@@ -17,7 +17,7 @@ title: Vac
 description: >- # this means to ignore newlines until "baseurl:"
   Vac is a modular peer-to-peer messaging stack, with a focus on secure messaging.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "vac.dev" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: vacp2p
 github_username:  vacp2p
 
@@ -38,3 +38,10 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+
+defaults:
+  - scope:
+      path: "assets/img"
+    values:
+      image: true
