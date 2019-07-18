@@ -1,9 +1,9 @@
 ---
 layout: post
 title:  "P2P Data Sync for Mobile"
-date:   2019-07-19 12:00:00 +0800
+date:   2019-07-18 12:00:00 +0800
 author: oskarth
-published: false
+published: true
 permalink: /p2p-data-sync-for-mobile
 categories: research
 ---
