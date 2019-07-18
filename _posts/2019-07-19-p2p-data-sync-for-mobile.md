@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "P2P Data Sync for Mobile"
-date:   2019-07-18 12:00:00 +0800
+date:   2019-07-19 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /p2p-data-sync-for-mobile
@@ -93,16 +93,70 @@ Another, arguably more pure and robust, way is having a *remote log*, where the 
 
 What they both have in common is that they act as a sort of highly-available cache to smooth over the non-overlapping connection windows between two endpoints. Neither of them are *required* to get reliable data transmission.
 
+### Basic calculations for bandwidth multiplier
+
+While we do want better simulations, and this is a work in progress, we can also look at the above scenarios using some basic calculations. This allows us to build a better intuition and reason about the problem without having to write code. Let's start with some assumptions:
+- two nodes exchanging a single message in batch mode
+- 10% uniformly random uptime for each node
+- in HA cache case, 100% uptime of a piece of infrastructure C 
+- retransmission every epoch (with constant or exponential backoff)
+- only looking at average (p50) case
+
+#### First case, no helper services
+
+A sends a message to B, and B acks it.
+
+```
+A message -> B (10% chance of arrival)
+A   <- ack   B (10% chance of arrival)
+```
+
+With a constant backoff, A will send messages at epoch `1, 2, 3, ...`. With exponential backoff and a multiplier of 2, this would be `1, 2, 4, 8, ...`. Let's assume constant backoff for now, as this is what will influence the success rate and thus the bandwidth multiplier.
+
+There's a difference between *time to receive* and *time to stop sending*. Assuming each send attempt is independent, it takes on average 10 epochs for A's message to arrive with B. Furthermore:
+
+1. A will send messages until it receives an ACK.
+2. B will send ACK if it receives a message.
+
+To get an average of one ack through, A needs to send 100 messages, and B send on average 10 acks. That's a multiplier of roughly a 100. That's roughly what we saw with the simulation above for receiving a message in interactive mode.
+
+#### Second case, high-availability caching layer
+
+Let's introduce a helper node or piece of infrastructure, C. Whenever A or B sends a message, it also sends it to C. Whenever A or B comes online, it queries for messages with C.
+
+```
+A message    -> B (10% chance of arrival)
+A message    -> C (100% chance of arrival)
+B <- req/res -> C (100% chance of arrival)
+A   <- ack      B (10% chance of arrival)
+C   <- ack      B (100% chance of arrival)
+A <- req/res -> C (100% chance of arrival)
+```
+
+What's the probability that A's messages will arrive at B? Directly, it's still 10%. But we can assume it's 100% that C picks up the message. (Giving C a 90% chance success rate doesn't materially change the numbers).
+
+B will pick up A's message from C after an average of 10 epochs. Then B will send ack to A, which will also be picked up by C 100% of the time. Once A comes online again, it'll query C and receive B's ack.
+
+Assuming we use exponential backoff with a multiplier of 2, A will send a message directly to B at epoch `1, 2, 4, 8` (assuming it is online). At this point, epoch `10`, B will be online in the average case. These direct sends will likely fail, but B will pick the message up from C and send one ack, both directly to A and to be picked up by C. Once A comes online, it'll query C and receive the ack from B, which means it won't do any more retransmits.
+
+How many messages have been sent? Not counting interactions with C, A sends 4 (at most) and B 1. Depending on if the interaction with C is direct or indirect (i.e. multicast), the factor for interaction with C will be ~2. This means the total bandwidth multiplier is likely to be `<10`, which is a lot more acceptable.
+
+Since the syncing semantics are end-to-end, this is without relying on the reliablity of C.
+
+#### Caveat
+
+Note that both of these are probabilistic argument. They are also based on heuristics. More formal analysis would be desirable, as well as better simulations to experimentally verify them. In fact, the calculations could very well be wrong!
+
 ## Future work
 
 There are many enhancements that can be made and desirable. Let's outline a few.
 
-1. Data sync clients. Examples of acutal usage of data sync, with more interesting domain semantics. This also includes usage of sequence numbers and DAGs to know what content is missing and ought to be synced.
+1. Data sync clients. Examples of actual usage of data sync, with more interesting domain semantics. This also includes usage of sequence numbers and DAGs to know what content is missing and ought to be synced.
 
 2. Remote log. As alluded to above, this is necessary. It needs a more clear specification and solid proof of concepts.
 
 3. More efficient ways of syncing with large number of nodes. When the number of nodes goes up, the algorithmic complexity doesn't look great. This also touches on things such as ambient content discovery.
 
-4. More robust simulations and real-world deployments. Exisiting simulation is ad hoc, and there are many improvements that can be made to gain more confidence and identify issues.
+4. More robust simulations and real-world deployments. Exisiting simulation is ad hoc, and there are many improvements that can be made to gain more confidence and identify issues. Additionally, better formal analysis.
 
 5. Example usage over multiple transports. Including things like sneakernet and meshnets. The described protocol is designed to work over unstructured, structured and private p2p networks. In some cases it can leverage differences in topology, such as multicast, or direct connections.
