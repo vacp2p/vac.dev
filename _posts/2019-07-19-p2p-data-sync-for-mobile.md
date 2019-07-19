@@ -6,8 +6,8 @@ author: oskarth
 published: true
 permalink: /p2p-data-sync-for-mobile
 categories: research
-summary: In building p2p messaging systems, one problem you quickly come across is the problem of reliably transmitting data. If there's no central server with high availability guarantees, you can't meaningfully guarantee that data has been transmitted. One way of solving this problem is through a synchronization protocol.
-image: /assets/img/mvds_interactive.png
+summary: Reliably transmitting data in a p2p network.
+image: /assets/img/vac.jpg
 ---
 
 Together with decanus, I've been working on the problem of data sync lately.
