@@ -6,7 +6,7 @@ author: oskarth
 published: true
 permalink: /p2p-data-sync-for-mobile
 categories: research
-summary: Reliably transmitting data in a p2p network.
+summary: Reliable and decentralized, pick two.
 image: /assets/img/vac.jpg
 ---
 
@@ -71,7 +71,7 @@ Which mode should you choose? It's a tradeoff of latency and bandwidth. If you w
 
 ### Basic simulation
 
-Initial ad hoc bandwidth and latency testing shows some issues with a naive approach. Running with the default simulation settings (https://github.com/status-im/mvds/):
+Initial ad hoc bandwidth and latency testing shows some issues with a naive approach. Running with the [default simulation settings](https://github.com/vacp2p/mvds/):
 
 - communicating nodes: 2
 - nodes using interactive mode: 2
