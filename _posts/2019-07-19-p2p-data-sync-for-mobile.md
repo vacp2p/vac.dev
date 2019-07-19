@@ -7,7 +7,7 @@ author: oskarth
 published: true
 permalink: /p2p-data-sync-for-mobile
 categories: research
-summary: Reliable and decentralized, pick two.
+summary: A research log. Reliable and decentralized, pick two.
 image: /assets/img/mvds_interactive.png
 ---
 
@@ -152,7 +152,7 @@ Note that both of these are probabilistic argument. They are also based on heuri
 
 ## Future work
 
-There are many enhancements that can be made and desirable. Let's outline a few.
+There are many enhancements that can be made and are desirable. Let's outline a few.
 
 1. Data sync clients. Examples of actual usage of data sync, with more interesting domain semantics. This also includes usage of sequence numbers and DAGs to know what content is missing and ought to be synced.
 
