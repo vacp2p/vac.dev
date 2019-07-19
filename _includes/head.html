@@ -9,6 +9,10 @@
   {%- include google-analytics.html -%}
   {%- endif -%}
 
+  {%- if jekyll.environment == 'production' and site.simple_analytics -%}
+  {%- include simple-analytics.html -%}
+  {%- endif -%}
+
   <!-- Twitter cards -->
   <meta name="twitter:site"    content="@{{ site.twitter_username }}">
   <meta name="twitter:creator" content="@{{ page.author }}">

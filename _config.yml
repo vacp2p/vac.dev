@@ -23,6 +23,8 @@ url: "https://vac.dev" # the base hostname & protocol for your site, e.g. http:/
 twitter_username: vacp2p
 github_username:  vacp2p
 
+simple_analytics: true
+
 # Build settings
 markdown: kramdown
 theme: minima
