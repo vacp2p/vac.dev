@@ -1,5 +1,6 @@
 ---
 layout: post
+name:  "P2P Data Sync for Mobile"
 title:  "P2P Data Sync for Mobile"
 date:   2019-07-19 12:00:00 +0800
 author: oskarth
@@ -7,7 +8,7 @@ published: true
 permalink: /p2p-data-sync-for-mobile
 categories: research
 summary: Reliable and decentralized, pick two.
-image: /assets/img/vac.jpg
+image: /assets/img/mvds_interactive.png
 ---
 
 Together with decanus, I've been working on the problem of data sync lately.
