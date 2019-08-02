@@ -30,10 +30,6 @@ markdown: kramdown
 theme: minima
 plugins:
   - jekyll-feed
-  
-header_pages:
-  - title: specs
-    url: "https://vac.dev/specs/"
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
