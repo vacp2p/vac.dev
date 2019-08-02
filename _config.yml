@@ -32,7 +32,8 @@ plugins:
   - jekyll-feed
   
 header_pages:
-  - specs/
+  - title: specs
+    path: /specs/
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
