@@ -32,8 +32,7 @@ plugins:
   - jekyll-feed
   
 header_pages:
-  - title: Specification
-    url: specs/
+  - specs/
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
