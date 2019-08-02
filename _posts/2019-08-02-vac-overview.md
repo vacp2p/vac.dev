@@ -38,7 +38,6 @@ What does this stack look like? We take inspiration from [core](https://tools.ie
 | Secure Transport  | Confidentiality, PFS, etc         | Double Ratchet, MLS  |
 | Transport Privacy | Transport and metadata protection | Whisper, Tor, Mixnet |
 | P2P Overlay       | Overlay routing, NAT traversal    | devp2p, libp2p       |
-| | |
 | Trust Establishment | Establishing end-to-end trust   | TOFU, web of trust   |
 
 As an example, end user semantics such as group chat or moderation capabilities can largely work regardless of specific choices further down the stack. Similarly, using a mesh network or Tor doesn't impact the use of Double Ratchet at the Secure Transport layer.
