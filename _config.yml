@@ -33,7 +33,7 @@ plugins:
   
 header_pages:
   - title: specs
-    path: /specs/
+    url: "/specs/"
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
