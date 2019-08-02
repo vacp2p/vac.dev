@@ -11,11 +11,11 @@ summary: Vac is a modular peer-to-peer messaging stack, with a focus on secure m
 image: /assets/img/vac.jpg
 ---
 
-Vac is a **modular peer-to-peer messaging stack, with a focus on secure messaging**. What does that mean? Let's unpack that a bit.
+Vac is a **modular peer-to-peer messaging stack, with a focus on secure messaging**. What does that mean? Let's unpack it a bit.
 
 ## Basic terms
 
-*messaging stack*. While the initial focus is on [data sync](http://localhost:4000/p2p-data-sync-for-mobile), we are concerned with all layers in the stack. That means all the way from underlying transports, p2p overlays and routing, to initial trust establishment and semantics for things like group chat. The ultimate goal is to give application developers the tools they need to provide secure messaging for their users, so they can focus on their domain expertise.
+*messaging stack*. While the initial focus is on [data sync](https://vac.dev/p2p-data-sync-for-mobile), we are concerned with all layers in the stack. That means all the way from underlying transports, p2p overlays and routing, to initial trust establishment and semantics for things like group chat. The ultimate goal is to give application developers the tools they need to provide secure messaging for their users, so they can focus on their domain expertise.
 
 *modular*. Unlike many other secure messaging applications, our goal is not to tightly coupled set of protocols, nor is it to reinvent the wheel. Instead, we aim to provide options at each layer in the stack, and build on the shoulders of giants, putting a premimum on interoperability. It's similar in philosophy to projects such as [libp2p](https://libp2p.io/) or [Substrate](https://www.parity.io/substrate/) in that regard. Each choice comes with different trade-offs, and these look different for different applications.
 
