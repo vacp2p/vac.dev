@@ -49,3 +49,14 @@ In this post, we'll outline this remote log in a bit more detail.
 
 # Remote log
 
+A remote log is a replication of a local log. This means a node can read data
+from a node that is offline.
+
+The spec is in early draft stage.
+
+There's a basic PoC/spike here (TODO link).
+
+## Future work
+
+Analyze/simulate further
+Deploy
