@@ -1,17 +1,15 @@
 ---
 layout: post
-name:  "Remote log data sync"
-title:  "Remote log data sync"
-date:   2019-10-04 12:00:00 +0800
+name:  "Remote log"
+title:  "P2P Data Sync with a Remote Log"
+date:   2019-10-01 12:00:00 +0800
 author: oskarth
-published: false
+published: true
 permalink: /remote-log
 categories: research
 summary: A research log. Reliable and decentralized, pick two.
 image: /assets/img/remote_log.png
 ---
-
-## Introduction
 
 A big problem when doing end-to-end data sync between mobile nodes is that most
 devices are offline most of the time. With a naive approach, you quickly run
@@ -165,7 +163,7 @@ The *remote log* protobuf is what is stored at the Name system.
 <!-- diagram -->
 
 <p align="center">
-    <img src="./remote-log.png" />
+    <img src="{{site.baseurl}}/assets/img/remote-log.png">
     <br />
     Figure 1: Remote log data synchronization.
 </p>
