@@ -31,7 +31,7 @@ In this post we are going to describe how such a remote log schema could work. S
 
 A remote log is a replication of a local log. This means a node can read data from a node that is offline.
 
-The spec is in an early draft stage and can be found [here](https://github.com/vacp2p/specs/pull/16). A very basic spike can be found [here](https://github.com/vacp2p/research/tree/master/remote_log). The rest of this post follows the current spec closely.
+The spec is in an early draft stage and can be found [here](https://github.com/vacp2p/specs/pull/16). A very basic [spike](https://en.wikipedia.org/wiki/Spike_(software_development))/proof-of-concept can be found [here](https://github.com/vacp2p/research/tree/master/remote_log). The rest of this post follows the current spec closely.
 
 ### Definitions
 
