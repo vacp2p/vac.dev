@@ -124,5 +124,7 @@ For data sync in general:
 
 ---
 
-PS. 1 Thanks everyone who submitted great [logo proposals](https://explorer.bounties.network/bounty/3389) for Vac!
-PPS. 2 Next week on October 10th decanus and I will be presenting Vac at [Devcon](https://devcon.org/agenda), come say hi :)
+
+PS1. Thanks everyone who submitted great [logo proposals](https://explorer.bounties.network/bounty/3389) for Vac!
+
+PPS2. Next week on October 10th decanus and I will be presenting Vac at [Devcon](https://devcon.org/agenda), come say hi :)
