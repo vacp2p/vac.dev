@@ -2,9 +2,9 @@
 layout: post
 name:  "P2P Data Sync with a Remote Log"
 title:  "P2P Data Sync with a Remote Log"
-date:   2019-10-01 12:00:00 +0800
+date:   2019-10-02 12:00:00 +0800
 author: oskarth
-published: false
+published: true
 permalink: /remote-log
 categories: research
 summary: A research log. Asynchronous P2P messaging? Remote logs to the rescue!
@@ -64,7 +64,7 @@ The *remote log* is the data format of what is stored in the name system.
     Figure 1: Remote log data synchronization.
 </p>
 
-### More on the remote log
+### Data format
 
 The remote log lets receiving nodes know what data they are missing. Depending on the specific requirements and capabilities of the nodes and name system, the information can be referred to differently. We distinguish between three rough modes:
 
@@ -72,7 +72,7 @@ The remote log lets receiving nodes know what data they are missing. Depending o
 2. Normal sized page with CAS mapping
 3. "Linked list" mode - minimally sized page with CAS mapping
 
-A remote log is a simply mapping from message identifiers to their corresponding address in a CAS.
+A remote log is a simply mapping from message identifiers to their corresponding address in a CAS:
 
 | Message Identifier (H1) | CAS Hash (H2) |
 | ---------------- |---------------|
