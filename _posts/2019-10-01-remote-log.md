@@ -76,13 +76,27 @@ The remote log lets receiving nodes know what data they are missing. Depending o
 
 **Data format:**
 
-```
-| H1_3 | H2_3 |
-| H1_2 | H2_2 |
-| H1_1 | H2_1 |
-| ------------|
-| next_page   |
-```
+A remote log is a simply mapping from message identifiers to their corresponding address in a CAS.
+
+| Message Identifier (H1) | CAS Hash (H2) |
+| ---------------- |---------------|
+| H1_3             | H2_3          |
+| H1_2             | H2_2          |
+| H1_1             | H2_1          |
+|                  |               |
+| *address to next page*           |
+
+Optionally, the content itself can be included, just like it normally would be
+sent over the wire.
+
+| Message Identifier (H1) | Content       |
+| ---------------- |---------------|
+| H1_3             | C3            |
+| H1_2             | C2            |
+| H1_1             | C1            |
+|                  |               |
+| *address to next page*           |
+
 
 Here the upper section indicates a list of ordered pairs, and the lower section contains the address for the next page chunk. `H1` is the native hash function, and `H2` is the one used by the CAS. The numbers corresponds to the messages. To indicate which CAS is used, a remote log SHOULD use a multiaddr.
 
