@@ -6,4 +6,4 @@ permalink: /about/
 
 Vac is a modular peer-to-peer messaging stack, with a focus on secure messaging.
 
-<img src="{{site.baseurl}}/assets/img/vac.jpg" width="200">
+<img src="{{site.baseurl}}/assets/img/vac.png" width="200">
