@@ -150,4 +150,4 @@ Thanks to Barry Whitehat for patient explanation and pointers. Thanks to WJ for 
 
 *Peacock header image from [Tonos](https://en.wikipedia.org/wiki/File:Flickr_-_lo.tangelini_-_Tonos_(1).jpg).*
 
-Discuss this post on our [forum](https://forum.vac.dev/).
+Discuss this post on our [forum](https://forum.vac.dev/t/discussion-feasibility-study-semaphore-rate-limiting-through-zksnarks/21).
