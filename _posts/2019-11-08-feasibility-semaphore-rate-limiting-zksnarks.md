@@ -66,7 +66,7 @@ In the case of rate limiting, we do want nodes to send multiple messages. This c
    
 3. This means any untrusted user who detects a spamming user, can use it to access their private key corresponding to funds in the contract, and thus slash them.
 
-4. As a consequence of above, we have a system where registered users can only messages X times per epoch, and no one can see who is sending what messages. Additionally, if a user is violation the above rate limit, they can be punished and any user can profit from it.
+4. As a consequence of above, we have a system where registered users can only messages X times per epoch, and no one can see who is sending what messages. Additionally, if a user is violating the above rate limit, they can be punished and any user can profit from it.
    
 ### Briefly on scope of 'approved users'
 
