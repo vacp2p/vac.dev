@@ -608,18 +608,193 @@ hr{
     opacity: 1;
 }
 
-.footer{
-    text-align: center;
-    ul{
-        margin: 0 0 50px 0;
+.footer {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	background-color: #262A39;
+	position: relative;
+	margin: 0 0 0 0;
+}
+.footer-inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	width: 1200px;
+	padding: 32px 0;
+}
+.cards--community.cards--community--dark {
+	margin: 0;
+	.card-inner {
+		background-color: transparent;
+	}
+	a {
+		h4 {
+			color: white;
+		}
+		p {
+			color: #939ba1;
+			opacity: .7;
+		}
+		&:hover {
+			h4 {
+				opacity: 0.8;
+			}
+		}
+	}
+}
+.cards--community--dark {
+	.community-icon--join {
+		background-image: url(../img/icon-join-dark.svg);
+	}
+	.community-icon--discussion {
+		background-image: url(../img/icon-discussion-dark.svg);
+	}
+	.community-icon--contribute {
+		background-image: url(../img/icon-contribute-dark.svg);
+	}
+}
+.footer-nav {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 32px 0 0 0;
+	padding: 32px 0;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	li {
+		a {
+			padding: 0 12px;
+			color: white;
+			&:hover {
+				opacity: .8;
+			}
+		}
+	}
+}
+.footer-logo-wrap {
+	width: 317px;
+	display: flex;
+	text-align: center;
+}
+.footer-logo-wrap__inner {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 0 16px 0;
+}
+a.footer-logo {
+	display: block;
+	width: 52px;
+	height: 52px;
+	background-size: 52px;
+	background-image: url(../img/footer-logo.svg);
+	&:hover {
+		opacity: .8;
+	}
+}
+.footer-address {
+	padding: 20px 0 0 0;
+	opacity: .7;
+}
+.footer-table {
+    display: flex;
+    .footer-list{
+        flex-direction: column;
+        margin: 0;
         padding: 0;
-        justify-content: center;
-        li{
-            a{
-                font-size: 0.875rem;
-            }
-        }
     }
+}
+.footer-table__column {
+	box-sizing: border-box;
+	padding: 15px 74px 64px;
+}
+.margin-top-15 {
+	margin-top: 15px;
+}
+.footer-header {
+	color: white;
+	opacity: .5;
+    margin: 0 0 40px 0;
+    font-size: 16px;
+}
+.footer-project {
+	columns: 2;
+	-webkit-columns: 2;
+    -moz-columns: 2;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+.footer-link {
+	height: 32px;
+	line-height: 32px;
+	margin: 0 0 15px 0;
+	a {
+		display: flex;
+		align-items: center;
+		color: white;
+		&:hover {
+			opacity: .8;
+		}
+	}
+}
+.margin-left {
+	margin-left: 15px;
+}
+.footer-icon {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-radius: 50%;
+	margin: 0 15px 0 0;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.footer-link--fb {
+	.footer-icon {
+		background-image: url(../img/icon_fb.svg);
+	}
+}
+.footer-link--tw {
+	.footer-icon {
+		background-image: url(../img/icon_tw.svg);
+	}
+}
+.footer-link--gt {
+	.footer-icon {
+		background-image: url(../img/icon-gitter.svg);
+	}
+}
+.footer-link--dc {
+	.footer-icon {
+		background-image: url(../img/icon_discord.svg);
+		background-size: 70%;
+	}
+}
+.footer-link--st {
+	.footer-icon {
+		background-image: url(../img/footer-logo.svg);
+	}
+}
+.footer-link--gh {
+	.footer-icon {
+		background-image: url(../img/icon_gh.svg);
+	}
+}
+.status-network {
+	display: inline-block;
+}
+.status-logo {
+	display: inline-block;
+	position: relative;
+	top: -3px;
+	left: 10px;
+	margin-left: 10px;
 }
 
 @media (min-width: 1200px){
@@ -1168,14 +1343,23 @@ hr{
             font-size: 1rem;
         }
     }
-    .footer{
-        margin-bottom: 50px;
-        p {
-            font-size: 1rem;
+    .footer-table{
+        flex-direction: column;
+        text-align: center;
+        .footer-list{
+            align-items: center;
         }
-        img{
-            width: 100px;
-            height: auto;
-        }
+    }
+    .footer-table__column{
+        padding: 16px;
+    }
+    .footer-header{
+        margin-bottom: 30px;
+    }
+    .footer img{
+        display: none;
+    }
+    .footer-icon{
+        display: none;
     }
 }
