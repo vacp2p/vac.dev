@@ -20,15 +20,6 @@ layout: default
             </div>
         </div>
     </div>
-    <!-- <div class="container text-center why-vac" id="why">
-        <div class="row">
-            <div class="col-lg-9 col-md-12 ml-auto mr-auto">
-                <h2 class="section-title bar-center"><b>WHY Vac</b></h2>
-                <p>Privacy is a fundamental human right. The ability to message without fear of censorship or prosecution must be maintained. The ability to conduct transactions with whom you want, and only whom you want is a requirement for free communication. This is why we build vacp2p</p>
-                <hr>
-            </div>
-        </div>
-    </div> -->
 </section>
 
 <section class="log" id="research-log">
@@ -41,11 +32,13 @@ layout: default
         <div class="row">
             <div class="col-md-12">
                 <ul>
-                    {% for post in site.posts %}
+                    {% for post in site.posts limit:5 %}
                         <li><time>{{ post.date | date: '%B %d, %Y' }}</time><time class="short">{{ post.date | date: '%d.%m.%Y' }}</time><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
                     {% endfor %}
-                    <li><a href="{{ "/feed.xml" | relative_url }}" target="_blank" class="btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M21.4286 0H2.57143C1.15125 0 0 1.15125 0 2.57143V21.4286C0 22.8488 1.15125 24 2.57143 24H21.4286C22.8488 24 24 22.8488 24 21.4286V2.57143C24 1.15125 22.8488 0 21.4286 0ZM6 20.5714C4.57982 20.5714 3.42857 19.4202 3.42857 18C3.42857 16.5798 4.57982 15.4286 6 15.4286C7.42018 15.4286 8.57143 16.5798 8.57143 18C8.57143 19.4202 7.42018 20.5714 6 20.5714ZM14.4393 20.5714H12.5999C12.2779 20.5714 12.0079 20.3231 11.9869 20.0018C11.7076 15.7134 8.27748 12.2918 3.9982 12.013C3.67693 11.9921 3.42857 11.7221 3.42857 11.4001V9.56073C3.42857 9.21064 3.7215 8.92982 4.07111 8.94868C9.99321 9.26871 14.7317 14.0131 15.0513 19.9289C15.0702 20.2785 14.7894 20.5714 14.4393 20.5714ZM19.9586 20.5714H18.1193C17.7892 20.5714 17.5206 20.3099 17.5071 19.9801C17.2072 12.6657 11.3354 6.79291 4.01995 6.49296C3.69011 6.47941 3.42857 6.2108 3.42857 5.88075V4.04143C3.42857 3.69568 3.71454 3.41657 4.06002 3.429C13.0509 3.75177 20.2498 10.9928 20.571 19.94C20.5834 20.2855 20.3043 20.5714 19.9586 20.5714Z" fill="#121212"/> </svg>Subscribe via RSS</a></li>
                 </ul>
+                <div class="btn-holder d-flex justify-content-center">
+                    <a href="{{site.url}}{{ site.baseurl }}/research-log/" class="btn btn-border">View all posts</a>
+                </div>
             </div>
         </div>
     </div>
@@ -64,7 +57,7 @@ layout: default
             </div>
             <div class="col-lg-4 col-md-6 ml-auto mr-auto">
                 <div class="btn-holder">
-                    <a href="/vac-overview" class="btn btn-purple">Learn More</a>
+                    <a href="{{site.url}}{{ site.baseurl }}/vac-overview/" class="btn btn-purple">Learn More</a>
                 </div>
             </div>
         </div>
