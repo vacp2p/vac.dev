@@ -7,44 +7,19 @@ author: oskarth
 published: true
 permalink: /fixing-whisper
 categories: research
-summary: A research log.
+summary: A research log. Why Whisper can't scale and how to fix it.
 image: /assets/img/whisper_scalability.png
 ---
 
 **tldr: Whisper currently can’t scale. This post shows why, and how to fix it.**
 
-## Background
+<!-- What is whisper? -->
 
-TODO: Too Statu specific
+Very few people use Whisper. One of the major consumers of it, Status, has major isues with bandwidth.
 
-We have very few users for the Status app. Despite this, we have issues with bandwidth usage. One of the most common complaints I hear about Status, and the reason core contributors often don’t use it at events for group coordination, is that it consumes too much bandwidth. People often have a limited data plan, and especially at big events we’ve seen community members have their whole data plan drained just by using Status.
-
-For more precise user reports and some rough numbers, see e.g.:
-
-    https://github.com/status-im/status-react/issues/9081 2
-    https://github.com/status-im/status-react/issues/9185 2
-
-We have made some improvements in this regard, both in the past and for the v1 release. Most recently by moving to a partitioned topic as opposed to a single discovery topic. There have also been improvements to mailserver performance 1.
-
-Still, this isn’t enough. At a fundamental level, the confidence that Whisper will scale to any reasonable level is very low, and for good reasons. However, this is more of a rough intuition, and we haven’t done any real studies on this or how to fix it. Right now it’s more like a pebble in our shoe that we keep walking around with, hoping it’ll go away.
-
-There are a few reasons we haven’t made progress on making Whisper more scalable:
-
-1) **Lack of adoption.** Few users means the problem haven’t hit us in any serious way, and the “scalability” issues we’ve solved have mostly been relevant for ~100-1k users. The issues we have seen have not been taken seriously enough, because people don’t depend on Status to function.
-
-2) **Church of Darkness.** One of our core principles is privacy, and this, coupled with lack of rigorous understanding of the protocols we use and their properties, have lead us to put an irrationally high premium on the metadata protection capabilities that Whisper provides.
-
-3) **Timeline expectations.** There are more longer-term plans for replacing Whisper. This is the work that is happening with Vac 1 and together with entities like Block.Science, Swarm and Nym. This means we’ve historically not seen fixing Whisper ourselves as a big priority in the short to medium term.
-
-## Going foward
-
-With v1 of the app soon being out of the door (amazing job everyone!), we are going to start pushing for more adoption. For people to use Status, we need reasonable performance, on par with alternative solutions.
-
-### On metadata protection and a reality check
-
-Considering the financial constraints, we need to push for traction and make Status a joy to use sooner rather than later. This means we can’t have people burn up their data plan and uninstall the app. Later on, we can enhance it with more rigorous guarantees around things like metadata protection, for example through mixnets such as the one Nym is working on.
-
-As an end user, most people care more about being able to use the thing at all than theoretical (and somewhat unrigorous) metadata protection guarantees. Additionally, the proposed solutions will still enable hardcore users to get stronger receiver-anonymity guarantees if they so wish.
+While the general confidence that Whisper will scale is low, the reasons aren't quite clear.
+code
+s an end user, most people care more about being able to use the thing at all than theoretical (and somewhat unrigorous) metadata protection guarantees. Additionally, the proposed solutions will still enable hardcore users to get stronger receiver-anonymity guarantees if they so wish.
 
 It is also worth pointing out that, unlike apps like Signal, we don’t tie users to their identity by a phone number or email address. This is already huge when it comes to privacy. Other apps like Briar also outsource the metadata protection to running on Tor. Now, this comes with issues regarding spam resistance, but that’s a topic for another time.
 
