@@ -11,11 +11,81 @@ summary: A research log.
 image: /assets/img/whisper_scalability.png
 ---
 
-## Intro
+**tldr: Whisper currently can’t scale. This post shows why, and how to fix it.**
 
-TODO: Take this as base https://discuss.status.im/t/fixing-whisper-for-great-profit/1419
+## Background
 
-## Whisper theoretical model
+TODO: Too Statu specific
+
+We have very few users for the Status app. Despite this, we have issues with bandwidth usage. One of the most common complaints I hear about Status, and the reason core contributors often don’t use it at events for group coordination, is that it consumes too much bandwidth. People often have a limited data plan, and especially at big events we’ve seen community members have their whole data plan drained just by using Status.
+
+For more precise user reports and some rough numbers, see e.g.:
+
+    https://github.com/status-im/status-react/issues/9081 2
+    https://github.com/status-im/status-react/issues/9185 2
+
+We have made some improvements in this regard, both in the past and for the v1 release. Most recently by moving to a partitioned topic as opposed to a single discovery topic. There have also been improvements to mailserver performance 1.
+
+Still, this isn’t enough. At a fundamental level, the confidence that Whisper will scale to any reasonable level is very low, and for good reasons. However, this is more of a rough intuition, and we haven’t done any real studies on this or how to fix it. Right now it’s more like a pebble in our shoe that we keep walking around with, hoping it’ll go away.
+
+There are a few reasons we haven’t made progress on making Whisper more scalable:
+
+1) **Lack of adoption.** Few users means the problem haven’t hit us in any serious way, and the “scalability” issues we’ve solved have mostly been relevant for ~100-1k users. The issues we have seen have not been taken seriously enough, because people don’t depend on Status to function.
+
+2) **Church of Darkness.** One of our core principles is privacy, and this, coupled with lack of rigorous understanding of the protocols we use and their properties, have lead us to put an irrationally high premium on the metadata protection capabilities that Whisper provides.
+
+3) **Timeline expectations.** There are more longer-term plans for replacing Whisper. This is the work that is happening with Vac 1 and together with entities like Block.Science, Swarm and Nym. This means we’ve historically not seen fixing Whisper ourselves as a big priority in the short to medium term.
+
+## Going foward
+
+With v1 of the app soon being out of the door (amazing job everyone!), we are going to start pushing for more adoption. For people to use Status, we need reasonable performance, on par with alternative solutions.
+
+### On metadata protection and a reality check
+
+Considering the financial constraints, we need to push for traction and make Status a joy to use sooner rather than later. This means we can’t have people burn up their data plan and uninstall the app. Later on, we can enhance it with more rigorous guarantees around things like metadata protection, for example through mixnets such as the one Nym is working on.
+
+As an end user, most people care more about being able to use the thing at all than theoretical (and somewhat unrigorous) metadata protection guarantees. Additionally, the proposed solutions will still enable hardcore users to get stronger receiver-anonymity guarantees if they so wish.
+
+It is also worth pointing out that, unlike apps like Signal, we don’t tie users to their identity by a phone number or email address. This is already huge when it comes to privacy. Other apps like Briar also outsource the metadata protection to running on Tor. Now, this comes with issues regarding spam resistance, but that’s a topic for another time.
+
+In terms of the Anonymity 1 Trilemma 1, we are likely in a suboptimal spot.
+
+### Why try to fix Whisper if we are going to replace it?
+
+Technically, this argument is correct. However, reality disagrees. If we are going to start pushing user acquisitions, we need to retain users. This needs to happen soon, on the order of few weeks, and not several months, coupled with more uncertainity and compatibility issues.
+
+It doesn’t make sense to replace Whisper with a semi-half assed medium term thing if it’ll take months to get in production, and then replace that thing with a generalized, scalable, decentralized, incentivized network.
+
+## Theoretical model
+
+### Caveats
+
+First, some caveats: this model likely contains bugs, has wrong assumptions, or completely misses certain dimensions. However, it acts as a form of existence proof for unscalability, with clear reasons.
+
+If certain assumptions are wrong, then we can challenge them and reason about them in isolation. It doesn’t mean things will definitely work as the model predicts, and that there aren’t unknown unknowns.
+
+The model also only deals with receiving bandwidth for end nodes, uses mostly static assumptions of averages, and doesn’t deal with spam resistance, privacy guarantees, accounting, intermediate node or network wide failures.
+
+### On the model and its goals
+
+The theoretical model for Whisper attempts to encode characteristics of it.
+
+Goals:
+
+1. Ensure network scales by being user or usage bound, as opposed to bandwidth growing in proportion to network size.
+2. Staying with in a reasonable bandwidth limit for limited data plans.
+3. Do the above without materially impacting existing nodes.
+
+It proceeds through various case with clear assumptions behind them, starting from the most naive assumptions. It prints results for 100 users, 10k users and 1m users.
+
+The colorized report assumes <10mb/day (300mb/month) is good, <30mb/day (1gb/month) is ok, <100mb/day (3gb/month) is bad and above is a complete failure. See bandwidth usage too high 2 for comparative numbers with other apps.
+Results
+
+A colorized report can be found here 5 and source code is here.
+
+The colorized report is easier to scan, but for completeness the report is also embedded below.
+
+## Whisper theoretical model / Results
 
 Attempts to encode characteristics of it. Here's a summary:
 
@@ -173,9 +243,60 @@ Note that this requires change of other nodes behavior, not just local node.
 - For 10k users, receiving bandwidth is    1.5MB/day. **Good!**
 - For  1m users, receiving bandwidth is   98.1MB/day. **Terrible!**
 
-### Summary
+### Takeaways
 
 ![](assets/img/whisper_scalability.png)
 
+1. Whisper as it currently works doesn’t scale, and we quickly run into unacceptable bandwidth usage.
+2. There are a few factors of this, but largely it boils down to noisy topics usage and use of bloom filters.
+   - Duplicate (e.g. see Whisper vs PSS) and bad envelopes are also fundamental factors, but this depends a bit more on specific deployment configurations.
+3. Waku mode (case 8) is a proposed solution that doesn’t require other nodes to change, and extends capabilities for nodes that puts a premium on performance. Essentially it’s a form of Infura for chat.
+4. The next bottleneck after this is the partitioned topics, which either needs to gracefully (and potentially quickly) grow, or an alternative way of consuming those messages needs to be deviced.
 
-------------------------------------------------------------
+## Waku mode
+
+- Doesn’t impact existing clients, it’s just a separate node and capability. A bit like Infura for chat.
+- Other nodes can still use Whisper as is, like a full node.
+- Sacrifices metadata protection and incurs higher connectivity/availability requirements for scalbility
+
+Requirements:
+
+- Exposes API to get messages from a set of list of topics (no bloom filter)
+- Way of being identified as a Waku node (e.g. through version string)
+- Option to statically encode this node in app, e.g. similar to custom bootnodes/mailserver
+- Only node that needs to be connected to, possibly as Whisper relay / mailserver hybrid
+
+Provides:
+
+- likely provides scalability of up to 10k users and beyond
+- with some enhancements to partition topic logic, can possibly scale up to 1m users
+
+Caveats:
+
+- hasn’t been tested in a large-scale simulation
+- other network and intermediate node bottlenecks might become apparent (e.g. full bloom filter and cluster capacity; can likely be dealt with in isolation using known techniques, e.g. load balancing)
+
+## Next steps
+
+The proposed Waku mode can be implemented as a proof of concept on the order of a few weeks, which works well with current marketing plans and, if successful, could be used in a 1.1 app release.
+
+A spec proposal is in early draft mode 8 with associated issue 4. This will be enhanced as discussions here progress.
+
+The main steps / requirements at this stage is:
+
+(a) Buy-in from Core to give users the option to use this mode
+
+(b) One or possibly two people to implement Waku mode as a proof of concept mode that can be used end to end
+
+As well as any refinements to the assumptions and model necessary.
+
+Additionally for performance improvements, there’s a more engineering focused effort on optimizing mailservers retries/locality/queries, that is out of scope of this post.
+
+To tie this to more long term research work, we also want to use these nodes to do accounting of resources (i.e. bandwidth). This will inform more incentive modelling work.
+
+Fin.
+
+
+## Waku progress so far
+
+TODO: https://forum.vac.dev/t/waku-project-and-progress/24
