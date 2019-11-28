@@ -1,19 +1,23 @@
 ---
 layout: post
-name:  "Fixing Whisper"
-title:  "Fixing Whisper"
+name:  "Fixing Whisper for great profit"
+title:  "Fixing Whisper for great profit"
 date:   2019-11-26 12:00:00 +0800
 author: oskarth
-published: false
-permalink: /fixing-whisper-waku
+published: true
+permalink: /fixing-whisper
 categories: research
 summary: A research log.
-image: /assets/img/vac.jpg
+image: /assets/img/whisper_scalability.png
 ---
+
+## Intro
+
+TODO: Take this as base https://discuss.status.im/t/fixing-whisper-for-great-profit/1419
 
 ## Whisper theoretical model
 
-Attempts to encode characteristics of it.
+Attempts to encode characteristics of it. Here's a summary:
 
 #### Goals:
 1. Ensure network scales by being user or usage bound, as opposed to bandwidth growing in proportion to network size.
@@ -168,5 +172,10 @@ Note that this requires change of other nodes behavior, not just local node.
 - For 100 users, receiving bandwidth is 1000.0KB/day. **Good!**
 - For 10k users, receiving bandwidth is    1.5MB/day. **Good!**
 - For  1m users, receiving bandwidth is   98.1MB/day. **Terrible!**
+
+### Summary
+
+![](assets/img/whisper_scalability.png)
+
 
 ------------------------------------------------------------
