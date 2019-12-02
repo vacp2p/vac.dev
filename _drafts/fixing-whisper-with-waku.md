@@ -11,14 +11,30 @@ summary: A research log. Why Whisper can't scale and how to fix it.
 image: /assets/img/whisper_scalability.png
 ---
 
-This post will introduce Waku. Waku is a fork of Whisper that addresses some of
-its shortcomings in an iterative way. It will also show a theoretical scaling
-model for Status.
+This post will introduce Waku. Waku is a fork of Whisper that attempts to
+addresses some of Whisper's shortcomings in an iterative fashion. We will also
+introduce a theoretical scaling model for Whisper that shows why it doesn't
+scale, and what can be done about it.
 
-- Description of Whisper and recap of its issues (gossip, 'darkness', pow, incentive, spec etc)
-- Introduce model
-- Motivation for a new protocol
-- Progress so far
+## Introduction
+
+Whisper is a gossip-based communication protocol or an ephemeral key-value store
+depending on which way you look at it. Historically speaking, it is the
+messaging pilllar of [Web3](http://gavwood.com/dappsweb3.html), together with
+Ethereum for consensus and Swarm for storage.
+
+Whisper, being a somewhat esoteric protocol and with some fundamental issues,
+haven't seen a lot of uptake. However, applications such as Status are using it,
+and have been making minor ad hoc modifications to it to make it run on mobile
+devices.
+
+What are these fundamental issues? In short:
+a) scalability, most immediately when it comes to bandwidth usage
+b) spam-resistance, proof of work is a poor mechanism for heterogenerous nodes
+c) no incentivized infrastructure, leading to centralized choke points
+d) lack of formal and unambiguous specification makes it hard to analyze and implement
+
+In this post, we'll focus on the first problem, which is bandwidth scalability.
 
 ## Whisper theoretical model
 
@@ -199,3 +215,14 @@ colored backgrounds correspond to the following bandwidth usage:
 ## Progress so far
 
 ,,,
+## Motivation for a new protocol
+
+- Why not new
+- Iterative
+- PRogress so far
+
+- Description of Whisper and recap of its issues (gossip, 'darkness', pow, incentive, spec etc)
+- Introduce model
+- Motivation for a new protocol
+- Progress so far
+
