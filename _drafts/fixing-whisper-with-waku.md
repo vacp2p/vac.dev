@@ -24,22 +24,23 @@ messaging pilllar of [Web3](http://gavwood.com/dappsweb3.html), together with
 Ethereum for consensus and Swarm for storage.
 
 Whisper, being a somewhat esoteric protocol and with some fundamental issues,
-haven't seen a lot of uptake. However, applications such as Status are using it,
+hasn't seen a lot of usage. However, applications such as Status are using it,
 and have been making minor ad hoc modifications to it to make it run on mobile
 devices.
 
 What are these fundamental issues? In short:
-a) scalability, most immediately when it comes to bandwidth usage
-b) spam-resistance, proof of work is a poor mechanism for heterogenerous nodes
-c) no incentivized infrastructure, leading to centralized choke points
-d) lack of formal and unambiguous specification makes it hard to analyze and implement
-e) running over devp2p, which limits where it can run and how
 
-In this post, we'll focus on the first problem, which is bandwidth scalability.
+1. scalability, most immediately when it comes to bandwidth usage
+2. spam-resistance, proof of work is a poor mechanism for heterogenerous nodes
+3. no incentivized infrastructure, leading to centralized choke points
+4. lack of formal and unambiguous specification makes it hard to analyze and implement
+5. running over devp2p, which limits where it can run and how
+
+In this post, we'll focus on the first problem, which is scalability through bandwidth usage.
 
 ## Whisper theoretical scalability model
 
-*(Feel free to skip this section if you want to get right to the results, there's a graph at the bottom).*
+*(Feel free to skip this section if you want to get right to the results).*
 
 There's widespread implicit knowledge that Whisper "doesn't scale", but it is less understood exactly why. This theoretical model attempts to encode some characteristics of it. Specifically for use case such as one by Status (see [Status Whisper usage
 spec](https://github.com/status-im/specs/blob/master/status-whisper-usage-spec.md)).
@@ -230,27 +231,27 @@ for more detail on the model and its assumptions.
 3. Waku mode (case 8) is an additional capability that doesn’t require other nodes to change, for nodes that put a premium on performance.
 4. The next bottleneck after this is the partitioned topics (app/network specific), which either needs to gracefully (and potentially quickly) grow, or an alternative way of consuming those messages needs to be deviced.
 
-The results are summed up in the following graph. Notice the log-log scale. The
+![](assets/img/whisper_scalability.png)
+
+The results are summed up in the graph above. Notice the log-log scale. The
 colored backgrounds correspond to the following bandwidth usage:
 
 - Blue: <10mb/d (<~300mb/month)
 - Green: <30mb/d (<~1gb/month)
 - Yellow: <100mb/d (<~3gb/month)
-- Red: >100mb/d(>3gb/month)
-
-![](assets/img/whisper_scalability.png)
+- Red: >100mb/d (>3gb/month)
 
 These ranges are somewhat arbitrary, but are based on [user
 requirements](https://github.com/status-im/status-react/issues/9081) for users
 on a limited data plan, with comparable usage for other messaging apps.
 
-## Waku project
+## Introducing Waku
 
 ### Motivation for a new protocol
 
-Apps such as Status will likely use Whisper for the forseeable future, and we
-want to enable them to use it with more users on mobile devices without
-bandwidth exploding with minimal changes.
+Apps such as Status will likely use something like Whisper for the forseeable
+future, and we want to enable them to use it with more users on mobile devices
+without bandwidth exploding with minimal changes.
 
 Additionally, there's not a clear cut alternative that maps cleanly to the
 desired use cases (p2p, multicast, privacy-preserving, open, etc).
@@ -286,8 +287,8 @@ iterative work with results on the order of weeks.
 
 ### Progress so far
 
-In short, we have a v0 version of the spec up [here](https://specs.vac.dev/waku.html) as well as a [PoC](https://github.com/status-im/nim-eth/pull/120) for backwards compatibility. In the coming weeks, we are going to solidify the specs, get a more fully featured PoC for [Waku mode](https://github.com/status-im/nim-eth/pull/114). See [rough roadmap](https://github.com/vacp2p/pm/issues/5), [project board](https://github.com/orgs/vacp2p/projects/2) and progress thread on the [Vac forum](https://forum.vac.dev/t/waku-project-and-progress/24).
+In short, we have a [Waku version 0 spec up](https://specs.vac.dev/waku.html) as well as a [PoC](https://github.com/status-im/nim-eth/pull/120) for backwards compatibility. In the coming weeks, we are going to solidify the specs, get a more fully featured PoC for [Waku mode](https://github.com/status-im/nim-eth/pull/114). See [rough roadmap](https://github.com/vacp2p/pm/issues/5), [project board](https://github.com/orgs/vacp2p/projects/2) and progress thread on the [Vac forum](https://forum.vac.dev/t/waku-project-and-progress/24).
 
-The spec also mentions several previously [ad hoc implemented features](https://specs.vac.dev/waku.html#additional-capabilities), such as light nodes and mailserver/client support.
+The spec has been rewrittten for clarity, with ABNF grammar and less ambiguous language. The spec also mentions several previously [ad hoc implemented features](https://specs.vac.dev/waku.html#additional-capabilities), such as light nodes and mailserver/client support. This has already caught a few incompatibilities between the `geth` (Go), `status/whisper` (Go) and `nim-eth` (Nim) versions, specifically around light node usage and the handshake. 
 
-If you are interested in this effort, please check out our forum for questions, comments and proposals. We already have some discussion for better [spam protection](https://forum.vac.dev/t/stake-priority-based-queuing/26) (see [previous post](https://vac.dev/feasibility-semaphore-rate-limiting-zksnarks) for a more complex but privacy-preserving proposal), something that is likely going to be addressed in future versions of Waku, along with many other enhancement.
+If you are interested in this effort, please check out [our forum](https://forum.vac.dev/) for questions, comments and proposals. We already have some discussion for better [spam protection](https://forum.vac.dev/t/stake-priority-based-queuing/26) (see [previous post](https://vac.dev/feasibility-semaphore-rate-limiting-zksnarks) for a more complex but privacy-preserving proposal), something that is likely going to be addressed in future versions of Waku, along with many other fixes and enhancement.
