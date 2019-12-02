@@ -33,19 +33,34 @@ a) scalability, most immediately when it comes to bandwidth usage
 b) spam-resistance, proof of work is a poor mechanism for heterogenerous nodes
 c) no incentivized infrastructure, leading to centralized choke points
 d) lack of formal and unambiguous specification makes it hard to analyze and implement
+e) running over devp2p, which limits where it can run and how
 
 In this post, we'll focus on the first problem, which is bandwidth scalability.
 
-## Whisper theoretical model
+## Whisper theoretical scalability model
 
-Whisper theoretical model. Attempts to encode characteristics of it. Specifically for use case such as one by Status (see [Status Whisper usage spec](https://github.com/status-im/specs/blob/master/status-whisper-usage-spec.md)).
+*(Feel free to skip this section if you want to get right to the results, there's a graph at the bottom).*
 
+There's widespread implicit knowledge that Whisper "doesn't scale", but it is less understood exactly why. This theoretical model attempts to encode some characteristics of it. Specifically for use case such as one by Status (see [Status Whisper usage
+spec](https://github.com/status-im/specs/blob/master/status-whisper-usage-spec.md)).
+
+### Caveats
+
+First, some caveats: this model likely contains bugs, has wrong assumptions, or completely misses certain dimensions. However, it acts as a form of existence proof for unscalability, with clear reasons.
+
+If certain assumptions are wrong, then we can challenge them and reason about them in isolation. It doesn’t mean things will definitely work as the model predicts, and that there aren’t unknown unknowns.
+
+The model also only deals with receiving bandwidth for end nodes, uses mostly static assumptions of averages, and doesn’t deal with spam resistance, privacy guarantees, accounting, intermediate node or network wide failures.
 
 ### Goals
+
 1. Ensure network scales by being user or usage bound, as opposed to bandwidth growing in proportion to network size.
 2. Staying with in a reasonable bandwidth limit for limited data plans.
 3. Do the above without materially impacting existing nodes.
 
+It proceeds through various case with clear assumptions behind them, starting from the most naive assumptions. It shows results for 100 users, 10k users and 1m users.
+
+### Model
 
 ```
 Case 1. Only receiving messages meant for you [naive case]
@@ -61,6 +76,7 @@ For 10k users, receiving bandwidth is 1000.0KB/day
 For  1m users, receiving bandwidth is 1000.0KB/day
 
 ------------------------------------------------------------
+
 Case 2. Receiving messages for everyone [naive case]
 
 Assumptions:
@@ -74,7 +90,8 @@ For 10k users, receiving bandwidth is    9.5GB/day
 For  1m users, receiving bandwidth is  953.7GB/day
 
 ------------------------------------------------------------
-Case 3. All private messages go over one discovery topic
+
+Case 3. All private messages go over one discovery topic [naive case]
 
 Assumptions:
 - A1. Envelope size (static): 1024kb
@@ -89,6 +106,7 @@ For 10k users, receiving bandwidth is    4.8GB/day
 For  1m users, receiving bandwidth is  476.8GB/day
 
 ------------------------------------------------------------
+
 Case 4. All private messages are partitioned into shards [naive case]
 
 Assumptions:
@@ -127,7 +145,9 @@ For  1m users, receiving bandwidth is   95.5GB/day
 NOTE: Traffic extremely sensitive to bloom false positives
 This completely dominates network traffic at scale.
 With p=1% we get 10k users ~100MB/day and 1m users ~10gb/day)
+
 ------------------------------------------------------------
+
 Case 6. Case 5 + Benign duplicate receives
 
 Assumptions:
@@ -179,6 +199,8 @@ For  1m users, receiving bandwidth is   27.8GB/day
 
 Case 8. No metadata protection w bloom filter; 1 node connected; static shard
 
+Aka waku mode.
+
 Next step up is to either only use contact code, or shard more aggressively.
 Note that this requires change of other nodes behavior, not just local node.
 
@@ -202,6 +224,12 @@ for more detail on the model and its assumptions.
 
 ### Takeaways
 
+1. Whisper as it currently works doesn’t scale, and we quickly run into unacceptable bandwidth usage.
+2. There are a few factors of this, but largely it boils down to noisy topics usage and use of bloom filters.
+   - Duplicate (e.g. see [Whisper vs PSS](https://our.status.im/whisper-pss-comparison/) and bad envelopes are also fundamental factors, but this depends a bit more on specific deployment configurations.
+3. Waku mode (case 8) is an additional capability that doesn’t require other nodes to change, for nodes that put a premium on performance.
+4. The next bottleneck after this is the partitioned topics (app/network specific), which either needs to gracefully (and potentially quickly) grow, or an alternative way of consuming those messages needs to be deviced.
+
 The results are summed up in the following graph. Notice the log-log scale. The
 colored backgrounds correspond to the following bandwidth usage:
 
@@ -212,17 +240,54 @@ colored backgrounds correspond to the following bandwidth usage:
 
 ![](assets/img/whisper_scalability.png)
 
-## Progress so far
+These ranges are somewhat arbitrary, but are based on [user
+requirements](https://github.com/status-im/status-react/issues/9081) for users
+on a limited data plan, with comparable usage for other messaging apps.
 
-,,,
-## Motivation for a new protocol
+## Waku project
 
-- Why not new
-- Iterative
-- PRogress so far
+### Motivation for a new protocol
 
-- Description of Whisper and recap of its issues (gossip, 'darkness', pow, incentive, spec etc)
-- Introduce model
-- Motivation for a new protocol
-- Progress so far
+Apps such as Status will likely use Whisper for the forseeable future, and we
+want to enable them to use it with more users on mobile devices without
+bandwidth exploding with minimal changes.
 
+Additionally, there's not a clear cut alternative that maps cleanly to the
+desired use cases (p2p, multicast, privacy-preserving, open, etc).
+
+We are actively researching, developing and collaborating with more greenfield
+approaches. It is likely that Waku will either converge to those, or Waku will
+lay the groundwork (clear specs, common issues/components) necessary to make
+switching to another protocol easier. In this project we want to emphasize
+iterative work with results on the order of weeks.
+
+### Briefly on Waku mode
+
+- Doesn’t impact existing clients, it’s just a separate node and capability.
+- Other nodes can still use Whisper as is, like a full node.
+- Sacrifices metadata protection and incurs higher connectivity/availability requirements for scalbility
+
+**Requirements:**
+
+- Exposes API to get messages from a set of list of topics (no bloom filter)
+- Way of being identified as a Waku node (e.g. through version string)
+- Option to statically encode this node in app, e.g. similar to custom bootnodes/mailserver
+- Only node that needs to be connected to, possibly as Whisper relay / mailserver hybrid
+
+**Provides:**
+
+- likely provides scalability of up to 10k users and beyond
+- with some enhancements to partition topic logic, can possibly scale up to 1m users (app/network specific)
+
+**Caveats:**
+
+- hasn’t been tested in a large-scale simulation
+- other network and intermediate node bottlenecks might become apparent (e.g. full bloom filter and private cluster capacity; can likely be dealt with in isolation using known techniques, e.g. load balancing) (deployment specific)
+
+### Progress so far
+
+In short, we have a v0 version of the spec up [here](https://specs.vac.dev/waku.html) as well as a [PoC](https://github.com/status-im/nim-eth/pull/120) for backwards compatibility. In the coming weeks, we are going to solidify the specs, get a more fully featured PoC for [Waku mode](https://github.com/status-im/nim-eth/pull/114). See [rough roadmap](https://github.com/vacp2p/pm/issues/5), [project board](https://github.com/orgs/vacp2p/projects/2) and progress thread on the [Vac forum](https://forum.vac.dev/t/waku-project-and-progress/24).
+
+The spec also mentions several previously [ad hoc implemented features](https://specs.vac.dev/waku.html#additional-capabilities), such as light nodes and mailserver/client support.
+
+If you are interested in this effort, please check out our forum for questions, comments and proposals. We already have some discussion for better [spam protection](https://forum.vac.dev/t/stake-priority-based-queuing/26) (see [previous post](https://vac.dev/feasibility-semaphore-rate-limiting-zksnarks) for a more complex but privacy-preserving proposal), something that is likely going to be addressed in future versions of Waku, along with many other enhancement.
