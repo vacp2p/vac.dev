@@ -291,3 +291,5 @@ In short, we have a [Waku version 0 spec up](https://specs.vac.dev/waku.html) as
 The spec has been rewrittten for clarity, with ABNF grammar and less ambiguous language. The spec also incorporates several previously [ad hoc implemented features](https://specs.vac.dev/waku.html#additional-capabilities), such as light nodes and mailserver/client support. This has already caught a few incompatibilities between the `geth` (Go), `status/whisper` (Go) and `nim-eth` (Nim) versions, specifically around light node usage and the handshake. 
 
 If you are interested in this effort, please check out [our forum](https://forum.vac.dev/) for questions, comments and proposals. We already have some discussion for better [spam protection](https://forum.vac.dev/t/stake-priority-based-queuing/26) (see [previous post](https://vac.dev/feasibility-semaphore-rate-limiting-zksnarks) for a more complex but privacy-preserving proposal), something that is likely going to be addressed in future versions of Waku, along with many other fixes and enhancement.
+
+Discuss this post [here](https://forum.vac.dev/t/discussion-fixing-whisper-with-waku/27).
