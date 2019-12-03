@@ -1,7 +1,7 @@
 ---
 layout: post
-name:  "Waku - Fixing Whisper"
-title:  "Waku - Fixing Whisper"
+name:  "Fixing Whisper with Waku"
+title:  "Fixing Whisper with Waku"
 date:   2019-12-03 12:00:00 +0800
 author: oskarth
 published: true
