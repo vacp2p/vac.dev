@@ -2,7 +2,7 @@
 layout: post
 name:  "Waku - Fixing Whisper"
 title:  "Waku - Fixing Whisper"
-date:   2019-11-28 12:00:00 +0800
+date:   2019-12-03 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /fixing-whisper-with-waku
