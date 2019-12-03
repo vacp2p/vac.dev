@@ -7,7 +7,7 @@ author: oskarth
 published: true
 permalink: /fixing-whisper-with-waku
 categories: research
-summary: A research log. Why Whisper can't scale and how to fix it.
+summary: A research log. Why Whisper doesn't scale and how to fix it.
 image: /assets/img/whisper_scalability.png
 ---
 
