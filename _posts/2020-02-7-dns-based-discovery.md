@@ -1,5 +1,3 @@
-# DNS based discovery
-
 ---
 layout: post
 name:  "DNS based discovery"
