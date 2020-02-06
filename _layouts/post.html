@@ -9,6 +9,10 @@ layout: default
             <div class="meta">{{ page.date | date_to_string }} • {{ page.author }}</div>
             <div class="editor-content">
                 {{ content }}
+
+                {% if page.discuss %}
+                    <p>Discuss this post on our <a href="{{ page.discuss }}">forum</a>. </p>
+                {% endif %}
             </div>
         </div>
     </div>
