@@ -8,7 +8,7 @@ published: true
 permalink: /vac-overview
 categories: research
 summary: Vac is a modular peer-to-peer messaging stack, with a focus on secure messaging. Overview of terms, stack and open problems.
-image: /assets/img/vac.jpg
+image: /assets/img/vac.png
 ---
 
 Vac is a **modular peer-to-peer messaging stack, with a focus on secure messaging**. What does that mean? Let's unpack it a bit.
