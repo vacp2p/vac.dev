@@ -56,7 +56,7 @@ What makes this DNS based discovery useful? It allows us to have a mutable list 
 
 Additionally, DNS provides us with a robust and scalable infrastructure. This is due to its hierarchical architecture. This hierarchical architecture also already makes it distributed such that the failure of one DNS server does not result in us no longer being able to resolve our name.
 
-As with every solution though, there is a trade-off. By storing the list in DNS name an adversary would simply need to censor the DNS records for a specific name. This would prevent any new client trying to join the network from not being able to do so.
+As with every solution though, there is a trade-off. By storing the list in DNS name an adversary would simply need to censor the DNS records for a specific name. This would prevent any new client trying to join the network from being able to do so.
 
 One thing you notice when looking at [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459) is that it is a lot more technically complex than Bitcoin's way of doing this. So if Bitcoin uses this simple method and has proven that it works, why did we need a new method?
 
