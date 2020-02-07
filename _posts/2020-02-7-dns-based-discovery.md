@@ -21,7 +21,7 @@ How do we do this?
 
 [EIP 1459: Node Discovery via DNS](https://eips.ethereum.org/EIPS/eip-1459), which is one of the strategies we are using for discovering waku nodes. [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459) is a DNS-based discovery protocol that stores [merkle trees](https://en.wikipedia.org/wiki/Merkle_tree) in DNS records which contain connection information for nodes.
 
-*Waku is our fork of Whisper. Oskar recently wrote an [entire post](https://vac.dev/fixing-whisper-with-waku) explaining it recently. In short, Waku is our method of fixing the shortcomings of Whisper in a more iterative fashion. You can find the specification [here](https://specs.vac.dev/waku/waku.html)*
+*Waku is our fork of Whisper. Oskar recently wrote an [entire post](https://vac.dev/fixing-whisper-with-waku) explaining it. In short, Waku is our method of fixing the shortcomings of Whisper in a more iterative fashion. You can find the specification [here](https://specs.vac.dev/waku/waku.html)*
 
 DNS-based methods for bootstrapping p2p networks are quite popular. Even Bitcoin uses it, but it uses a concept called DNS seeds, which are just DNS servers that are configured to return a list of randomly selected nodes from the network upon being queried. This means that although these seeds are hardcoded in the client, the IP addresses of actual nodes do not have to be.
 
