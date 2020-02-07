@@ -8,7 +8,6 @@ published: true
 permalink: /dns-based-discovery
 categories: research
 summary: A look at EIP-1459 and the benefits of DNS based discovery.
-image: /assets/img/vac.png
 ---
 
 Discovery in p2p networks is the process of how nodes find each other and specific resources they are looking for. Popular discovery protocols, such as [Kademlia](https://pdos.csail.mit.edu/~petar/papers/maymounkov-kademlia-lncs.pdf) which utilizes a [distributed hash table](https://en.wikipedia.org/wiki/Distributed_hash_table) or DHT, are highly inefficient for resource restricted devices. These methods use short connection windows, and it is quite battery intensive to keep establishing connections. Additionally, we cannot expect a mobile phone for example to synchronize an entire DHT using cellular data.
