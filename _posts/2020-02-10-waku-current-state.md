@@ -12,6 +12,8 @@ image: /assets/img/TODOFIXME.png
 discuss: https://forum.vac.dev/t/TODOFIXME
 ---
 
+TODO: Picture for bottleneck or Waku
+
 # Where we are at with Waku?
 
 Waku is our fork of Whisper where we address the shortcomings of Whisper in an iterative manner. We've seen in previous post that Whisper doesn't scale, and why. Here's an update on where we are at with Waku since that [last post](https://vac.dev/fixing-whisper-with-waku).
@@ -46,18 +48,33 @@ We've got a [simulation](https://github.com/status-im/nimbus/tree/master/waku#te
 
 ## How many users does Waku support?
 
-Recap what is said in Scalability post. Write it in a slightly more general form, i.e. less Status app specific.
+This is our current understanding of how many users a network running the Waku protocol can support. Specifically in the context of the Status chat app, since that's the most immediate consumer of Waku. It should generalize fairly well to most deployments, but YMMW.
 
-https://discuss.status.im/t/scalability-estimate-how-many-users-can-waku-and-the-status-app-support/1514/1
+**tldr (for Status app):**
+- beta: 100 DAU
+- v1: 1k DAU
+- v1.1 (waku only): 10k DAU (up to x10 with deployment hotfixes)
+- v1.2 (waku+dns): 100k DAU (can optionally be folded into v1.1)
 
-One of the goals is to support Status app. Here are the bottlenecks:
+*Assuming 10 concurrent users = 100 DAU. Estimate uncertainty increases for each order of magnitude until real-world data is observed.*
 
-- Bottlenecks 1 2 3
--- BW recv
--- dns discovery etc
--- full node -> problem statement next, kad
+As far as we know right now, there is one immediate bottleneck, a very likely bottleneck after that, and a third bottleneck that is still conjecture but not unlikely to appear. These are:
 
-- Link to DNS discovery post
+- Bottleneck 1 - Receive bandwidth for end user clients (aka ‘Fixing Whisper with Waku’)
+- Bottleneck 2 - Nodes and cluster capacity (aka ‘DNS based node discovery’)
+- Bottleneck 3 - Full node traffic (aka ‘the routing / partition problem’)
+
+We've already seen the first bottleneck being discussed in the initial post. Dean wrote a post on [DNS based discovery](https://vac.dev/dns-based-discovery) which explains how we will address the likely second bottleneck. More on the third one in future posts.
+
+For more details on these bottlenecks, uncertainty and mitigations, see [Scalability estimate: How many users can Waku and the Status app support?](https://discuss.status.im/t/scalability-estimate-how-many-users-can-waku-and-the-status-app-support/1514).
+
+TODO: Elaborate on bottleneck 3, kad etc
+
+## Simulation
+
+The ultimate test is real-world usage. Until then, we have a simulation. Here's some data on this.
+
+TODO: Insert picture
 
 - Simulations
 -- include data numbers (below raw data)
