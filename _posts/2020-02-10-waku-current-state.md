@@ -115,9 +115,18 @@ Run the simulation yourself [here](https://github.com/status-im/nimbus/tree/mast
 
 ## Difference between Waku and Whisper
 
-XXX: Add this in section above or here? In-line? How much emphasize?
+Summary of main differences between Waku v0 spec and Whisper v6, as described in EIP-627:
 
-Highlight spec and stuff
+- Handshake/Status message not compatible with shh/6 nodes; specifying options as association list
+- Include topic-interest in Status handshake
+- Upgradability policy
+- `topic-interest` packet code
+- RLPx subprotocol is changed from shh/6 to waku/0.
+- Light node capability is added.
+- Optional rate limiting is added.
+- Status packet has following additional parameters: light-node, confirmations-enabled and rate-limits
+- Mail Server and Mail Client functionality is now part of the specification.
+- P2P Message packet contains a list of envelopes instead of a single envelope.
 
 ## Next steps and future plans
 
