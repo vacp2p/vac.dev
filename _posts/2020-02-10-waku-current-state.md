@@ -130,10 +130,12 @@ Summary of main differences between Waku v0 spec and Whisper v6, as described in
 
 ## Next steps and future plans
 
-- Kad routing etc
+There are a lot of remaining challenges to make Waku a robust and suitable base
+communication protocol. Here we outline a few challenges that we aim to address:
 
-- Roadmap
+- scalability of the network
+- incentived infrastructure and spam-resistance
+- build with resource restricted devices in mind, including nodes being mostly offline
 
-- Better spam proof and incentive
-
--> Future posts
+When it comes to the third bottleneck, a likely candidate for addressing this
+is using Kademlia routing. Stay tuned.
