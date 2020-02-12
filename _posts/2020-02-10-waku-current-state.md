@@ -20,21 +20,29 @@ Waku is our fork of Whisper where we address the shortcomings of Whisper in an i
 
 **Specs:**
 
-Specs are in version X, Y and can be found here
+We've cut the spec up into three components. These are:
 
-TODO: Add links
+- Waku (main spec), currently in [version 0.2.0](https://specs.vac.dev/waku/waku.html)
+- Waku envelope data field, currently in [version 0.1.0](https://specs.vac.dev/waku/envelope-data-format.html)
+- Waku mailserver, currently in [version 0.2.0](https://specs.vac.dev/waku/mailserver.html)
+
+TODO: Update Waku spec to 0.3
 
 **Clients:**
 
-We have two clients, both implement X spec
+There are currently two clients that implement Waku, these are [Nimbus](https://github.com/status-im/nimbus/tree/master/waku) in Nim and [status-go](https://github.com/status-im/status-go) in Go.
 
-TODO: Add links
+At the time of this writing the Nimbus client implements the spec fully, but lacks mail server and mail client capability. The status-go client implements everything except bridging mode, which is currently a work in progress.
+
+For more details, see [implementation matrix](https://specs.vac.dev/waku/waku.html#appendix-b-implementation-notes).
+
+In terms of end user applications, work is currently in progress to integrate it into the [Status core app](https://github.com/status-im/status-react/pull/9949) and is expected to be released in their upcoming 1.1 release.
+
+TODO: Fact check this with Adam and Kim
 
 **Simulation:**
 
-We've got a simulation that verifies scalability model, more on that below
-
-TODO: Add link
+We've got a [simulation](https://github.com/status-im/nimbus/tree/master/waku#testing-waku-protocol) in the Nimbus client that verifies - or rather, fails to falsify - the scalability model posted in an [earlier post](https://vac.dev/fixing-whisper-with-waku). More on this below.
 
 ## How many users does Waku support?
 
