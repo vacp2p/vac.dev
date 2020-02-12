@@ -74,7 +74,7 @@ TODO: Elaborate on bottleneck 3, kad etc
 
 The ultimate test is real-world usage. Until then, we have a simulation. Here's some data on this.
 
-TODO: Insert picture
+![](assets/img/waku_simulation.jpeg)
 
 Here we outline two network topologies, Star and full mesh, with 6 randomly connected nodes and 2 X, sending 10000 random envelopes over random topics, including invalid envelopes.
 
