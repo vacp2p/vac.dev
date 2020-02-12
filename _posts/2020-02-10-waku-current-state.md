@@ -76,50 +76,42 @@ The ultimate test is real-world usage. Until then, we have a simulation. Here's 
 
 TODO: Insert picture
 
-- Simulations
--- include data numbers (below raw data)
+Here we outline two network topologies, Star and full mesh, with 6 randomly connected nodes and 2 X, sending 10000 random envelopes over random topics, including invalid envelopes.
 
-- Obvious test is real world
+For light node, bloom filter is set to 1% false positive. It shows the number of valid and invalid envelopes received for the different nodes.
 
-```
-> ./build/start_network --topology:Star --amount:6 --test-node-peers:2
+**Star network:**
 
-Send 10k random envelopes over random topics
+| Description     | Peers | Valid | Invalid |
+|-----------------|-------|-------|---------|
+| Master node     |     7 | 10001 |       0 |
+| Full node 1     |     3 | 10001 |       0 |
+| Full node 2     |     1 | 10001 |       0 |
+| Full node 3     |     1 | 10001 |       0 |
+| Full node 4     |     1 | 10001 |       0 |
+| Full node 5     |     1 | 10001 |       0 |
+| Light node      |     2 |   815 |       0 |
+| Waku light node |     2 |     1 |       0 |
 
-Star simulation:
+**Full mesh:**
 
-confirm invlaid
+| Description     | Peers | Valid | Invalid |
+|-----------------|-------|-------|---------|
+| Full node 0     |     7 | 10001 |   20676 |
+| Full node 1     |     7 | 10001 |    9554 |
+| Full node 2     |     5 | 10001 |   23304 |
+| Full node 3     |     5 | 10001 |   11983 |
+| Full node 4     |     5 | 10001 |   24425 |
+| Full node 5     |     5 | 10001 |   23472 |
+| Light node      |     2 |   803 |     803 |
+| Waku light node |     2 |     1 |       1 |
 
-master node: connected peers 7 - 10001 / 0
-full node 1: connected peers 3 - 10001 / 0
-full node 2: connected peers 1 - 10001 / 0
-full node 3: connected peers 1 - 10001 / 0
-full node 4: connected peers 1 - 10001 / 0
-full node 5: connected peers 1 - 10001 / 0 
-light node 1: connected peers 2 - 815 / 0 (next run 1094)
-waku light node 1: connected peers 2 - 1 / 0
+Things to note:
+- Whisper light node with 1% false positive gets 1% of total traffic
+- Waku light node gets ~1000x less envelopes than Whisper light node
+- Full mesh results in a lot more duplicate messages, expect for Waku light node
 
-- Why 10001?
-- Which bloom filter used exactly?
-- Why invalid envelopes 815 and 1 respectively for light/waku nodes, and nothing for other full nodes?
-
-Ok think I got, also roughly ~100 1%
-- what precise bloom filter used?
-
-Full mesh:
-
-peers / valid envelopes / invalid
-
-full node 0: connected peers 7 - 10001 / 20676
-full node 1: connected peers 7 - 10001 / 9554
-full node 2: connected peers 5 - 10001 / 23304
-full node 3: connected peers 5 - 10001 / 11983
-full node 4: connected peers 5 - 10001 / 24425
-full node 5: connected peers 5 - 10001 / 23472
-light node 1: connected peers 2 - 803 / 803
-waku light node 1: connected peers 2 - 1 / 1
-
-```
+Run the simulation yourself [here](https://github.com/status-im/nimbus/tree/master/waku#testing-waku-protocol). The parameters are configurable, and it is integrated with Prometheus and Grafana.
 
 ## Difference between Waku and Whisper
 
