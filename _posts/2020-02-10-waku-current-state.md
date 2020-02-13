@@ -16,7 +16,7 @@ TODO: Picture for bottleneck or Waku
 
 # Where we are at with Waku?
 
-Waku is our fork of Whisper where we address the shortcomings of Whisper in an iterative manner. We've seen in previous post that Whisper doesn't scale, and why. Here's an update on where we are at with Waku since that [last post](https://vac.dev/fixing-whisper-with-waku).
+Waku is our fork of Whisper where we address the shortcomings of Whisper in an iterative manner. We've seen a in [previous post](https://vac.dev/fixing-whisper-with-waku) that Whisper doesn't scale, and why. Here's an update on where we are at with Waku since then.
 
 ## Current state
 
