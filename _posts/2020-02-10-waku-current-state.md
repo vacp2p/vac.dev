@@ -60,7 +60,7 @@ This is our current understanding of how many users a network running the Waku p
 
 As far as we know right now, there is one immediate bottleneck, a very likely bottleneck after that, and a third bottleneck that is still conjecture but not unlikely to appear. These are:
 
-- Bottleneck 1 - Receive bandwidth for end user clients (aka ‘Fixing Whisper with Waku’)
+- Immediate bottleneck - Receive bandwidth for end user clients (aka ‘Fixing Whisper with Waku’)
 - Bottleneck 2 - Nodes and cluster capacity (aka ‘DNS based node discovery’)
 - Bottleneck 3 - Full node traffic (aka ‘the routing / partition problem’)
 
