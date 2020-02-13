@@ -115,7 +115,7 @@ Run the simulation yourself [here](https://github.com/status-im/nimbus/tree/mast
 
 ## Difference between Waku and Whisper
 
-Summary of main differences between Waku v0 spec and Whisper v6, as described in EIP-627:
+Summary of main differences between Waku v0 spec and Whisper v6, as described in [EIP-627](https://eips.ethereum.org/EIPS/eip-627):
 
 - Handshake/Status message not compatible with shh/6 nodes; specifying options as association list
 - Include topic-interest in Status handshake
