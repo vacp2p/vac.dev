@@ -1,18 +1,19 @@
 ---
 layout: post
-name:  "Waku current state"
-title:  "Waku current state"
-date:   2020-02-10 12:00:00 +0800
+name:  "Where Are We at with Waku?"
+title:  "Where Are We at with Waku?"
+date:   2020-02-14 12:00:00 +0800
 author: oskarth
-published: false
-permalink: /waku-current-state
+published: true
+permalink: /where-are-we-at-with-waku
 categories: research
-summary: A research log. Waku current state.
+summary: A research log. Where are we at with Waku?
 image: /assets/img/TODOFIXME.png
 discuss: https://forum.vac.dev/t/TODOFIXME
 ---
 
 TODO: Picture for bottleneck or Waku
+TODO: Fix discuss link
 TODO: Fix date
 
 # Where we are at with Waku?
