@@ -13,6 +13,7 @@ discuss: https://forum.vac.dev/t/TODOFIXME
 ---
 
 TODO: Picture for bottleneck or Waku
+TODO: Fix date
 
 # Where we are at with Waku?
 
@@ -24,17 +25,15 @@ Waku is our fork of Whisper where we address the shortcomings of Whisper in an i
 
 We've cut the spec up into three components. These are:
 
-- Waku (main spec), currently in [version 0.2.0](https://specs.vac.dev/waku/waku.html)
+- Waku (main spec), currently in [version 0.3.0](https://specs.vac.dev/waku/waku.html)
 - Waku envelope data field, currently in [version 0.1.0](https://specs.vac.dev/waku/envelope-data-format.html)
 - Waku mailserver, currently in [version 0.2.0](https://specs.vac.dev/waku/mailserver.html)
-
-TODO: Update Waku spec to 0.3
 
 **Clients:**
 
 There are currently two clients that implement Waku, these are [Nimbus](https://github.com/status-im/nimbus/tree/master/waku) in Nim and [status-go](https://github.com/status-im/status-go) in Go.
 
-At the time of writing the Nimbus client implements the spec fully, but lacks mail server and mail client capability. The status-go client implements everything except bridging mode, which is currently a work in progress.
+At the time of writing the Nimbus client implements the spec fully, but lacks mail server/client, rate limiting and confirmations capability. The status-go client implements everything except bridging mode, which is currently a work in progress.
 
 For more details, see [implementation matrix](https://specs.vac.dev/waku/waku.html#appendix-b-implementation-notes).
 
@@ -72,13 +71,15 @@ TODO: Elaborate on bottleneck 3, kad etc
 
 ## Simulation
 
-The ultimate test is real-world usage. Until then, we have a simulation. Here's some data on this.
+The ultimate test is real-world usage. Until then, we have a simulation thanks to Kim De Mey from the Nimbus team!
 
 ![](assets/img/waku_simulation.jpeg)
 
-Here we outline two network topologies, Star and full mesh, with 6 randomly connected nodes and 2 X, sending 10000 random envelopes over random topics, including invalid envelopes.
+We have two network topologies, Star and full mesh, with 6 randomly connected nodes, one traditional light node with bloom filter (Whisper style) and one Waku light node.
 
-For light node, bloom filter is set to 1% false positive. It shows the number of valid and invalid envelopes received for the different nodes.
+One of the full nodes sends 1 envelope over 1 of the 100 topics that the two light nodes subscribe to. After that, it sends 10000 envelopes over random topics.
+
+For light node, bloom filter is set to almost 10% false positive (bloom filter: n=100, k=3, m=512). It shows the number of valid and invalid envelopes received for the different nodes.
 
 **Star network:**
 
@@ -107,7 +108,7 @@ For light node, bloom filter is set to 1% false positive. It shows the number of
 | Waku light node |     2 |     1 |       1 |
 
 Things to note:
-- Whisper light node with 1% false positive gets 1% of total traffic
+- Whisper light node with ~10% false positive gets ~10% of total traffic
 - Waku light node gets ~1000x less envelopes than Whisper light node
 - Full mesh results in a lot more duplicate messages, expect for Waku light node
 
