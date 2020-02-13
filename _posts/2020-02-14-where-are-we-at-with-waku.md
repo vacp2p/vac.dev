@@ -2,19 +2,19 @@
 layout: post
 name:  "Where Are We at with Waku?"
 title:  "Where Are We at with Waku?"
-date:   2020-02-14 12:00:00 +0800
+date:   2020-02-10 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /where-are-we-at-with-waku
 categories: research
 summary: A research log. Where are we at with Waku?
-image: /assets/img/TODOFIXME.png
+image: /assets/img/waku_infrastructure_sky.jpg
 discuss: https://forum.vac.dev/t/TODOFIXME
 ---
 
 TODO: Picture for bottleneck or Waku
 TODO: Fix discuss link
-TODO: Fix date
+TODO: Fix image credit
 
 # Where we are at with Waku?
 
@@ -141,3 +141,7 @@ communication protocol. Here we outline a few challenges that we aim to address:
 
 When it comes to the third bottleneck, a likely candidate for addressing this
 is using Kademlia routing. Stay tuned.
+
+# Acknowledgements
+
+Image from "caged sky" by mh.xbhd.org is licensed under CC BY 2.0 (https://ccsearch.creativecommons.org/photos/a9168311-78de-4cb7-a6ad-f92be8361d0e)
