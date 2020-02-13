@@ -58,7 +58,7 @@ This is our current understanding of how many users a network running the Waku p
 
 *Assuming 10 concurrent users = 100 DAU. Estimate uncertainty increases for each order of magnitude until real-world data is observed.*
 
-As far as we know right now, there is one immediate bottleneck, a very likely bottleneck after that, and a third bottleneck that is still conjecture but not unlikely to appear. These are:
+As far as we know right now, these are the bottlenecks we have:
 
 - Immediate bottleneck - Receive bandwidth for end user clients (aka ‘Fixing Whisper with Waku’)
 - Very likely bottleneck - Nodes and cluster capacity (aka ‘DNS based node discovery’)
