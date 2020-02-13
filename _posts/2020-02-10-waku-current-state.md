@@ -44,7 +44,7 @@ TODO: Fact check this with Adam and Kim
 
 **Simulation:**
 
-We've got a [simulation](https://github.com/status-im/nimbus/tree/master/waku#testing-waku-protocol) in the Nimbus client that verifies - or rather, fails to falsify - the scalability model posted in an [earlier post](https://vac.dev/fixing-whisper-with-waku). More on this below.
+We've got a [simulation](https://github.com/status-im/nimbus/tree/master/waku#testing-waku-protocol) in the Nimbus client that verifies - or rather, fails to falsify - the scalability model described in an [earlier post](https://vac.dev/fixing-whisper-with-waku). More on this below.
 
 ## How many users does Waku support?
 
