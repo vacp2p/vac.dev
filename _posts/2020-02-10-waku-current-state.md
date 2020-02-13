@@ -34,7 +34,7 @@ TODO: Update Waku spec to 0.3
 
 There are currently two clients that implement Waku, these are [Nimbus](https://github.com/status-im/nimbus/tree/master/waku) in Nim and [status-go](https://github.com/status-im/status-go) in Go.
 
-At the time of this writing the Nimbus client implements the spec fully, but lacks mail server and mail client capability. The status-go client implements everything except bridging mode, which is currently a work in progress.
+At the time of writing the Nimbus client implements the spec fully, but lacks mail server and mail client capability. The status-go client implements everything except bridging mode, which is currently a work in progress.
 
 For more details, see [implementation matrix](https://specs.vac.dev/waku/waku.html#appendix-b-implementation-notes).
 
