@@ -50,7 +50,7 @@ We've got a [simulation](https://github.com/status-im/nimbus/tree/master/waku#te
 
 This is our current understanding of how many users a network running the Waku protocol can support. Specifically in the context of the Status chat app, since that's the most immediate consumer of Waku. It should generalize fairly well to most deployments, but YMMW.
 
-**tldr (for Status app):**
+**tl;dr (for Status app):**
 - beta: 100 DAU
 - v1: 1k DAU
 - v1.1 (waku only): 10k DAU (up to x10 with deployment hotfixes)
