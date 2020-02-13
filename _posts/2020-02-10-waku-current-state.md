@@ -62,7 +62,7 @@ As far as we know right now, these are the bottlenecks we have:
 
 - Immediate bottleneck - Receive bandwidth for end user clients (aka ‘Fixing Whisper with Waku’)
 - Very likely bottleneck - Nodes and cluster capacity (aka ‘DNS based node discovery’)
-- Bottleneck 3 - Full node traffic (aka ‘the routing / partition problem’)
+- Conjecture but not unlikely to appear- Full node traffic (aka ‘the routing / partition problem’)
 
 We've already seen the first bottleneck being discussed in the initial post. Dean wrote a post on [DNS based discovery](https://vac.dev/dns-based-discovery) which explains how we will address the likely second bottleneck. More on the third one in future posts.
 
