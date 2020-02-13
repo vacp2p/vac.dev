@@ -61,7 +61,7 @@ This is our current understanding of how many users a network running the Waku p
 As far as we know right now, there is one immediate bottleneck, a very likely bottleneck after that, and a third bottleneck that is still conjecture but not unlikely to appear. These are:
 
 - Immediate bottleneck - Receive bandwidth for end user clients (aka ‘Fixing Whisper with Waku’)
-- Bottleneck 2 - Nodes and cluster capacity (aka ‘DNS based node discovery’)
+- Very likely bottleneck - Nodes and cluster capacity (aka ‘DNS based node discovery’)
 - Bottleneck 3 - Full node traffic (aka ‘the routing / partition problem’)
 
 We've already seen the first bottleneck being discussed in the initial post. Dean wrote a post on [DNS based discovery](https://vac.dev/dns-based-discovery) which explains how we will address the likely second bottleneck. More on the third one in future posts.
