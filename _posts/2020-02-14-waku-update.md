@@ -7,7 +7,7 @@ author: oskarth
 published: true
 permalink: /waku-update
 categories: research
-summary: A research log. Waku update. What's the current state of Waku? How many users does it support? What are the bottlenecks? What's next?
+summary: A research log. What's the current state of Waku? How many users does it support? What are the bottlenecks? What's next?
 image: /assets/img/waku_infrastructure_sky.jpg
 discuss: https://forum.vac.dev/t/waku-update-where-are-we-at/34
 ---
