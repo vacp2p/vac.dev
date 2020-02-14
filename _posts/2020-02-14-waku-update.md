@@ -1,46 +1,42 @@
 ---
 layout: post
-name:  "Where Are We at with Waku?"
-title:  "Where Are We at with Waku?"
+name:  "Waku Update"
+title:  "Waku Update"
 date:   2020-02-10 12:00:00 +0800
 author: oskarth
 published: true
-permalink: /where-are-we-at-with-waku
+permalink: /waku-update
 categories: research
-summary: A research log. Where are we at with Waku?
+summary: A research log. Waku Update.
 image: /assets/img/waku_infrastructure_sky.jpg
 discuss: https://forum.vac.dev/t/TODOFIXME
 ---
 
-TODO: Picture for bottleneck or Waku
-TODO: Fix discuss link
-TODO: Fix image credit
-
-# Where we are at with Waku?
-
-Waku is our fork of Whisper where we address the shortcomings of Whisper in an iterative manner. We've seen a in [previous post](https://vac.dev/fixing-whisper-with-waku) that Whisper doesn't scale, and why. Here's an update on where we are at with Waku since then.
+Waku is our fork of Whisper where we address the shortcomings of Whisper in an iterative manner. We've seen a in [previous post](https://vac.dev/fixing-whisper-with-waku) that Whisper doesn't scale, and why. In this post we'll talk about what the current state of Waku is, how much users it can support, and briefly on future plans. 
 
 ## Current state
 
 **Specs:**
 
-We've cut the spec up into three components. These are:
+We released [Waku spec v0.3](https://specs.vac.dev/waku/waku.html) this week! You can see a full changelog [here](https://specs.vac.dev/waku/waku.html#changelog).
+
+The main change from 0.2 is changing the handshake to be more flexible by specifying options as an association list. The driving force for this was making sure we could immediately communicate a list of topics a client is interested in in an unambiguous way. This will also give us more flexibility going forward in terms of capabilities and requirements we want to communicate between peers. We also added a recommendation for DNS based discovery and an upgradability/compatibility policy.
+
+Additionally, we've cut the spec up into three components. This is in-line with our goal of making Vac as modular as possible. The components are:
 
 - Waku (main spec), currently in [version 0.3.0](https://specs.vac.dev/waku/waku.html)
 - Waku envelope data field, currently in [version 0.1.0](https://specs.vac.dev/waku/envelope-data-format.html)
 - Waku mailserver, currently in [version 0.2.0](https://specs.vac.dev/waku/mailserver.html)
 
+We can probably factor these out further as the main spec is getting quite big, but this is good enough for now.
+
 **Clients:**
 
 There are currently two clients that implement Waku, these are [Nimbus](https://github.com/status-im/nimbus/tree/master/waku) in Nim and [status-go](https://github.com/status-im/status-go) in Go.
 
-At the time of writing the Nimbus client implements the spec fully, but lacks mail server/client, rate limiting and confirmations capability. The status-go client implements everything except bridging mode, which is currently a work in progress.
+For more details on what each client support and don't, you can follow the [work in progress checklist](https://github.com/vacp2p/pm/issues/7).
 
-For more details, see [implementation matrix](https://specs.vac.dev/waku/waku.html#appendix-b-implementation-notes).
-
-In terms of end user applications, work is currently in progress to integrate it into the [Status core app](https://github.com/status-im/status-react/pull/9949) and is expected to be released in their upcoming 1.1 release.
-
-TODO: Fact check this with Adam and Kim
+In terms of end user applications, work is currently in progress to integrate it into the [Status core app](https://github.com/status-im/status-react/pull/9949) using the statusg-go client. It is expected to be released in their upcoming 1.1 release (see [Status app roadmap](https://trello.com/b/DkxQd1ww/status-app-roadmap)).
 
 **Simulation:**
 
@@ -48,7 +44,7 @@ We've got a [simulation](https://github.com/status-im/nimbus/tree/master/waku#te
 
 ## How many users does Waku support?
 
-This is our current understanding of how many users a network running the Waku protocol can support. Specifically in the context of the Status chat app, since that's the most immediate consumer of Waku. It should generalize fairly well to most deployments, but YMMW.
+This is our current understanding of how many users a network running the Waku protocol can support. Specifically in the context of the Status chat app, since that's the most immediate consumer of Waku. It should generalize fairly well to most deployments.
 
 **tl;dr (for Status app):**
 - beta: 100 DAU
@@ -67,8 +63,6 @@ As far as we know right now, these are the bottlenecks we have:
 We've already seen the first bottleneck being discussed in the initial post. Dean wrote a post on [DNS based discovery](https://vac.dev/dns-based-discovery) which explains how we will address the likely second bottleneck. More on the third one in future posts.
 
 For more details on these bottlenecks, uncertainty and mitigations, see [Scalability estimate: How many users can Waku and the Status app support?](https://discuss.status.im/t/scalability-estimate-how-many-users-can-waku-and-the-status-app-support/1514).
-
-TODO: Elaborate on bottleneck 3, kad etc
 
 ## Simulation
 
@@ -139,9 +133,10 @@ communication protocol. Here we outline a few challenges that we aim to address:
 - incentived infrastructure and spam-resistance
 - build with resource restricted devices in mind, including nodes being mostly offline
 
-When it comes to the third bottleneck, a likely candidate for addressing this
-is using Kademlia routing. Stay tuned.
+When it comes to the third bottleneck mentioned aboe, a likely candidate for addressing this
+is using Kademlia routing. This is similar to what is done in PSS, but there are a few different ways of doing it (classical vs forwarding Kademlia, etc). We are in the early stages of experimenting with this over libp2p in
+[nim-libp2p](https://github.com/status-im/nim-libp2p). More on this in a future post!
 
-# Acknowledgements
+## Acknowledgements
 
-Image from "caged sky" by mh.xbhd.org is licensed under CC BY 2.0 (https://ccsearch.creativecommons.org/photos/a9168311-78de-4cb7-a6ad-f92be8361d0e)
+*Image from "caged sky" by mh.xbhd.org is licensed under CC BY 2.0 (https://ccsearch.creativecommons.org/photos/a9168311-78de-4cb7-a6ad-f92be8361d0e)*
