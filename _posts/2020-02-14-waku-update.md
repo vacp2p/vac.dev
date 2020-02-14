@@ -7,9 +7,9 @@ author: oskarth
 published: true
 permalink: /waku-update
 categories: research
-summary: A research log. Waku Update.
+summary: A research log. Waku update. What's the current state of Waku? How many users does it support? What are the bottlenecks? What's next?
 image: /assets/img/waku_infrastructure_sky.jpg
-discuss: https://forum.vac.dev/t/TODOFIXME
+discuss: https://forum.vac.dev/t/waku-update-where-are-we-at/34
 ---
 
 Waku is our fork of Whisper where we address the shortcomings of Whisper in an iterative manner. We've seen a in [previous post](https://vac.dev/fixing-whisper-with-waku) that Whisper doesn't scale, and why. In this post we'll talk about what the current state of Waku is, how many users it can support, and future plans. 
