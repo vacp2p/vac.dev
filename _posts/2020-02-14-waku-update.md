@@ -2,7 +2,7 @@
 layout: post
 name:  "Waku Update"
 title:  "Waku Update"
-date:   2020-02-10 12:00:00 +0800
+date:   2020-02-14 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /waku-update
@@ -12,7 +12,7 @@ image: /assets/img/waku_infrastructure_sky.jpg
 discuss: https://forum.vac.dev/t/TODOFIXME
 ---
 
-Waku is our fork of Whisper where we address the shortcomings of Whisper in an iterative manner. We've seen a in [previous post](https://vac.dev/fixing-whisper-with-waku) that Whisper doesn't scale, and why. In this post we'll talk about what the current state of Waku is, how much users it can support, and briefly on future plans. 
+Waku is our fork of Whisper where we address the shortcomings of Whisper in an iterative manner. We've seen a in [previous post](https://vac.dev/fixing-whisper-with-waku) that Whisper doesn't scale, and why. In this post we'll talk about what the current state of Waku is, how many users it can support, and future plans. 
 
 ## Current state
 
@@ -20,9 +20,13 @@ Waku is our fork of Whisper where we address the shortcomings of Whisper in an i
 
 We released [Waku spec v0.3](https://specs.vac.dev/waku/waku.html) this week! You can see a full changelog [here](https://specs.vac.dev/waku/waku.html#changelog).
 
-The main change from 0.2 is changing the handshake to be more flexible by specifying options as an association list. The driving force for this was making sure we could immediately communicate a list of topics a client is interested in in an unambiguous way. This will also give us more flexibility going forward in terms of capabilities and requirements we want to communicate between peers. We also added a recommendation for DNS based discovery and an upgradability/compatibility policy.
+The main change from 0.2 is changing the handshake to be more flexible. This enables us to communicate topic interest immediately without ambiguity. We also did the following:
 
-Additionally, we've cut the spec up into three components. This is in-line with our goal of making Vac as modular as possible. The components are:
+- added recommendation for DNS based discovery
+- added an upgradability and compatibility policy
+- cut the spec up into several components
+
+We cut the spec up in several components to make Vac as modular as possible. The components right now are:
 
 - Waku (main spec), currently in [version 0.3.0](https://specs.vac.dev/waku/waku.html)
 - Waku envelope data field, currently in [version 0.1.0](https://specs.vac.dev/waku/envelope-data-format.html)
@@ -36,15 +40,15 @@ There are currently two clients that implement Waku, these are [Nimbus](https://
 
 For more details on what each client support and don't, you can follow the [work in progress checklist](https://github.com/vacp2p/pm/issues/7).
 
-In terms of end user applications, work is currently in progress to integrate it into the [Status core app](https://github.com/status-im/status-react/pull/9949) using the statusg-go client. It is expected to be released in their upcoming 1.1 release (see [Status app roadmap](https://trello.com/b/DkxQd1ww/status-app-roadmap)).
+Work is currently in progress to integrate it into the [Status core app](https://github.com/status-im/status-react/pull/9949). Waku is expected to be part of their upcoming 1.1 release (see [Status app roadmap](https://trello.com/b/DkxQd1ww/status-app-roadmap)).
 
 **Simulation:**
 
-We've got a [simulation](https://github.com/status-im/nimbus/tree/master/waku#testing-waku-protocol) in the Nimbus client that verifies - or rather, fails to falsify - the scalability model described in an [earlier post](https://vac.dev/fixing-whisper-with-waku). More on this below.
+We have a [simulation](https://github.com/status-im/nimbus/tree/master/waku#testing-waku-protocol) that verifies - or rather, fails to falsify - our [scalability model](https://vac.dev/fixing-whisper-with-waku). More on the simulation and what it shows below.
 
 ## How many users does Waku support?
 
-This is our current understanding of how many users a network running the Waku protocol can support. Specifically in the context of the Status chat app, since that's the most immediate consumer of Waku. It should generalize fairly well to most deployments.
+This is our current understanding of how many users a network running Waku can support. Specifically in the context of the Status chat app, since that's the most immediate consumer of Waku. It should generalize fairly well to most deployments.
 
 **tl;dr (for Status app):**
 - beta: 100 DAU
@@ -62,7 +66,7 @@ As far as we know right now, these are the bottlenecks we have:
 
 We've already seen the first bottleneck being discussed in the initial post. Dean wrote a post on [DNS based discovery](https://vac.dev/dns-based-discovery) which explains how we will address the likely second bottleneck. More on the third one in future posts.
 
-For more details on these bottlenecks, uncertainty and mitigations, see [Scalability estimate: How many users can Waku and the Status app support?](https://discuss.status.im/t/scalability-estimate-how-many-users-can-waku-and-the-status-app-support/1514).
+For more details on these bottlenecks, see [Scalability estimate: How many users can Waku and the Status app support?](https://discuss.status.im/t/scalability-estimate-how-many-users-can-waku-and-the-status-app-support/1514).
 
 ## Simulation
 
@@ -70,7 +74,7 @@ The ultimate test is real-world usage. Until then, we have a simulation thanks t
 
 ![](assets/img/waku_simulation.jpeg)
 
-We have two network topologies, Star and full mesh, with 6 randomly connected nodes, one traditional light node with bloom filter (Whisper style) and one Waku light node.
+We have two network topologies, Star and full mesh. Both networks have 6 full nodes, one traditional light node with bloom filter, and one Waku light node.
 
 One of the full nodes sends 1 envelope over 1 of the 100 topics that the two light nodes subscribe to. After that, it sends 10000 envelopes over random topics.
 
@@ -126,16 +130,14 @@ Summary of main differences between Waku v0 spec and Whisper v6, as described in
 
 ## Next steps and future plans
 
-There are a lot of remaining challenges to make Waku a robust and suitable base
+Several challenges remain to make Waku a robust and suitable base
 communication protocol. Here we outline a few challenges that we aim to address:
 
 - scalability of the network
 - incentived infrastructure and spam-resistance
 - build with resource restricted devices in mind, including nodes being mostly offline
 
-When it comes to the third bottleneck mentioned aboe, a likely candidate for addressing this
-is using Kademlia routing. This is similar to what is done in PSS, but there are a few different ways of doing it (classical vs forwarding Kademlia, etc). We are in the early stages of experimenting with this over libp2p in
-[nim-libp2p](https://github.com/status-im/nim-libp2p). More on this in a future post!
+For the third bottleneck, a likely candidate for fixing this is Kademlia routing. This is similar to what is done in [Swarm's](https://swarm.ethereum.org/]) PSS. We are in the early stages of experimenting with this over libp2p in [nim-libp2p](https://github.com/status-im/nim-libp2p). More on this in a future post!
 
 ## Acknowledgements
 
