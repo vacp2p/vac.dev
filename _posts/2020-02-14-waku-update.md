@@ -18,9 +18,9 @@ Waku is our fork of Whisper where we address the shortcomings of Whisper in an i
 
 **Specs:**
 
-We released [Waku spec v0.3](https://specs.vac.dev/waku/waku.html) this week! You can see a full changelog [here](https://specs.vac.dev/waku/waku.html#changelog).
+We released [Waku spec v0.3](https://specs.vac.dev/waku/waku.html) this week! You can see the full changelog [here](https://specs.vac.dev/waku/waku.html#changelog).
 
-The main change from 0.2 is changing the handshake to be more flexible. This enables us to communicate topic interest immediately without ambiguity. We also did the following:
+The main change from 0.2 is making the handshake more flexible. This enables us to communicate topic interest immediately without ambiguity. We also did the following:
 
 - added recommendation for DNS based discovery
 - added an upgradability and compatibility policy
@@ -36,7 +36,7 @@ We can probably factor these out further as the main spec is getting quite big, 
 
 **Clients:**
 
-There are currently two clients that implement Waku, these are [Nimbus](https://github.com/status-im/nimbus/tree/master/waku) in Nim and [status-go](https://github.com/status-im/status-go) in Go.
+There are currently two clients that implement Waku v0.3, these are [Nimbus](https://github.com/status-im/nimbus/tree/master/waku) in Nim and [status-go](https://github.com/status-im/status-go) in Go.
 
 For more details on what each client support and don't, you can follow the [work in progress checklist](https://github.com/vacp2p/pm/issues/7).
 
@@ -131,7 +131,7 @@ Summary of main differences between Waku v0 spec and Whisper v6, as described in
 ## Next steps and future plans
 
 Several challenges remain to make Waku a robust and suitable base
-communication protocol. Here we outline a few challenges that we aim to address:
+communication protocol. Here we outline a few challenges that we are addressing and will continue to work on:
 
 - scalability of the network
 - incentived infrastructure and spam-resistance
