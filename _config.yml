@@ -18,8 +18,18 @@ sass:
   sass_dir: _sass
   style: compressed
 
+collections:
+  authors:
+    output: true
+
 defaults:
   - scope:
       path: "assets/img"
     values:
       image: true
+  - scope:
+      path: ""
+      type: "authors"
+    values:
+      layout: "author"
+
