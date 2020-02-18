@@ -6,14 +6,13 @@ title: FAQ
 
 ## Are there messaging protocols out there that you feel live up to your security and privacy Standards? Where does Signal fall in?
 
-<!-- @todo do we wanna keep this? its kinda status related -->
-
 There are a lot of protocols out there and new ones come up every day, in terms of fitting our requirements on 
 scalability, decentralization, security and privacy we've yet to find one that works just as is, which is why we are 
 developing our own.
 
-Signal is using a centralized server, but they provide many protocols. For end to end encryption and forward secrecy we 
-use a modified version of Signal's Double Ratchet and X3DH key exchange in the Status app. So kudos to them for that work!
+Signal is using a centralized server, but they provide many protocols. [Status](https://status.im) for example used a modified version of 
+Signal's Double Ratchet and X3DH key exchange for encryption and forward secrecy in their app. 
+So kudos to them for that work!
 
 You can find this in status client specification [here](https://status-im.github.io/specs/status-secure-transport-spec).
 
