@@ -1,0 +1,26 @@
+---
+layout: default
+---
+<h1></h1>
+<div class="container post-content">
+    <div class="row">
+        <div class="col-lg-10 ml-auto mr-auto">
+            <h1>{{ page.name }}</h1>
+            <div class="meta">
+                <a href="https://twitter.com/{{ page.twitter }}">Twitter</a>
+                {% if page.website %}
+                • <a href="{{ page.website }}">Website</a>
+                {% endif %}
+            </div>
+            <div class="row">
+                {% assign filtered_posts = site.posts | where: 'author', page.short_name %}
+                {% for post in filtered_posts %}
+                <div class="col-md-12 mt-60">
+                    <time>{{ post.date | date: '%B %d, %Y' }}</time>
+                    <h3><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h3>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

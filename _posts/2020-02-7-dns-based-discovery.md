@@ -3,7 +3,7 @@ layout: post
 name:  "DNS Based Discovery"
 title:  "DNS Based Discovery"
 date:   2020-02-7 12:00:00 +0100
-author: DeanEigenmann
+author: dean
 published: true
 permalink: /dns-based-discovery
 categories: research
