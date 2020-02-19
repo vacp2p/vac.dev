@@ -1352,4 +1352,12 @@ a.footer-logo {
     h2 {
         margin-top: 1em;
     }
+	
+    .container .post-content a{
+        color: $purple;
+        text-decoration: underline;
+        &:hover{
+            color: $dark-grey;
+        }
+    }
 }
