@@ -32,6 +32,6 @@ of scrutiny from academic researchers and so on.
 There are a few trade-offs that allow Waku to be more scalable and suitable for resource restricted devices than Whisper. 
 It is worth noting that all of these are optional, and a Waku client can choose to get all the privacy benefits by turning these options off:
 
-1. Light client means mobile nodes don't relay messages that aren't their own 
-2. Mailserver for offline messaging means a mailserver knows which messages you are requesting and what your IP is
-3. Fetching messages by topic instead of bloom filter means there's less (none) false positives, which reveal that you care about certain topics more
+1. Light client means mobile nodes don't relay messages that aren't their own. 
+2. Mailserver for offline messaging means a mailserver knows which messages you are requesting and what your IP is.
+3. Fetching messages by topic instead of bloom filter means there's less (none) false positives, which reveal that you care about certain topics more.
