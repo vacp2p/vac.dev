@@ -18,7 +18,7 @@ Waku is our fork of Whisper where we address the shortcomings of Whisper in an i
 
 **Specs:**
 
-We released [Waku spec v0.3](https://specs.vac.dev/waku/waku.html) this week! You can see the full changelog [here](https://specs.vac.dev/waku/waku.html#changelog).
+We released [Waku spec v0.3](https://specs.vac.dev/specs/waku/waku.html) this week! You can see the full changelog [here](https://specs.vac.dev/specs/waku/waku.html#changelog).
 
 The main change from 0.2 is making the handshake more flexible. This enables us to communicate topic interest immediately without ambiguity. We also did the following:
 
@@ -28,9 +28,9 @@ The main change from 0.2 is making the handshake more flexible. This enables us 
 
 We cut the spec up in several components to make Vac as modular as possible. The components right now are:
 
-- Waku (main spec), currently in [version 0.3.0](https://specs.vac.dev/waku/waku.html)
-- Waku envelope data field, currently in [version 0.1.0](https://specs.vac.dev/waku/envelope-data-format.html)
-- Waku mailserver, currently in [version 0.2.0](https://specs.vac.dev/waku/mailserver.html)
+- Waku (main spec), currently in [version 0.3.0](https://specs.vac.dev/specs/waku/waku.html)
+- Waku envelope data field, currently in [version 0.1.0](https://specs.vac.dev/specs/waku/envelope-data-format.html)
+- Waku mailserver, currently in [version 0.2.0](https://specs.vac.dev/specs/waku/mailserver.html)
 
 We can probably factor these out further as the main spec is getting quite big, but this is good enough for now.
 
