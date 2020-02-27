@@ -32,7 +32,7 @@ devices.
 What are these fundamental issues? In short:
 
 1. scalability, most immediately when it comes to bandwidth usage
-2. spam-resistance, proof of work is a poor mechanism for heterogenerous nodes
+2. spam-resistance, proof of work is a poor mechanism for heterogeneous nodes
 3. no incentivized infrastructure, leading to centralized choke points
 4. lack of formal and unambiguous specification makes it hard to analyze and implement
 5. running over devp2p, which limits where it can run and how
