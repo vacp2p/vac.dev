@@ -33,7 +33,7 @@ layout: default
             <div class="col-md-12">
                 <ul>
                     {% for post in site.posts limit:5 %}
-                        <li><time>{{ post.date | date: '%B %d, %Y' }}</time><time class="short">{{ post.date | date: '%d.%m.%Y' }}</time><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+                    <li><time>{{ post.date | date: '%B %d, %Y' }}</time><time class="short">{{ post.date | date: '%d.%m.%Y' }}</time><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
                     {% endfor %}
                 </ul>
                 <div class="btn-holder d-flex justify-content-center">
@@ -42,7 +42,7 @@ layout: default
             </div>
         </div>
     </div>
-</section>    
+</section>
 
 <section class="what-is-vac" id="what">
     <div class="container">
