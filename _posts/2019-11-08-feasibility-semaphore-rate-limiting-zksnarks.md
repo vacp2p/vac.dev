@@ -89,7 +89,7 @@ The above repo was used to exercise the basic paths and to gain intution of feas
 
 #### Proof time
 
-Prove time for Semaphore (https://github.com/kobigurk/semaphore) zKSNARKs using circom, groth and snarkjs is currently way too long. It takes on the order of ~10m to generate a proof. With Websnark, it is likely to take 30s, which might still be too long. We should experiment with native code on mobile here.
+Prove time for Semaphore (<https://github.com/kobigurk/semaphore>) zKSNARKs using circom, groth and snarkjs is currently way too long. It takes on the order of ~10m to generate a proof. With Websnark, it is likely to take 30s, which might still be too long. We should experiment with native code on mobile here.
 
 See [details](https://github.com/vacp2p/research/issues/7).
 
