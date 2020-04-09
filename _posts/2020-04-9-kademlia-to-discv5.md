@@ -22,7 +22,7 @@ It became clear that another solution was needed, and after years of research an
 
 ## Distributed Hash Tables
 
-In 2001 there were 4 proposals for such DHTs, [Tapestry](https://pdos.csail.mit.edu/~strib/docs/tapestry/tapestry_jsac03.pdf), [Chord](https://pdos.csail.mit.edu/papers/chord:sigcomm01/chord_sigcomm.pdf), [CAN](https://people.eecs.berkeley.edu/~sylvia/papers/cans.pdf) and [Pastry](http://rowstron.azurewebsites.net/PAST/pastry.pdf), all of which made various trade-offs and changes in their core functionality, giving them unique characteristics.
+In 2001 4 new protocols for such DHTs were conceived, [Tapestry](https://pdos.csail.mit.edu/~strib/docs/tapestry/tapestry_jsac03.pdf), [Chord](https://pdos.csail.mit.edu/papers/chord:sigcomm01/chord_sigcomm.pdf), [CAN](https://people.eecs.berkeley.edu/~sylvia/papers/cans.pdf) and [Pastry](http://rowstron.azurewebsites.net/PAST/pastry.pdf), all of which made various trade-offs and changes in their core functionality, giving them unique characteristics.
 
 But as said, they're all DHTs. So what is a DHT?
 
@@ -32,7 +32,7 @@ If we have a network with 9 key-value pairs and 3 nodes, ideally each node would
 
 ## Kademlia
 
-So now that we know what DHTs are, let's get to Kademlia, the predecessor of discv4. Kademlia was concieved by Petar Maymounkov and David Mazières in 2002. I will naively say that this is probably one of the most popular and most used DHT protocols. It's quite simple in how it works, so let's look at it.
+So now that we know what DHTs are, let's get to Kademlia, the predecessor of discv4. Kademlia was created by Petar Maymounkov and David Mazières in 2002. I will naively say that this is probably one of the most popular and most used DHT protocols. It's quite simple in how it works, so let's look at it.
 
 In Kademlia, nodes and values are arranged by distance (in a very mathematical definition). This distance is not a geographical one, but rather based on identifiers. It is calculated how far 2 identifiers are from eachother using some distance function.
 
