@@ -203,13 +203,41 @@ This also needs an open API that anyone can use. It should be properly secured, 
 
 ## Where are we now?
 
-**TODO: Instead, consider looking back at initial list and how we are close to achieving things. Give alternatives for realistic to build up, goal attainable, kind of a blueprint without too technically detailed. Point to right mix, hope**
+Let's look back at some of desirable properties we set out in the beginning and see how close we are to building out the necessary components. Is it realistic at all or just a pipe dream? We'll see that there are many building blocks in place, and there's reason for hope.
 
-## 5. What now?
+**Self-sovereignity identity**. Public key crypto and web of trust like constructs makes this possible.
 
-We've look at what WeChat provides and what we'd like an alternative to look like. We've also seen a few principal modules that are necessary to achieve those goals. To achieve all of this is a daunting task, and one might call it overly ambitiuous.
+**Pseudonymity, and ideally total anonymity**. Pseudonymity can largely be achieved with public key crypto. For transactions, pseudonymity exists in systems in most cryptocurrencies. The challenge is linkage across time, especially when interfacing with other "legacy" system. There are stronger constructs that are actively being worked on and are promising here, such as mixnets (Nym), mixers (Wasabi Wallet, Tornado.Cash) and zero knowledge proofs (Zcash, Ethereum, Starkware). This area of applied research has exploded over the last few years.
 
-The good news is that a lot of people are working all these building blocks. Compared to a few years ago we've come quite far when it comes to p2p infrastructure, privacy, security, scalability, and general developer mass and mindshare. If you want to join us in building some of these building blocks, check out our forum.
+**Private and secure communication**. Signal has pioneered a lot of this, following OTR. Double Ratchet, X3DH. E2EE is minimum these days, and properties like PFS and PD are getting better. For metadata protection, you have Tor, with its faults, and more active research on mixnets and private information retrieval, etc.
+
+**Censorship-resistance**. This covers a lot of ground across the spectrum. You have technologies like Bittorrent, Bitcoin/Ethereum, Tor obfuscated transports, E2EE by default, partial mesh networks in production, abilit to move/replicate host machines more quickly have all made this more of a reality than it used to be. this easier. Of course, techniques such as deep packet inspection and internet shutdowns have increased.
+
+**Decentralization**. Cryptocurrencies, projects like libp2p and IPFS. Need to be mindful here of many projects that claim decentralization but are still vulnerable to single points of failures.
+
+**Built for mass adoption**. This one is more subjective. There's definitely a lot of work to be done here, both when it comes to fundamental performance, key management and things like social discoverability. Directionally these things are improving and becoming easier for the average person but there is a lot ot be done here.
+
+**Scalability**. With projects like Ethereum 2.0 and IPFS more and more resources are a being put into this, both at the consensus/compute layer as well as networking (gossip, scalable Kademlia) layer. Also various layer 2 solutions for transactions.
+
+**Fundamentals in place to support great user experience**. Similar to built for mass adoption. As scalability becomes more important, more applied research is being done in the p2p area to improve things like latency, bandwidth.
+
+**Works for resource restricted devices, including smartphones**. Work in progress and not enough focus here, generally an after thought. Also have stateless clients etc.
+
+**Adaptive nodes**. See above. With subprotocols and capabilities in Ethereum and libp2p, this is getting easier.
+
+**Sustainable**. Token economics is a thing. While a lot of it won't stay around, there are many more projects working on making themselves dispensable. Being open source, having an engaged community and enabling users run their own infrastructure. Users as stakeholders.
+
+**Spam resistant**. Tricky problem if you want to be pseudonymous, but some signs of hope with incentivization mechanisms, zero knowledge based signaling, etc. Together with various forms of rate limiting and better controlling of topology and network amplification. And just generally being battle-tested by real world attacks, such as historical Ethereum DDoS attacks.
+
+**Trust minimized**. Bitcoin. Zero knowledge provable computation. Open source. Reproducible builds. Signed binaries. Incentive compatible structures. Independent audits. Still a lot of work, but getting better.
+
+**Open source**. Big and only getting bigger. Including mainstream companies.
+
+## What's next?
+
+We've look at what WeChat provides and what we'd like an alternative to look like. We've also seen a few principal modules that are necessary to achieve those goals. To achieve all of this is a daunting task, and one might call it overly ambitiuous. We've also seen how far we've come with some of the goals, and how a lot of the pieces are there, in one form or another. Then it is a question of putting them all together in the right mix.
+
+The good news is that a lot of people are working all these building blocks and thinking about these problems. Compared to a few years ago we've come quite far when it comes to p2p infrastructure, privacy, security, scalability, and general developer mass and mindshare. If you want to join us in building some of these building blocks, and assembling them, check out our forum.
 
 PS. We are hiring. DS
 
