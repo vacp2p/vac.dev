@@ -239,7 +239,7 @@ We've look at what WeChat provides and what we'd like an alternative to look lik
 
 The good news is that a lot of people are working all these building blocks and thinking about these problems. Compared to a few years ago we've come quite far when it comes to p2p infrastructure, privacy, security, scalability, and general developer mass and mindshare. If you want to join us in building some of these building blocks, and assembling them, check out our forum.
 
-PS. We are hiring. DS
+PS. We are [hiring protocol engineers](https://status.im/our_team/open_positions.html). DS
 
 
 ## References
