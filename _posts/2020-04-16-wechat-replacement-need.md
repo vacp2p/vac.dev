@@ -241,7 +241,6 @@ The good news is that a lot of people are working all these building blocks and 
 
 PS. We are hiring. DS
 
-**TODO: Insert link to JD**
 
 ## References
 
