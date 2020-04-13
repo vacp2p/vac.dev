@@ -213,7 +213,7 @@ Let's look back at some of desirable properties we set out in the beginning and 
 
 **Censorship-resistance**. This covers a lot of ground across the spectrum. You have technologies like Bittorrent, Bitcoin/Ethereum, Tor obfuscated transports, E2EE by default, partial mesh networks in production, abilit to move/replicate host machines more quickly have all made this more of a reality than it used to be. this easier. Of course, techniques such as deep packet inspection and internet shutdowns have increased.
 
-**Decentralization**. Cryptocurrencies, projects like libp2p and IPFS. Need to be mindful here of many projects that claim decentralization but are still vulnerable to single points of failures.
+**Decentralization**. Cryptocurrencies, projects like libp2p and IPFS. Need to be mindful here of many projects that claim decentralization but are still vulnerable to single points of failures, such as relying on gateways.
 
 **Built for mass adoption**. This one is more subjective. There's definitely a lot of work to be done here, both when it comes to fundamental performance, key management and things like social discoverability. Directionally these things are improving and becoming easier for the average person but there is a lot ot be done here.
 
