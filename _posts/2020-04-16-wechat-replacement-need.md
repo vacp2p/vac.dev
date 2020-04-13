@@ -207,7 +207,7 @@ Let's look back at some of desirable properties we set out in the beginning and 
 
 **Self-sovereignity identity**. Public key crypto and web of trust like constructs makes this possible.
 
-**Pseudonymity, and ideally total anonymity**. Pseudonymity can largely be achieved with public key crypto. For transactions, pseudonymity exists in systems in most cryptocurrencies. The challenge is linkage across time, especially when interfacing with other "legacy" system. There are stronger constructs that are actively being worked on and are promising here, such as mixnets (Nym), mixers (Wasabi Wallet, Tornado.Cash) and zero knowledge proofs (Zcash, Ethereum, Starkware). This area of applied research has exploded over the last few years.
+**Pseudonymity, and ideally total anonymity**. Pseudonymity can largely be achieved with public key crypto and open systems that allow for permissionless participation. For transactions, pseudonymity exists in most cryptocurrencies. The challenge is linkage across time, especially when interfacing with other "legacy" system. There are stronger constructs that are actively being worked on and are promising here, such as mixnets (Nym), mixers (Wasabi Wallet, Tornado.Cash) and zero knowledge proofs (Zcash, Ethereum, Starkware). This area of applied research has exploded over the last few years.
 
 **Private and secure communication**. Signal has pioneered a lot of this, following OTR. Double Ratchet, X3DH. E2EE is minimum these days, and properties like PFS and PD are getting better. For metadata protection, you have Tor, with its faults, and more active research on mixnets and private information retrieval, etc.
 
