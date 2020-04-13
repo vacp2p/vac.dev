@@ -135,7 +135,7 @@ You might notice that just one simple property, self-sovereign identity, leads t
 
 Most user facing applications have similar issues, Google Apps/FB/Twitter etc. For popular tools that have this built in, we can look at git - which is truly decentralized and have keypair at the bottom. It is for a very specific technical domain, and even then people rely on Github. Key management is fairly difficult even for technical people, and for normal people even more so. Banks are generally far behind on this tech, relying on arcane procedures and special purpose hardware for 2FA. That's another big issue.
 
-Let's shift gears a bit and talk about more  some other functional requirements.
+Let's shift gears a bit and talk about some other functional requirements.
 
 ### Routing - packets from A to B
 
