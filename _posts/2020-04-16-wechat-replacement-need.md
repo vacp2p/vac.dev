@@ -9,7 +9,7 @@ permalink: /wechat-replacement-need
 categories: research
 summary: A research log.
 image: /assets/img/TODO
-discuss: https://forum.vac.dev/t/TODO
+discuss: https://forum.vac.dev/
 ---
 
 # What would a WeChat replacement need?
@@ -112,7 +112,7 @@ It is worth noting that a lot of the required infrastructure has been developed,
 
 ### Account - self-sovereign identity and the perils of phone numbers
 
-Starting from the most basic: what is an account and how do you get one? With most internet services today, WeChat and almost all popular messaging apps included, you need to signup with some centralized authority. Usually you also have to verify this with some data that ties this account to you as an individual. E.g. by requiring a phone number, which in most jurisdictions [1] means giving out your real ID. This also means you can be banned from using the service by a somewhat arbitrary process, with no due process.
+Starting from the most basic: what is an account and how do you get one? With most internet services today, WeChat and almost all popular messaging apps included, you need to signup with some centralized authority. Usually you also have to verify this with some data that ties this account to you as an individual. E.g. by requiring a phone number, which in most jurisdictions [^1] means giving out your real ID. This also means you can be banned from using the service by a somewhat arbitrary process, with no due process.
 
 Now, we could argue these app providers can do what they want. And they are right, in a very narrow sense. As apps like WeChat (and Google) become general-purpose platforms, they become more and more ingrained in our everyday lives. They start to provide utilities that we absolutely require to work to go about our day, such as paying for food or transportation. This means we need higher standard than this.
 
@@ -120,7 +120,7 @@ Justifications for requiring phone numbers are usually centered around three cla
 1) Avoiding spam
 2) Tying your account to your real name, for various reasons
 3) Using as a commonly shared identifier as a social network discovery mechanism
- 
+
 Of course, many services require more than phone numbers. E.g. email, other forms of personal data such as voice recording, linking a bank account, and so on.
 
 In contrast, a self-sovereign system would allow you to "create an account" completely on your own. This can easily be done with public key cryptograpy, and it also paves the way for end-to-end encryption to make your messages private.
@@ -131,7 +131,7 @@ Just having a public key as an account isn't enough though. If it goes through a
 
 Even so, if the system is closed source we don't know what it is doing. Perhaps the app communicating is also uploading data to another place, or somehow making it possible to see who is who and act accordingly.
 
-You might notice that just one simple property, self-sovereign identity, leads to a slew of other requirements and properties. You might also notice that WeChat is far from alone in this, even if their identity requirements might be a bit stringent than, say, Telegram. Their control aspects are also a bit more extreme, at least for someone with western sensibilities [2].
+You might notice that just one simple property, self-sovereign identity, leads to a slew of other requirements and properties. You might also notice that WeChat is far from alone in this, even if their identity requirements might be a bit stringent than, say, Telegram. Their control aspects are also a bit more extreme, at least for someone with western sensibilities [^2].
 
 Most user facing applications have similar issues, Google Apps/FB/Twitter etc. For popular tools that have this built in, we can look at git - which is truly decentralized and have keypair at the bottom. It is for a very specific technical domain, and even then people rely on Github. Key management is fairly difficult even for technical people, and for normal people even more so. Banks are generally far behind on this tech, relying on arcane procedures and special purpose hardware for 2FA. That's another big issue.
 
@@ -143,9 +143,9 @@ In order to get a lot of the features WeChat provides, we need the ability to do
 
 To communicate with people, in the base case, we need to go from one phone to another phone that is separated by a large distance. This requires some form of routing. The most natural platform to build this on is the existing Internet, though not the only one. Most phones are resource restricted, and are only "on" for brief periods of time. This is needed to preserve battery and bandwidth. Additionally, Internet uses IPs as endpoints, which change as a phones move through space. NAT punching etc isn't always perfect either. This means we need a way to get a message from one public key to another, and through some intermediate nodes. We can think of these nodes as a form of service network. Similar to how a power grid works, or phone lines, or collection of ISPs.
 
-One important property here is to ensure we don't end up in a situation like the centralized capture scenario above, something we've seen with centralized ISPs [3, 4] where they can choose which traffic is good and which is bad. We want to allow the use of different service nodes, just like if a restaurant gives you food poisioning you can go to the one next door and then the first one goes out of business after a while. And the circle of life continues.
+One important property here is to ensure we don't end up in a situation like the centralized capture scenario above, something we've seen with centralized ISPs [^3] [^4] where they can choose which traffic is good and which is bad. We want to allow the use of different service nodes, just like if a restaurant gives you food poisioning you can go to the one next door and then the first one goes out of business after a while. And the circle of life continues.
 
-We shouldn't be naive though, and think that this is something nodes are likely to do for free. They need to be adequately compensated for their services, in some of incentivization scheme. That can either be monetary, or as in the case of Bittorrent, more of a barter situation where you use game theory to coordinate with strangers [5], and some form of reputation attached to it (for private trackers).
+We shouldn't be naive though, and think that this is something nodes are likely to do for free. They need to be adequately compensated for their services, in some of incentivization scheme. That can either be monetary, or as in the case of Bittorrent, more of a barter situation where you use game theory to coordinate with strangers [^5], and some form of reputation attached to it (for private trackers).
 
 There are many ways of doing routing, and we won't go into too much technical detail here. Suffice to say is that you likely want both a structured and unstructured alternative, and that these comes with several trade-offs when it comes to efficiency, metadata protection, ability to incentivize, compatibility with existing topologies, and suitability for mobilephones (mostly offline, bandwidth restricted, not directly connectable). Expect more on this in a future article.
 
@@ -177,11 +177,11 @@ The baseline here is pseudonymity, and having tools to allow individuals to "cut
 
 The most immediate need here is transaction from A to B. Direct exchange. There is also a more indirect need for private lawmaking and contracting.
 
-We talked about routing and storage and how they likely need to be incentivized to work properly. How are they going to be compensated? While this could in theory work via existing banking system and so on, this would be rather heavy. It'd also very likely require tying your identifier to your legal name, something that goes against what we want to achieve. What we want is something that acts more as right-to-access, similar to the way cash functions in a society [6]. I pay for a fruit with something that is valuable to you and then I'm on my way.
+We talked about routing and storage and how they likely need to be incentivized to work properly. How are they going to be compensated? While this could in theory work via existing banking system and so on, this would be rather heavy. It'd also very likely require tying your identifier to your legal name, something that goes against what we want to achieve. What we want is something that acts more as right-to-access, similar to the way cash functions in a society [^6]. I pay for a fruit with something that is valuable to you and then I'm on my way.
 
-While there might be other candidates, such as pre-paid debit cards and so on, this transaction mode pretty much requires a cryptocurrency component. The alternative is to do it on a reputation basis, which might work for small communities, due to social cohesion, but quickly detoriates for large ones [7]. Ad hoc models like private Bittorrent trackers are centralized and easy to censor.
+While there might be other candidates, such as pre-paid debit cards and so on, this transaction mode pretty much requires a cryptocurrency component. The alternative is to do it on a reputation basis, which might work for small communities, due to social cohesion, but quickly detoriates for large ones [^7]. Ad hoc models like private Bittorrent trackers are centralized and easy to censor.
 
-Now, none of the existing cryptocurrency models are ideal. They also all suffer from lack of widespread use, and it is difficult to get onboarded to them in the first place. Transactions in Bitcoin are slow. Ethereum is faster and has more capabilities, but it still suffers from linking payments over time, which makes the privacy part of this more difficult. Zcash, Monero and similar are interesting, but also require more use. For Zcash, shielded transactions appear to only account for less than 2% of all transactions in 2019 [8, 9].
+Now, none of the existing cryptocurrency models are ideal. They also all suffer from lack of widespread use, and it is difficult to get onboarded to them in the first place. Transactions in Bitcoin are slow. Ethereum is faster and has more capabilities, but it still suffers from linking payments over time, which makes the privacy part of this more difficult. Zcash, Monero and similar are interesting, but also require more use. For Zcash, shielded transactions appear to only account for less than 2% of all transactions in 2019 [^8] [^9].
 
 Another dimension is what sets general purpose cryptocurrencies like Ethereum apart. Aside from just paying from A to B, you can encode rules about when something should be paid out and not. This is very useful for doing a form of private lawmaking, contracting, for setting up service agreements with these nodes. If there's no trivial recourse as in the meatspace world, where you know someone's name and you can sue them, you need a different kind of model.
 
@@ -244,23 +244,23 @@ PS. We are [hiring protocol engineers](https://status.im/our_team/open_positions
 
 ## References
 
-1: Mandatory SIM card registration laws: https://privacyinternational.org/long-read/3018/timeline-sim-card-registration-laws
+[^1]: Mandatory SIM card registration laws: https://privacyinternational.org/long-read/3018/timeline-sim-card-registration-laws
 
-2: On WeChat keyword censorship: https://citizenlab.ca/2016/11/wechat-china-censorship-one-app-two-systems/
+[^2]: On WeChat keyword censorship: https://citizenlab.ca/2016/11/wechat-china-censorship-one-app-two-systems/
 
-3: Net Neutrality: https://www.eff.org/issues/net-neutrality
+[^3]: Net Neutrality: https://www.eff.org/issues/net-neutrality
 
-4: ISP centralization: https://ilsr.org/repealing-net-neutrality-puts-177-million-americans-at-risk/
+[^4]: ISP centralization: https://ilsr.org/repealing-net-neutrality-puts-177-million-americans-at-risk/
 
-5: Incentives Build Robustness in BitTorrent bittorrent.org/bittorrentecon.pdf
+[^5]: Incentives Build Robustness in BitTorrent bittorrent.org/bittorrentecon.pdf
 
-6: The Case for Electronic Cash:  https://coincenter.org/files/2019-02/the-case-for-electronic-cash-coin-center.pdf
+[^6]: The Case for Electronic Cash:  https://coincenter.org/files/2019-02/the-case-for-electronic-cash-coin-center.pdf
 
-7: Money, blockchains, and social scalability: http://unenumerated.blogspot.com/2017/02/money-blockchains-and-social-scalability.html
+[^7]: Money, blockchains, and social scalability: http://unenumerated.blogspot.com/2017/02/money-blockchains-and-social-scalability.html
 
-8: Zcash private transactions (partial paywall): https://www.theblockcrypto.com/genesis/48413/an-analysis-of-zcashs-private-transactions
+[^8]: Zcash private transactions (partial paywall): https://www.theblockcrypto.com/genesis/48413/an-analysis-of-zcashs-private-transactions
 
-9: Shielded transactions usage (stats page 404s): https://z.cash/support/faq/
+[^9]: Shielded transactions usage (stats page 404s): https://z.cash/support/faq/
 
 ## Acknowledgements
 
