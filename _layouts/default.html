@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ page.lang | default: site.lang | default: 'en-US' }}" class="no-js">
-    
+
     <head>
 
-        <title>{{ site.title }}{{ if page.title }} - {{ page.title }}{{ endif }}</title>
+
+        {% if page.title %}
+        <title>{{ site.title }} - {{ page.title }}</title>
+        {% else %}
+        <title>{{ site.title }}</title>
+        {% endif %}
+
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,18 +32,18 @@
          fathom('trackPageview');
         </script>
         <!-- / Fathom -->
-      
+
         <!-- Twitter cards -->
         <meta name="twitter:site"    content="@{{ site.twitter_username }}">
         <meta name="twitter:creator" content="@{{ page.author }}">
         <meta name="twitter:title"   content="{{ page.title }}">
-      
+
         {% if page.summary %}
         <meta name="twitter:description" content="{{ page.summary }}">
         {% else %}
         <meta name="twitter:description" content="{{ site.description }}">
         {% endif %}
-      
+
         {% if page.image %}
         <meta name="twitter:card"  content="summary_large_image">
         <meta name="twitter:image" content="{{ site.url }}{{ site.baseurl }}{{ page.image }}">
