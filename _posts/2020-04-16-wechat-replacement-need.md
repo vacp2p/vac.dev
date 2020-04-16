@@ -12,8 +12,6 @@ image: /assets/img/tianstatue.jpg
 discuss: https://forum.vac.dev/
 ---
 
-# What would a WeChat replacement need?
-
 What would it take to replace WeChat? More specifically, what would a self-sovereign, private, censorship-resistant and open alternative look like? One that allows people to communicate, coordinate and transact freely.
 
 ## Background
