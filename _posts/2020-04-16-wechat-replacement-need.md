@@ -241,6 +241,9 @@ The good news is that a lot of people are working all these building blocks and 
 
 PS. We are [hiring protocol engineers](https://status.im/our_team/open_positions.html). DS
 
+## Acknowledgements
+
+Corey, Dean, Jacek.
 
 ## References
 
@@ -261,7 +264,3 @@ PS. We are [hiring protocol engineers](https://status.im/our_team/open_positions
 [^8]: Zcash private transactions (partial paywall): https://www.theblockcrypto.com/genesis/48413/an-analysis-of-zcashs-private-transactions
 
 [^9]: Shielded transactions usage (stats page 404s): https://z.cash/support/faq/
-
-## Acknowledgements
-
-Corey, Dean, Jacek.
