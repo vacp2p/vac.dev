@@ -1,14 +1,14 @@
 ---
 layout: post
-name:  "What would a WeChat replacement need?"
-title:  "What would a WeChat replacement need?"
+name:  "What Would a WeChat Replacement Need?"
+title:  "What Would a WeChat Replacement Need?"
 date:   2020-04-16 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /wechat-replacement-need
 categories: research
-summary: A research log.
-image: /assets/img/TODO
+summary: A research log. What would it take to replace WeChat? What would a self-sovereign, private, censorship-resistant and open alternative look like? One that allows people to communicate, coordinate and transact freely.
+image: /assets/img/tianstatue.jpg
 discuss: https://forum.vac.dev/
 ---
 
