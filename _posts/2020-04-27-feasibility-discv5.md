@@ -43,7 +43,7 @@ The main things we wanted to investigate was the overhead on finding a peer. Thi
 
 ## Feasbility
 
-To be able to investigate the feasibility of discv5, we used various methods including rough calculations which can be found in the [notebook](https://vac.dev/discv5-notebook/), and a simulation isolated in [vacp2p/research#](https://github.com/vacp2p/research/pull/19).
+To be able to investigate the feasibility of discv5, we used various methods including rough calculations which can be found in the [notebook](https://vac.dev/discv5-notebook/), and a simulation isolated in [vacp2p/research#19](https://github.com/vacp2p/research/pull/19).
 
 ### CPU & Memory Usage
 
