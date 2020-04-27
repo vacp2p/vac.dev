@@ -2,8 +2,8 @@
 - name: "Oskar Thoren"
   shortName: "oskarth"
   image: "oskar.png"
-  statusLink: https://status.im/
-  statusName: Honey Badger Rogers
+  statusLink:
+  statusName:
   github: "oskarth"
   twitter: "oskarth"
 
