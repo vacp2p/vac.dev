@@ -16,34 +16,6 @@ discuss: https://forum.vac.dev/t/waku-version-2-pitch/52
 
 *NOTE: This post was originally written with Status as a primary use case in mind, which reflects how we talk about some problems here. However, Waku v2 is a general-purpose private p2p messaging protocol, especially for people running in resource restricted environments.*
 
-# Table of Contents
-
-1.  [Problem](#org0c3be09)
-2.  [Appetite](#org4293ad1)
-3.  [Solution](#org255ac65)
-    1.  [Baseline](#org9f0408b)
-    2.  [Track 1 - Move to libp2p](#org900b26a)
-        1.  [1. FloodSub](#org26e8b86)
-        2.  [2. Simplify the protocol](#org978176b)
-        3.  [3. Core integration](#orgfe0c903)
-        4.  [4. Topic interest behavior](#orgfe0c904)
-        5.  [5. Historical message caching](#org636ca90)
-        6.  [6. Waku v1 <> Libp2p bridge](#orgc021c69)
-    3.  [Track 2 - Better routing](#org30053d1)
-        1.  [1. GossipSub](#org5a2c87e)
-        2.  [2. Topic sharding](#org9adde90)
-        3.  [3. Other factors](#org90aa712)
-    4.  [Track 3 - Accounting and user-run nodes](#org3b38a9b)
-        1.  [1. Adaptive nodes and capabilities](#org92e8676)
-        2.  [2. Accounting](#org376e97f)
-        3.  [3. Relax high availability requirement](#org18fd27b)
-        4.  [4. Incentivize light and full nodes to tell the truth (policy, etc)](#orge9bb567)
-        5.  [5. Settlement PoC](#org5b0cf19)
-4.  [Out of scope](#orgc50fab1)
-
-
-<a id="org0c3be09"></a>
-
 # Problem
 
 The Waku network is fragile and doesn't scale.
@@ -85,9 +57,6 @@ Doing this means the Waku network will be able to scale, and doing so in the rig
 -   deliberately ignore most of our principles
 -   risk the network being shut down when we run out of cash
 
-
-<a id="org4293ad1"></a>
-
 # Appetite
 
 Our initial risk appetite for this is 6 weeks for a small team.
@@ -95,9 +64,6 @@ Our initial risk appetite for this is 6 weeks for a small team.
 The idea is that we want to make tangible progress towards the goal in a limited period of time, as opposed to getting bogged down in trying to find a theoretically perfect generalized solution. Fixed time, variable scope.
 
 It is likely some elements of a complete solution will be done separately. See later sections for that.
-
-
-<a id="org255ac65"></a>
 
 # Solution
 
@@ -109,17 +75,12 @@ The goal is here to improve the status quo, not get a perfect solution from the 
 
 Let's first look at the baseline, and then go into some of the tracks and their phases. Track 1 is best done first, after which track 2 and 3 can be executed in parallel. Track 1 gives us more options for track 2 and 3. The work in track 1 is currently more well-defined, so it is likely the specifics of track 2 and 3 will get refined at a later stage.
 
-<a id="org9f0408b"></a>
-
 ## Baseline
 
 Here's where we are at now. In reality, the amplification factor are likely even worse than this (15 in the graph below), up to 20-30. Especially with an open network, where we can't easily control connectivity and availability of nodes. Left unchecked, with a full mesh, it could even go as high x100, though this is likely excessive and can be dialed down. See scaling model for more details.
 
 
 ![](assets/img/waku_v1_routing_small.png)
-
-
-<a id="org900b26a"></a>
 
 ## Track 1 - Move to libp2p
 
@@ -128,9 +89,6 @@ Moving to PubSub over libp2p wouldn't improve amplification per se, but it would
 See more on libp2p PubSub here: <https://docs.libp2p.io/concepts/publish-subscribe/>
 
 As part of this move, there are a few individual pieces that are needed.
-
-
-<a id="org26e8b86"></a>
 
 ### 1. FloodSub
 
@@ -147,9 +105,6 @@ Moving to FloodSub over libp2p would also be an opportunity to clean up and simp
 
 Very experimental and incomplete libp2p support can be found in the nim-waku repo under v2: <https://github.com/status-im/nim-waku>
 
-
-<a id="org978176b"></a>
-
 ### 2. Simplify the protocol
 
 Due to Waku's origins in Whisper, devp2p and as a standalone protocol, there are a lot of stuff that has accumulated (<https://specs.vac.dev/specs/waku/waku.html>). Not all of it serves it purpose anymore. For example, do we still need RLP here when we have Protobuf messages? What about extremely low PoW when we have peer scoring? What about key management / encryption when have encryption at libp2p and Status protocol level?
@@ -158,20 +113,13 @@ Not everything has to be done in one go, but being minimalist at this stage will
 
 The essential characteristic that has to be maintained is that we don't need to change the upper layers, i.e. we still deal with (Waku) topics and some envelope like data unit.
 
-<a id="orgfe0c903"></a>
-
 ### 3. Core integration
 
 As early as possible we want to integrate with Core via Stimbus in order to mitigate risk and catch integration issues early in the process. What this looks like in practice is some set of APIs, similar to how Whisper and Waku were working in parallel, and experimental feature behind a toggle in core/desktop.
 
-<a id="orgfe0c904"></a>
-
 ### 4. Topic interest behavior
 
 While we target full node traffic here, we want to make sure we maintain the existing bandwidth requirements for light nodes that Waku v1 addressed (<https://vac.dev/fixing-whisper-with-waku>). This means implementing topic-interest in the form of Waku topics. Note that this would be separate from app topics notes above.
-
-
-<a id="org636ca90"></a>
 
 ### 5. Historical message caching
 
@@ -179,22 +127,13 @@ Basically what mailservers are currently doing. This likely looks slightly diffe
 
 Also see section below on adaptive nodes and capabilities.
 
-
-<a id="orgc021c69"></a>
-
 ### 6. Waku v1 <> Libp2p bridge
 
 To make the transition complete, there has to a be bridge mode between current Waku and libp2p. This is similar to what was done for Whisper and Waku, and allows any nodes in the network to upgrade to Waku v2 at their leisure. For example, this would likely look different for Core, Desktop, Research and developers.
 
-
-<a id="org30053d1"></a>
-
 ## Track 2 - Better routing
 
 This is where we improve the amplification factors.
-
-
-<a id="org5a2c87e"></a>
 
 ### 1. GossipSub
 
@@ -211,9 +150,6 @@ Explaining how GossipSub works is out of scope of this document. It is implement
 
 While we technically could implement this over existing Waku, we'd have to re-implement it, and we'd lose out on all the other benefits libp2p would provide, as well as the ecosystem of people and projects working on improving the scalability and security of these protocols.
 
-
-<a id="org9adde90"></a>
-
 ### 2. Topic sharding
 
 This one is slightly more speculative in terms of its ultimate impact. The basic idea is to split the application topic into N shards, say 10, and then each full node can choose which shards to listen to. This can reduce amplification factors by another factor of 10.
@@ -227,23 +163,15 @@ Note that this means a light node that listens to several topics would have to b
 
 This is orthogonal from the choice of FloodSub or GossipSub, but due to GossipSub's more dynamic nature it is likely best combined with it.
 
-
-<a id="org90aa712"></a>
-
 ### 3. Other factors
 
 Not a primary focus, but worth a look. Looking at the scaling model, there might be other easy wins to improve overall bandwidth consumption between full nodes. For example, can we reduce envelope size by a significant factor?
-
-
-<a id="org3b38a9b"></a>
 
 ## Track 3 - Accounting and user-run nodes
 
 This is where we make sure the network isn't fragile, become a true p2p app, get our users excited and engaged, and allow us to scale the network without creating an even bigger cluster.
 
 To work in practice, this has a soft dependency on node discovery such as DNS based discovery (<https://eips.ethereum.org/EIPS/eip-1459>) or Discovery v5 (<https://vac.dev/feasibility-discv5>).
-
-<a id="org92e8676"></a>
 
 ### 1. Adaptive nodes and capabilities
 
@@ -252,9 +180,6 @@ We want to make the gradation between light nodes, full nodes, storing (partial 
 Depending on how the other tracks come together, this design should allow for a desktop node to identify as a full relaying node for some some app topic shard, but also express waku topic interest and retrieve historical messages itself.
 
 E.g. Disc v5 can be used to supply node properties through ENR.
-
-
-<a id="org376e97f"></a>
 
 ### 2. Accounting
 
@@ -288,9 +213,6 @@ As a concrete example: a light node has some topic interest and cares about hist
 
 Also see below in section 4, using constructs such as eigentrust as a local reputation mechanism.
 
-
-<a id="org18fd27b"></a>
-
 ### 3. Relax high availability requirement
 
 If we want desktop nodes to participate in the storing of historical messages, high availability is a problem. It is a problem for any node, especially if they lie about it, but assuming they are honest it is still an issue.
@@ -298,8 +220,6 @@ If we want desktop nodes to participate in the storing of historical messages, h
 By being connected to multiple nodes, we can get an overlapping online window. Then these can be combined together to get consistency. This is obviously experimental and would need to be tested before being deployed, but if it works it'd be very useful.
 
 Additionally or alternatively, instead of putting a high requirement on message availability, focus on detection of missing information. This likely requires re-thinking how we do data sync / replication.
-
-<a id="orge9bb567"></a>
 
 ### 4. Incentivize light and full nodes to tell the truth (policy, etc)
 
@@ -316,15 +236,9 @@ For full nodes:
 -   use eigentrust
 -   staking for discovery visibility with slashing
 
-
-<a id="org5b0cf19"></a>
-
 ### 5. Settlement PoC
 
 Can be done after phase 2 if so desired. Basically integrate payments based on accounting and policy.
-
-
-<a id="orgc50fab1"></a>
 
 # Out of scope
 
