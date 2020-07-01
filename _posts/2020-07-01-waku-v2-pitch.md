@@ -51,7 +51,7 @@ The Waku network is fragile and doesn't scale.
 
 As [Status](https://status.im) is moving into a user-acquisition phase and is improving retention rates for users they need the infrastructure to keep up, specifically when it comes to messaging.
 
-Based on user acquisition models, our initial goal is to support 100k DAU in September, with demand growing from there.
+Based on user acquisition models, the initial goal is to support 100k DAU in September, with demand growing from there.
 
 With the Status Scaling Model we have studied the current bottlenecks as a function of concurrent users (CCU) and daily active users (DAU). Here are the conclusions.
 
