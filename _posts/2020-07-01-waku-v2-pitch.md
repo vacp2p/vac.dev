@@ -49,7 +49,7 @@ discuss: https://forum.vac.dev/t/waku-version-2-pitch/52
 
 The Waku network is fragile and doesn't scale.
 
-As Status is moving into a user-acquisition phase and is improving retention rates for users we need the infrastructure to keep up, specifically when it comes to messaging.
+As [Status](https://status.im) is moving into a user-acquisition phase and is improving retention rates for users they need the infrastructure to keep up, specifically when it comes to messaging.
 
 Based on user acquisition models, our initial goal is to support 100k DAU in September, with demand growing from there.
 
