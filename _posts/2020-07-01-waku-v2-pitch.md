@@ -26,12 +26,12 @@ Based on user acquisition models, the initial goal is to support 100k DAU in Sep
 
 With the Status Scaling Model we have studied the current bottlenecks as a function of concurrent users (CCU) and daily active users (DAU). Here are the conclusions.
 
-****1. Connection limits****. With 100 full nodes we reach ~10k CCU based on connection limits. This can primarily be addressed by increasing the number of nodes (cluster or user operated). This assumes node discovery works. It is also worth investigating the limitations of max number of connections, though this is likely to be less relevant for user-operated nodes. For a user-operated network, this means 1% of users have to run a full node. See Fig 1-2.
+**1. Connection limits**. With 100 full nodes we reach ~10k CCU based on connection limits. This can primarily be addressed by increasing the number of nodes (cluster or user operated). This assumes node discovery works. It is also worth investigating the limitations of max number of connections, though this is likely to be less relevant for user-operated nodes. For a user-operated network, this means 1% of users have to run a full node. See Fig 1-2.
 
-****2. Bandwidth as a bottleneck****. We notice that memory usage appears to not be
+**2. Bandwidth as a bottleneck**. We notice that memory usage appears to not be
 the primary bottleneck for full nodes, and the bottleneck is still bandwidth. To support 10k DAU, and full nodes with an amplification factor of 25 the required Internet speed is ~50 Mbps, which is a fast home Internet connection. For ~100k DAU only cloud-operated nodes can keep up (500 Mbps). See Fig 3-5.
 
-****3. Amplification factors****. Reducing amplification factors with better routing, would have a high impact, but it is likely we'd need additional measures as well, such as topic sharding or similar. See Fig 8-13.
+**3. Amplification factors**. Reducing amplification factors with better routing, would have a high impact, but it is likely we'd need additional measures as well, such as topic sharding or similar. See Fig 8-13.
 
 Figure 1-5:
 
