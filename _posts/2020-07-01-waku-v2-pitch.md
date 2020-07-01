@@ -40,7 +40,6 @@ discuss: https://forum.vac.dev/t/waku-version-2-pitch/52
         4.  [4. Incentivize light and full nodes to tell the truth (policy, etc)](#orge9bb567)
         5.  [5. Settlement PoC](#org5b0cf19)
 4.  [Out of scope](#orgc50fab1)
-5.  [Next steps](#org1414f44)
 
 
 <a id="org0c3be09"></a>
@@ -336,18 +335,3 @@ Can be done after phase 2 if so desired. Basically integrate payments based on a
 5.  We assume Core will, at some point, provide an UX for integrating payment of services.
 6.  We assume the desktop client is sufficiently usable.
 7.  We assume Core and Infra will investigate ways of improving MaxPeers.
-
-
-<a id="org1414f44"></a>
-
-# Next steps
-
--   Assemble team of ~5-6 people with clear commitment
-	- Basically Vac ~2ppl, Nimbus, Stimbus, Core, Desktop
-	- Nimbus/Stimbus/Desktop may overlap depending on individual
-	- Tentative team: Oskar, Dean, Kim, X from Desktop (?), Y from Core (Andrea/Samuel/someone else?)
-	- TODO: Get confirmation from @andre and @iurimatias 
--   Improve on solution and iterate plan / hammer out scope
-	-   in-progress async
--   Kick-off
-	-   TODO: OP to schedule early next week once team is formed
