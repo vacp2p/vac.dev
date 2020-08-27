@@ -50,7 +50,7 @@ In terms of specific properties and trade-offs at each layer, we'll go deeper do
 
 With all the pieces involved, this is quite an undertaking. Luckily, a lot of pieces are already in place and can be either incorporated as-is or iterated on. In terms of medium and long term, here's a rough sketch of priorities and open problems.
 
-1. **Better data sync.** While the current [MVDS](https://github.com/vacp2p/specs/blob/master/mvds.md) works, it is lacking in a few areas:
+1. **Better data sync.** While the current [MVDS](https://specs.vac.dev/specs/mvds.html) works, it is lacking in a few areas:
 - Lack of remote log for mostly-offline offline devices
 - Better scalability for multi-user chat contexts
 - Better usability in terms of application layer usage and supporting more transports
