@@ -85,9 +85,9 @@ us too...
 
 While this might seem like a lot, a lot has been done already, and the majority of the remaining tasks are more amendable to be pursued in parallel with other efforts. It is also worth mentioning that part of track 2 and 3 have been started, in the form of moving to GossipSub (amplification factors) and basics of adaptive nodes (multiple protocols). This is in addition to things like Waku Web which were not part of the initial scope.
 
-## Next steps
+## Upcoming
 
-Aside from the things mentioned above, what are the next steps? There are a few areas of interest, mentioned in no particular order. For track 2 and 3, see previous post for more details.
+Aside from the things mentioned above, what is coming up next? There are a few areas of interest, mentioned in no particular order. For track 2 and 3, see previous post for more details.
 
 1) Better routing (track 2). While we are already building on top of GossipSub, we still need to explore things like topic shardings in more detail to further reduce amplification factors.
 
