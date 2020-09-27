@@ -30,7 +30,7 @@ Let's talk about specs and the main implementation, nim-waku.
 
 ## Specs
 
-After some back and forth on how to best structure things, we ended up breaking down the specs into a few pieces. While Waku v2 is best though of as a cohesive whole in terms of its capabilities, it is made up of several protocols. Here's a list of the current specs and their status:
+After some back and forth on how to best structure things, we ended up breaking down the specs into a few pieces. While Waku v2 is best thought of as a cohesive whole in terms of its capabilities, it is made up of several protocols. Here's a list of the current specs and their status:
 
 - [Main spec](https://specs.vac.dev/specs/waku/v2/waku-v2.html) (draft)
 - [Relay protocol spec](https://specs.vac.dev/specs/waku/v2/waku-relay.html) (draft)
