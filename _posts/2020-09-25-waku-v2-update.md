@@ -62,7 +62,7 @@ As a bonus, we wanted to see what it'd take to get Waku running in a browser. Th
 
 Using the current stack with nim-waku, would require quite a lot of ground work with WASM, WebRTC, Websockets support etc. Instead, we decided to take a shortcut and hack together a JS implementation called [Waku Web Chat](https://github.com/vacp2p/waku-web-chat/). This quick hack wouldn't be possible without the people behind [js-libp2p-examples](https://github.com/libp2p/js-libp2p-examples/) and [js-libp2p](https://github.com/libp2p/js-libp2p) and all its libraries. These are people like Jacob Heun, Vasco Santos, and Cayman Nava. Thanks!
 
-It consists of a brower implementation, a NodeJS implementation and a bootstrap server that acts as a signaling server for WebRTC. It is largely a bastardized version of GossipSub, and while it isn't completely to spec, it does allow messages from a browser to eventually end up at a nim-waku node, and vice versa. Which is pretty cool.
+It consists of a brower implementation, a NodeJS implementation and a bootstrap server that acts as a signaling server for WebRTC. It is largely a bastardized version of GossipSub, and while it isn't completely to spec, it does allow messages originating from a browser to eventually end up at a nim-waku node, and vice versa. Which is pretty cool.
 
 # Coming up
 
