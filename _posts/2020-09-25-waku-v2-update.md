@@ -89,7 +89,7 @@ While this might seem like a lot, a lot has been done already, and the majority 
 
 Aside from the things mentioned above, what is coming up next? There are a few areas of interest, mentioned in no particular order. For track 2 and 3, see previous post for more details.
 
-1) Better routing (track 2). While we are already building on top of GossipSub, we still need to explore things like topic shardings in more detail to further reduce amplification factors.
+1) Better routing (track 2). While we are already building on top of GossipSub, we still need to explore things like topic sharding in more detail to further reduce amplification factors.
 
 2) Accounting and user-run nodes (track 3). With store and filter protocol getting ready, we can start to implement accounting and light connection game for incentivization in a bottom up and iterative manner.
 
