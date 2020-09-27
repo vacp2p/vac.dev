@@ -50,7 +50,7 @@ The filter and store protocol allow for adaptive nodes, i.e. nodes that have var
 
 The main implementation we are working on is [nim-waku](https://github.com/status-im/nim-waku/). This builds on top of libraries such as [nim-libp2p](https://github.com/status-im/nim-libp2p) and others that the [Nimbus team](https://nimbus.team/) have been creating as an Ethereum 2.0 client.
 
-Currently nim-waku implements the relay protocol, and is close to implementing filter and store protocol. It also exposes a [Nim Node API](https://github.com/status-im/nim-waku/blob/master/docs/api/v2/node.md) that allows libraries such as [nim-status](https://github.com/status-im/status-nim) to use it. There is also a rudimentary JSON RPC API for command line scripting.
+Currently nim-waku implements the relay protocol, and is close to implementing filter and store protocol. It also exposes a [Nim Node API](https://github.com/status-im/nim-waku/blob/master/docs/api/v2/node.md) that allows libraries such as [nim-status](https://github.com/status-im/status-nim) to use it. Additionally, there is also a rudimentary JSON RPC API for command line scripting.
 
 ## Nangang testnet
 
