@@ -22,7 +22,7 @@ In the last post ([Waku v2 plan](https://vac.dev/waku-v2-plan)) we explained the
 2) Track 2 - Better routing
 3) Track 3 - Accounting and user-run nodes
 
-As well as various rough components for each track. The primary inital focus is track 1. This means things like: moving to FloodSub, simplify the protocol, core integration, topic interest behavior, historical message caching, and Waku v1<>v2 bridge.
+As well as various rough components for each track. The primary initial focus is track 1. This means things like: moving to FloodSub, simplify the protocol, core integration, topic interest behavior, historical message caching, and Waku v1<>v2 bridge.
 
 # Current state
 
