@@ -72,7 +72,7 @@ Now that we know what the current state is, what is still missing? what are the 
 
 While we are getting closer to closing out work for track 1, there are still a few things missing from the initial scope:
 
-1) Store and filter protocol needs to be finished. This means basic spec, implementation, API integration and proven to work in a testnet. All of these are work in progress and expected to be done very soon. Once the store protocol is done in a basic form, it needs further improvements to make it production ready, at least on a spec/basic implementation level.
+1) Store and filter protocols need to be finished. This means basic spec, implementation, API integration and proven to work in a testnet. All of these are work in progress and expected to be done very soon. Once the store protocol is done in a basic form, it needs further improvements to make it production ready, at least on a spec/basic implementation level.
 
 2) Core integration was mentioned in scope for track 1 initially. This work has stalled a bit, largely due to organizational bandwidth and priorities. While there is a Nim Node API that in theory is ready to be used, having it be used in e.g. Status desktop or mobile app is a different matter. The team responsible for this at Status ([status-nim](github.com/status-im/status-nim)) has been making progress on getting nim-waku v1 integrated, and is expected to look into nim-waku v2 integration soon. One thing that makes this a especially tricky is the difference in interface between Waku v1 and v2, which brings
 us too...
