@@ -9,7 +9,7 @@ permalink: /waku-v2-update
 categories: research
 summary: A research log. Read on to find out what is going on with Waku v2, a messaging protocol. What has been happening? What is coming up next?
 image: /assets/img/TODO
-discuss: TODO
+discuss: https://forum.vac.dev/t/discussion-waku-v2-update/56
 ---
 
 It has been a while since the last post. It is time for an update on Waku v2. Aside from getting more familiar with libp2p (specifically nim-libp2p) and some vacation, what have we been up to? In this post we'll talk about what we've gotten done since last time, and briefly talk about immediate next steps and future. But first, a recap.
@@ -18,15 +18,15 @@ It has been a while since the last post. It is time for an update on Waku v2. As
 
 In the last post ([Waku v2 plan](https://vac.dev/waku-v2-plan)) we explained the rationale of Waku v2 - the current Waku network is fragile and doesn't scale. To solve this, Waku v2 aims to reduce amplification factors and get more user run nodes. We broke the work down into three separate tracks.
 
-1) Track 1 - Move to libp2p
-2) Track 2 - Better routing
-3) Track 3 - Accounting and user-run nodes
+1. Track 1 - Move to libp2p
+2. Track 2 - Better routing
+3. Track 3 - Accounting and user-run nodes
 
 As well as various rough components for each track. The primary initial focus is track 1. This means things like: moving to FloodSub, simplify the protocol, core integration, topic interest behavior, historical message caching, and Waku v1<>v2 bridge.
 
 # Current state
 
-Let's talk about specs and the main implementation, nim-waku.
+Let's talk about the state of specs and our main implementation nim-waku. Then we'll go over our recent testnet, Nangang, and finish off with a Web PoC.
 
 ## Specs
 
@@ -60,7 +60,7 @@ Last week we launched a very rudimentary internal testnet called Nangang. The go
 
 As a bonus, we wanted to see what it'd take to get Waku running in a browser. This is a very powerful capability that enables a lot of use cases, and something that libp2p enables with its multiple transport support.
 
-Using the current stack with nim-waku, would require quite a lot of ground work with WASM, WebRTC, Websockets support etc. Instead, we decided to take a shortcut and hack together a JS implementation called [Waku Web Chat](https://github.com/vacp2p/waku-web-chat/). This quick hack wouldn't be possible without the people behind [js-libp2p-examples](https://github.com/libp2p/js-libp2p-examples/) and [js-libp2p](https://github.com/libp2p/js-libp2p) and all its libraries. These are people like Jacob Heun, Vasco Santos, and Cayman Nava. Thanks!
+Using the current stack, with nim-waku, would require quite a lot of ground work with WASM, WebRTC, Websockets support etc. Instead, we decided to take a shortcut and hack together a JS implementation called [Waku Web Chat](https://github.com/vacp2p/waku-web-chat/). This quick hack wouldn't be possible without the people behind [js-libp2p-examples](https://github.com/libp2p/js-libp2p-examples/) and [js-libp2p](https://github.com/libp2p/js-libp2p) and all its libraries. These are people like Jacob Heun, Vasco Santos, and Cayman Nava. Thanks!
 
 It consists of a brower implementation, a NodeJS implementation and a bootstrap server that acts as a signaling server for WebRTC. It is largely a bastardized version of GossipSub, and while it isn't completely to spec, it does allow messages originating from a browser to eventually end up at a nim-waku node, and vice versa. Which is pretty cool.
 
@@ -104,6 +104,4 @@ As you can tell, quite a lot of thing! Luckily, we have two people joining as pr
 
 ---
 
-If you are feeling adventerous and want to use early stage alpha software, check out the [docs](https://github.com/status-im/nim-waku/tree/master/docs). If you want to read the specs, head over to [Waku spec](https://specs.vac.dev/specs/waku/). If you want to talk with us, join us on [Status](https://get.status.im/chat/public/vac) or on [Telegram](https://t.me/vacp2p) (they are bridged).
-
-Finally, if you want to discuss this article, head over to our [research forum](https://forum.vac.dev/).
+If you are feeling adventurous and want to use early stage alpha software, check out the [docs](https://github.com/status-im/nim-waku/tree/master/docs). If you want to read the specs, head over to [Waku spec](https://specs.vac.dev/specs/waku/). If you want to talk with us, join us on [Status](https://get.status.im/chat/public/vac) or on [Telegram](https://t.me/vacp2p) (they are bridged).
