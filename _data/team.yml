@@ -54,3 +54,11 @@
   statusName:
   github: dryajov
   twitter: dryajov
+
+- name: "Hanno Cornelius"
+  shortName: "hanno"
+  image: "hanno.png"
+  statusLink:
+  statusName:
+  github: jm-clius
+  twitter:
