@@ -1,20 +1,20 @@
 ---
 layout: post
-name:  "Vac, Waku v2 and Ethereum Messaging"
-title:  "Vac, Waku v2 and Ethereum Messaging"
-date:   2020-11-10 12:00:00 +0800
+name:  "[Talk] Vac, Waku v2 and Ethereum Messaging"
+title:  "[Talk] Vac, Waku v2 and Ethereum Messaging"
+date:   2020-11-11 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /waku-v2-ethereum-messaging
 categories: research
 summary: Talk from Taipei Ethereum Meetup. Read on to find out about our journey from Whisper to Waku v2, as well as how Waku v2 can be useful for Etherum Messaging.
 image: /assets/img/taipei_ethereum_meetup.png
-discuss: https://forum.vac.dev/t/TODO
+discuss: https://forum.vac.dev/t/discussion-talk-vac-waku-v2-and-ethereum-messaging/60
 ---
 
 *The following post is a transcript of the talk given at the [Taipei Ethereum meetup, November 5](https://www.meetup.com/Taipei-Ethereum-Meetup/events/274033344/). There is also a [video recording]( https://www.youtube.com/watch?v=lUDy1MoeYnI).*
 
-# Vac, Waku v2 and Ethereum Messaging
+---
 
 ## 0. Introduction
 
@@ -36,7 +36,7 @@ However, for various reasons, Whisper didn't get the attention it deserved. Deve
 
 In an effort to solve some of its immediate problems, we forked Whisper into Waku and formalized it with a proper specification. This solved immediate bandwidth issues for light nodes, introduced rate limiting for better spam protection, improved historical message support, etc.
 
-If you are interested in this journey, checkout the EthCC talk Dean and I gave in Paris earlier this year https://www.youtube.com/watch?v=6lLT33tsJjs
+If you are interested in this journey, checkout the [EthCC talk Dean and I gave in Paris earlier this year](https://www.youtube.com/watch?v=6lLT33tsJjs).
 
 Status upgraded to Waku v1 early 2020. What next?
 
@@ -47,14 +47,16 @@ We were far from done. The changes we had made were quite incremental and done i
 This kickstarted Waku v2 efforts, which is what we've been working on since July. This work was and is initally centered around a few pieces:
 
 (a) Moving to libp2p
+
 (b) Better routing
+
 (c) Accounting and user-run nodes
 
 The general theme was: making the Waku network more scalable and robust.
 
 We also did a scalability study to show at what point the network would run into issues, due to the inherent lack of routing that Whisper and Waku v1 provided.
 
-You can read more about this here <https://vac.dev/waku-v2-plan>
+You can read more about this [here](https://vac.dev/waku-v2-plan).
 
 ## 3.5 Waku v2 - Design goals
 
@@ -70,7 +72,7 @@ Taking a step back, what problem does Waku v2 attempt to solve compared to all t
     - not being publicly connectable
     - only being intermittently connected; mostly-offline
 
-4. **Privacy***. These applications have a desire for some privacy guarantees, such as pseudonymity, metadata protection in transit, etc.
+4. **Privacy**. These applications have a desire for some privacy guarantees, such as pseudonymity, metadata protection in transit, etc.
 
 As well as to do so in a modular fashion. Meaning you can find a reasonable trade-off depending on your exact requirements. For example, you usually have to trade off some bandwidth to get metadata protection, and vice versa.
 
@@ -93,7 +95,7 @@ The main implementation is written in Nim using nim-libp2p, which is also poweri
 
 Right now, all protocols, with the exception of bridge, are in draft mode, meaning they have been implemented but are not yet being relied upon in production.
 
-You can read more about the breakdown in this update here: https://vac.dev/waku-v2-update though some progress has been made since then, as well was in the main Waku v2 spec https://specs.vac.dev/specs/waku/v2/waku-v2.html
+You can read more about the breakdown in this [update](https://vac.dev/waku-v2-update) though some progress has been made since then, as well was in the [main Waku v2 spec](https://specs.vac.dev/specs/waku/v2/waku-v2.html).
 
 ## 5. Waku v2 - Upcoming
 
@@ -178,9 +180,9 @@ And then build up from there.
 
 A lot of this will happen in Javascript and browsers, since that's the primarily environment for a lot of wallets and dapps. We are currently hiring for a Waku JS Wallet integration lead to help push this effort further.
 
-Come talk to me after or apply here https://status.im/our_team/open_positions.html?gh_jid=2385338
+Come talk to me after or [apply here](https://status.im/our_team/open_positions.html?gh_jid=2385338).
 
-That's it! You can find us on Status, Telegram, vac.dev. I'm on twitter here: https://twitter.com/oskarth
+That's it! You can find us on Status, Telegram, vac.dev. I'm on twitter [here](https://twitter.com/oskarth).
 
 Questions?
 
