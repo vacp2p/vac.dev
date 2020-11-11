@@ -8,7 +8,7 @@ published: true
 permalink: /waku-v2-ethereum-messaging
 categories: research
 summary: Talk from Taipei Ethereum Meetup. Read on to find out about our journey from Whisper to Waku v2, as well as how Waku v2 can be useful for Etherum Messaging.
-image: /assets/img/taipei_ethereum_meetup.png
+image: /assets/img/taipei_ethereum_meetup_slide.png
 discuss: https://forum.vac.dev/t/discussion-talk-vac-waku-v2-and-ethereum-messaging/60
 ---
 
