@@ -2,7 +2,7 @@
 layout: post
 name:  "[Talk] Vac, Waku v2 and Ethereum Messaging"
 title:  "[Talk] Vac, Waku v2 and Ethereum Messaging"
-date:   2020-11-11 12:00:00 +0800
+date:   2020-11-10 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /waku-v2-ethereum-messaging
