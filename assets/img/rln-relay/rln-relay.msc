@@ -2,10 +2,10 @@
 msc {
   hscale = "2";
 
-  d [label = " "], a [label = " "],b [label = " "];
-  a rbox a [label="Relay Node A"], 
-  b note b [label="Membership Contract"],
-  d rbox d [label = "Relay Node B"];
+  d [label = "Relay Node B"], a [label = "Relay Node A"],b [label = "Membership Contract"];
+  # a rbox a [label="Relay Node A"], 
+  # b note b [label="Membership Contract"],
+  # d rbox d [label = "Relay Node B"];
   |||;
 
   a box a [ label=" \n Generate sk,pk \n "] ;
