@@ -3,17 +3,17 @@ msc {
   hscale="1",
   wordwraparcs=true;
 
-  a [label=" "],
-  b [label=" "],
-  c [label=" "],
-  d [label=" "],
-  e [label=" "];
+  a [label="RLN-Relay Node: Publisher"],
+  b [label="RLN-Relay Node: Router"],
+  c [label="RLN-Relay Node"],
+  d [label="RLN-Relay Node"],
+  e [label="Membership Contract"];
 
-  a rbox a [label="Relay Node: Publisher"],
-  b rbox b [label="Relay Node: Router"],
-  c rbox c [label="Relay Node"],
-  d rbox d [label="Relay Node"],
-  e note e [label="Membership Contract"];
+  # a rbox a [label="RLN-Relay Node: Publisher"],
+  # b rbox b [label="RLN-Relay Node: Router"],
+  # c rbox c [label="RLN-Relay Node"],
+  # d rbox d [label="RLN-Relay Node"],
+  # e note e [label="Membership Contract"];
   |||;
   b box b [label=" \n nullifierMap= [(nullifier, shareX, shareY)...] \n \n  Initialize an empty map of the received nullifiers \n "],
   c box c [label=" \n nullifierMap= [(nullifier, shareX, shareY)...] \n \n Initialize an empty map of the received nullifiers \n "],
