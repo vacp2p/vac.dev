@@ -12,8 +12,9 @@ image: /assets/img/js-waku-gist.png
 discuss: https://forum.vac.dev/t/discussion-presenting-js-waku-waku-v2-in-the-browser/81 
 ---
 
-After almost three months working on JS-Waku,
-we thought it would be a good time to give it a proper introduction.
+For the past 3 months, we have been working in bringing Waku v2 to the browser.
+Our aim is to empower dApps with Waku v2, and it led to the creation of a new library.
+We believe now is good time to introduce it!
 
 ## Waku v2
 
