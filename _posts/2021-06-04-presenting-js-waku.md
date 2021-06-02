@@ -9,7 +9,7 @@ permalink: /presenting-js-waku
 categories: platform
 summary: "JS-Waku is bringing Waku v2 to the browser. Learn what we achieved so far and what is next in our pipeline!"
 image: /assets/img/js-waku-gist.png
-discuss: TODO 
+discuss: https://forum.vac.dev/t/discussion-presenting-js-waku-waku-v2-in-the-browser/81 
 ---
 
 After almost three months working on JS-Waku,
