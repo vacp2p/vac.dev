@@ -128,7 +128,8 @@ const msg = WakuMessage.fromUtf8String("Here is a message!", "/my-cool-app/1/my-
 await waku.relay.send(msg);
 ```
 
-We have also put a bounty at [0xHack](https://0xhack.dev/) for using JS-Waku.
+We have also put a bounty at [0xHack](https://0xhack.dev/) for using JS-Waku
+and running a [workshop](https://vimeo.com/551509621).
 We were thrilled to have a couple of hackers create new software using our libraries.
 One of the projects aimed to create a decentralised, end-to-end encrypted messenger app,
 similar to what the [ETH-DM](https://rfc.vac.dev/spec/20/) protocol aims to achieve.
