@@ -12,7 +12,7 @@ image: /assets/img/js-waku-gist.png
 discuss: https://forum.vac.dev/t/discussion-presenting-js-waku-waku-v2-in-the-browser/81 
 ---
 
-For the past 3 months, we have been working in bringing Waku v2 to the browser.
+For the past 3 months, we have been working on bringing Waku v2 to the browser.
 Our aim is to empower dApps with Waku v2, and it led to the creation of a new library.
 We believe now is good time to introduce it!
 
@@ -32,7 +32,7 @@ To further enable web and restricted resource environments, Waku v2 was created 
 The migration of the Status chat feature to Waku v2 is currently in progress.
 
 We see the need of such solution in the broader Ethereum ecosystem, beyond Status.
-This is why are building Waku v2 as a decentralised communication platform for all to use and build on.
+This is why we are building Waku v2 as a decentralised communication platform for all to use and build on.
 If you want to read more about Waku v2 and what it aims to achieve,
 checkout [What's the Plan for Waku v2?](/waku-v2-plan).
 
@@ -84,7 +84,7 @@ enabling your dApp to:
 
 JS-Waku needs to operate in the same context from which Waku v2 was born:
 a restricted environment were connectivity or uptime are not guaranteed;
-JS-Waku bring Waku v2 to the browser.
+JS-Waku brings Waku v2 to the browser.
 
 ## Achievements so far
 
@@ -130,7 +130,7 @@ await waku.relay.send(msg);
 
 We have also put a bounty at [0xHack](https://0xhack.dev/) for using JS-Waku.
 We were thrilled to have a couple of hackers create new software using our libraries.
-One of the project aimed to create a decentralised, end-to-end encrypted messenger app,
+One of the projects aimed to create a decentralised, end-to-end encrypted messenger app,
 similar to what the [ETH-DM](https://rfc.vac.dev/spec/20/) protocol aims to achieve.
 Another project was a decentralised Twitter platform.
 Such projects allow us to prioritize the work on JS-Waku and understand how DevEx can be improved.
@@ -165,7 +165,7 @@ check out the new role in our team:
 [js-waku: Wallet & Dapp Integration Developer](https://status.im/our_team/jobs.html?gh_jid=3157894).
 We also have a number of [positions](https://status.im/our_team/jobs.html) open to work on Waku protocol and nim-waku.
 
-If you are as excited as us by JS-Waku, why not building a dApp with it?
+If you are as excited as us by JS-Waku, why not build a dApp with it?
 You can find documentation on the [npmjs page](https://www.npmjs.com/package/js-waku).
 
 Whether you are a developer, you can come chat with us using [WakuJS Web Chat](https://status-im.github.io/js-waku/)
