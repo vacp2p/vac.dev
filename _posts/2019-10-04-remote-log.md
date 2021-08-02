@@ -96,7 +96,7 @@ Both patterns can be used in parallel, e,g. by storing the last `k` messages dir
 
 ### Interaction with MVDS
 
-[vac.mvds.Message](https://specs.vac.dev/specs/mvds.html#payloads) payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.
+[vac.mvds.Message](https://rfc.vac.dev/spec/2/#payloads) payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.
 
 ## Future work
 

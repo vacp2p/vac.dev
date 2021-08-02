@@ -28,7 +28,7 @@ Vac is a **modular peer-to-peer messaging stack, with a focus on secure messagin
 
 ## Protocol stack
 
-What does this stack look like? We take inspiration from [core](https://tools.ietf.org/html/rfc793) [internet architecture](https://www.ietf.org/rfc/rfc1122.txt), existing [survey work](http://cacr.uwaterloo.ca/techreports/2015/cacr2015-02.pdf) and other [efforts](https://code.briarproject.org/briar/briar/wikis/A-Quick-Overview-of-the-Protocol-Stack) that have been done to decompose the problem into orthogonal pieces. Each layer provides their own set of properties and only interact with the layers it is adjacent to. Note that this is a rough sketch.
+What does this stack look like? We take inspiration from [core](https://tools.ietf.org/html/rfc793) [internet architecture](https://www.ietf.org/rfc/rfc1122.txt), existing [survey work](https://css.csail.mit.edu/6.858/2020/readings/secure-messaging.pdf) and other [efforts](https://code.briarproject.org/briar/briar/wikis/A-Quick-Overview-of-the-Protocol-Stack) that have been done to decompose the problem into orthogonal pieces. Each layer provides their own set of properties and only interact with the layers it is adjacent to. Note that this is a rough sketch.
 
 | Layer / Protocol  | Purpose                           | Examples             |
 |-------------------|-----------------------------------|----------------------|
@@ -50,7 +50,7 @@ In terms of specific properties and trade-offs at each layer, we'll go deeper do
 
 With all the pieces involved, this is quite an undertaking. Luckily, a lot of pieces are already in place and can be either incorporated as-is or iterated on. In terms of medium and long term, here's a rough sketch of priorities and open problems.
 
-1. **Better data sync.** While the current [MVDS](https://specs.vac.dev/specs/mvds.html) works, it is lacking in a few areas:
+1. **Better data sync.** While the current [MVDS](https://rfc.vac.dev/spec/2/) works, it is lacking in a few areas:
 - Lack of remote log for mostly-offline offline devices
 - Better scalability for multi-user chat contexts
 - Better usability in terms of application layer usage and supporting more transports

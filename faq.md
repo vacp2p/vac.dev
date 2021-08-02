@@ -14,7 +14,7 @@ Signal is using a centralized server, but they provide many protocols. [Status](
 Signal's Double Ratchet and X3DH key exchange for encryption and forward secrecy in their app. 
 So kudos to them for that work!
 
-You can find this in status client specification [here](https://status-im.github.io/specs/status-secure-transport-spec).
+You can find this in status client specification [here](https://specs.status.im/spec/1).
 
 ## Are there any benefits to building messaging protocols for Ethereum? Is Waku a long term solution?
 
@@ -30,7 +30,7 @@ First off, the privacy guarantees provided by Whisper are mostly theoretical at 
 of scrutiny from academic researchers and so on.
 
 There are a few trade-offs that allow Waku to be more scalable and suitable for resource restricted devices than Whisper. 
-It is worth noting that all of these are [optional](https://specs.vac.dev/specs/waku/waku.html#status), and a Waku client can choose to get all the privacy benefits by turning these options off:
+It is worth noting that all of these are [optional](https://rfc.vac.dev/spec/6/#packet-usage), and a Waku client can choose to get all the privacy benefits by turning these options off:
 
 1. Light client means mobile nodes don't relay messages that aren't their own. 
 2. Mailserver for offline messaging means a mailserver knows which messages you are requesting and what your IP is.
