@@ -32,11 +32,11 @@ Let's talk about the state of specs and our main implementation nim-waku. Then w
 
 After some back and forth on how to best structure things, we ended up breaking down the specs into a few pieces. While Waku v2 is best thought of as a cohesive whole in terms of its capabilities, it is made up of several protocols. Here's a list of the current specs and their status:
 
-- [Main spec](https://specs.vac.dev/specs/waku/v2/waku-v2.html) (draft)
-- [Relay protocol spec](https://specs.vac.dev/specs/waku/v2/waku-relay.html) (draft)
-- [Filter protocol spec](https://specs.vac.dev/specs/waku/v2/waku-filter.html) (raw)
-- [Store protocol spec](https://specs.vac.dev/specs/waku/v2/waku-store.html) (raw)
-- [Bridge spec](https://specs.vac.dev/specs/waku/v2/waku-bridge.html) (raw)
+- [Main spec](https://rfc.vac.dev/spec/10/) (draft)
+- [Relay protocol spec](https://rfc.vac.dev/spec/11/) (draft)
+- [Filter protocol spec](https://rfc.vac.dev/spec/12) (raw)
+- [Store protocol spec](https://rfc.vac.dev/spec/13) (raw)
+- [Bridge spec](https://rfc.vac.dev/spec/15/) (raw)
 
 Raw means there is not yet an implementation that corresponds fully to the spec, and draft means there is an implementation that corresponds to the spec. In the interest of space, we won't go into too much detail on the specs here except to note a few things:
 
@@ -74,7 +74,7 @@ While we are getting closer to closing out work for track 1, there are still a f
 
 1) Store and filter protocols need to be finished. This means basic spec, implementation, API integration and proven to work in a testnet. All of these are work in progress and expected to be done very soon. Once the store protocol is done in a basic form, it needs further improvements to make it production ready, at least on a spec/basic implementation level.
 
-2) Core integration was mentioned in scope for track 1 initially. This work has stalled a bit, largely due to organizational bandwidth and priorities. While there is a Nim Node API that in theory is ready to be used, having it be used in e.g. Status desktop or mobile app is a different matter. The team responsible for this at Status ([status-nim](github.com/status-im/status-nim)) has been making progress on getting nim-waku v1 integrated, and is expected to look into nim-waku v2 integration soon. One thing that makes this a especially tricky is the difference in interface between Waku v1 and v2, which brings
+2) Core integration was mentioned in scope for track 1 initially. This work has stalled a bit, largely due to organizational bandwidth and priorities. While there is a Nim Node API that in theory is ready to be used, having it be used in e.g. Status desktop or mobile app is a different matter. The team responsible for this at Status ([status-nim](https://github.com/status-im/status-nim) has been making progress on getting nim-waku v1 integrated, and is expected to look into nim-waku v2 integration soon. One thing that makes this a especially tricky is the difference in interface between Waku v1 and v2, which brings
 us too...
 
 3) Companion spec for encryption. As part of simplifying the protocol, the routing is decoupled from the encryption in v2 ([1](https://github.com/vacp2p/specs/issues/158), [2](https://github.com/vacp2p/specs/issues/181)). There are multiple layers of encryption at play here, and we need to figure out a design that makes sense for various use cases (dapps using Waku on their own, Status app, etc).
@@ -104,4 +104,4 @@ As you can tell, quite a lot of thing! Luckily, we have two people joining as pr
 
 ---
 
-If you are feeling adventurous and want to use early stage alpha software, check out the [docs](https://github.com/status-im/nim-waku/tree/master/docs). If you want to read the specs, head over to [Waku spec](https://specs.vac.dev/specs/waku/). If you want to talk with us, join us on [Status](https://get.status.im/chat/public/vac) or on [Telegram](https://t.me/vacp2p) (they are bridged).
+If you are feeling adventurous and want to use early stage alpha software, check out the [docs](https://github.com/status-im/nim-waku/tree/master/docs). If you want to read the specs, head over to [Waku spec](https://rfc.vac.dev/spec/10/). If you want to talk with us, join us on [Status](https://get.status.im/chat/public/vac) or on [Telegram](https://t.me/vacp2p) (they are bridged).

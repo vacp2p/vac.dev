@@ -95,7 +95,7 @@ The main implementation is written in Nim using nim-libp2p, which is also poweri
 
 Right now, all protocols, with the exception of bridge, are in draft mode, meaning they have been implemented but are not yet being relied upon in production.
 
-You can read more about the breakdown in this [update](https://vac.dev/waku-v2-update) though some progress has been made since then, as well was in the [main Waku v2 spec](https://specs.vac.dev/specs/waku/v2/waku-v2.html).
+You can read more about the breakdown in this [update](https://vac.dev/waku-v2-update) though some progress has been made since then, as well was in the [main Waku v2 spec](https://rfc.vac.dev/spec/10).
 
 ## 5. Waku v2 - Upcoming
 

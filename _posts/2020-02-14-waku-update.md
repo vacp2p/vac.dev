@@ -18,7 +18,7 @@ Waku is our fork of Whisper where we address the shortcomings of Whisper in an i
 
 **Specs:**
 
-We released [Waku spec v0.3](https://specs.vac.dev/specs/waku/waku.html) this week! You can see the full changelog [here](https://specs.vac.dev/specs/waku/waku.html#changelog).
+We released [Waku spec v0.3](https://rfc.vac.dev/spec/6) this week! You can see the full changelog [here](https://rfc.vac.dev/spec/6/#changelog).
 
 The main change from 0.2 is making the handshake more flexible. This enables us to communicate topic interest immediately without ambiguity. We also did the following:
 
@@ -28,23 +28,23 @@ The main change from 0.2 is making the handshake more flexible. This enables us 
 
 We cut the spec up in several components to make Vac as modular as possible. The components right now are:
 
-- Waku (main spec), currently in [version 0.3.0](https://specs.vac.dev/specs/waku/waku.html)
-- Waku envelope data field, currently in [version 0.1.0](https://specs.vac.dev/specs/waku/envelope-data-format.html)
-- Waku mailserver, currently in [version 0.2.0](https://specs.vac.dev/specs/waku/mailserver.html)
+- Waku (main spec), currently in [version 0.3.0](https://rfc.vac.dev/spec/6)
+- Waku envelope data field, currently in [version 0.1.0](https://rfc.vac.dev/spec/7)
+- Waku mailserver, currently in [version 0.2.0](https://rfc.vac.dev/spec/8)
 
 We can probably factor these out further as the main spec is getting quite big, but this is good enough for now.
 
 **Clients:**
 
-There are currently two clients that implement Waku v0.3, these are [Nimbus](https://github.com/status-im/nimbus/tree/master/waku) in Nim and [status-go](https://github.com/status-im/status-go) in Go.
+There are currently two clients that implement Waku v0.3, these are [Nimbus (Update: now nim-waku)](https://github.com/status-im/nim-waku) in Nim and [status-go](https://github.com/status-im/status-go) in Go.
 
 For more details on what each client support and don't, you can follow the [work in progress checklist](https://github.com/vacp2p/pm/issues/7).
 
-Work is currently in progress to integrate it into the [Status core app](https://github.com/status-im/status-react/pull/9949). Waku is expected to be part of their upcoming 1.1 release (see [Status app roadmap](https://trello.com/b/DkxQd1ww/status-app-roadmap)).
+Work is currently in progress to integrate it into the [Status core app](https://github.com/status-im/status-react/pull/9949). Waku is expected to be part of their upcoming 1.1 release (see [Status app roadmap (link deprecated)](https://trello.com/b/DkxQd1ww/status-app-roadmap)).
 
 **Simulation:**
 
-We have a [simulation](https://github.com/status-im/nimbus/tree/master/waku#testing-waku-protocol) that verifies - or rather, fails to falsify - our [scalability model](https://vac.dev/fixing-whisper-with-waku). More on the simulation and what it shows below.
+We have a [simulation](https://github.com/status-im/nim-waku/blob/master/waku/v1/node/quicksim.nim) that verifies - or rather, fails to falsify - our [scalability model](https://vac.dev/fixing-whisper-with-waku). More on the simulation and what it shows below.
 
 ## How many users does Waku support?
 
@@ -111,7 +111,7 @@ Things to note:
 - Waku light node gets ~1000x less envelopes than Whisper light node
 - Full mesh results in a lot more duplicate messages, expect for Waku light node
 
-Run the simulation yourself [here](https://github.com/status-im/nimbus/tree/master/waku#testing-waku-protocol). The parameters are configurable, and it is integrated with Prometheus and Grafana.
+Run the simulation yourself [here](https://github.com/status-im/nim-waku/blob/master/waku/v1/node/quicksim.nim). The parameters are configurable, and it is integrated with Prometheus and Grafana.
 
 ## Difference between Waku and Whisper
 
@@ -137,7 +137,7 @@ communication protocol. Here we outline a few challenges that we are addressing 
 - incentived infrastructure and spam-resistance
 - build with resource restricted devices in mind, including nodes being mostly offline
 
-For the third bottleneck, a likely candidate for fixing this is Kademlia routing. This is similar to what is done in [Swarm's](https://swarm.ethereum.org/]) PSS. We are in the early stages of experimenting with this over libp2p in [nim-libp2p](https://github.com/status-im/nim-libp2p). More on this in a future post!
+For the third bottleneck, a likely candidate for fixing this is Kademlia routing. This is similar to what is done in [Swarm's](https://www.ethswarm.org/) PSS. We are in the early stages of experimenting with this over libp2p in [nim-libp2p](https://github.com/status-im/nim-libp2p). More on this in a future post!
 
 ## Acknowledgements
 
