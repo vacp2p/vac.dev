@@ -129,7 +129,7 @@ await waku.relay.send(msg);
 ```
 
 We have also put a bounty at [0xHack](https://0xhack.dev/) for using JS-Waku
-and running a [workshop](https://vimeo.com/551509621).
+and running a [workshop](https://www.youtube.com/watch?v=l77j0VX75QE).
 We were thrilled to have a couple of hackers create new software using our libraries.
 One of the projects aimed to create a decentralised, end-to-end encrypted messenger app,
 similar to what the [ETH-DM](https://rfc.vac.dev/spec/20/) protocol aims to achieve.
@@ -171,5 +171,5 @@ You can find documentation on the [npmjs page](https://www.npmjs.com/package/js-
 
 Whether you are a developer, you can come chat with us using [WakuJS Web Chat](https://status-im.github.io/js-waku/)
 or [chat2](https://github.com/status-im/nim-waku/blob/master/docs/tutorial/chat2.md).
-You can get support on Discord [#waku-support (dev support)](https://discord.gg/VChNsDdj).
+You can get support in #dappconnect-support on [Vac Discord](https://discord.gg/j5pGbn7MHZ) or [Telegram](https://t.me/dappconnectsupport).
 If you have any ideas on how Waku could enable a specific dapp or use case, do share, we are always keen to hear it.
