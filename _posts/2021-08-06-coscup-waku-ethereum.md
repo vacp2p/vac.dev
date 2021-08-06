@@ -168,7 +168,7 @@ For more on topics, see https://rfc.vac.dev/spec/23/
 In the Status protocol, content topics - topics in Whisper/Waku v1 - are used for several things:
 
 - Contact code topic to discover X3DH bundles for perfect forward secrecy
-	- Partitioned into N (currently 5000) content topics to balance privacy with efficancy
+	- Partitioned into N (currently 5000) content topics to balance privacy with efficiency
 - Public chats correspond to hash of the plaintext name
 - Negotiated topic for 1:1 chat with DHKE derived content topic
 
