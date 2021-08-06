@@ -67,7 +67,7 @@ Let's first look at what the goals are.
 ### Goals
 
 Waku v2 provides a PubSub based messaging protocol with the following
-charactersistics:
+characteristics:
 
 1. **Generalized messaging**. Applications that require a messaging protocol to
    communicate human to human, machine to machine, or a mix.
