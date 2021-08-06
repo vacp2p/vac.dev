@@ -18,7 +18,7 @@ discuss: https://forum.vac.dev/t/discussion-talk-waku-v2-ethereum-messaging-cosc
 
 ![](https://i.imgur.com/gW0cm9o.png =200x200)
 
-## 0. Introduction
+## Introduction
 
 Hi everyone!
 
@@ -26,7 +26,7 @@ Today I'll talk to you about Waku v2. What it is, what problems it is solving,
 and how it can be useful for things such as messaging in Ethereum. First, let me
 start with some brief background.
 
-## 1. Brief history and background
+## Brief history and background
 
 Back when Ethereum got started, there used to be this concept of the "holy
 trinity". You had Ethereum for compute/consensus, Swarm for storage, and Whisper
@@ -53,7 +53,7 @@ In a nutshell, we forked Whisper to address immediate shortcomings and this
 became Waku v1. Waku v2 is complete re-thought implementation from scratch on top
 of libp2p. This will be the subject of today's talk.
 
-## 2. Waku v2
+## Waku v2
 
 ### Overview
 
@@ -143,7 +143,7 @@ of these research areas are:
 - More rigorous privacy analysis
 - Improving interaction with wallets and dapp
 
-## 3. Use cases
+## Use cases
 
 Let's look at where Waku v2 is and can be used.
 
@@ -218,7 +218,7 @@ WalletConnect v2 is currently in late alpha using Waku v2.
 
 These are all things that are in progress / proof of concept stage.
 
-## 4. Contribute
+## Contribute
 
 We'd love to see contributions of any form!
 
@@ -229,7 +229,7 @@ We'd love to see contributions of any form!
 - We are hiring: Wallet & Dapp Integration Developer, Distributed Systems Engineer, Protocol Engineer, Protocol Researcher - all [job listings](https://status.im/our_team/jobs.html)
 - Join our new [Discord](https://discord.gg/bJCTqS5H)
 
-## 5. Conclusion
+## Conclusion
 
 In this talk we've gone over the original vision for Web3 and how Waku came to
 be. We've also looked at what Waku v2 aims to do. We looked at its protocols,
