@@ -153,7 +153,7 @@ content based filtering. Here's an example of the default PubSub topic:
 
 `/waku/2/default-waku/proto`
 
-This is recommended as it increase privacy for participants and it is stored by
+This is recommended as it increases privacy for participants and it is stored by
 default, however this is up to the application.
 
 The second type of topic is a content topic, which is application specific. For
