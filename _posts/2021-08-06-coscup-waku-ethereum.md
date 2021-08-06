@@ -103,7 +103,7 @@ See https://rfc.vac.dev/ for a full overview.
 ### Implementations
 
 Waku v2 consists of multiple implementations. This allows for client diversity,
-makes it easier to strength the protocols, and allow people to use Waku v2 in
+makes it easier to strengthen the protocols, and allow people to use Waku v2 in
 different contexts.
 
 - nim-waku - the reference client written in Nim, most full-featured.
