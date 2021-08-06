@@ -1,15 +1,15 @@
 ---
 layout: post
-name:  "Waku v2 and Ethereum Messaging [Talk at COSCUP]"
-title:  "Waku v2 and Ethereum Messaging [Talk at COSCUP]"
+name:  "[Talk at COSCUP] Vac, Waku v2 and Ethereum Messaging"
+title:  "[Talk at COSCUP] Vac, Waku v2 and Ethereum Messaging"
 date:   2021-08-06 12:00:00 +0800
 author: oskarth
 published: true
-permalink: /waku-ethereum-coscup
+permalink: /waku-v2-ethereum-coscup
 categories: research
-summary: Learn more about Waku, its origins, goals, protocols, implementation and ongoing research. Understand how it is used and how it can be useful for mesaging in Ethereum.
+summary: Learn more about Waku v2, its origins, goals, protocols, implementation and ongoing research. Understand how it is used and how it can be useful for mesaging in Ethereum.
 image: /assets/img/coscup-waku/talk.png
-discuss: https://forum.vac.dev/t/discussion-waku-v2-and-ethereum-messaging-talk-at-coscup/95
+discuss: https://forum.vac.dev/t/discussion-talk-at-coscup-vac-waku-v2-and-ethereum-messaging/95
 ---
 
 *This is the English version of a talk originally given in Chinese at COSCUP in Taipei. There is a [video recording](https://www.youtube.com/watch?v=s0ATpQ4_XFc) with Chinese and English subtitles.*
