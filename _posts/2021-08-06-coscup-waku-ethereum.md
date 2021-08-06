@@ -31,7 +31,7 @@ trinity". You had Ethereum for compute/consensus, Swarm for storage, and Whisper
 for messaging. This is partly where the term Web3 comes from.
 
 Status started out as an app with the goal of being a window onto Ethereum and
-secure messenger. As one of the few if not only apps using Whisper in
+a secure messenger. As one of the few, if not the only, apps using Whisper in
 production, not to mention on a mobile phone, we quickly realized there were
 problems with the underlying protocols and infrastructure. Protocols such as
 Whisper weren't quite ready for prime time yet when it came to things such as
