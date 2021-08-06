@@ -16,8 +16,6 @@ discuss: https://forum.vac.dev/t/discussion-talk-at-coscup-vac-waku-v2-and-ether
 
 ---
 
-![](https://i.imgur.com/gW0cm9o.png =200x200)
-
 ## Introduction
 
 Hi everyone!
@@ -243,5 +241,3 @@ messaging in Ethereum, including for things like WalletConnect.
 I hope this talk gives you a better idea of what Waku is, why it exists, and
 that it inspires you to contribute, either to Waku itself or by using it in your
 own project!
-
-![](https://i.imgur.com/gW0cm9o.png =200x200)
