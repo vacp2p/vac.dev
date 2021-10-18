@@ -2,18 +2,51 @@
 layout: default
 ---
 
-<div class="container post-content">
-    <div class="row">
-        <div class="col-lg-10 ml-auto mr-auto">
-            <h1>{{page.title}}</h1>
-            <div class="meta">{{ page.date | date_to_string }} • <a href="/authors/{{ page.author }}">{{ page.author }}</a></div>
-            <div class="editor-content">
-                {{ content }}
-
-                {% if page.discuss %}
-                    <p>Discuss this post on our <a href="{{ page.discuss }}">forum</a>. </p>
-                {% endif %}
-            </div>
-        </div>
+<section
+  class="
+    container
+    max-w-screen-xl
+    flex flex-col
+    sm:flex-row
+    pt-10
+    pb-0
+    md:pb-10
+    lg:pb-0
+  "
+>
+  <div
+    class="
+      heading-block
+      w-full
+      sm:w-2/12
+      lg:w-3/12
+      flex
+      lg:justify-center
+      items-start
+      pb-3
+      sm:pb-0
+    "
+  >
+    <a class="link link--back" href="/research-log/">Back</a>
+  </div>
+  <div
+    class="info-block w-full sm:w-10/12 lg:w-9/12 pb-5 sm:pb-10 overflow-hidden"
+  >
+    <div class="post mb-10">
+      <h1 class="text-xl md:text-xxl mb-5 sm:max-w-md lg:max-w-2xl">
+        {{page.title}}
+      </h1>
+      <div>
+        <span class="text-s lg:text-base">
+          {{ page.date | date_to_string }} • by
+        </span>
+        <a
+          href="/authors/{{ page.author }}"
+          class="text-s lg:text-base font-bold hover:underline"
+          >{{ page.author }}</a
+        >
+      </div>
     </div>
-</div>
+    <div class="post__content">{{ content }}</div>
+  </div>
+</section>

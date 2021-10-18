@@ -1,12 +1,12 @@
 ---
 layout: post
-name:  "From Kademlia to Discv5"
-title:  "From Kademlia to Discv5"
-date:   2020-04-9 16:00:00 +0100
+name: 'From Kademlia to Discv5'
+title: 'From Kademlia to Discv5'
+date: 2020-04-9 16:00:00 +0100
 author: dean
 published: true
 permalink: /kademlia-to-discv5
-categories: research
+category: research
 summary: A quick history of discovery in peer-to-peer networks, along with a look into discv4 and discv5, detailing what they are, how they work and where they differ.
 ---
 
@@ -48,9 +48,10 @@ XOR 10011001
 The top in decimal numbers means that the distance between `153` and `50` is `171`.
 
 There are several reasons why `XOR` was taken:
- 1. The distance from one ID to itself will be `0`.
- 2. Distance is symmetric, A to B is the same as B to A.
- 3. Follows triangle inequality, if `A`, `B` and `C` are points on a triangle then the distance `A` to `B` is closer or equal to that of `A` to `C` plus the one from `B` to `C`.
+
+1.  The distance from one ID to itself will be `0`.
+2.  Distance is symmetric, A to B is the same as B to A.
+3.  Follows triangle inequality, if `A`, `B` and `C` are points on a triangle then the distance `A` to `B` is closer or equal to that of `A` to `C` plus the one from `B` to `C`.
 
 In summary, this distance function allows a node to decide what is "close" to it and make decisions based on that "closeness".
 
@@ -67,11 +68,11 @@ For Kademlia nodes to support these functions, there are several messages with w
 - `FINDNODE` - Returns the closest nodes requested to a given ID.
 - `FINDVALUE` - The same as `FINDNODE`, except if a node stores the specific value it will return it directly.
 
-*This is a **very** simplified explanation of Kademlia and skips various important details. For the full description, make sure to check out the [paper](https://pdos.csail.mit.edu/~petar/papers/maymounkov-kademlia-lncs.pdf) or a more in-depth [design specification](http://xlattice.sourceforge.net/components/protocol/kademlia/specs.html)*
+_This is a **very** simplified explanation of Kademlia and skips various important details. For the full description, make sure to check out the [paper](https://pdos.csail.mit.edu/~petar/papers/maymounkov-kademlia-lncs.pdf) or a more in-depth [design specification](http://xlattice.sourceforge.net/components/protocol/kademlia/specs.html)_
 
 ## Discv4
 
-Now after that history lesson, we finally get to discv4 (which stands for discovery v4), Ethereum's current node discovery protocol. The protocol itself is essentially based off of Kademlia, however it does away with certain aspects of it. For example, it does away with any usage of the value part of the DHT. 
+Now after that history lesson, we finally get to discv4 (which stands for discovery v4), Ethereum's current node discovery protocol. The protocol itself is essentially based off of Kademlia, however it does away with certain aspects of it. For example, it does away with any usage of the value part of the DHT.
 
 Kademlia is mainly used for the organisation of the network, so we only use the routing table to locate other nodes. Due to the fact that discv4 doesn't use the value portion of the DHT at all, we can throw away the `FINDVALUE` and `STORE` commands described by Kademlia.
 
@@ -81,7 +82,7 @@ Additionally, discv4 adds mutual endpoint verification. This is meant to ensure 
 
 Finally, all discv4 nodes are expected to maintain up-to-date ENR records. These contain information about a node. They can be requested from any node using a discv4-specific packet called `ENRRequest`.
 
-*If you want some more details on ENRs, check out one of my posts ["Network Addresses in Ethereum"](https://dean.eigenmann.me/blog/2020/01/21/network-addresses-in-ethereum/)*
+_If you want some more details on ENRs, check out one of my posts ["Network Addresses in Ethereum"](https://dean.eigenmann.me/blog/2020/01/21/network-addresses-in-ethereum/)_
 
 Discv4 comes with its own range of problems however. Let's look at a few of them.
 
@@ -103,7 +104,7 @@ Logarithmic distance means we first calculate the distance and then run it throu
 log2(A xor B)
 ```
 
-And the second, more important change, is that discv5 aims at solving one of the biggest issues of discv4: the differentiation of sub-protocols. It does this by adding topic tables. Topic tables are [first in first out](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)) lists that contain nodes which have advertised that they provide a specific service. Nodes get themselves added to this list by registering `ads` on their peers. 
+And the second, more important change, is that discv5 aims at solving one of the biggest issues of discv4: the differentiation of sub-protocols. It does this by adding topic tables. Topic tables are [first in first out](<https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)>) lists that contain nodes which have advertised that they provide a specific service. Nodes get themselves added to this list by registering `ads` on their peers.
 
 As of writing, there is still an issue with this proposal. There is currently no efficient way for a node to place `ads` on multiple peers, since it would require separate requests for every peer which is inefficient in a large-scale network.
 

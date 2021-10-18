@@ -1,12 +1,12 @@
 ---
 layout: post
-name:  "What's the Plan for Waku v2?"
-title:  "What's the Plan for Waku v2?"
-date:   2020-07-01 12:00:00 +0800
+name: "What's the Plan for Waku v2?"
+title: "What's the Plan for Waku v2?"
+date: 2020-07-01 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /waku-v2-plan
-categories: research
+category: research
 summary: Read about our plans for Waku v2, moving to libp2p, better routing, adaptive nodes and accounting!
 image: /assets/img/status_scaling_model_fig4.png
 discuss: https://forum.vac.dev/t/waku-version-2-pitch/52
@@ -14,7 +14,7 @@ discuss: https://forum.vac.dev/t/waku-version-2-pitch/52
 
 **tldr: The Waku network is fragile and doesn't scale. Here's how to solve it.**
 
-*NOTE: This post was originally written with Status as a primary use case in mind, which reflects how we talk about some problems here. However, Waku v2 is a general-purpose private p2p messaging protocol, especially for people running in resource restricted environments.*
+_NOTE: This post was originally written with Status as a primary use case in mind, which reflects how we talk about some problems here. However, Waku v2 is a general-purpose private p2p messaging protocol, especially for people running in resource restricted environments._
 
 # Problem
 
@@ -26,12 +26,12 @@ Based on user acquisition models, the initial goal is to support 100k DAU in Sep
 
 With the Status Scaling Model we have studied the current bottlenecks as a function of concurrent users (CCU) and daily active users (DAU). Here are the conclusions.
 
-****1. Connection limits****. With 100 full nodes we reach ~10k CCU based on connection limits. This can primarily be addressed by increasing the number of nodes (cluster or user operated). This assumes node discovery works. It is also worth investigating the limitations of max number of connections, though this is likely to be less relevant for user-operated nodes. For a user-operated network, this means 1% of users have to run a full node. See Fig 1-2.
+\***\*1. Connection limits\*\***. With 100 full nodes we reach ~10k CCU based on connection limits. This can primarily be addressed by increasing the number of nodes (cluster or user operated). This assumes node discovery works. It is also worth investigating the limitations of max number of connections, though this is likely to be less relevant for user-operated nodes. For a user-operated network, this means 1% of users have to run a full node. See Fig 1-2.
 
-****2. Bandwidth as a bottleneck****. We notice that memory usage appears to not be
+\***\*2. Bandwidth as a bottleneck\*\***. We notice that memory usage appears to not be
 the primary bottleneck for full nodes, and the bottleneck is still bandwidth. To support 10k DAU, and full nodes with an amplification factor of 25 the required Internet speed is ~50 Mbps, which is a fast home Internet connection. For ~100k DAU only cloud-operated nodes can keep up (500 Mbps). See Fig 3-5.
 
-****3. Amplification factors****. Reducing amplification factors with better routing, would have a high impact, but it is likely we'd need additional measures as well, such as topic sharding or similar. See Fig 8-13.
+\***\*3. Amplification factors\*\***. Reducing amplification factors with better routing, would have a high impact, but it is likely we'd need additional measures as well, such as topic sharding or similar. See Fig 8-13.
 
 Figure 1-5:
 
@@ -50,12 +50,12 @@ What we need to do is:
 
 Doing this means the Waku network will be able to scale, and doing so in the right way, in a robust fashion. What would a fragile way of scaling be? Increasing our reliance on a Status Pte Ltd operated cluster which would paint us in a corner where we:
 
--   keep increasing requirements for Internet speed for full nodes
--   are vulnerable to censorship and attacks
--   have to control the topology in an artifical manner to keep up with load
--   basically re-invent a traditional centralized client-server app with extra steps
--   deliberately ignore most of our principles
--   risk the network being shut down when we run out of cash
+- keep increasing requirements for Internet speed for full nodes
+- are vulnerable to censorship and attacks
+- have to control the topology in an artifical manner to keep up with load
+- basically re-invent a traditional centralized client-server app with extra steps
+- deliberately ignore most of our principles
+- risk the network being shut down when we run out of cash
 
 # Appetite
 
@@ -79,7 +79,6 @@ Let's first look at the baseline, and then go into some of the tracks and their 
 
 Here's where we are at now. In reality, the amplification factor are likely even worse than this (15 in the graph below), up to 20-30. Especially with an open network, where we can't easily control connectivity and availability of nodes. Left unchecked, with a full mesh, it could even go as high x100, though this is likely excessive and can be dialed down. See scaling model for more details.
 
-
 ![](assets/img/waku_v1_routing_small.png)
 
 ## Track 1 - Move to libp2p
@@ -100,14 +99,13 @@ Why can't we use Waku topics for routing directly? PubSub over libp2p isn't buil
 
 ![](assets/img/waku_v2_routing_flood_small.png)
 
-
 Moving to FloodSub over libp2p would also be an opportunity to clean up and simplify some components that are no longer needed in the Waku v1 protocol, see point below.
 
 Very experimental and incomplete libp2p support can be found in the nim-waku repo under v2: <https://github.com/status-im/nim-waku>
 
 ### 2. Simplify the protocol
 
-Due to Waku's origins in Whisper, devp2p and as a standalone protocol, there are a lot of stuff that has accumulated (<https://rfc.vac.dev/spec/6/>). Not all of it serves it purpose anymore. For example, do we still need RLP here when we have Protobuf messages? What about extremely low PoW when we have peer scoring? What about key management / encryption when have encryption at libp2p and Status protocol level?
+Due to Waku's origins in Whisper, devp2p and as a standalone protocol, there are a lot of stuff that has accumulated (<https://specs.vac.dev/specs/waku/waku.html>). Not all of it serves it purpose anymore. For example, do we still need RLP here when we have Protobuf messages? What about extremely low PoW when we have peer scoring? What about key management / encryption when have encryption at libp2p and Status protocol level?
 
 Not everything has to be done in one go, but being minimalist at this stage will the protocol lean and make us more adaptable.
 
@@ -201,9 +199,9 @@ The general shape of the solution is inspired by the Swarm model, where we do ac
 
 While accounting for individual resource usage is useful, for the ultimate end user experience we can ideally account for other things such as:
 
--   end to end delivery
--   online time
--   completeness of storage
+- end to end delivery
+- online time
+- completeness of storage
 
 This can be gradually enhanced and strengthened, for example with proofs, consistency checks, Quality of Service, reputation systems. See <https://discuss.status.im/t/network-incentivisation-first-draft/1037> for one attempt to provide stronger guarantees with periodic consistency checks and a shared fund mechanism. And <https://forum.vac.dev/t/incentivized-messaging-using-validity-proofs/51> for using validity proofs and removing liveness requirement for settlement.
 
@@ -227,14 +225,14 @@ In accounting phase it is largely assumed nodes are honest. What happens when th
 
 For light nodes:
 
--   if they don't, they get disconnected
--   prepayment (especially to "high value" nodes)
+- if they don't, they get disconnected
+- prepayment (especially to "high value" nodes)
 
 For full nodes:
 
--   multiple nodes reporting to agree, where truth becomes a shelling point
--   use eigentrust
--   staking for discovery visibility with slashing
+- multiple nodes reporting to agree, where truth becomes a shelling point
+- use eigentrust
+- staking for discovery visibility with slashing
 
 ### 5. Settlement PoC
 

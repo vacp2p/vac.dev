@@ -1,12 +1,12 @@
 ---
 layout: post
-name:  "What Would a WeChat Replacement Need?"
-title:  "What Would a WeChat Replacement Need?"
-date:   2020-04-16 12:00:00 +0800
+name: 'What Would a WeChat Replacement Need?'
+title: 'What Would a WeChat Replacement Need?'
+date: 2020-04-16 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /wechat-replacement-need
-categories: research
+category: research
 summary: What would a self-sovereign, private, censorship-resistant and open alternative to WeChat look like?
 image: /assets/img/tianstatue.jpg
 discuss: https://forum.vac.dev/t/discussion-what-would-a-wechat-replacement-need/42
@@ -84,11 +84,12 @@ We want something that is self-sovereign, private, censorship-resistant and open
 **Open source**. Related to above, where we must be able to inspect the software to know that it functions as advertised and hasn't been compromised, e.g. by uploading private data to a third party.
 
 Some of these are graded and a bit subtle, i.e.:
+
 - Censorship resistance would ideally be able to absorb Internet shutdowns. This would require an extensive MANET/meshnet infrastructure, which while desirable, requires a lot of challenges to be overcome to be feasible.
 - Privacy would ideally make all actions (optionally) totally anoymous, though this may incur undue costs on bandwidth and latency, which impacts user experience.
 - Decentralization, certain topologies, such as DHTs, are efficient and quite decentralized but still have some centralized aspects, which makes it attackable in various ways. Ditto for blockchains compared with bearer instruments which requires some coordinating infrastructure, compared with naturally occuring assets such as precious metals.
 - "Discover people" and striving for "total anonymity" might initially seem incompatible. The idea is to provide for sane defaults, and then allow people to decide how much information they want to disclose. This is the essence of privacy.
-- Users often want *some* form of moderation to get a good user experience, which can be seen as a form of censorship. The idea to raise the bar on the basics, the fundamental infrastructure. If individuals or specific communities want certain moderation mechanisms, that is still a compatible requirement.
+- Users often want _some_ form of moderation to get a good user experience, which can be seen as a form of censorship. The idea to raise the bar on the basics, the fundamental infrastructure. If individuals or specific communities want certain moderation mechanisms, that is still a compatible requirement.
 
 ### Counterpoint 1
 
@@ -115,9 +116,10 @@ Starting from the most basic: what is an account and how do you get one? With mo
 Now, we could argue these app providers can do what they want. And they are right, in a very narrow sense. As apps like WeChat (and Google) become general-purpose platforms, they become more and more ingrained in our everyday lives. They start to provide utilities that we absolutely require to work to go about our day, such as paying for food or transportation. This means we need higher standard than this.
 
 Justifications for requiring phone numbers are usually centered around three claims:
-1) Avoiding spam
-2) Tying your account to your real name, for various reasons
-3) Using as a commonly shared identifier as a social network discovery mechanism
+
+1. Avoiding spam
+2. Tying your account to your real name, for various reasons
+3. Using as a commonly shared identifier as a social network discovery mechanism
 
 Of course, many services require more than phone numbers. E.g. email, other forms of personal data such as voice recording, linking a bank account, and so on.
 
@@ -246,19 +248,11 @@ Corey, Dean, Jacek.
 ## References
 
 [^1]: Mandatory SIM card registration laws: https://privacyinternational.org/long-read/3018/timeline-sim-card-registration-laws
-
 [^2]: On WeChat keyword censorship: https://citizenlab.ca/2016/11/wechat-china-censorship-one-app-two-systems/
-
 [^3]: Net Neutrality: https://www.eff.org/issues/net-neutrality
-
 [^4]: ISP centralization: https://ilsr.org/repealing-net-neutrality-puts-177-million-americans-at-risk/
-
 [^5]: Incentives Build Robustness in BitTorrent bittorrent.org/bittorrentecon.pdf
-
-[^6]: The Case for Electronic Cash:  https://coincenter.org/files/2019-02/the-case-for-electronic-cash-coin-center.pdf
-
+[^6]: The Case for Electronic Cash: https://coincenter.org/files/2019-02/the-case-for-electronic-cash-coin-center.pdf
 [^7]: Money, blockchains, and social scalability: http://unenumerated.blogspot.com/2017/02/money-blockchains-and-social-scalability.html
-
 [^8]: Zcash private transactions (partial paywall): https://www.theblockcrypto.com/genesis/48413/an-analysis-of-zcashs-private-transactions
-
 [^9]: Shielded transactions usage (stats page 404s): https://z.cash/support/faq/

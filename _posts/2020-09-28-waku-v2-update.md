@@ -1,12 +1,12 @@
 ---
 layout: post
-name:  "Waku v2 Update"
-title:  "Waku v2 Update"
-date:   2020-09-28 12:00:00 +0800
+name: 'Waku v2 Update'
+title: 'Waku v2 Update'
+date: 2020-09-28 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /waku-v2-update
-categories: research
+category: research
 summary: A research log. Read on to find out what is going on with Waku v2, a messaging protocol. What has been happening? What is coming up next?
 image: /assets/img/vac.png
 discuss: https://forum.vac.dev/t/discussion-waku-v2-update/56
@@ -32,11 +32,11 @@ Let's talk about the state of specs and our main implementation nim-waku. Then w
 
 After some back and forth on how to best structure things, we ended up breaking down the specs into a few pieces. While Waku v2 is best thought of as a cohesive whole in terms of its capabilities, it is made up of several protocols. Here's a list of the current specs and their status:
 
-- [Main spec](https://rfc.vac.dev/spec/10/) (draft)
-- [Relay protocol spec](https://rfc.vac.dev/spec/11/) (draft)
-- [Filter protocol spec](https://rfc.vac.dev/spec/12) (raw)
-- [Store protocol spec](https://rfc.vac.dev/spec/13) (raw)
-- [Bridge spec](https://rfc.vac.dev/spec/15/) (raw)
+- [Main spec](https://specs.vac.dev/specs/waku/v2/waku-v2.html) (draft)
+- [Relay protocol spec](https://specs.vac.dev/specs/waku/v2/waku-relay.html) (draft)
+- [Filter protocol spec](https://specs.vac.dev/specs/waku/v2/waku-filter.html) (raw)
+- [Store protocol spec](https://specs.vac.dev/specs/waku/v2/waku-store.html) (raw)
+- [Bridge spec](https://specs.vac.dev/specs/waku/v2/waku-bridge.html) (raw)
 
 Raw means there is not yet an implementation that corresponds fully to the spec, and draft means there is an implementation that corresponds to the spec. In the interest of space, we won't go into too much detail on the specs here except to note a few things:
 
@@ -72,16 +72,16 @@ Now that we know what the current state is, what is still missing? what are the 
 
 While we are getting closer to closing out work for track 1, there are still a few things missing from the initial scope:
 
-1) Store and filter protocols need to be finished. This means basic spec, implementation, API integration and proven to work in a testnet. All of these are work in progress and expected to be done very soon. Once the store protocol is done in a basic form, it needs further improvements to make it production ready, at least on a spec/basic implementation level.
+1. Store and filter protocols need to be finished. This means basic spec, implementation, API integration and proven to work in a testnet. All of these are work in progress and expected to be done very soon. Once the store protocol is done in a basic form, it needs further improvements to make it production ready, at least on a spec/basic implementation level.
 
-2) Core integration was mentioned in scope for track 1 initially. This work has stalled a bit, largely due to organizational bandwidth and priorities. While there is a Nim Node API that in theory is ready to be used, having it be used in e.g. Status desktop or mobile app is a different matter. The team responsible for this at Status ([status-nim](https://github.com/status-im/status-nim) has been making progress on getting nim-waku v1 integrated, and is expected to look into nim-waku v2 integration soon. One thing that makes this a especially tricky is the difference in interface between Waku v1 and v2, which brings
-us too...
+2. Core integration was mentioned in scope for track 1 initially. This work has stalled a bit, largely due to organizational bandwidth and priorities. While there is a Nim Node API that in theory is ready to be used, having it be used in e.g. Status desktop or mobile app is a different matter. The team responsible for this at Status ([status-nim](github.com/status-im/status-nim)) has been making progress on getting nim-waku v1 integrated, and is expected to look into nim-waku v2 integration soon. One thing that makes this a especially tricky is the difference in interface between Waku v1 and v2, which brings
+   us too...
 
-3) Companion spec for encryption. As part of simplifying the protocol, the routing is decoupled from the encryption in v2 ([1](https://github.com/vacp2p/specs/issues/158), [2](https://github.com/vacp2p/specs/issues/181)). There are multiple layers of encryption at play here, and we need to figure out a design that makes sense for various use cases (dapps using Waku on their own, Status app, etc).
+3. Companion spec for encryption. As part of simplifying the protocol, the routing is decoupled from the encryption in v2 ([1](https://github.com/vacp2p/specs/issues/158), [2](https://github.com/vacp2p/specs/issues/181)). There are multiple layers of encryption at play here, and we need to figure out a design that makes sense for various use cases (dapps using Waku on their own, Status app, etc).
 
-4) Bridge implementation. The spec is done and we know how it should work, but it needs to be implemented.
+4. Bridge implementation. The spec is done and we know how it should work, but it needs to be implemented.
 
-5) General tightening up of specs and implementation.
+5. General tightening up of specs and implementation.
 
 While this might seem like a lot, a lot has been done already, and the majority of the remaining tasks are more amendable to be pursued in parallel with other efforts. It is also worth mentioning that part of track 2 and 3 have been started, in the form of moving to GossipSub (amplification factors) and basics of adaptive nodes (multiple protocols). This is in addition to things like Waku Web which were not part of the initial scope.
 
@@ -89,19 +89,19 @@ While this might seem like a lot, a lot has been done already, and the majority 
 
 Aside from the things mentioned above, what is coming up next? There are a few areas of interest, mentioned in no particular order. For track 2 and 3, see previous post for more details.
 
-1) Better routing (track 2). While we are already building on top of GossipSub, we still need to explore things like topic sharding in more detail to further reduce amplification factors.
+1. Better routing (track 2). While we are already building on top of GossipSub, we still need to explore things like topic sharding in more detail to further reduce amplification factors.
 
-2) Accounting and user-run nodes (track 3). With store and filter protocol getting ready, we can start to implement accounting and light connection game for incentivization in a bottom up and iterative manner.
+2. Accounting and user-run nodes (track 3). With store and filter protocol getting ready, we can start to implement accounting and light connection game for incentivization in a bottom up and iterative manner.
 
-3) Privacy research. Study better and more rigorous privacy guarantees. E.g. how FloodSub/GossipSub behaves for common threat models, and how custom packet
-format can improve things like unlinkability.
+3. Privacy research. Study better and more rigorous privacy guarantees. E.g. how FloodSub/GossipSub behaves for common threat models, and how custom packet
+   format can improve things like unlinkability.
 
-4) zkSnarks RLN for spam protection and incentivization. We studied this [last year](https://vac.dev/feasibility-semaphore-rate-limiting-zksnarks) and recent developments have made this relevant to study again. Create an [experimental spec/PoC](https://github.com/vacp2p/specs/issues/189) as an extension to the relay protocol. Kudos to Barry Whitehat and others like Kobi Gurkan and Koh Wei Jie for pushing this!
+4. zkSnarks RLN for spam protection and incentivization. We studied this [last year](https://vac.dev/feasibility-semaphore-rate-limiting-zksnarks) and recent developments have made this relevant to study again. Create an [experimental spec/PoC](https://github.com/vacp2p/specs/issues/189) as an extension to the relay protocol. Kudos to Barry Whitehat and others like Kobi Gurkan and Koh Wei Jie for pushing this!
 
-5) Ethereum M2M messaging. Being able to run in the browser opens up a lot of doors, and there is an opportunity here to enable things like a decentralized WalletConnect, multi-sig transactions, voting and similar use cases. This was the original goal of Whisper, and we'd like to deliver on that.
+5. Ethereum M2M messaging. Being able to run in the browser opens up a lot of doors, and there is an opportunity here to enable things like a decentralized WalletConnect, multi-sig transactions, voting and similar use cases. This was the original goal of Whisper, and we'd like to deliver on that.
 
 As you can tell, quite a lot of thing! Luckily, we have two people joining as protocol engineers soon, which will bring much needed support for the current team of ~2-2.5 people. More details to come in further updates.
 
 ---
 
-If you are feeling adventurous and want to use early stage alpha software, check out the [docs](https://github.com/status-im/nim-waku/tree/master/docs). If you want to read the specs, head over to [Waku spec](https://rfc.vac.dev/spec/10/). If you want to talk with us, join us on [Status](https://get.status.im/chat/public/vac) or on [Telegram](https://t.me/vacp2p) (they are bridged).
+If you are feeling adventurous and want to use early stage alpha software, check out the [docs](https://github.com/status-im/nim-waku/tree/master/docs). If you want to read the specs, head over to [Waku spec](https://specs.vac.dev/specs/waku/). If you want to talk with us, join us on [Status](https://get.status.im/chat/public/vac) or on [Telegram](https://t.me/vacp2p) (they are bridged).
