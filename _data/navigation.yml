@@ -1,24 +1,24 @@
 ---
-- title: 'Work'
-  link: '/#work'
+- title: "Work"
+  link: "/#work"
   type: local
 
-- title: 'About'
-  link: '/#about'
+- title: "About"
+  link: "/#about"
   type: local
 
-- title: 'Join Vac'
-  link: '/#join'
+- title: "Join Vac"
+  link: "/#join"
   type: local
 
-- title: 'Research log'
-  link: '/research-log'
+- title: "Research log"
+  link: "/research-log"
   type: local
 
-- title: 'Specs'
-  link: 'https://rfc.vac.dev/'
+- title: "Specs"
+  link: "https://rfc.vac.dev/"
   type: external
 
-- title: 'Forum'
-  link: 'https://forum.vac.dev/'
+- title: "Forum"
+  link: "https://forum.vac.dev/"
   type: external

@@ -2,105 +2,25 @@
 layout: default
 ---
 
-<section
-  class="
-    intro
-    container
-    max-w-screen-xl
-    flex flex-col
-    sm:flex-row
-    pt-10
-    pb-8
-    lg:py-10
-    border-b
-  "
->
+<section class="intro container max-w-screen-xl flex flex-col sm:flex-row pt-10 pb-8 lg:py-10 border-b">
   <div class="heading-block w-full sm:w-2/12 lg:w-3/12"></div>
   <div class="info-block w-full sm:w-10/12 lg:w-9/12">
-    <h1 class="text-xl md:text-xxl mb-10 sm:max-w-md lg:max-w-xl">
-      Vac researches peer-to-peer, private, censorship resistant communication.
-    </h1>
-    <a
-      class="link link--external"
-      href="https://jobs.status.im/?search=Vac"
-      target="_blank"
-      rel="noopener noreferrer"
-      >See Vac openings</a
-    >
+    <h1 class="text-xl md:text-xxl mb-10 sm:max-w-md lg:max-w-xl">Vac researches peer-to-peer, private, censorship resistant communication.</h1>
+    <a class="link link--external" href="https://jobs.status.im/?search=Vac" target="_blank" rel="noopener noreferrer">See Vac openings</a>
   </div>
 </section>
 
-<section
-  id="work"
-  class="
-    work
-    container
-    max-w-screen-xl
-    flex flex-col
-    sm:flex-row
-    py-10
-    border-b
-    l:pb-16
-  "
->
+<section id="work" class="work container max-w-screen-xl flex flex-col sm:flex-row py-10 border-b l:pb-16">
   <div class="heading-block w-full sm:w-2/12 lg:w-3/12">
-    <h2 class="text-sm font-semibold mb-6 s:text-center lg:text-center">
-      Work
-    </h2>
+    <h2 class="text-sm font-semibold mb-6 s:text-center lg:text-center">Work</h2>
   </div>
   <div class="info-block w-full sm:w-10/12 lg:w-9/12">
     <p class="section__text text-s lg:text-base italic mb-6 l:max-w-md l:mb-16">
-      Building protocols and products at all layers of the stack including
-      underlying transports, p2p overlays and routing, initial trust
-      establishment, and semantics for things like group chat.
+      Building protocols and products at all layers of the stack including underlying transports, p2p overlays and routing, initial trust establishment, and semantics for things like group chat.
     </p>
-    <div
-      class="
-        work__cards
-        container
-        s:mx-auto
-        flex flex-col
-        items-center
-        sm:flex-row sm:items-stretch
-      "
-    >
-      <div
-        class="
-          work__card
-          group
-          flex flex-col
-          justify-between
-          items-center
-          max-w-280 max-h-280
-          lg:max-w-436 lg:max-h-436
-          border
-          pt-5
-          p-4
-          lg:p-8 lg:pb-10
-          mb-8
-          sm:mr-5 sm:mb-0
-          hover:bg-black
-          transition
-          duration-500
-        "
-      >
-        <svg
-          width="65"
-          height="64"
-          viewBox="0 0 65 64"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          class="
-            mb-2
-            lg:mb-8
-            mt-4
-            l:mt-20
-            w-16
-            h-16
-            fill-current
-            group-hover:text-white
-          "
-        >
+    <div class="work__cards container s:mx-auto flex flex-col items-center sm:flex-row sm:items-stretch">
+      <div class="work__card group flex flex-col justify-between items-center max-w-280 max-h-280 lg:max-w-436 lg:max-h-436 border pt-5 p-4 lg:p-8 lg:pb-10 mb-8 sm:mr-5 sm:mb-0 hover:bg-black transition duration-500">
+        <svg width="65" height="64" viewBox="0 0 65 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="mb-2 lg:mb-8 mt-4 l:mt-20 w-16 h-16 fill-current group-hover:text-white">
           <g clip-path="url(#clip0)">
             <path
               d="M4.40096 46.0099C3.92982 46.0099 3.45868 45.7658 3.19484 45.3338C2.79908 44.6578 3.00638 43.7939 3.68482 43.3996C3.77905 43.3432 11.9769 38.4043 18.4975 32.0569C11.7131 25.4465 3.81674 20.6953 3.72252 20.639C3.04407 20.2446 2.83677 19.3808 3.23253 18.7047C3.62829 18.0287 4.49519 17.8221 5.17364 18.2165C5.5317 18.4418 14.2573 23.6625 21.5129 31.0615C22.0405 31.6061 22.0405 32.4888 21.5129 33.0334C14.5965 40.1132 5.5317 45.578 5.13594 45.8221C4.9098 45.9348 4.6648 46.0099 4.40096 46.0099Z"
@@ -153,93 +73,23 @@ layout: default
           </g>
           <defs>
             <clipPath id="clip0">
-              <rect
-                width="64"
-                height="64"
-                fill="white"
-                transform="translate(0.5)"
-              />
+              <rect width="64" height="64" fill="white" transform="translate(0.5)" />
             </clipPath>
           </defs>
         </svg>
 
-        <p
-          class="
-            work__heading
-            mb-9
-            md:mb-5
-            lg:mb-20 lg:uppercase
-            font-semibold
-            text-s
-            lg:text-base
-            group-hover:text-white
-          "
-        >
-          Waku
-        </p>
-        <p
-          class="
-            work__text
-            text-s
-            lg:text-base
-            mt-4
-            lg:mt-2.5
-            opacity-75
-            text-left
-            max-w-screen-xxs
-            group-hover:text-white
-          "
-        >
-          A gossip based messaging protocol for private, secure, p2p messaging
-          with implementations written in go, nim, java script.
+        <p class="work__heading mb-9 md:mb-5 lg:mb-20 lg:uppercase font-semibold text-s lg:text-base group-hover:text-white">Waku</p>
+        <p class="work__text text-s lg:text-base mt-4 lg:mt-2.5 opacity-75 text-left max-w-screen-xxs group-hover:text-white">
+          A gossip based messaging protocol for private, secure, p2p messaging with implementations written in go, nim, java script.
         </p>
         {%- comment -%}
         <div class="work__link container flex justify-start mt-3 lg:mt-6">
-          <a
-            class="link link--external group-hover:text-white"
-            href="https://vac.dev/"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Visit Vaku</a
-          >
+          <a class="link link--external group-hover:text-white" href="https://vac.dev/" target="_blank" rel="noopener noreferrer">Visit Vaku</a>
         </div>
         {%- endcomment -%}
       </div>
-      <div
-        class="
-          work__card
-          group
-          flex flex-col
-          justify-between
-          items-center
-          max-w-280 max-h-280
-          lg:max-w-436 lg:max-h-436
-          border
-          pt-5
-          p-4
-          lg:p-8 lg:pb-10
-          hover:bg-black
-          transition
-          duration-500
-        "
-      >
-        <svg
-          width="62"
-          height="64"
-          viewBox="0 0 62 64"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          class="
-            mb-2
-            lg:mb-8
-            mt-4
-            l:mt-20
-            w-16
-            h-16
-            fill-current
-            group-hover:text-peach
-          "
-        >
+      <div class="work__card group flex flex-col justify-between items-center max-w-280 max-h-280 lg:max-w-436 lg:max-h-436 border pt-5 p-4 lg:p-8 lg:pb-10 hover:bg-black transition duration-500">
+        <svg width="62" height="64" viewBox="0 0 62 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="mb-2 lg:mb-8 mt-4 l:mt-20 w-16 h-16 fill-current group-hover:text-peach">
           <g clip-path="url(#clip0)">
             <path
               d="M48.1706 9.25283C42.8204 6.21844 37.6207 3.26952 32.421 0.320607C31.5401 -0.170879 30.6806 -0.085403 29.8212 0.406083C20.3241 5.8338 10.8271 11.2401 1.35162 16.6679C1.05081 16.8388 0.771486 17.3303 0.771486 17.6722C0.75 28.5062 0.728514 39.3189 0.792973 50.1316C0.792973 50.8368 1.33013 51.8411 1.91027 52.183C7.02404 55.1961 12.2023 58.0809 17.3805 61.0084C17.4235 61.0298 17.5094 61.0084 17.7458 61.0084C17.7458 60.6024 17.7458 60.175 17.7458 59.769C17.7458 49.1273 17.7673 38.5069 17.7243 27.8652C17.7243 26.8608 18.0896 26.3907 18.906 25.942C28.4245 20.557 37.9215 15.1507 47.4185 9.74431C47.6119 9.63747 47.8268 9.48788 48.1706 9.25283Z"
@@ -249,61 +99,19 @@ layout: default
               d="M39.7046 64.0005C39.7046 63.509 39.7046 63.103 39.7046 62.7183C39.7046 55.282 39.7261 47.8456 39.6831 40.3878C39.6831 39.4262 39.9624 38.9133 40.8219 38.4432C47.4397 34.7464 54.0146 30.9855 60.6109 27.2459C60.9332 27.0749 61.234 26.8826 61.6208 26.6476C61.4489 26.498 61.3414 26.3698 61.191 26.2843C56.8937 23.8269 52.575 21.3908 48.2992 18.8906C47.0315 18.1427 45.9357 18.1214 44.625 18.8693C38.222 22.5661 31.7761 26.1988 25.3302 29.8315C24.6211 30.2162 24.4062 30.6649 24.4062 31.4556C24.4277 38.8706 24.4277 46.2643 24.4062 53.6793C24.4062 54.7905 24.75 55.6666 25.7384 56.2222C30.1861 58.7437 34.6123 61.2439 39.06 63.7654C39.2104 63.8509 39.4038 63.8936 39.7046 64.0005Z"
               class="text-black group-hover:text-peach"
             />
-            <path
-              d="M61.7495 51.5856C56.5713 48.6367 51.5864 45.816 46.4727 42.9098C46.4727 48.7435 46.4727 54.3849 46.4727 60.2614C51.5435 57.3766 56.5283 54.5559 61.7495 51.5856Z"
-              class="text-black group-hover:text-peach"
-            />
+            <path d="M61.7495 51.5856C56.5713 48.6367 51.5864 45.816 46.4727 42.9098C46.4727 48.7435 46.4727 54.3849 46.4727 60.2614C51.5435 57.3766 56.5283 54.5559 61.7495 51.5856Z" class="text-black group-hover:text-peach" />
           </g>
           <defs>
             <clipPath id="clip0">
-              <rect
-                width="61"
-                height="64"
-                fill="white"
-                transform="translate(0.75)"
-              />
+              <rect width="61" height="64" fill="white" transform="translate(0.75)" />
             </clipPath>
           </defs>
         </svg>
-        <p
-          class="
-            work__heading
-            mb-9
-            md:mb-5
-            lg:mb-20 lg:uppercase
-            font-semibold
-            text-s
-            lg:text-base
-            group-hover:text-peach
-          "
-        >
-          DApp Connect
-        </p>
-        <p
-          class="
-            work__text
-            text-s
-            lg:text-base
-            mt-4
-            lg:mt-2.5
-            opacity-75
-            text-left
-            max-w-screen-xxs
-            group-hover:text-peach
-          "
-        >
-          The communication layer for Ethereum. A tech stack enabling
-          decentralized communication between DApps and people.
-        </p>
+        <p class="work__heading mb-9 md:mb-5 lg:mb-20 lg:uppercase font-semibold text-s lg:text-base group-hover:text-peach">DApp Connect</p>
+        <p class="work__text text-s lg:text-base mt-4 lg:mt-2.5 opacity-75 text-left max-w-screen-xxs group-hover:text-peach">The communication layer for Ethereum. A tech stack enabling decentralized communication between DApps and people.</p>
         {%- comment -%}
         <div class="work__link container flex justify-start mt-3 lg:mt-6">
-          <a
-            class="link link--external link--dapp group-hover:text-peach"
-            href="https://vac.dev/"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Visit DApp Connect</a
-          >
+          <a class="link link--external link--dapp group-hover:text-peach" href="https://vac.dev/" target="_blank" rel="noopener noreferrer">Visit DApp Connect</a>
         </div>
         {%- endcomment -%}
       </div>
@@ -311,93 +119,36 @@ layout: default
   </div>
 </section>
 
-<section
-  id="about"
-  class="
-    about
-    container
-    max-w-screen-xl
-    flex flex-col
-    sm:flex-row
-    pt-10
-    pb-5
-    lg:pb-2
-    border-b
-  "
->
+<section id="about" class="about container max-w-screen-xl flex flex-col sm:flex-row pt-10 pb-5 lg:pb-2 border-b">
   <div class="heading-block w-full sm:w-2/12 lg:w-3/12">
-    <h2 class="text-sm font-semibold mb-5 s:text-center lg:text-center">
-      About
-    </h2>
+    <h2 class="text-sm font-semibold mb-5 s:text-center lg:text-center">About</h2>
   </div>
   <div class="info-block w-full sm:w-10/12 lg:w-9/12">
-    <p class="section__text text-s lg:text-base italic mb-5 l:max-w-md l:mb-8">
-      Our research is designed to remove centralized third parties from our
-      communication. We believe in the right to privacy, security, and autonomy
-      of the individual.
-    </p>
-    <div
-      class="
-        about__cards
-        container
-        s:mx-auto
-        flex flex-col flex-wrap
-        sm:flex-row
-      "
-    >
+    <p class="section__text text-s lg:text-base italic mb-5 l:max-w-md l:mb-8">Our research is designed to remove centralized third parties from our communication. We believe in the right to privacy, security, and autonomy of the individual.</p>
+    <div class="about__cards container s:mx-auto flex flex-col flex-wrap sm:flex-row">
       {% for card in site.data.cards %}
-      <div
-        class="
-          about__card
-          flex flex-col
-          w-full
-          sm:w-1/2
-          lm:max-w-screen-xscard
-          mb-6
-          lg:mb-10
-          lm:mr-5
-        "
-      >
-        <img
-          src="{{ card.src }}"
-          class="about__gif self-center"
-          alt="Gif animation"
-          width="210"
-          height="210"
-        />
-        <p
-          class="about__heading mb-4 font-semibold text-s lg:text-sm text-left"
-        >
-          {{ card.title }}
-        </p>
-        <p class="about__text text-s lg:text-base opacity-75 md:mr-5 lg:mr-0">
-          {{ card.text }}
-        </p>
+      <div class="about__card flex flex-col w-full sm:w-1/2 lm:max-w-screen-xscard mb-6 lg:mb-10 lm:mr-5">
+        <img src="{{ card.src }}" class="about__gif self-center" alt="Gif animation" width="210" height="210" />
+        <p class="about__heading mb-4 font-semibold text-s lg:text-sm text-left">{{ card.title }}</p>
+        <p class="about__text text-s lg:text-base opacity-75 md:mr-5 lg:mr-0">{{ card.text }}</p>
       </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<section
-  id="research-log"
-  class="log container max-w-screen-xl flex flex-col sm:flex-row py-10 border-b"
->
+<section id="research-log" class="log container max-w-screen-xl flex flex-col sm:flex-row py-10 border-b">
   <div class="heading-block w-full sm:w-2/12 lg:w-3/12">
-    <h2 class="text-sm font-semibold mb-5 s:text-center lg:text-center">
-      Research log
-    </h2>
+    <h2 class="text-sm font-semibold mb-5 s:text-center lg:text-center">Research log</h2>
   </div>
 
   <div class="info-block w-full sm:w-10/12 lg:w-9/12">
     <div class="flex flex-col">
       <ul class="container s:mx-auto flex-row hidden flex-wrap sm:flex">
-        {% for post in site.posts limit:8 %} {% include post-preview.html %} {%
-        endfor %}
+        {% for post in site.posts limit:8 %} {% include post-preview.html %} {% endfor %}
       </ul>
       <ul class="container s:mx-auto flex flex-col sm:hidden">
-        {% for post in site.posts limit:4 %} {% include post-preview.html %} {%
-        endfor %}
+        {% for post in site.posts limit:4 %} {% include post-preview.html %} {% endfor %}
       </ul>
 
       <div class="log__link container flex justify-start">
@@ -408,33 +159,18 @@ layout: default
 </section>
 
 {%- comment -%}
-<section
-  id="media"
-  class="
-    media
-    container
-    max-w-screen-xl
-    flex flex-col
-    sm:flex-row
-    py-10
-    border-b
-  "
->
+<section id="media" class="media container max-w-screen-xl flex flex-col sm:flex-row py-10 border-b">
   <div class="heading-block w-full sm:w-2/12 lg:w-3/12">
-    <h2 class="text-sm font-semibold mb-5 s:text-center lg:text-center">
-      Media
-    </h2>
+    <h2 class="text-sm font-semibold mb-5 s:text-center lg:text-center">Media</h2>
   </div>
 
   <div class="info-block w-full sm:w-10/12 lg:w-9/12">
     <div class="flex flex-col">
       <ul class="container s:mx-auto flex-row hidden flex-wrap sm:flex">
-        {% for mediapost in site.data.media limit:8 %} {% include
-        media-preview.html %} {% endfor %}
+        {% for mediapost in site.data.media limit:8 %} {% include media-preview.html %} {% endfor %}
       </ul>
       <ul class="container s:mx-auto flex flex-col sm:hidden">
-        {% for mediapost in site.data.media limit:4 %} {% include
-        media-preview.html %} {% endfor %}
+        {% for mediapost in site.data.media limit:4 %} {% include media-preview.html %} {% endfor %}
       </ul>
 
       <div class="media__link container flex justify-start">
@@ -445,57 +181,27 @@ layout: default
 </section>
 {%- endcomment -%}
 
-<section
-  id="join"
-  class="
-    join
-    container
-    max-w-screen-xl
-    flex flex-col
-    sm:flex-row
-    pt-10
-    sl:py-10
-  "
->
+<section id="join" class="join container max-w-screen-xl flex flex-col sm:flex-row pt-10 sl:py-10">
   <div class="heading-block w-full sm:w-2/12 lg:w-3/12">
-    <h2 class="text-sm font-semibold mb-5 s:text-center lg:text-center">
-      Join
-    </h2>
+    <h2 class="text-sm font-semibold mb-5 s:text-center lg:text-center">Join</h2>
   </div>
 
   <div class="info-block w-full sm:w-10/12 lg:w-9/12">
-    <div
-      class="flex flex-col sl:flex-row sl:justify-between lg:max-w-screen-ml"
-    >
+    <div class="flex flex-col sl:flex-row sl:justify-between lg:max-w-screen-ml">
       {% for card in site.data.join %}
       <div class="join__option w-full sl:w-4/12 flex sl:flex-col mb-10 sl:mb-0">
-        <div
-          class="flex justify-center items-center h-8 mr-6 sl:mr-0 mb-5 lg:mb-8"
-        >
-          <a
-            href="{{ card.link }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="hover:opacity-50"
-          >
+        <div class="flex justify-center items-center h-8 mr-6 sl:mr-0 mb-5 lg:mb-8">
+          <a href="{{ card.link }}" target="_blank" rel="noopener noreferrer" class="hover:opacity-50">
             <img src="{{ card.src }}" alt="Join option logo" />
           </a>
         </div>
         <div class="flex flex-col justify-between flex-1">
           <div>
-            <h2 class="text-xs lg:text-sm font-semibold mb-3 text-left">
-              {{ card.title }}
-            </h2>
+            <h2 class="text-xs lg:text-sm font-semibold mb-3 text-left">{{ card.title }}</h2>
             <p class="w-full text-s lg:text-base mb-3">{{ card.text }}</p>
           </div>
           <div class="media__link container flex justify-start">
-            <a
-              class="link link--external"
-              href="{{ card.link }}"
-              target="_blank"
-              rel="noopener noreferrer"
-              >{{ card.linkText }}</a
-            >
+            <a class="link link--external" href="{{ card.link }}" target="_blank" rel="noopener noreferrer">{{ card.linkText }}</a>
           </div>
         </div>
       </div>
