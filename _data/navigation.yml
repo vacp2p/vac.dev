@@ -16,7 +16,7 @@
   type: local
 
 - title: 'Specs'
-  link: 'https://specs.vac.dev'
+  link: 'https://rfc.vac.dev/'
   type: external
 
 - title: 'Forum'
