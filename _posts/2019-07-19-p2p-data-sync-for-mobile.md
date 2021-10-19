@@ -1,12 +1,12 @@
 ---
 layout: post
-name: 'P2P Data Sync for Mobile'
-title: 'P2P Data Sync for Mobile'
+name: "P2P Data Sync for Mobile"
+title: "P2P Data Sync for Mobile"
 date: 2019-07-19 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /p2p-data-sync-for-mobile
-category: research
+categories: research
 summary: A research log. Reliable and decentralized, pick two.
 image: /assets/img/mvds_interactive.png
 ---
@@ -59,7 +59,7 @@ For requirements or design goals for a solution, here's what we came up with.
 
 ## MVDS - a minimium viable version
 
-The first minimum viable version is in an alpha stage, and it has a [specification](https://github.com/vacp2p/specs/blob/master/mvds.md), [implementation](https://github.com/vacp2p/mvds) and we have deployed it in a [console client](https://github.com/status-im/status-console-client) for end to end functionality. It's heavily inspired by [Bramble Sync Protocol](https://code.briarproject.org/briar/briar-spec/blob/master/protocols/BSP.md).
+The first minimum viable version is in an alpha stage, and it has a [specification](https://rfc.vac.dev/spec/2), [implementation](https://github.com/vacp2p/mvds) and we have deployed it in a [console client](https://github.com/status-im/status-console-client) for end to end functionality. It's heavily inspired by [Bramble Sync Protocol](https://code.briarproject.org/briar/briar-spec/blob/master/protocols/BSP.md).
 
 The spec is fairly minimal. You have nodes that exchange records over some secure transport. These records are of different types, such as `OFFER`, `MESSAGE`, `REQUEST`, and `ACK`. A peer keep tracks of the state of message for each node it is interacting with. There's also logic for message retransmission with exponential delay. The positive ACK and retransmission model is quite similar to how TCP is designed.
 
