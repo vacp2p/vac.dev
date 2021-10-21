@@ -66,7 +66,7 @@
 
 .post__content h2,
 .post__content h3 {
-  @apply text-sm font-semibold mb-5;
+  @apply text-h font-semibold mb-5;
 }
 
 .post__content p {
@@ -100,6 +100,10 @@
 
 .post__content .highlight {
   @apply w-full bg-black px-2 overflow-x-auto;
+}
+
+.post__content .highlight::-webkit-scrollbar {
+  @apply bg-black;
 }
 
 .post__content code {

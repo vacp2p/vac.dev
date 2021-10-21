@@ -47,6 +47,7 @@ module.exports = {
       base: ["16px", "29px"],
       l: ["18px", "25px"],
       lg: ["20px", "28px"],
+      h: ["22px", "22px"],
       xl: ["24px", "32px"],
       xxl: ["32px", "44px"],
     },
