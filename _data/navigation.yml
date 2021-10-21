@@ -15,6 +15,10 @@
   link: "/research-log"
   type: local
 
+- title: "Media"
+  link: "/media"
+  type: local
+
 - title: "Specs"
   link: "https://rfc.vac.dev/"
   type: external
