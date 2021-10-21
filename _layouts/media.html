@@ -2,13 +2,10 @@
 layout: default
 ---
 
-<section class="media container max-w-screen-xl flex flex-col sm:flex-row pt-10 pb-8 lg:py-10 border-b">
-  <div class="heading-block w-full sm:w-2/12 lg:w-3/12 flex lg:justify-center items-start pb-3 sm:pb-0">
-    <a class="link link--back" href="/">Back</a>
-  </div>
+<section class="media container max-w-screen-xl flex flex-col items-center pt-10 pb-8 lg:py-10">
   <div class="info-block w-full sm:w-10/12 lg:w-9/12">
     <h1 class="text-xl md:text-xxl mb-5 lg:mb-16 sm:max-w-md lg:max-w-xl">Media</h1>
-    <div class="media__cards container mx-auto lg:mx-0 flex flex-col flex-wrap sm:flex-row lg:max-w-4xl sl:justify-between">
+    <div class="media__cards container mx-auto lg:mx-0 flex flex-col flex-wrap sm:flex-row sl:justify-between">
       {% for mediapost in site.data.media %}
       <div class="media__card flex flex-col w-full sl:max-w-48 mb-5 sm:mb-0 group">
         <a href="{{ mediapost.link }}" target="_blank" rel="noopener noreferrer">
