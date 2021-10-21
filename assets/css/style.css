@@ -70,7 +70,7 @@
 }
 
 .post__content p {
-  @apply text-s lg:text-base mb-5 last:mb-0;
+  @apply text-s lg:text-base mb-5 last:mb-0 text-left;
 }
 
 .post__content a {
@@ -98,8 +98,12 @@
   @apply inline;
 }
 
+.post__content .highlight {
+  @apply w-full bg-black px-2 overflow-x-auto;
+}
+
 .post__content code {
-  @apply text-white text-s lg:text-base bg-black px-2;
+  @apply font-code text-white text-s lg:text-base;
 }
 
 .post__content img {
