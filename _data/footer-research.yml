@@ -1,9 +1,6 @@
 ---
 - title: "Log"
-  link: https://status.im/
+  link: "/research-log"
 
-- title: "Forum"
-  link: https://forum.vac.dev/
-
-- title: "Careers"
-  link: https://jobs.status.im/?search=Vac
+- title: "Specs"
+  link: "https://rfc.vac.dev/"
