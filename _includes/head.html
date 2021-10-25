@@ -10,6 +10,28 @@
   <title>Vac</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <script async defer src="https://cdn.simpleanalytics.io/hello.js"></script>
+  <noscript><img src="https://api.simpleanalytics.io/hello.gif" alt="" /></noscript>
+
+  <!-- Fathom - simple website analytics - https://github.com/usefathom/fathom -->
+  <script>
+    (function (f, a, t, h, o, m) {
+      a[h] =
+        a[h] ||
+        function () {
+          (a[h].q = a[h].q || []).push(arguments);
+        };
+      (o = f.createElement("script")), (m = f.getElementsByTagName("script")[0]);
+      o.async = 1;
+      o.src = t;
+      o.id = "fathom-script";
+      m.parentNode.insertBefore(o, m);
+    })(document, window, "//fathom.status.im/tracker.js", "fathom");
+    fathom("set", "siteId", "YELIA");
+    fathom("trackPageview");
+  </script>
+  <!-- / Fathom -->
+
   <!-- Twitter cards -->
   <meta name="twitter:site" content="@{{ site.twitter_username }}" />
   <meta name="twitter:creator" content="@{{ page.author }}" />
