@@ -128,7 +128,11 @@ layout: default
     <div class="about__cards container s:mx-auto flex flex-col flex-wrap sm:flex-row">
       {% for card in site.data.cards %}
       <div class="about__card flex flex-col w-full sm:w-1/2 lm:max-w-screen-xscard mb-6 lg:mb-10 lm:mr-5">
-        <img src="{{ card.src }}" class="about__gif self-center" alt="Gif animation" width="210" height="210" />
+        <!-- <img src="{{ card.src }}" class="about__gif self-center" alt="Gif animation" width="210" height="210" /> -->
+        <video class="about__video self-center" width="210" height="210" autoplay loop>
+          <source src="{{ card.src }}" type="video/mp4" />
+          Your browser does not support the video tag
+        </video>
         <p class="about__heading mb-4 font-semibold text-s lg:text-sm text-left">{{ card.title }}</p>
         <p class="about__text text-s lg:text-base opacity-75 md:mr-5 lg:mr-0">{{ card.text }}</p>
       </div>
