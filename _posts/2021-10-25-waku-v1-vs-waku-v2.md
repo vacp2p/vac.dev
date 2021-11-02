@@ -2,7 +2,7 @@
 layout: post
 name:  "Waku v1 vs Waku v2: Bandwidth Comparison"
 title:  "Waku v1 vs Waku v2: Bandwidth Comparison"
-date:   2021-11-02 17:00:00 +0200
+date:   2021-11-03 10:00:00 +0200
 author: hanno
 published: true
 permalink: /waku-v1-v2-bandwidth-comparison
@@ -23,14 +23,15 @@ we are specifically interested in its scalability and resource usage characteris
 However, the theoretical performance improvements of Waku v2 over Waku v1,
 has never been properly benchmarked and tested.
 
-A full performance evaluation of Waku v2 would require significant planning and resources,
+Although we're working towards a full performance evaluation of Waku v2,
+this would require significant planning and resources,
 if it were to simulate "real world" conditions faithfully and measure bandwidth and resource usage across different network connections,
 robustness against attacks/losses, message latencies, etc.
 (There already exists a fairly comprehensive [evaluation of GossipSub v1.1](https://research.protocol.ai/publications/gossipsub-v1.1-evaluation-report/vyzovitis2020.pdf),
 on which [`11/WAKU2-RELAY`](https://rfc.vac.dev/spec/11/) is based.)
 
-As a more realistic starting point,
-this document contains a limited and local comparison of the _bandwidth_ profile (only) between Waku v1 and Waku v2.
+As a starting point,
+this post contains a limited and local comparison of the _bandwidth_ profile (only) between Waku v1 and Waku v2.
 It reuses and adapts existing network simulations for [Waku v1](https://github.com/status-im/nim-waku/blob/master/waku/v1/node/quicksim.nim) and [Waku v2](https://github.com/status-im/nim-waku/blob/master/waku/v2/node/quicksim2.nim)
 and compares bandwidth usage for similar message propagation scenarios.
 
@@ -191,6 +192,20 @@ especially for densely connected networks.
 - E.g. for a network consisting of **150** or more densely connected nodes,
 Waku v2 provides more than **10x** better average bandwidth usage rates than Waku v1.
 - As the network continues to scale, both in absolute terms (number of nodes) and in network traffic (message rates) the disparity between Waku v2 and Waku v1 becomes even larger.
+
+## Future work
+
+Now that we've confirmed that Waku v2's bandwidth improvements over its predecessor matches theory,
+we can proceed to a more in-depth characterisation of Waku v2's resource usage.
+Some questions that we want to answer include:
+- What proportion of Waku v2's bandwidth usage is used to propagate _payload_ versus bandwidth spent on _control_ messaging to maintain the mesh?
+- To what extent is message latency (time until a message is delivered to its destination) affected by network size and message rate?
+- How _reliable_ is message delivery in Waku v2 for different network sizes and message rates?
+- What are the resource usage profiles of other Waku v2 protocols (e.g.[`12/WAKU2-FILTER`](https://rfc.vac.dev/spec/12/) and [`19/WAKU2-LIGHTPUSH`](https://rfc.vac.dev/spec/19/))?
+
+Our aim is to get ever closer to a "real world" understanding of Waku v2's performance characteristics,
+identify and fix vulnerabilities
+and continually improve the efficiency of our suite of protocols.
 
 ## References
 
