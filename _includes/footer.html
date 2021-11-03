@@ -1,21 +1,21 @@
 <footer class="footer bg-black flex flex-shrink-0 justify-center">
-  <div class="container max-w-screen-xl flex sl:justify-between lm:justify-start p-5 pb-10 md:px-12 md:pt-5 lg:pt-10">
+  <div class="container max-w-screen-xl flex sl:justify-between lm:justify-start p-5 md:px-12 md:pt-5 lg:py-10">
     <div class="logo mr-10 sm:mr-0 sm:w-2/12 lg:w-3/12">
       <a href="/"><img src="{{ '/assets/img/logo.png' | relative_url }}" alt="Vac logo" class="w-9 h-11" /></a>
     </div>
 
     <div class="flex flex-col xm:flex-row xm:justify-between sm:w-10/12 lg:w-9/12">
-      <p class="hidden ml:inline-block ml:mr-10 text-base text-white opacity-75">Vac researches peer-to-peer, private, censorship resistant communication</p>
+      <p class="hidden sl:inline-block sl:mr-10 text-xxs lg:text-base text-white opacity-75">Vac researches peer-to-peer, private, censorship resistant communication</p>
       <nav class="flex max-w-xs mr-0 xm:mr-5 l:mr-32 mb-5 sm:mb-0">
         <div class="flex">
           <div class="flex flex-col mr-5 sm:mr-10 sl:mr-14">
-            <p class="text-base text-white mb-5 lg:mb-4">Research</p>
+            <p class="text-xxs lg:text-base text-white opacity-75 mb-5 lg:mb-8">Research</p>
             <ul>
               {% for nav in site.data.footer-research %} {% include nav-item-footer.html %} {% endfor %}
             </ul>
           </div>
           <div class="flex flex-col sl:mr-14">
-            <p class="text-base text-white mb-5 lg:mb-4 mr-5">Socials</p>
+            <p class="text-xxs lg:text-base text-white opacity-75 mb-5 lg:mb-8">Socials</p>
             <ul>
               {% for nav in site.data.footer-socials %} {% include nav-item-footer.html %} {% endfor %}
             </ul>
