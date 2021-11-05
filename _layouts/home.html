@@ -187,9 +187,9 @@ layout: default
   </div>
 
   <div class="info-block w-full sm:w-10/12 lg:w-9/12">
-    <div class="flex flex-col sl:flex-row sl:justify-between lg:max-w-screen-ml">
+    <div class="flex flex-col sl:gap-1 sl:flex-row sl:justify-between lg:max-w-screen-ml">
       {% for card in site.data.join %}
-      <div class="join__option w-full sl:w-4/12 flex sl:flex-col mb-10 sl:mb-0">
+      <div class="join__option w-full sl:max-w-210 sl:w-4/12 flex sl:flex-col mb-10 sl:mb-0">
         <div class="flex justify-center items-center h-8 mr-6 sl:mr-0 mb-5 lg:mb-8">
           <a href="{{ card.link }}" target="_blank" rel="noopener noreferrer" class="hover:opacity-50">
             <img src="{{ card.src }}" alt="Join option logo" />
@@ -197,8 +197,8 @@ layout: default
         </div>
         <div class="flex flex-col justify-between flex-1">
           <div>
-            <h2 class="text-xs lg:text-sm font-semibold mb-3 text-left">{{ card.title }}</h2>
-            <p class="w-full text-s lg:text-base mb-3">{{ card.text }}</p>
+            <h2 class="text-xs lg:text-sm font-semibold mb-3 lg:mb-8 text-left sl:text-center">{{ card.title }}</h2>
+            <p class="w-full text-s lg:text-sm mb-3">{{ card.text }}</p>
           </div>
           <div class="media__link container flex justify-start">
             <a class="link link--external" href="{{ card.link }}" target="_blank" rel="noopener noreferrer">{{ card.linkText }}</a>

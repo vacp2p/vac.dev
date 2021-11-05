@@ -9,6 +9,7 @@ module.exports = {
         arrowPeach: "url(/assets/img/arrow-peach.svg)",
       }),
       maxWidth: {
+        210: "210px",
         280: "280px",
         436: "436px",
         680: "680px",
