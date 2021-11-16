@@ -110,6 +110,11 @@
   @apply font-code text-white text-s lg:text-base;
 }
 
+.post__content p code,
+.post__content a code {
+  @apply font-code text-white text-s lg:text-base bg-black;
+}
+
 .post__content img {
   @apply w-full ml:max-w-80 mx-auto mb-3;
 }
