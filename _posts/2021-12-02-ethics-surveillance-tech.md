@@ -2,7 +2,7 @@
 layout: post
 name:  "Opinion: Pseudo-ethics in the Surveillance Tech Industry"
 title:  "Opinion: Pseudo-ethics in the Surveillance Tech Industry"
-date:   2021-12-06 10:00:00 +0200
+date:   2021-12-02 10:00:00 +0200
 author: circe
 published: true
 permalink: /ethics-surveillance-tech
@@ -11,6 +11,8 @@ summary: A look at typical ethical shortfalls in the global surveillance tech in
 image: /assets/img/vac.png
 discuss:
 ---
+
+_This is an opinion piece by pseudonymous contributor, circe._ 
 
 ## Preface
 
