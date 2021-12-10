@@ -1,0 +1,7 @@
+<li class="hover:opacity-50">
+  {% if nav.type == "local" %}
+  <a class="nav__link" href="{{ nav.link }}">{{ nav.title }}</a>
+  {% elsif nav.type == "external" %}
+  <a href="{{ nav.link }}" target="_blank" rel="noopener noreferrer">{{ nav.title }}</a>
+  {% endif %}
+</li>

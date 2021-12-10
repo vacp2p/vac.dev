@@ -1,29 +1,40 @@
-<header>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="nav-section">
-                    <div class="logo">
-                        <a href="{{site.url}}{{ site.baseurl }}"><img src="{{ '/assets/img/logo.svg' | relative_url }}"></a>
-                    </div>
-                    <a href="#" class="mobile-trigger"></a>
-                    <div class="header-lists">
-                        <ul class="menu">
-                            <li><a href="{{site.url}}{{ site.baseurl }}/research-log/">Research Log</a></li>
-                            <li><a href="{{site.url}}{{ site.baseurl }}/#what">What</a></li>
-                            <li><a href="{{site.url}}{{ site.baseurl }}/#who">Who</a></li>
-                            <li><a href="https://forum.vac.dev/" target="_blank">Forum</a></li>
-                            <li><a href="https://rfc.vac.dev" target="_blank">RFCs</a></li>
-                            <li><a href="{{site.url}}{{ site.baseurl }}/faq">FAQ</a></li>
-                        </ul>
-                        <ul class="social-media">
-                            <li><a href="https://twitter.com/vacp2p" target="_blank"><svg width="34" height="28" viewBox="0 0 34 28" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M30.5052 6.88197C30.5267 7.18399 30.5267 7.48607 30.5267 7.78808C30.5267 17 23.5153 27.6143 10.7005 27.6143C6.75255 27.6143 3.08505 26.4708 0 24.4861C0.560936 24.5508 1.10022 24.5724 1.68274 24.5724C4.94031 24.5724 7.9391 23.4722 10.3338 21.5953C7.27032 21.5305 4.70304 19.5242 3.81851 16.7627C4.25002 16.8274 4.68146 16.8706 5.13455 16.8706C5.76017 16.8706 6.38585 16.7842 6.9683 16.6333C3.77541 15.986 1.38066 13.1815 1.38066 9.79443V9.70816C2.30829 10.2259 3.38706 10.5495 4.53039 10.5926C2.65347 9.34133 1.42382 7.20557 1.42382 4.7893C1.42382 3.49491 1.76894 2.30836 2.37304 1.27281C5.80327 5.50125 10.9594 8.26263 16.7411 8.56471C16.6332 8.04694 16.5685 7.50765 16.5685 6.9683C16.5685 3.12814 19.6751 4.86376e-08 23.5368 4.86376e-08C25.5431 4.86376e-08 27.3553 0.84137 28.6282 2.20051C30.203 1.89849 31.7132 1.31598 33.0508 0.517771C32.5329 2.13583 31.4327 3.49497 29.9873 4.35786C31.3896 4.20692 32.7488 3.81851 34 3.27922C33.0509 4.65988 31.8643 5.88952 30.5052 6.88197Z" fill="#121212"/> </svg></a></li>
-                            <li><a href="https://github.com/vacp2p" target="_blank"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M11.3722 26.6927C11.3722 26.8298 11.2145 26.9395 11.0157 26.9395C10.7895 26.9601 10.6319 26.8504 10.6319 26.6927C10.6319 26.5557 10.7895 26.446 10.9883 26.446C11.194 26.4254 11.3722 26.5351 11.3722 26.6927ZM9.24032 26.3843C9.19234 26.5214 9.32944 26.679 9.53508 26.7202C9.71331 26.7887 9.91895 26.7202 9.96008 26.5831C10.0012 26.446 9.87097 26.2883 9.66532 26.2266C9.4871 26.1786 9.28831 26.2472 9.24032 26.3843ZM12.2702 26.2677C12.0714 26.3157 11.9343 26.446 11.9548 26.6036C11.9754 26.7407 12.1536 26.8298 12.3593 26.7819C12.5581 26.7339 12.6952 26.6036 12.6746 26.4665C12.654 26.3363 12.469 26.2472 12.2702 26.2677ZM16.7806 0C7.27298 0 0 7.21815 0 16.7258C0 24.3278 4.78468 30.8331 11.619 33.1226C12.4964 33.2803 12.8048 32.7387 12.8048 32.2932C12.8048 31.8682 12.7843 29.5238 12.7843 28.0843C12.7843 28.0843 7.98589 29.1125 6.97823 26.0415C6.97823 26.0415 6.19677 24.0468 5.07258 23.5327C5.07258 23.5327 3.50282 22.4565 5.18226 22.477C5.18226 22.477 6.88911 22.6141 7.82823 24.2456C9.32944 26.8915 11.8452 26.1307 12.8254 25.6782C12.9831 24.5815 13.4286 23.8206 13.9222 23.3682C10.0903 22.9431 6.22419 22.3879 6.22419 15.7936C6.22419 13.9085 6.74516 12.9625 7.84194 11.7561C7.66371 11.3105 7.08105 9.47339 8.02016 7.10161C9.45282 6.65605 12.75 8.95242 12.75 8.95242C14.121 8.56855 15.5948 8.36976 17.0548 8.36976C18.5149 8.36976 19.9887 8.56855 21.3597 8.95242C21.3597 8.95242 24.6569 6.6492 26.0895 7.10161C27.0286 9.48024 26.446 11.3105 26.2677 11.7561C27.3645 12.9694 28.0363 13.9153 28.0363 15.7936C28.0363 22.4085 23.9988 22.9363 20.1669 23.3682C20.7976 23.9097 21.3323 24.9379 21.3323 26.5488C21.3323 28.8589 21.3117 31.7173 21.3117 32.2794C21.3117 32.725 21.627 33.2665 22.4976 33.1089C29.3524 30.8331 34 24.3278 34 16.7258C34 7.21815 26.2883 0 16.7806 0ZM6.6629 23.6423C6.57379 23.7109 6.59436 23.8686 6.71089 23.9988C6.82056 24.1085 6.97823 24.1565 7.06734 24.0673C7.15645 23.9988 7.13589 23.8411 7.01936 23.7109C6.90968 23.6012 6.75202 23.5532 6.6629 23.6423ZM5.92258 23.0871C5.8746 23.1762 5.94315 23.2859 6.08024 23.3544C6.18992 23.423 6.32702 23.4024 6.375 23.3065C6.42298 23.2173 6.35444 23.1077 6.21734 23.0391C6.08024 22.998 5.97056 23.0186 5.92258 23.0871ZM8.14355 25.5274C8.03387 25.6165 8.075 25.8222 8.23266 25.9524C8.39032 26.1101 8.58911 26.1307 8.67823 26.021C8.76734 25.9319 8.72621 25.7262 8.58911 25.596C8.43831 25.4383 8.23266 25.4177 8.14355 25.5274ZM7.3621 24.5198C7.25242 24.5883 7.25242 24.7665 7.3621 24.9242C7.47177 25.0819 7.65686 25.1504 7.74597 25.0819C7.85565 24.9927 7.85565 24.8145 7.74597 24.6569C7.65 24.4992 7.47177 24.4307 7.3621 24.5198Z" fill="#121212"/> </svg></a></li>
-                            <li><a href="https://status.im/" target="_blank"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg"> <path fill-rule="evenodd" clip-rule="evenodd" d="M0 17C0 7.61114 7.61084 0 16.9997 0C26.3885 0 34 7.61114 34 17C34 26.3889 26.3885 34 16.9997 34C7.61084 34 0 26.3889 0 17ZM17.0632 16.2595L17.0622 16.2594V16.2588C16.2043 16.1694 15.3463 16.0806 14.2911 16.139C13.7851 16.167 13.2481 16.2388 12.7378 16.3574C13.0483 12.6009 15.8109 9.31288 19.5672 9.10479C21.872 8.97641 24.1754 10.3466 24.3009 12.5711C24.4239 14.7572 22.6921 16.2199 19.8339 16.3787C18.7791 16.4371 17.9215 16.3483 17.0632 16.2595ZM14.1833 24.2994C11.9998 24.4174 9.8175 23.161 9.69934 21.1221L9.69873 21.1227C9.58305 19.1185 11.2228 17.7781 13.9306 17.6327C14.9305 17.5785 15.7434 17.6601 16.5562 17.7422L16.5763 17.7442C17.3831 17.8245 18.1908 17.9048 19.1818 17.8517C19.6616 17.8256 20.1701 17.7605 20.6535 17.6509C20.3594 21.0947 17.743 24.1083 14.1833 24.2994Z" fill="#121212"/> </svg></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+<header class="sm:sticky sm:top-0 bg-white z-50">
+  <div class="container max-w-screen-xl sm:border-b">
+    <div class="nav-section flex justify-between items-center py-3 md:py-5 lg:py-10">
+      <div class="logo md:pr-8 l:p-0">
+        <a href="/"><img src="{{ '/assets/img/logo.png' | relative_url }}" alt="Vac logo" class="w-9 h-11" /></a>
+      </div>
+      <div class="flex justify-between items-center w-9/12">
+        <div class="burger block sm:hidden z-50">
+          <button class="burger__button burger__button--open fixed top-2 right-5 w-12 h-12" type="button" aria-label="Mobile menu button">
+            <img class="burger__icon" src="{{ '/assets/img/burger.svg' | relative_url }}" alt="Open menu button" />
+          </button>
+          <button class="burger__button burger__button--close hidden fixed top-2 right-5 w-12 h-12" type="button" aria-label="Close mobile menu button">
+            <img class="burger__icon burger__icon--close" src="{{ '/assets/img/close.svg' | relative_url }}" alt="Close menu button" />
+          </button>
         </div>
+
+        <nav class="nav max-w-screen-xm md:max-w-screen-sl container">
+          <ul class="nav__list hidden sm:flex justify-between container text-xs font-semibold md:pr-8 l:p-0">
+            {% for nav in site.data.navigation %} {% include nav-item.html %} {% endfor %}
+          </ul>
+        </nav>
+
+        <ul class="social items-center hidden md:flex">
+          {% include social.html %}
+        </ul>
+      </div>
+
+      <div class="overlay container max-w-screen-sm w-full hidden sm:hidden fixed top-0 right-0 h-screen bg-black bg-opacity-40 z-30">
+        <nav class="nav-mobile hidden fixed top-0 right-0 flex flex-col justify-between items-center pt-14 px-12 pb-5 bg-white w-9/12 h-3/4 z-40">
+          <ul class="nav__list flex flex-col flex-1 justify-between items-center container box-content w-32 h-auto max-h-nav text-xs font-normal">
+            {% for nav in site.data.navigation %} {% include nav-item.html %} {% endfor %}
+          </ul>
+          <ul class="social items-center flex mt-8">
+            {% include social.html %}
+          </ul>
+        </nav>
+      </div>
     </div>
+  </div>
 </header>

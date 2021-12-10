@@ -1,8 +1,8 @@
 ---
 layout: post
-name:  "P2P Data Sync for Mobile"
-title:  "P2P Data Sync for Mobile"
-date:   2019-07-19 12:00:00 +0800
+name: "P2P Data Sync for Mobile"
+title: "P2P Data Sync for Mobile"
+date: 2019-07-19 12:00:00 +0800
 author: oskarth
 published: true
 permalink: /p2p-data-sync-for-mobile
@@ -22,14 +22,17 @@ There are many synchronization protocols out there and I won't go into detail of
 Why do we want to do p2p sync for mobilephones in the first place? There are three components to that question. One is on the value of decentralization and peer-to-peer, the second is on why we'd want to reliably sync data at all, and finally why mobilephones and other resource restricted devices.
 
 ### Why p2p?
+
 For decentralization and p2p, there are both technical and social/philosophical reasons. Technically, having a user-run network means it can scale with the number of users. Data locality is also improved if you query data that's close to you, similar to distributed CDNs. The throughput is also improved if there are more places to get data from.
 
 Socially and philosophically, there are several ways to think about it. Open and decentralized networks also relate to the idea of open standards, i.e. compare the longevity of AOL with IRC or Bittorrent. One is run by a company and is shut down as soon as it stops being profitable, the others live on. Additionally increasingly control of data and infrastructure is becoming a liability. By having a network with no one in control, everyone is. It's ultimately a form of democratization, more similar to organic social structures pre Big Internet companies. This leads to properties such as censorship resistance and coercion resistance, where we limit the impact a 3rd party might have a voluntary interaction between individuals or a group of people. Examples of this are plentiful in the world of Facebook, Youtube, Twitter and WeChat.
 
 ### Why reliably sync data?
+
 At risk of stating the obvious, reliably syncing data is a requirement for many problem domains. You don't get this by default in a p2p world, as it is unreliable with nodes permissionslessly join and leave the network. In some cases you can get away with only ephemeral data, but usually you want some kind of guarantees. This is a must for reliable group chat experience, for example, where messages are expected to arrive in a timely fashion and in some reasonable order. The same is true for messages there represent financial transactions, and so on.
 
 ### Why mobilephones?
+
 Most devices people use daily are mobile phones. It's important to provide the same or at least similar guarantees to more traditional p2p nodes that might run on a desktop computer or computer. The alternative is to rely on gateways, which shares many of the drawbacks of centralized control and prone to censorship, control and surveillence.
 
 More generally, resource restricted devices can differ in their capabilities. One example is smartphones, but others are: desktop, routers, Raspberry PIs, POS systems, and so on. The number and diversity of devices are exploding, and it's useful to be able to leverage this for various types of infrastructure. The alternative is to centralize on big cloud providers, which also lends itself to lack of democratization and censorship, etc.
@@ -90,18 +93,19 @@ Each failed attempt implies another retransmission. That means we have `(1/0.1)^
 
 The problem above hints at the requirements 3 and 4 above. While we did get reliable syncing (requirement 1), it came at a big cost.
 
-There are a few ways of getting around this issue. One is having a *store and forward* model, where some intermediary node picks up (encrypted) messages and forwards them to the recipient. This is what we have in production right now at Status.
+There are a few ways of getting around this issue. One is having a _store and forward_ model, where some intermediary node picks up (encrypted) messages and forwards them to the recipient. This is what we have in production right now at Status.
 
-Another, arguably more pure and robust, way is having a *remote log*, where the actual data is spread over some decentralized storage layer, and you have a mutable reference to find the latest messages, similar to DNS.
+Another, arguably more pure and robust, way is having a _remote log_, where the actual data is spread over some decentralized storage layer, and you have a mutable reference to find the latest messages, similar to DNS.
 
-What they both have in common is that they act as a sort of highly-available cache to smooth over the non-overlapping connection windows between two endpoints. Neither of them are *required* to get reliable data transmission.
+What they both have in common is that they act as a sort of highly-available cache to smooth over the non-overlapping connection windows between two endpoints. Neither of them are _required_ to get reliable data transmission.
 
 ### Basic calculations for bandwidth multiplier
 
 While we do want better simulations, and this is a work in progress, we can also look at the above scenarios using some basic calculations. This allows us to build a better intuition and reason about the problem without having to write code. Let's start with some assumptions:
+
 - two nodes exchanging a single message in batch mode
 - 10% uniformly random uptime for each node
-- in HA cache case, 100% uptime of a piece of infrastructure C 
+- in HA cache case, 100% uptime of a piece of infrastructure C
 - retransmission every epoch (with constant or exponential backoff)
 - only looking at average (p50) case
 
@@ -116,7 +120,7 @@ A   <- ack   B (10% chance of arrival)
 
 With a constant backoff, A will send messages at epoch `1, 2, 3, ...`. With exponential backoff and a multiplier of 2, this would be `1, 2, 4, 8, ...`. Let's assume constant backoff for now, as this is what will influence the success rate and thus the bandwidth multiplier.
 
-There's a difference between *time to receive* and *time to stop sending*. Assuming each send attempt is independent, it takes on average 10 epochs for A's message to arrive with B. Furthermore:
+There's a difference between _time to receive_ and _time to stop sending_. Assuming each send attempt is independent, it takes on average 10 epochs for A's message to arrive with B. Furthermore:
 
 1. A will send messages until it receives an ACK.
 2. B will send ACK if it receives a message.

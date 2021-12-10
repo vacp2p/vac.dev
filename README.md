@@ -1,8 +1,35 @@
-# vac
+# Vac.dev Website
 
-1. Install a full [Ruby development environment](https://jekyllrb.com/docs/installation/), 
-   You need v2.7.
-2. Install Jekyll and [bundler gems](https://jekyllrb.com/docs/ruby-101/#bundler).
-3. Change into your cloned repo
-4. Build the site and make it available on a local server: `bundle exec jekyll serve`
-5. Now browse to http://localhost:4000
+Originally created by [EthWorks](https://ethworks.io/).
+
+# Development
+
+- Install Depndencies:
+  ```
+  yarn install
+  bundle install
+  ```
+- Build Website
+  ```
+  yarn run build
+  ```
+- For development or server:
+  ```
+  yarn run dev
+  yarn run start
+  ```
+
+# Continuous Integration
+
+- `develop` branch is pushed to [dev.vac.dev](https://dev.vac.dev) via [this CI Job](https://ci.status.im/job/website/job/dev.vac.dev/)
+- `master` branch is pushed to [vac.dev](https://vac.dev) via [this CI Job](https://ci.status.im/job/website/job/vac.dev/)
+
+# Known Issues
+
+### Bundler and Jekyll on Apple M1 (with Ruby `x86_64`)
+
+```sh
+arch -x86_64 gem install --user-install bundler jekyll
+echo 'export PATH="~/.gem/ruby/2.6.0/bin:$PATH"' >> ~/.zshrc
+bundle update
+```

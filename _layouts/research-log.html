@@ -2,21 +2,38 @@
 layout: default
 ---
 
-<div class="container post-content">
-    <div class="row">
-        <div class="col-lg-10 ml-auto mr-auto">
-            <h1>Research log</h1>
-            <div class="row">
-                {% for post in site.posts %}
-                    <div class="col-md-12 mt-60">
-                        <time>{{ post.date | date: '%B %d, %Y' }}</time>
-                        <h3><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h3>
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="btn-holder mt-60">
-                <a href="{{ '/feed.xml' | relative_url }}" target="_blank" class="btn subscribe-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M21.4286 0H2.57143C1.15125 0 0 1.15125 0 2.57143V21.4286C0 22.8488 1.15125 24 2.57143 24H21.4286C22.8488 24 24 22.8488 24 21.4286V2.57143C24 1.15125 22.8488 0 21.4286 0ZM6 20.5714C4.57982 20.5714 3.42857 19.4202 3.42857 18C3.42857 16.5798 4.57982 15.4286 6 15.4286C7.42018 15.4286 8.57143 16.5798 8.57143 18C8.57143 19.4202 7.42018 20.5714 6 20.5714ZM14.4393 20.5714H12.5999C12.2779 20.5714 12.0079 20.3231 11.9869 20.0018C11.7076 15.7134 8.27748 12.2918 3.9982 12.013C3.67693 11.9921 3.42857 11.7221 3.42857 11.4001V9.56073C3.42857 9.21064 3.7215 8.92982 4.07111 8.94868C9.99321 9.26871 14.7317 14.0131 15.0513 19.9289C15.0702 20.2785 14.7894 20.5714 14.4393 20.5714ZM19.9586 20.5714H18.1193C17.7892 20.5714 17.5206 20.3099 17.5071 19.9801C17.2072 12.6657 11.3354 6.79291 4.01995 6.49296C3.69011 6.47941 3.42857 6.2108 3.42857 5.88075V4.04143C3.42857 3.69568 3.71454 3.41657 4.06002 3.429C13.0509 3.75177 20.2498 10.9928 20.571 19.94C20.5834 20.2855 20.3043 20.5714 19.9586 20.5714Z" fill="#121212"/> </svg>Subscribe via RSS</a>
-            </div>
-        </div>
-    </div>
-</div>
+<section class="container max-w-screen-xl flex flex-col sm:flex-row pt-10 pb-8 lg:py-10 border-b">
+  <div class="heading-block w-full sm:w-2/12 lg:w-3/12 flex lg:justify-center items-start pb-3 sm:pb-0">
+    <a class="link link--back" href="/">Back</a>
+  </div>
+  <div class="info-block w-full sm:w-10/12 lg:w-9/12">
+    <h1 class="text-xl md:text-xxl mb-5 lg:mb-10 sm:max-w-md lg:max-w-xl">Research log</h1>
+    <p class="section__text text-s lg:text-base italic l:max-w-md">We take inspiration from core internet architecture, existing survey work and other efforts that have been done to decompose the problem into orthogonal pieces.</p>
+  </div>
+</section>
+
+{%- comment -%}
+<section class="container max-w-screen-xl flex flex-col sm:flex-row pt-10 pb-3 sm:pb-8 border-b">
+  <div class="heading-block w-full sm:w-2/12 lg:w-3/12 pr-2 ml:pr-0">
+    <h2 class="text-sm font-semibold mb-5 text-center">Open problems</h2>
+  </div>
+
+  <div class="info-block w-full sm:w-10/12 lg:w-9/12">
+    <ul class="container s:mx-auto flex flex-col flex-wrap sm:flex-row">
+      {% for post in site.posts %} {% if post.categories contains "problem" %} {% include post-preview.html %} {% endif %} {% endfor %}
+    </ul>
+  </div>
+</section>
+{%- endcomment -%}
+
+<section class="container max-w-screen-xl flex flex-col sm:flex-row pt-10 pb-3 sm:pb-8">
+  <div class="heading-block w-full sm:w-2/12 lg:w-3/12 pr-2 ml:pr-0">
+    <h2 class="text-sm font-semibold mb-5 text-center">Research entries</h2>
+  </div>
+
+  <div class="info-block w-full sm:w-10/12 lg:w-9/12">
+    <ul class="container s:mx-auto flex flex-col flex-wrap sm:flex-row">
+      {% for post in site.posts %} {% include post-preview.html %} {% endfor %}
+    </ul>
+  </div>
+</section>
