@@ -1,0 +1,58 @@
+<head>
+  {% if page.title %}
+  <title>{{ site.title }} - {{ page.title }}</title>
+  {% else %}
+  <title>{{ site.title }}</title>
+  {% endif %}
+
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Vac</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script async defer src="https://cdn.simpleanalytics.io/hello.js"></script>
+  <noscript><img src="https://api.simpleanalytics.io/hello.gif" alt="" /></noscript>
+
+  <!-- Fathom - simple website analytics - https://github.com/usefathom/fathom -->
+  <script>
+    (function (f, a, t, h, o, m) {
+      a[h] =
+        a[h] ||
+        function () {
+          (a[h].q = a[h].q || []).push(arguments);
+        };
+      (o = f.createElement("script")), (m = f.getElementsByTagName("script")[0]);
+      o.async = 1;
+      o.src = t;
+      o.id = "fathom-script";
+      m.parentNode.insertBefore(o, m);
+    })(document, window, "//fathom.status.im/tracker.js", "fathom");
+    fathom("set", "siteId", "YELIA");
+    fathom("trackPageview");
+  </script>
+  <!-- / Fathom -->
+
+  <!-- Twitter cards -->
+  <meta name="twitter:site" content="@{{ site.twitter_username }}" />
+  <meta name="twitter:creator" content="@{{ page.author }}" />
+  <meta name="twitter:title" content="{{ page.title }}" />
+
+  {% if page.summary %}
+  <meta name="twitter:description" content="{{ page.summary }}" />
+  {% else %}
+  <meta name="twitter:description" content="{{ site.description }}" />
+  {% endif %} {% if page.image %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="{{ site.url }}{{ site.baseurl }}{{ page.image }}" />
+  {% else %}
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:image" content="{{ site.url }}/assets/img/vac.png" />
+  {% endif %}
+  <!-- end of Twitter cards -->
+
+  <link rel="shortcut icon" href="{{ '/assets/img/favicon.png' | relative_url }}" type="image/png" />
+  <link rel="preload" href="/fonts/OpenSans-Regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/OpenSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/OpenSans-SemiBoldItalic.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/style.css" />
+</head>

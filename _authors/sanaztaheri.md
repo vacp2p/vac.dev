@@ -1,7 +1,7 @@
 ---
+layout: author
 short_name: sanaz
-name: Sanaz Taheri
+name: Sanaz
 twitter: sanaz2016
 github: staheri14
-image: sanaz.png
 ---
