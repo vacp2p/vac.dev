@@ -1,6 +1,7 @@
 ---
+layout: author
 short_name: franck
-name: Franck Royer
+name: Franck
 twitter: dantounet
 github: d4nte
 ---

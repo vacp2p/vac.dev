@@ -1,7 +1,7 @@
 ---
+layout: author
 short_name: oskarth
-name: Oskar Thoren
+name: Oskar
 twitter: oskarth
 github: oskarth
-image: oskar.png
 ---

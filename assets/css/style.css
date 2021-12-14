@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("../../fonts/OpenSans-Regular.woff2") format("woff2"), url("../../fonts/OpenSans-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("../../fonts/OpenSans-SemiBold.woff2") format("woff2"), url("../../fonts/OpenSans-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("../../fonts/OpenSans-Italic.woff2") format("woff2"), url("../../fonts/OpenSans-Italic.woff") format("woff");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("../../fonts/OpenSans-SemiBoldItalic.woff2") format("woff2"), url("../../fonts/OpenSans-SemiBoldItalic.woff") format("woff");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+.link--external,
+.link--back {
+  @apply relative italic font-semibold text-xs pl-3 transition-all duration-300;
+}
+
+.link--external {
+  @apply before:absolute before:top-1/2 before:left-0 before:transform before:-translate-y-1/2 before:w-2 before:h-2 before:bg-arrow before:bg-no-repeat before:bg-contain group-hover:before:bg-arrowWhite;
+}
+
+.link--back {
+  @apply before:absolute before:top-1/2 before:left-0 before:transform before:-translate-y-1/2 before:rotate-180 before:w-2 before:h-2 before:bg-arrow before:bg-no-repeat before:bg-contain;
+}
+
+.link--external,
+.link--back {
+  @apply after:absolute after:left-0 after:bottom-0 after:w-full after:h-px hover:after:bg-black;
+}
+
+.link--dapp {
+  @apply group-hover:before:bg-arrowPeach;
+}
+
+.post__content div {
+  @apply mb-10 lg:mb-14 last:mb-0;
+}
+
+.post__content h1 {
+  @apply text-xl font-semibold mb-5;
+}
+
+.post__content h2,
+.post__content h3 {
+  @apply text-h font-semibold mb-5;
+}
+
+.post__content p {
+  @apply text-s lg:text-base mb-5 last:mb-0 text-left;
+}
+
+.post__content a {
+  @apply text-s lg:text-base underline hover:opacity-50 break-words;
+}
+
+.post__content ul,
+.post__content ol {
+  @apply list-inside mb-5;
+}
+
+.post__content ul {
+  @apply list-disc;
+}
+
+.post__content ol {
+  @apply list-decimal;
+}
+
+.post__content li {
+  @apply text-s lg:text-base;
+}
+
+.post__content li p {
+  @apply inline;
+}
+
+.post__content .highlight {
+  @apply w-full bg-black px-2 overflow-x-auto;
+}
+
+.post__content .highlight::-webkit-scrollbar {
+  @apply bg-black;
+}
+
+.post__content code {
+  @apply font-code text-white text-s lg:text-base;
+}
+
+.post__content p code,
+.post__content a code {
+  @apply font-code text-white text-s lg:text-base bg-black;
+}
+
+.post__content img {
+  @apply w-full ml:max-w-80 mx-auto mb-3;
+}
+
+.post__content table {
+  @apply w-full mb-4 border-collapse;
+}
+
+.post__content thead th {
+  @apply align-bottom border-solid border-2 border-black border-opacity-20 border-l-0 border-r-0 text-left;
+}
+
+.post__content th,
+.post__content td {
+  @apply p-3 align-top border border-solid  border-black border-opacity-20 border-l-0 border-r-0;
+}
+
+.post__content hr {
+  @apply m-12;
+}

@@ -1,79 +1,15 @@
+---
+---
+
 <!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: 'en-US' }}" class="no-js">
+<html class="h-full" lang="en-US">
+  {% include head.html %}
+  <body class="h-full flex flex-col font-body">
+    <div class="flex-grow container max-w-screen-xl mx-auto px-5 md:px-12 lg:pt-6">
+      {% include header.html %}
 
-    <head>
-
-
-        {% if page.title %}
-        <title>{{ site.title }} - {{ page.title }}</title>
-        {% else %}
-        <title>{{ site.title }}</title>
-        {% endif %}
-
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <script async defer src="https://cdn.simpleanalytics.io/hello.js"></script>
-        <noscript><img src="https://api.simpleanalytics.io/hello.gif" alt=""></noscript>
-
-        <!-- Fathom - simple website analytics - https://github.com/usefathom/fathom -->
-        <script>
-         (function(f, a, t, h, o, m){
-	         a[h]=a[h]||function(){
-		         (a[h].q=a[h].q||[]).push(arguments)
-	         };
-	         o=f.createElement('script'),
-	         m=f.getElementsByTagName('script')[0];
-	         o.async=1; o.src=t; o.id='fathom-script';
-	         m.parentNode.insertBefore(o,m)
-         })(document, window, '//fathom.status.im/tracker.js', 'fathom');
-         fathom('set', 'siteId', 'YELIA');
-         fathom('trackPageview');
-        </script>
-        <!-- / Fathom -->
-
-        <!-- Twitter cards -->
-        <meta name="twitter:site"    content="@{{ site.twitter_username }}">
-        <meta name="twitter:creator" content="@{{ page.author }}">
-        <meta name="twitter:title"   content="{{ page.title }}">
-
-        {% if page.summary %}
-        <meta name="twitter:description" content="{{ page.summary }}">
-        {% else %}
-        <meta name="twitter:description" content="{{ site.description }}">
-        {% endif %}
-
-        {% if page.image %}
-        <meta name="twitter:card"  content="summary_large_image">
-        <meta name="twitter:image" content="{{ site.url }}{{ site.baseurl }}{{ page.image }}">
-        {% else %}
-        <meta name="twitter:card"  content="summary">
-        <meta name="twitter:image" content="{{ site.url }}/assets/img/vac.png">
-        {% endif %}
-        <!-- end of Twitter cards -->
-
-        <link rel="shortcut icon" href="{{ '/assets/img/favicon.png' | relative_url }}" type="image/png" />
-
-        <link href="https://fonts.googleapis.com/css?family=Lexend+Deca&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
-    </head>
-
-  <body class="layout--{{ page.layout | default: layout.layout }}{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %} {{ page.title | slugify }}">
-
-    <div class="main-container">
-
-        {% include header.html %}
-        {{ content }}
-        {% include footer.html %}
-
+      <main class="bg-white text-black flex flex-col">{{ content }}</main>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>
-    <script async src="{{ '/assets/js/main.js' | relative_url }}"></script>
-
+    {% include footer.html %} {% include scripts.html %}
   </body>
 </html>

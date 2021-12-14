@@ -2,18 +2,15 @@
 layout: default
 ---
 
-<div class="container post-content">
-    <div class="row">
-        <div class="col-lg-10 ml-auto mr-auto">
-            <h1>{{page.title}}</h1>
-            <div class="meta">{{ page.date | date_to_string }} • <a href="/authors/{{ page.author }}">{{ page.author }}</a></div>
-            <div class="editor-content">
-                {{ content }}
-
-                {% if page.discuss %}
-                    <p>Discuss this post on our <a href="{{ page.discuss }}">forum</a>. </p>
-                {% endif %}
-            </div>
-        </div>
+<section class="container max-w-screen-xl flex flex-col items-center pt-10 pb-0 md:pb-10 lg:pb-0">
+  <div class="info-block max-w-680 pb-5 sm:pb-10 overflow-hidden">
+    <div class="post mb-10">
+      <h1 class="text-xl md:text-xxl mb-5 sm:max-w-md lg:max-w-2xl">{{page.title}}</h1>
+      <div>
+        <span class="text-s lg:text-base"> {{ page.date | date_to_string }} • by </span>
+        <a href="/authors/{{ page.author }}" class="text-s lg:text-base font-bold hover:underline">{{ page.author }}</a>
+      </div>
     </div>
-</div>
+    <div class="post__content">{{ content }}</div>
+  </div>
+</section>
