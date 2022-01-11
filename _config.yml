@@ -25,6 +25,7 @@ exclude:
   - package-lock.json
   - README.md
   - src
+  - assets
   - tailwind.config.js
   - netlify.toml
   - vendor
