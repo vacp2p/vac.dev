@@ -32,7 +32,7 @@ pipeline {
 
     stage('Install Deps') {
       steps {
-        sh 'yarn install --ignore-optional'
+        sh 'yarn install'
         sh 'bundle install'
       }
     }
