@@ -22,11 +22,12 @@
     "tailwindcss": "^2.2.7"
   },
   "scripts": {
-    "build:production": "cross-env NODE_ENV=production gulp",
-    "build:dev": "cross-env NODE_ENV=development gulp",
+    "build:production": "cross-env NODE_ENV=production gulp build",
+    "build:dev": "cross-env NODE_ENV=development gulp build",
     "build": "yarn run build:production",
-    "dev": "cross-env NODE_ENV=development gulp serve",
-    "start": "yarn run dev",
+    "devel": "cross-env NODE_ENV=development gulp devel",
+    "dev": "yarn run devel",
+    "start": "yarn run devel",
     "clean": "git clean -fdx",
     "deploy": "node scripts/deploy.js"
   }
