@@ -26,7 +26,7 @@ A [sustainability and business workshop](https://forum.vac.dev/t/vac-sustainabil
 From the beginning, our protocol development has been complemented by various client implementations of these protocols,
 first in [Nim](https://github.com/status-im/nim-waku),
 but later also in [JavaScript](https://github.com/status-im/js-waku)
-and [go](https://github.com/status-im/go-waku).
+and [Go](https://github.com/status-im/go-waku).
 A follow-up post will clarify the purposes, similarities and differences between these three clients.
 The [Nim client](https://github.com/status-im/nim-waku/tree/d2fccb5220144893f994a67f2cc26661247f101f/waku/v2), is our reference implementation,
 developed by the research team in parallel with the specs
