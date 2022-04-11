@@ -1,11 +1,11 @@
 ---
 layout: post
-name:  "What's new in `nwaku`?"
-title:  "What's new in `nwaku`?"
-date:   2022-04-11 10:00:00 +0200
+name:  "Introducing `nwaku`?"
+title:  "Introducing `nwaku`?"
+date:   2022-04-12 10:00:00 +0200
 author: hanno
 published: true
-permalink: /nwaku-update-2022-04
+permalink: /introducing-nwaku
 categories: research
 summary: A summary of recent developments in the Nim-based Waku v2 client and a preview of current and future focus areas.
 image: /assets/img/vac.png
@@ -15,12 +15,12 @@ discuss:
 ## Background
 
 If you've been following our [research log](https://vac.dev/research-log/),
-you'll know that many things have happened in the world of Waku v2 since [our last general update](./2020-02-14-waku-update.md).
+you'll know that many things have happened in the world of Waku v2 since [our last general update](/waku-v2-ethereum-coscup).
 In line with our [long term goals](https://vac.dev/#about),
 we've introduced new protocols,
 tweaked our existing protocols
-and expanded our team capacity.
-We've also shown [in a series of practical experiments](./2021-10-25-waku-v1-vs-waku-v2.md) that Waku v2 does indeed deliver on some of the [theoretical advantages](./2020-07-01-waku-v2-pitch.md) it was designed to have over its predecessor, Waku v1.
+and expanded our team.
+We've also shown [in a series of practical experiments](/waku-v1-v2-bandwidth-comparison) that Waku v2 does indeed deliver on some of the [theoretical advantages](/waku-v2-plan) it was designed to have over its predecessor, Waku v1.
 A [sustainability and business workshop](https://forum.vac.dev/t/vac-sustainability-and-business-workshop/116) led to the formulation of a clearer vision for Vac as a team.
 
 From the beginning, our protocol development has been complemented by various client implementations of these protocols,
@@ -31,12 +31,12 @@ A follow-up post will clarify the purposes, similarities and differences between
 The [Nim client](https://github.com/status-im/nim-waku/tree/d2fccb5220144893f994a67f2cc26661247f101f/waku/v2), is our reference implementation,
 developed by the research team in parallel with the specs
 and building on a home-grown implementation of [`libp2p`](https://github.com/status-im/nim-libp2p).
-We believe the Nim client is suitable to run as [a standalone adaptive node](./2020-07-01-waku-v2-pitch.md),
+The Nim client is suitable to run as [a standalone adaptive node](/waku-update),
 managed by individual operators
 or as an encapsulated service node in other applications.
 This post looks at some recent developments within the Nim client.
 
-## 1. `nim-waku` is now known as `nwaku`
+## 1. **nim-waku** is now known as _**nwaku**_
 
 Pronounced NWHA-koo.
 You may already have seen us refer to "`nwaku`" on Vac communication channels,
@@ -76,11 +76,12 @@ whereas they would previously keep accumulating dead peers.
 `nwaku` nodes that persist historical messages on disk now manage their own storage size based on the `--store-capacity`.
 This can significantly improve node start-up times.
 
-Doubtless more issues impacting stability will be addressed in future as `nwaku` matures,
-but we've noticed a marked improvement in the stability of running `nwaku` nodes.
-These include environments where `nwaku` nodes are expected to run with a long uptime,
-such as the Vac team's own fleets.
-Vac currently operates two fleets of `nwaku` nodes, `wakuv2.prod` and `wakuv2.test`.
+More stability issues may be addressed in future as `nwaku` matures,
+but we've noticed a marked improvement in the reliability of running `nwaku` nodes.
+These include environments where `nwaku` nodes are expected to run with a long uptime.
+Vac currently operates two long-running fleets of `nwaku` nodes, `wakuv2.prod` and `wakuv2.test`,
+for internal dogfooding and
+to serve as experimental bootstrapping nodes.
 Status has also recently deployed similar fleets for production and testing based on `nwaku`.
 Our goal is to have `nwaku` be stable, performant and flexible enough
 to be an attractive option for operators to run and maintain their own Waku v2 nodes.
@@ -124,6 +125,11 @@ It is enabled in a `nwaku` node by default.
 This is a DHT-based discovery mechanism adapted to store and relay _node records_.
 Our implementation is based on [Ethereum's Discovery v5 protocol](https://github.com/ethereum/devp2p/blob/fa6428ada7385c13551873b2ae6ad2457c228eb8/discv5/discv5-theory.md)
 with some [minor modifications](https://rfc.vac.dev/spec/33/) to isolate our discovery network from that of Ethereum.
+The decision to separate the Waku Discovery v5 network from Ethereum's was made on considerations of lookup efficiency.
+This comes at a possible tradeoff in network resilience.
+We are considering merging with the Ethereum Discovery v5 network in future,
+or even implement a hybrid solution.
+[This post](https://forum.vac.dev/t/waku-v2-discv5-roadmap-discussion/121/8) explains the decision and future steps.
 
 ## 5. Spam protection using RLN
 
@@ -131,6 +137,9 @@ An early addition to our suite of protocols was [an extension of `11/WAKU-RELAY`
 that provided spam protection using [Rate Limiting Nullifiers (RLN)](https://rfc.vac.dev/spec/32/).
 The `nwaku` client now contains a working demonstration and integration of RLN relay.
 Check out [this tutorial](https://github.com/status-im/nim-waku/blob/ee96705c7fbe4063b780ac43b7edee2f6c4e351b/docs/tutorial/rln-chat2-live-testnet.md) to see the protocol in action using a toy chat application built on `nwaku`.
+We'd love for people to join us in dogfooding RLN spam protection as part of our operator incentive testnet.
+Feel free to join our [Vac Discord](https://discord.gg/KNj3ctuZvZ) server
+and head to the `#rln` channel for more information.
 
 ## Future work
 
@@ -139,7 +148,7 @@ these are some of the current and future focus areas for `nwaku`:
 
 ### Reaching out to operators:
 
-We want to push for operators to run and maintain their own Waku v2 nodes,
+We are starting to push for operators to run and maintain their own Waku v2 nodes,
 preferably contributing to the default Waku v2 network as described by the default pubsub topic (`/waku/2/default-waku/proto`).
 Amongst other things, a large fleet of stable operator-run Waku v2 nodes will help secure the network,
 provide valuable services to a variety of applications
@@ -164,6 +173,7 @@ or build their own security solutions on the application layer above Waku.
 We are working on [a set of features](https://github.com/vacp2p/research/issues/97) built into Waku
 that will provide the general security properties Waku users may desire
 and do so in a modern and simple way.
+This is useful for applications outside of Status that want similar security guarantees.
 As a first step, we've already made good progress toward [integrating noise handshakes](https://forum.vac.dev/t/noise-handshakes-as-key-exchange-mechanism-for-waku2/130) as a key exchange mechanism in Waku v2.
 
 ### Protocol incentivization
@@ -174,13 +184,16 @@ and punishing adversarial actions.
 This will increase the overall security of the network
 and encourage operators to run their own Waku nodes.
 In turn, the sustainability of Vac as an organization will be better guaranteed.
-As such, protocol incentivization was one of the major conclusions in our recent [Vac Sustainability and Business Workshop](https://forum.vac.dev/t/vac-sustainability-and-business-workshop/).
+As such, protocol incentivization was a major focus in our recent [Vac Sustainability and Business Workshop](https://forum.vac.dev/t/vac-sustainability-and-business-workshop/).
 Our first step here is to finish integrating RLN relay into Waku
 with blockchain interaction to manage members,
 punish spammers
 and reward spam detectors.
 After this, we want to design monetary incentivization for providers of `store`, `lightpush` and `filter` services.
 This may also tie into a reputation mechanism for service nodes based on a network-wide consensus on service quality.
+A big challenge for protocol incentivization is doing it in a private fashion,
+so we can keep similar metadata protection guarantees as the Waku base layer.
+This ties into our focus on [Zero Knowledge tech](https://forum.vac.dev/t/vac-3-zk/97)
 
 ### Improved store capacity
 
@@ -266,12 +279,13 @@ You can also view the changelog for past releases [here](https://github.com/stat
 - [Node Discovery Protocol v5 - Theory](https://github.com/ethereum/devp2p/blob/fa6428ada7385c13551873b2ae6ad2457c228eb8/discv5/discv5-theory.md)
 - [Noise handshakes](https://forum.vac.dev/t/noise-handshakes-as-key-exchange-mechanism-for-waku2/130)
 - [RLN tutorial](https://github.com/status-im/nim-waku/blob/ee96705c7fbe4063b780ac43b7edee2f6c4e351b/docs/tutorial/rln-chat2-live-testnet.md)
+- [Vac <3 ZK](https://forum.vac.dev/t/vac-3-zk/97)
 - [Vac About page](https://vac.dev/#about)
 - [Vac Research log](https://vac.dev/research-log/)
 - [Vac RFC site](https://rfc.vac.dev/)
 - [Vac Sustainability and Business Workshop](https://forum.vac.dev/t/vac-sustainability-and-business-workshop/)
-- [Waku Update](./2020-02-14-waku-update.md)
-- [Waku v1 vs Waku v2: Bandwidth Comparison](./2021-10-25-waku-v1-vs-waku-v2.md)
+- [Waku Update](/waku-update)
+- [Waku v1 vs Waku v2: Bandwidth Comparison](/waku-v1-v2-bandwidth-comparison)
 - [Waku v2 Peer Exchange](https://github.com/vacp2p/rfc/issues/495)
 - [Waku v2 Discovery v5 Roadmap](https://forum.vac.dev/t/waku-v2-discv5-roadmap-discussion/121)
-- [What's the Plan for Waku v2?](./2020-07-01-waku-v2-pitch.md)
+- [What's the Plan for Waku v2?](/waku-v2-plan)
