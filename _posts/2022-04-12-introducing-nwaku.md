@@ -1,13 +1,13 @@
 ---
 layout: post
-name:  "Introducing `nwaku`?"
-title:  "Introducing `nwaku`?"
+name:  "Introducing \"nwaku\""
+title:  "Introducing \"nwaku\""
 date:   2022-04-12 10:00:00 +0200
 author: hanno
 published: true
 permalink: /introducing-nwaku
 categories: research
-summary: A summary of recent developments in the Nim-based Waku v2 client and a preview of current and future focus areas.
+summary: Introducing "nwaku", a Nim-based Waku v2 client, including a summary of recent developments and preview of current and future focus areas.
 image: /assets/img/vac.png
 discuss:
 ---
@@ -36,12 +36,12 @@ managed by individual operators
 or as an encapsulated service node in other applications.
 This post looks at some recent developments within the Nim client.
 
-## 1. **nim-waku** is now known as _**nwaku**_
+## 1. _**nim-waku**_ is now known as _**nwaku**_
 
 Pronounced NWHA-koo.
 You may already have seen us refer to "`nwaku`" on Vac communication channels,
 but it is now official:
-`nim-waku` has been renamed to `nwaku`.
+The `nim-waku` Waku v2 client has been named `nwaku`.
 Why? Well, we needed a recognizable name for our client that could easily be referred to in everyday conversations
 and `nim-waku` just didn't roll off the tongue.
 We've followed the example of the closely related [`nimbus` project](https://github.com/status-im/nimbus-eth2) to find a punchier name
@@ -193,7 +193,7 @@ After this, we want to design monetary incentivization for providers of `store`,
 This may also tie into a reputation mechanism for service nodes based on a network-wide consensus on service quality.
 A big challenge for protocol incentivization is doing it in a private fashion,
 so we can keep similar metadata protection guarantees as the Waku base layer.
-This ties into our focus on [Zero Knowledge tech](https://forum.vac.dev/t/vac-3-zk/97)
+This ties into our focus on [Zero Knowledge tech](https://forum.vac.dev/t/vac-3-zk/97).
 
 ### Improved store capacity
 
@@ -214,19 +214,19 @@ This is an ongoing effort.
 In addition to [the three discovery methods](#4-peer-discovery) already implemented in `nwaku`,
 we are working on improving discovery on at least three fronts:
 
-#### Capability discovery:
+#### _Capability discovery:_
 
 Waku v2 nodes may be interested in peers with specific capabilities, for example:
 
-1.  peers within a specific pubsub topic mesh,
-2.  peers with `store` capability,
-3.  `store` peers with x days of history for a specific content topic, etc.
+1. peers within a specific pubsub topic mesh,
+2. peers with **store** capability,
+3. **store** peers with x days of history for a specific content topic, etc.
 
 Capability discovery entails mechanisms by which such capabilities can be advertised and discovered/negotiated.
 One major hurdle to overcome is the increased complexity of finding a node with specific capabilities within the larger network (a needle in a haystack).
 See the [original problem statement](https://github.com/vacp2p/rfc/issues/429) for more.
 
-#### Improvements in Discovery v5
+#### _Improvements in Discovery v5_
 
 Of the implemented discovery methods,
 Discovery v5 best addresses our need for a decentralized and scalable discovery mechanism.
@@ -237,7 +237,7 @@ introducing explicit NAT traversal
 and utilizing [topic advertisement](https://github.com/ethereum/devp2p/blob/fa6428ada7385c13551873b2ae6ad2457c228eb8/discv5/discv5-theory.md#topic-advertisement).
 The [Waku v2 Discovery v5 Roadmap](https://forum.vac.dev/t/waku-v2-discv5-roadmap-discussion/121) contains more details.
 
-#### Generalized peer exchange 
+#### _Generalized peer exchange_
 
 `nwaku` already implements [GossipSub peer exchange](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/gossipsub-v1.1.md#prune-backoff-and-peer-exchange).
 We now need a general request-response mechanism outside of GossipSub
@@ -256,7 +256,7 @@ Much more is happening behind the scenes, of course,
 so for more information, or to join the conversation,
 feel free to join our [Vac Discord](https://discord.gg/KNj3ctuZvZ) server
 or to check out the [`nwaku` repo on Github](https://github.com/status-im/nim-waku).
-You can also view the changelog for past releases [here](https://github.com/status-im/nim-waku/releases)
+You can also view the changelog for past releases [here](https://github.com/status-im/nim-waku/releases).
 
 ## References
 
