@@ -13,7 +13,7 @@ discuss:
 ---
 
 
-As covered in previous posts on this research log, Waku v2 builds on [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md).
+As covered in previous posts on this research log, Waku v2 builds on [libp2p gossipsub](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/README.md).
 Nodes participating in a gossipsub protocol manage a mesh network that is used for routing messages.
 This mesh network is managed in a decentralized way, which requires each node to know other participating peers.
 A node learns about the existence of other peers via [*ambient peer discovery*](https://docs.libp2p.io/concepts/publish-subscribe/#discovery).
@@ -29,7 +29,7 @@ We focus on ambient peer discovery methods that are in line with our goal of bui
 
 ## Discovery V5
 
-[Discovery v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) is Ethereum's peer discovery protocol.
+[Discovery v5](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5.md) is Ethereum's peer discovery protocol.
 It is based on the [Kademlia](https://en.wikipedia.org/wiki/Kademlia) distributed hashtable (DHT).
 An [introduction to discv5 and its history](https://vac.dev/kademlia-to-discv5), and a [discv5 Waku v2 feasibility study](https://vac.dev/feasibility-discv5)
 can be found in previous posts on this research log.
@@ -112,7 +112,7 @@ Choosing $b=3$ would reduce the number to $\approx 144 * 6 = 864$.
 Even when choosing $\alpha = 10$ we would have to wait at least 80 RTTs.
 This effort is just for retrieving a single Waku node. Ideally, we want at least 3 Waku nodes for bootstrapping a Waku relay.
 
-[The discv5 docu](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md#ad-placement-and-topic-radius) roughly estimates $p=1%$ to be the threshold for acceptably efficient random walk discovery. 
+[The discv5 docu](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5-theory.md#ad-placement-and-topic-radius) roughly estimates $p=1%$ to be the threshold for acceptably efficient random walk discovery. 
 This is in line with our estimation:
 
 $$0.9 = 1 - (1-1/100)^{16q} => q \approx 14$$
@@ -165,7 +165,7 @@ With these nodes in mind, we started working on a simple *peer exchange protocol
 The peer exchange protocol will allow nodes to ask peers for further peers.
 Similar to discv5, the peer exchange protocol will also support capability discovery.
 
-The new peer exchange protocol can be seen as a simple replacement for [Rendezvous protocol](https://github.com/libp2p/specs/blob/master/rendezvous/README.md), which Waku v2 does not support.
+The new peer exchange protocol can be seen as a simple replacement for [Rendezvous protocol](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/rendezvous/README.md), which Waku v2 does not support.
 While the rendezvous protocol involves nodes registering at rendezvous peers, the peer exchange protocol simply allows nodes to ask any peer for a list of peers (with a certain set of capabilities).
 Rendezvous tends to introduce centralized elements as rendezvous peers have a super-peer role.
 
@@ -179,7 +179,7 @@ Waku v2 comprises further protocols related to ambient peer discovery. We shortl
 
 ### Gossipsub Peer Exchange Protocol
 
-Gossipsub provides an integrated [peer exchange](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#prune-backoff-and-peer-exchange) mechanism which is also supported by Waku v2.
+Gossipsub provides an integrated [peer exchange](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/gossipsub-v1.1.md#prune-backoff-and-peer-exchange) mechanism which is also supported by Waku v2.
 Gossipsub peer exchange works in a *push* manner. Nodes send peer lists to peers they prune from the active mesh.
 This pruning is part of the gossipsub peer management, blurring the boundaries of *peer management* and *ambient peer discovery*.
 
@@ -229,10 +229,10 @@ Besides saving resources on resource restricted devices, this approach works as 
 
 ## References
 
-- [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md)
+- [libp2p gossipsub](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/README.md)
 - [ambient peer discovery](https://docs.libp2p.io/concepts/publish-subscribe/#discovery)
 - [Waku v2](https://rfc.vac.dev/spec/10/)
-- [Discovery v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md)
+- [Discovery v5](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5.md)
 - [Kademlia](https://en.wikipedia.org/wiki/Kademlia)
 - [Discv5 history](https://vac.dev/kademlia-to-discv5)
 - [Discv5 Waku v2 feasibility study](https://vac.dev/feasibility-discv5)
@@ -240,12 +240,12 @@ Besides saving resources on resource restricted devices, this approach works as 
 - [Sybil attack](https://en.wikipedia.org/wiki/Sybil_attack)
 - [eclipse attack](https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/heilman)
 - [Waku v2 ENR](https://rfc.vac.dev/spec/31/)
-- [Discv5 topic discovery](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md#topic-advertisement)
+- [Discv5 topic discovery](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5-theory.md#ad-placement-and-topic-radius)
 - [Discv5 paper](https://github.com/harnen/service-discovery-paper)
 - [peer exchange idea](https://github.com/libp2p/specs/issues/222)
-- [Rendezvous protocol](https://github.com/libp2p/specs/blob/master/rendezvous/README.md)
+- [Rendezvous protocol](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/rendezvous/README.md)
 - [Waku v2 discv5](https://rfc.vac.dev/spec/33/)
-- [Gossipsub peer exchange](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#prune-backoff-and-peer-exchange)
+- [Gossipsub peer exchange](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/gossipsub-v1.1.md#prune-backoff-and-peer-exchange)
 - [NAT traversal](https://docs.libp2p.io/concepts/nat/)
 - [UPNP](https://en.wikipedia.org/wiki/Universal_Plug_and_Play)
 - [NAT-PMP](https://datatracker.ietf.org/doc/html/rfc6886)
