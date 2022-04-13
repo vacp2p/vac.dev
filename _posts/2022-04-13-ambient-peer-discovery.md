@@ -37,7 +37,8 @@ can be found in previous posts on this research log.
 We use Discovery V5 as an ambient peer discovery method for Waku v2 because it is decentralized, efficient, actively researched, and has web3 as its main application area.
 Discv5 also offers mitigation techniques for various attacks, which we cover later in this post.
 
-One of the main benefits of DHT-based discovery methods is offering a global view over participating nodes. This, in turn, allows sampling random sets of nodes which is important for equally distributing load.
+One of the main benefits of DHT-based discovery methods is offering a global view over participating nodes. 
+This, in turn, allows sampling random sets of nodes which is important for equally distributing load.
 However, discovery methods like discv5 still depend on bootstrapping, which Waku v2 does via parameters on start-up or via [DNS-based discovery](https://vac.dev/dns-based-discovery).
 
 ### DHT Background
