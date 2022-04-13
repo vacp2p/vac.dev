@@ -153,7 +153,8 @@ So, for popular topics, a node might fail to register the topic in a close neigh
 However, because the topic is popular (has a high occurrence percentage $p$), it can still be efficiently discovered.
 
 In the future, we also plan to integrate Waku v2 capability discovery, which will not only allow asking for nodes that support Waku v2,
-but asking for Waku v2 nodes supporting specific Waku v2 subprotocols like filter or store. For the store protocol we envision sub-capabilities reflecting message topics and time frames of messages.
+but asking for Waku v2 nodes supporting specific Waku v2 subprotocols like filter or store.
+For the store protocol we envision sub-capabilities reflecting message topics and time frames of messages.
 
 
 ## Peer Exchange Protocol
