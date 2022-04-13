@@ -43,7 +43,8 @@ However, discovery methods like discv5 still depend on bootstrapping, which Waku
 
 ### DHT Background
 
-Distributed Hash Tables are a class of structured P2P overlay networks. A DHT can be seen as a distributed node set of which each node is responsible for a part of the hash space.
+Distributed Hash Tables are a class of structured P2P overlay networks.
+A DHT can be seen as a distributed node set of which each node is responsible for a part of the hash space.
 In contrast to unstructured P2P networks, e.g. the mesh network maintained by gossipsub,
 DHTs have a global view over the node set and the hash space (assuming the participating nodes behave well).
 
