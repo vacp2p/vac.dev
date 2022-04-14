@@ -1,15 +1,15 @@
 ---
 layout: post
-name:  "Introducing \"nwaku\""
-title:  "Introducing \"nwaku\""
+name:  "Introducing nwaku"
+title:  "Introducing nwaku"
 date:   2022-04-12 10:00:00 +0200
 author: hanno
 published: true
 permalink: /introducing-nwaku
 categories: research
-summary: Introducing "nwaku", a Nim-based Waku v2 client, including a summary of recent developments and preview of current and future focus areas.
+summary: Introducing nwaku, a Nim-based Waku v2 client, including a summary of recent developments and preview of current and future focus areas.
 image: /assets/img/vac.png
-discuss:
+discuss: https://forum.vac.dev/
 ---
 
 ## Background
