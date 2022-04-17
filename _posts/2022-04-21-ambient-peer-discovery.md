@@ -1,30 +1,58 @@
 ---
 layout: post
-name:  "Waku V2 Ambient Peer Discovery"
-title:  "Waku V2 Ambient Peer Discovery"
-date:
+name:  "Waku v2 Ambient Peer Discovery"
+title:  "Waku v2 Ambient Peer Discovery"
+date: 2022-04-21 10:00:00 +0200
 author: Daniel
 published: true
-permalink: /wakuv2-apd-2022-13
+permalink: /wakuv2-apd-2022-21
 categories: research
-summary:
-image: /assets/img/vac.png
+summary: Introducing and discussing ambient peer discovery methods currently used by Waku v2, as well as future plans regarding ambient peer discovery.
+image: /assets/img/waku_v2_discv5_random_walk_estimation.svg
 discuss:
 ---
 
+[Waku v2](https://rfc.vac.dev/spec/10/) comprises a set of modular protocols for secure privacy preserving communication.
+Avoiding centralization, these protocols exchange messages over a P2P network layer.
+In order to build a P2P network, participating nodes first have to discover peers within this network.
+This is where [*ambient peer discovery*](https://docs.libp2p.io/concepts/publish-subscribe/#discovery) comes into play:
+it allows nodes to find peers, making it an integral part of any decentralized application.
 
-As covered in previous posts on this research log, Waku v2 builds on [libp2p gossipsub](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/README.md).
+In this post the term *node* to refers to *our* endpoint or the endpoint that takes action,
+while the term *peer* refers to other endpoints in the P2P network.
+These endpoints can be any device connected to the Internet: e.g. servers, PCs, notebooks, mobile devices, or applications like a browser.
+As such, nodes and peers are the same. We use these terms for the ease explanation without loss of generality.
+
+
+In Waku's modular design, ambient peer discovery is an umbrella term for mechanisms that allow nodes to find peers.
+Various ambient peer discovery mechanisms are supported, and each is specified as a separate protocol.
+Where do these protocols fit into Waku's protocol stack?
+The P2P layer of Waku v2 builds on [libp2p gossipsub](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/README.md).
 Nodes participating in a gossipsub protocol manage a mesh network that is used for routing messages.
-This mesh network is managed in a decentralized way, which requires each node to know other participating peers.
-A node learns about the existence of other peers via [*ambient peer discovery*](https://docs.libp2p.io/concepts/publish-subscribe/#discovery).
-Ambient peer discovery is an umbrella term for mechanisms that allow nodes to find other peers.
-It is an integral part of any decentralized application.
+This mesh network is an [unstructured P2P network](https://en.wikipedia.org/wiki/Peer-to-peer#Unstructured_networks)
+offering high robustness and resilience against attacks.
+Gossipsub implements many improvements overcoming the shortcomings typically associated with unstructured P2P networks, e.g. inefficient flooding based routing.
+The gossipsub mesh network is managed in a decentralized way, which requires each node to know other participating peers.
+Waku v2 may use any combination of its ambient discovery protocols to find appropriate peers.
 
-Waku v2 comprises a *peer management layer* based on libp2p gossipsub, which manages the peers of nodes, and an *ambient peer discovery layer*,
+Summarizing, Waku v2 comprises a *peer management layer* based on libp2p gossipsub,
+which manages the peers of nodes, and an *ambient peer discovery layer*,
 which provides information about peers to the peer management layer.
 
-This post covers the current state and future considerations of ambient peer discovery for [Waku v2](https://rfc.vac.dev/spec/10/).
-We focus on ambient peer discovery methods that are in line with our goal of building a fully decentralized, generalized and censorship-resistant messaging protocol.
+We focus on ambient peer discovery methods that are in line with our goal of building a fully decentralized, generalized, privacy-preserving and censorship-resistant messaging protocol.
+Some of these protocols still need adjustments to adhere to our privacy and anonymity requirements. For now, we focus on operational stability and feasibility.
+However, when choosing techniques, we pay attention to selecting mechanisms that can feasibly be tweaked for privacy in future research efforts.
+Because of the modular design and the fact that Waku v2 has several discovery methods at its disposal, we could even remove a protocol in case future evaluation deems it not fitting our standards.
+
+This post covers the current state and future considerations of ambient peer discovery for Waku v2,
+and gives reason for changes and modification we made or plan to make.
+The ambient peer discovery protocols currently supported by Waku v2 are a modified version of Ethereum's [Discovery v5](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5.md)
+and [DNS-based discovery](https://vac.dev/dns-based-discovery).
+Waku v2 further supports [gossipsub's peer exchange protocol](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/gossipsub-v1.1.md#prune-backoff-and-peer-exchange).
+In addition, we plan to introduce a general peer discovery protocol and a capability discovery protocol.
+The former allows resource restricted nodes to outsource querying for peers to stronger peers,
+the latter allows querying peers for their supported capability.
+Besides these new protocols, we are working on integrating capability discovery in our existing ambient peer discovery protocols.
 
 
 ## Discovery V5
@@ -34,12 +62,18 @@ It is based on the [Kademlia](https://en.wikipedia.org/wiki/Kademlia) distribute
 An [introduction to discv5 and its history](https://vac.dev/kademlia-to-discv5), and a [discv5 Waku v2 feasibility study](https://vac.dev/feasibility-discv5)
 can be found in previous posts on this research log.
 
-We use Discovery V5 as an ambient peer discovery method for Waku v2 because it is decentralized, efficient, actively researched, and has web3 as its main application area.
+We use Discovery v5 as an ambient peer discovery method for Waku v2 because it is decentralized, efficient, actively researched, and has web3 as its main application area.
 Discv5 also offers mitigation techniques for various attacks, which we cover later in this post.
 
-One of the main benefits of DHT-based discovery methods is offering a global view over participating nodes. 
+Using a DHT (structured P2P network) as a means for ambient peer discovery, while using the gossipsub mesh network (unstructured P2P network) for transmitting actual messages,
+Waku v2 leverages advantages from both worlds.
+One of the main benefits of DHTs is offering a global view over participating nodes. 
 This, in turn, allows sampling random sets of nodes which is important for equally distributing load.
-However, discovery methods like discv5 still depend on bootstrapping, which Waku v2 does via parameters on start-up or via [DNS-based discovery](https://vac.dev/dns-based-discovery).
+Gossipsub, on the other hand, offers great robustness and resilience against attacks.
+Even if discv5 discovery should not work in advent of a DoS attack, Waku v2 can still operate switching to different discovery methods.
+
+Discovery methods that use separate P2P networks still depend on bootstrapping,
+which Waku v2 does via parameters on start-up or via [DNS-based discovery](https://vac.dev/dns-based-discovery).
 
 ### DHT Background
 
@@ -57,8 +91,7 @@ However, discv5 introduced various practical mitigation techniques.
 ### Random Walk Discovery
 
 While discv5 is based on the Kademlia DHT, it only uses the *distributed node set* aspect of DHTs.
-So, it basically only uses the *key set* of a hash table, and not the mapping of values (items) into the hash space.
-
+It does not map of values (items) into the distributed hash space.
 This makes sense, because the main purpose of discv5 is discovering other nodes that support discv5, which are expected to be Ethereum nodes.
 Ethereum nodes that want to discover other Ethereum nodes simply query the discv5 network for a random set of peers.
 If Waku v2 would do the same, only a small subset of the retrieved nodes would support Waku v2.
@@ -100,7 +133,7 @@ Figure 1 shows a log-log plot for $P(W^q) = 90\%$.
 <p align="center">
     <img src="../assets/img/waku_v2_discv5_random_walk_estimation.svg"  width="50%" />
     <br />
-    Figure 1: log-log plot showing the number of queries necessary to retrieve a Waku v2 node with a probability of 90% in relation to the precentage of Waku v2 nodes in the network.
+    Figure 1: log-log plot showing the number of queries necessary to retrieve a Waku v2 node with a probability of 90% in relation to the Waku v2 node concentration in the network.
 </p>
 
 Assuming $p=0.1$, we would need
@@ -121,7 +154,11 @@ $$0.9 = 1 - (1-1/100)^{16q} => q \approx 14$$
 The number of necessary queries is linearly dependent on the percentage $p$ of Waku nodes.
 The number of hops per query is logarithmically dependent on $n$.
 Thus, random walk searching is inefficient for small percentages $p$.
-However, random walks are more resilient against attacks.
+Still, random walks are more resilient against attacks.
+
+We can conclude that a Waku node concentration below 1% renders vanilla discv5 unfit for our needs.
+Our current solution and future plans for solving this issue are covered in the next subsections.
+
 
 ### Simple Solution: Separate Discovery Network
 
@@ -145,7 +182,7 @@ While the buckets of the discv5 routing table represent distance intervals from 
 Nodes that want to register a topic try to register that topic at one random peer per bucket.
 This leads to registering the topic at peers in closer and closer neighbourhoods around the topic ID, which
 yields a very efficient and resilient compromise between random walk discovery and DHT discovery.
-Peers in larger neighbourhoods aroung the topic ID are less efficient to discover, however more resilient against eclipse attacks and vice versa.
+Peers in larger neighbourhoods around the topic ID are less efficient to discover, however more resilient against eclipse attacks and vice versa.
 
 Further, this works well with the overload and DoS protection discv5 employs.
 Discv5 limits the amount of nodes registered per topic on a single peer. Further, discv5 enforces a waiting time before nodes can register topics at peers.
@@ -153,19 +190,19 @@ So, for popular topics, a node might fail to register the topic in a close neigh
 However, because the topic is popular (has a high occurrence percentage $p$), it can still be efficiently discovered.
 
 In the future, we also plan to integrate Waku v2 capability discovery, which will not only allow asking for nodes that support Waku v2,
-but asking for Waku v2 nodes supporting specific Waku v2 subprotocols like filter or store.
+but asking for Waku v2 nodes supporting specific Waku v2 protocols like filter or store.
 For the store protocol we envision sub-capabilities reflecting message topics and time frames of messages.
+We will also investigate related security implications.
 
 
 ## Peer Exchange Protocol
-
 
 While discv5 based ambient peer discovery has many desirable properties, resource restricted nodes and nodes behind restrictive NAT setups cannot run discv5 satisfactory.
 With these nodes in mind, we started working on a simple *peer exchange protocol* based on ideas proposed [here](https://github.com/libp2p/specs/issues/222).
 The peer exchange protocol will allow nodes to ask peers for further peers.
 Similar to discv5, the peer exchange protocol will also support capability discovery.
 
-The new peer exchange protocol can be seen as a simple replacement for [Rendezvous protocol](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/rendezvous/README.md), which Waku v2 does not support.
+The new peer exchange protocol can be seen as a simple replacement for the [Rendezvous protocol](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/rendezvous/README.md), which Waku v2 does not support.
 While the rendezvous protocol involves nodes registering at rendezvous peers, the peer exchange protocol simply allows nodes to ask any peer for a list of peers (with a certain set of capabilities).
 Rendezvous tends to introduce centralized elements as rendezvous peers have a super-peer role.
 
@@ -183,6 +220,10 @@ Gossipsub provides an integrated [peer exchange](https://github.com/libp2p/specs
 Gossipsub peer exchange works in a *push* manner. Nodes send peer lists to peers they prune from the active mesh.
 This pruning is part of the gossipsub peer management, blurring the boundaries of *peer management* and *ambient peer discovery*.
 
+We will investigate anonymity implications of this protocol and might disable it in favour of more anonymity-preserving protocols.
+Sending a list of peers discloses information about the sending node.
+We also consider restricting the peers a node returns to a set of peers the node does not actively use.
+
 
 ### Capability Negotiation
 
@@ -196,21 +237,16 @@ We work on a *capability negotiation protocol* which allows nodes to ask peers
 * for their complete list of capabilities, and
 * whether they support a specific capability
 
-## Security Considerations
-
-We will investigate security properties of these discovery mechanisms with a focus on anonymity.
-DHT approaches typically allow inferring information about the querying node. Further, sending peer lists might allow inferring information about the responding node.
-
-TODO elaborate or refer to a future post.
-
+We will investigate security implications, especially when sending full capability lists.
 
 ## NAT traversal
 
 For [NAT traversal](https://docs.libp2p.io/concepts/nat/), Waku v2 currently supports the port mapping protocols [UPNP](https://en.wikipedia.org/wiki/Universal_Plug_and_Play) and [NAT-PMP](https://datatracker.ietf.org/doc/html/rfc6886) / [PCP](https://datatracker.ietf.org/doc/html/rfc6887).
 
 In the future, we plan to add support for parts of [ICE](https://datatracker.ietf.org/doc/html/rfc8445), e.g. [STUN](https://datatracker.ietf.org/doc/html/rfc7350).
-We do not plan to support [TURN](https://www.rfc-editor.org/rfc/rfc5928) as it does not match our anonymity requirements.
-We might consider a custom protocol similar to TURN that is in line with our requirements.
+We do not plan to support [TURN](https://www.rfc-editor.org/rfc/rfc5928) because TURN relays would introduce a centralized element.
+A modified decentralized version of TURN featuring incentivization might be an option in the future;
+strong peers could offer a relay service similar to TURN.
 
 There are [plans to integrate more NAT traversal into discv5](https://github.com/ethereum/devp2p/issues/199), in which we might participate.
 So far, the only traversal technique supported by discv5 is nodes receiving their external IP address in pong messages.
@@ -224,14 +260,30 @@ For mobile nodes, which suffer from changing IP addresses and double NAT setups,
 Besides saving resources on resource restricted devices, this approach works as long as peers are in less restrictive environments.
 
 
+## Conclusion and Future Prospects
+
+*Ambient peer discovery* is an integral part of decentralized applications. It allows nodes to learn about peers in the network.
+As of yet, Waku v2 supports DNS-based discovery and a slightly modified version of discv5.
+We are working on further protocols, including a peer exchange protocol that allows resource restricted nodes to ask stronger peers for peer lists.
+Further, we are working on adding capability discovery to our ambient discovery protocols, allowing nodes to find peers with desired properties.
+
+These protocols can be combined in a modular way and allow Waku v2 nodes to build a strong and resilient mesh network,
+even if some discovery methods are not available in a given situation.
+
+We will investigate security properties of these discovery mechanisms with a focus on privacy and anonymity in a future post on this research log.
+As an outlook we can already state that DHT approaches typically allow inferring information about the querying node.
+Further, sending peer lists allows inferring the position of a node within the mesh, and by extension information about the node.
+Waku v2 already provides some mitigation, because the mesh for transmitting actual messages, and the peer discovery network are separate.
+To mitigate information leakage by transmitting peer lists, we plan to only reply with lists of peers that nodes do not use in their active meshes.
 
 ---
 
 ## References
 
-- [libp2p gossipsub](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/README.md)
-- [ambient peer discovery](https://docs.libp2p.io/concepts/publish-subscribe/#discovery)
 - [Waku v2](https://rfc.vac.dev/spec/10/)
+- [libp2p gossipsub](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/README.md)
+- [unstructured P2P network](https://en.wikipedia.org/wiki/Peer-to-peer#Unstructured_networks)
+- [ambient peer discovery](https://docs.libp2p.io/concepts/publish-subscribe/#discovery)
 - [Discovery v5](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5.md)
 - [Kademlia](https://en.wikipedia.org/wiki/Kademlia)
 - [Discv5 history](https://vac.dev/kademlia-to-discv5)
