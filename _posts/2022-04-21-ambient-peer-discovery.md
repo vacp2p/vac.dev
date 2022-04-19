@@ -7,7 +7,7 @@ author: Daniel
 published: true
 permalink: /wakuv2-apd-2022-21
 categories: research
-summary: Introducing and discussing ambient peer discovery methods currently used by Waku v2, as well as future plans regarding ambient peer discovery.
+summary: Introducing and discussing ambient peer discovery methods currently used by Waku v2, as well as future plans in this area.
 image: /assets/img/waku_v2_discv5_random_walk_estimation.svg
 discuss:
 ---
