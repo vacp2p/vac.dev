@@ -21,7 +21,7 @@ it allows nodes to find peers, making it an integral part of any decentralized a
 In this post the term *node* to refers to *our* endpoint or the endpoint that takes action,
 while the term *peer* refers to other endpoints in the P2P network.
 These endpoints can be any device connected to the Internet: e.g. servers, PCs, notebooks, mobile devices, or applications like a browser.
-As such, nodes and peers are the same. We use these terms for the ease explanation without loss of generality.
+As such, nodes and peers are the same. We use these terms for the ease of explanation without loss of generality.
 
 
 In Waku's modular design, ambient peer discovery is an umbrella term for mechanisms that allow nodes to find peers.
@@ -45,19 +45,41 @@ However, when choosing techniques, we pay attention to selecting mechanisms that
 Because of the modular design and the fact that Waku v2 has several discovery methods at its disposal, we could even remove a protocol in case future evaluation deems it not fitting our standards.
 
 This post covers the current state and future considerations of ambient peer discovery for Waku v2,
-and gives reason for changes and modification we made or plan to make.
+and gives reason for changes and modifications we made or plan to make.
 The ambient peer discovery protocols currently supported by Waku v2 are a modified version of Ethereum's [Discovery v5](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5.md)
 and [DNS-based discovery](https://vac.dev/dns-based-discovery).
 Waku v2 further supports [gossipsub's peer exchange protocol](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/gossipsub-v1.1.md#prune-backoff-and-peer-exchange).
-In addition, we plan to introduce a general peer discovery protocol and a capability discovery protocol.
+In addition, we plan to introduce protocols for general peer exchange and capability discovery, respectively.
 The former allows resource restricted nodes to outsource querying for peers to stronger peers,
-the latter allows querying peers for their supported capability.
+the latter allows querying peers for their supported capabilities.
 Besides these new protocols, we are working on integrating capability discovery in our existing ambient peer discovery protocols.
+
+## Static Node Lists
+
+The simplest method of learning about peers in a P2P network is via static node lists.
+These can be given to nodes as start-up parameters or listed in a config-file.
+They can also be provided in a script-parseable format, e.g. the [status fleets](https://fleets.status.im/) in JSON.
+While this method of providing bootstrap nodes is very easy to implement, it requires static peers, which introduce centralized elements.
+Also, updating static peer information introduces administrative overhead.
+Typically, static node lists only hold a small number of bootstrap nodes, which may lead to high load on these nodes.
+
+
+## DNS-based Discovery
+
+Compared to static node lists,
+[DNS-based discovery](https://vac.dev/dns-based-discovery) (specified in [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459))
+provides a more dynamic way of discovering bootstrap nodes.
+It is very efficient, can easily be handled by resource restricted devices,
+and provides very good availability.
+In addition to a naive DNS approach, Ethereum's DNS-based discovery introduces efficient authentication leveraging [Merkle trees](https://en.wikipedia.org/wiki/Merkle_tree).
+
+However, adding nodes to the bootstrap nodes still requires administrative privileges because DNS records have to be added or updated.
+Also, this method of discovery still requires centralized elements.
 
 
 ## Discovery V5
 
-[Discovery v5](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5.md) is Ethereum's peer discovery protocol.
+A much more dynamic method of ambient peer discovery is [Discovery v5](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5.md), which is Ethereum's peer discovery protocol.
 It is based on the [Kademlia](https://en.wikipedia.org/wiki/Kademlia) distributed hashtable (DHT).
 An [introduction to discv5 and its history](https://vac.dev/kademlia-to-discv5), and a [discv5 Waku v2 feasibility study](https://vac.dev/feasibility-discv5)
 can be found in previous posts on this research log.
@@ -73,7 +95,7 @@ Gossipsub, on the other hand, offers great robustness and resilience against att
 Even if discv5 discovery should not work in advent of a DoS attack, Waku v2 can still operate switching to different discovery methods.
 
 Discovery methods that use separate P2P networks still depend on bootstrapping,
-which Waku v2 does via parameters on start-up or via [DNS-based discovery](https://vac.dev/dns-based-discovery).
+which Waku v2 does via parameters on start-up or via DNS-based discovery.
 
 ### DHT Background
 
@@ -289,6 +311,8 @@ To mitigate information leakage by transmitting peer lists, we plan to only repl
 - [Discv5 history](https://vac.dev/kademlia-to-discv5)
 - [Discv5 Waku v2 feasibility study](https://vac.dev/feasibility-discv5)
 - [DNS-based discovery](https://vac.dev/dns-based-discovery)
+- [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459)
+- [Merkle trees](https://en.wikipedia.org/wiki/Merkle_tree)
 - [Sybil attack](https://en.wikipedia.org/wiki/Sybil_attack)
 - [eclipse attack](https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/heilman)
 - [Waku v2 ENR](https://rfc.vac.dev/spec/31/)
