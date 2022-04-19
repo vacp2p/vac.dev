@@ -12,7 +12,7 @@ image: /assets/img/waku_v2_discv5_random_walk_estimation.svg
 discuss:
 ---
 
-[Waku v2](https://rfc.vac.dev/spec/10/) comprises a set of modular protocols for secure privacy preserving communication.
+[Waku v2](https://rfc.vac.dev/spec/10/) comprises a set of modular protocols for secure, privacy preserving communication.
 Avoiding centralization, these protocols exchange messages over a P2P network layer.
 In order to build a P2P network, participating nodes first have to discover peers within this network.
 This is where [*ambient peer discovery*](https://docs.libp2p.io/concepts/publish-subscribe/#discovery) comes into play:
