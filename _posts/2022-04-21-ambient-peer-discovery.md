@@ -171,7 +171,7 @@ Choosing $b=3$ would reduce the number to $\approx 144 * 6 = 864$.
 Even when choosing $\alpha = 10$ we would have to wait at least 80 RTTs.
 This effort is just for retrieving a single Waku node. Ideally, we want at least 3 Waku nodes for bootstrapping a Waku relay.
 
-[The discv5 docu](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5-theory.md#ad-placement-and-topic-radius) roughly estimates $p=1%$ to be the threshold for acceptably efficient random walk discovery. 
+[The discv5 doc](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5-theory.md#ad-placement-and-topic-radius) roughly estimates $p=1%$ to be the threshold for acceptably efficient random walk discovery. 
 This is in line with our estimation:
 
 $$0.9 = 1 - (1-1/100)^{16q} => q \approx 14$$
