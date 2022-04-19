@@ -69,11 +69,10 @@ Typically, static node lists only hold a small number of bootstrap nodes, which 
 Compared to static node lists,
 [DNS-based discovery](https://vac.dev/dns-based-discovery) (specified in [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459))
 provides a more dynamic way of discovering bootstrap nodes.
-It is very efficient, can easily be handled by resource restricted devices,
-and provides very good availability.
+It is very efficient, can easily be handled by resource restricted devices and provides very good availability.
 In addition to a naive DNS approach, Ethereum's DNS-based discovery introduces efficient authentication leveraging [Merkle trees](https://en.wikipedia.org/wiki/Merkle_tree).
 
-However, adding nodes to the bootstrap nodes still requires administrative privileges because DNS records have to be added or updated.
+However, changing and updating the list of bootstrap nodes still requires administrative privileges because DNS records have to be added or updated.
 Also, this method of discovery still requires centralized elements.
 
 
@@ -96,6 +95,11 @@ Even if discv5 discovery should not work in advent of a DoS attack, Waku v2 can 
 
 Discovery methods that use separate P2P networks still depend on bootstrapping,
 which Waku v2 does via parameters on start-up or via DNS-based discovery.
+This might raise the question of why such discovery methods are beneficial?
+The answer lies in the aforementioned global view of DHTs. Without discv5 and similar methods, the bootstrap nodes are used as part of the gossipsub mesh.
+This might put heavy load on these nodes and further, might open pathways to inference attacks.
+Discv5, on the other hand, uses the bootstrap nodes merely as an entry to the discovery network and can provide random sets of nodes (sampled from a global view)
+for bootstrapping or expanding the mesh.
 
 ### DHT Background
 
@@ -113,7 +117,7 @@ However, discv5 introduced various practical mitigation techniques.
 ### Random Walk Discovery
 
 While discv5 is based on the Kademlia DHT, it only uses the *distributed node set* aspect of DHTs.
-It does not map of values (items) into the distributed hash space.
+It does not map values (items) into the distributed hash space.
 This makes sense, because the main purpose of discv5 is discovering other nodes that support discv5, which are expected to be Ethereum nodes.
 Ethereum nodes that want to discover other Ethereum nodes simply query the discv5 network for a random set of peers.
 If Waku v2 would do the same, only a small subset of the retrieved nodes would support Waku v2.
@@ -125,11 +129,11 @@ A first naive solution for Waku v2 discv5 discovery is
 * repeat until enough Waku v2 capable nodes are found
 
 This query process boils down to random walk discovery, which is very resilient against attacks, but also very inefficient if the number of nodes supporting the desired capability is small.
-We refer to this is as the needle-in-the-haystack problem.
+We refer to this as the needle-in-the-haystack problem.
 
 ### Random Walk Performance Estimation
 
-This subsection provides a rough estimation on the overhead introduced by random walk discovery.
+This subsection provides a rough estimation of the overhead introduced by random walk discovery.
 
 Given the following parameters:
 
@@ -244,7 +248,7 @@ This pruning is part of the gossipsub peer management, blurring the boundaries o
 
 We will investigate anonymity implications of this protocol and might disable it in favour of more anonymity-preserving protocols.
 Sending a list of peers discloses information about the sending node.
-We also consider restricting the peers a node returns to a set of peers the node does not actively use.
+We consider restricting these peer lists to cached peers that are currently not used in the active gossipsub mesh.
 
 
 ### Capability Negotiation
