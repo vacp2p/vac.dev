@@ -27,6 +27,7 @@ const content = () => {
   const args = ['exec', jekyll, 'build']
   if (isDevelopmentBuild) {
     args.push('--incremental')
+    args.push('--future')
   }
 
   return spawn('bundle', args, { stdio: 'inherit' })
