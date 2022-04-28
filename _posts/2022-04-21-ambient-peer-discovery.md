@@ -58,9 +58,10 @@ Besides these new protocols, we are working on integrating capability discovery 
 
 The simplest method of learning about peers in a P2P network is via static node lists.
 These can be given to nodes as start-up parameters or listed in a config-file.
-They can also be provided in a script-parseable format, e.g. the [status fleets](https://fleets.status.im/) in JSON.
+They can also be provided in a script-parseable format, e.g. in JSON.
 While this method of providing bootstrap nodes is very easy to implement, it requires static peers, which introduce centralized elements.
-Also, updating static peer information introduces administrative overhead.
+Also, updating static peer information introduces significant administrative overhead:
+code and/or config files have to be updated and released.
 Typically, static node lists only hold a small number of bootstrap nodes, which may lead to high load on these nodes.
 
 
@@ -72,8 +73,11 @@ provides a more dynamic way of discovering bootstrap nodes.
 It is very efficient, can easily be handled by resource restricted devices and provides very good availability.
 In addition to a naive DNS approach, Ethereum's DNS-based discovery introduces efficient authentication leveraging [Merkle trees](https://en.wikipedia.org/wiki/Merkle_tree).
 
+A further advantage over static node lists is the separation of code/release management and bootstrap node management.
 However, changing and updating the list of bootstrap nodes still requires administrative privileges because DNS records have to be added or updated.
-Also, this method of discovery still requires centralized elements.
+
+While this method of discovery still requires centralized elements,
+node list management can be delegated to various DNS zones managed by other entities mitigating centralization.
 
 
 ## Discovery V5
@@ -107,7 +111,6 @@ Distributed Hash Tables are a class of structured P2P overlay networks.
 A DHT can be seen as a distributed node set of which each node is responsible for a part of the hash space.
 In contrast to unstructured P2P networks, e.g. the mesh network maintained by gossipsub,
 DHTs have a global view over the node set and the hash space (assuming the participating nodes behave well).
-
 
 DHTs are susceptible to various kinds of attacks, especially [Sybil attacks](https://en.wikipedia.org/wiki/Sybil_attack),
 [eclipse attacks](https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/heilman), and DoS attacks in general.
