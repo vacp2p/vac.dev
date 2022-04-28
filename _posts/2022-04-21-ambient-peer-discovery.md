@@ -9,7 +9,7 @@ permalink: /wakuv2-apd-2022-21
 categories: research
 summary: Introducing and discussing ambient peer discovery methods currently used by Waku v2, as well as future plans in this area.
 image: /assets/img/waku_v2_discv5_random_walk_estimation.svg
-discuss:
+discuss: https://forum.vac.dev/t/discussion-waku-v2-ambient-peer-discovery/133
 ---
 
 [Waku v2](https://rfc.vac.dev/spec/10/) comprises a set of modular protocols for secure, privacy preserving communication.
