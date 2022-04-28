@@ -223,6 +223,45 @@ but asking for Waku v2 nodes supporting specific Waku v2 protocols like filter o
 For the store protocol we envision sub-capabilities reflecting message topics and time frames of messages.
 We will also investigate related security implications.
 
+### Attacks on DHTs
+
+In this post, we only briefly describe common attacks on DHTs.
+These attacks are mainly used for denial of service (DoS),
+but can also used as parts of more sophisticated attacks, e.g. deanonymization attacks.
+A future post on this research log will cover security aspects of ambient peer discovery with a focus on privacy and anonymity.
+
+#### Sybil Attack
+
+The power of an attacker in a DHT is proportional to the number of controlled nodes.
+Controlling nodes comes at a high resource cost and/or requires controlling a botnet via a preliminary attack.
+
+In a Sybil attack, an attacker generates lots of virtual node identities.
+This allows the attacker to control a large portion of the ID space in a DHT at a relatively low cost.
+Sybil attacks are especially powerful when the attacker can freely choose the IDs of generated nodes,
+because this allows positioning at chosen points in the DHT.
+
+Because Sybil attacks amplify the power of many attacks against DHTs,
+making Sybil attacks as difficult as possible is the basis for resilient DHT operation.
+The typical abstract mitigation approach is binding node identities to physical network interfaces.
+To some extend, this can be achieved by introducing IP address based limits.
+Further, generating node IDs can be bound by proof of work (PoW),
+which, however, comes with a set of shortcomings, e.g. relatively high costs on resource restricted devices.
+[The discv5 doc](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5-rationale.md#sybil-and-eclipse-attacks)
+describes both Sybil and eclipse attacks, as well as concrete mitigation techniques employed by discv5.
+
+
+#### Eclipse Attack
+
+In an eclipse attack, nodes controlled by the attacker poison the routing tables of other nodes in way that parts of the DHT become eclipsed, i.e. invisible.
+When a controlled node is asked for the next step in a path,
+it provides another controlled node as the next step,
+effectively navigating the querying node around or away from certain areas of the DHT.
+
+The eclipse attack becomes very powerful in combination with a successful Sybil attack;
+especially when the attacker can freely choose the position of the Sybil nodes.
+
+
+The aforementioned new topic discovery of discv5 provides a good balance between protection against eclipse attacks and query performance.
 
 ## Peer Exchange Protocol
 
@@ -325,6 +364,7 @@ To mitigate information leakage by transmitting peer lists, we plan to only repl
 - [Waku v2 ENR](https://rfc.vac.dev/spec/31/)
 - [Discv5 topic discovery](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5-theory.md#ad-placement-and-topic-radius)
 - [Discv5 paper](https://github.com/harnen/service-discovery-paper)
+- [Discv5 vs Sybil and eclipse attacks](https://github.com/ethereum/devp2p/blob/6b0abc3d956a626c28dce1307ee9f546db17b6bd/discv5/discv5-rationale.md#sybil-and-eclipse-attacks)
 - [peer exchange idea](https://github.com/libp2p/specs/issues/222)
 - [Rendezvous protocol](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/rendezvous/README.md)
 - [Waku v2 discv5](https://rfc.vac.dev/spec/33/)
