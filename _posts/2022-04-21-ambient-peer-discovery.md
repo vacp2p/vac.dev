@@ -99,7 +99,7 @@ Even if discv5 discovery should not work in advent of a DoS attack, Waku v2 can 
 
 Discovery methods that use separate P2P networks still depend on bootstrapping,
 which Waku v2 does via parameters on start-up or via DNS-based discovery.
-This might raise the question of why such discovery methods are beneficial?
+This might raise the question of why such discovery methods are beneficial.
 The answer lies in the aforementioned global view of DHTs. Without discv5 and similar methods, the bootstrap nodes are used as part of the gossipsub mesh.
 This might put heavy load on these nodes and further, might open pathways to inference attacks.
 Discv5, on the other hand, uses the bootstrap nodes merely as an entry to the discovery network and can provide random sets of nodes (sampled from a global view)
@@ -160,7 +160,7 @@ $$P(W^q) = 1 - (1-p/100)^{kq} \iff  q = log_{(1-p/100)^k}(1-P(W^q))$$
 Figure 1 shows a log-log plot for $P(W^q) = 90\%$.
 
 <p align="center">
-    <img src="../assets/img/waku_v2_discv5_random_walk_estimation.svg"  width="50%" />
+    <img src="../assets/img/waku_v2_discv5_random_walk_estimation.svg"  width="75%" />
     <br />
     Figure 1: log-log plot showing the number of queries necessary to retrieve a Waku v2 node with a probability of 90% in relation to the Waku v2 node concentration in the network.
 </p>
@@ -230,7 +230,7 @@ These attacks are mainly used for denial of service (DoS),
 but can also used as parts of more sophisticated attacks, e.g. deanonymization attacks.
 A future post on this research log will cover security aspects of ambient peer discovery with a focus on privacy and anonymity.
 
-#### Sybil Attack
+*Sybil Attack*
 
 The power of an attacker in a DHT is proportional to the number of controlled nodes.
 Controlling nodes comes at a high resource cost and/or requires controlling a botnet via a preliminary attack.
@@ -250,9 +250,9 @@ which, however, comes with a set of shortcomings, e.g. relatively high costs on 
 describes both Sybil and eclipse attacks, as well as concrete mitigation techniques employed by discv5.
 
 
-#### Eclipse Attack
+*Eclipse Attack*
 
-In an eclipse attack, nodes controlled by the attacker poison the routing tables of other nodes in way that parts of the DHT become eclipsed, i.e. invisible.
+In an eclipse attack, nodes controlled by the attacker poison the routing tables of other nodes in a way that parts of the DHT become eclipsed, i.e. invisible.
 When a controlled node is asked for the next step in a path,
 it provides another controlled node as the next step,
 effectively navigating the querying node around or away from certain areas of the DHT.
