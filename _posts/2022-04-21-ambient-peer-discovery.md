@@ -112,8 +112,8 @@ A DHT can be seen as a distributed node set of which each node is responsible fo
 In contrast to unstructured P2P networks, e.g. the mesh network maintained by gossipsub,
 DHTs have a global view over the node set and the hash space (assuming the participating nodes behave well).
 
-DHTs are susceptible to various kinds of attacks, especially [Sybil attacks](https://en.wikipedia.org/wiki/Sybil_attack),
-[eclipse attacks](https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/heilman), and DoS attacks in general.
+DHTs are susceptible to various kinds of attacks, especially [Sybil attacks](https://en.wikipedia.org/wiki/Sybil_attack)
+and [eclipse attacks](https://www.usenix.org/conference/usenixsecurity15/technical-sessions/presentation/heilman).
 While security aspects have been addressed in various research papers, general practical solutions are not available.
 However, discv5 introduced various practical mitigation techniques.
 
@@ -127,7 +127,7 @@ If Waku v2 would do the same, only a small subset of the retrieved nodes would s
 
 A first naive solution for Waku v2 discv5 discovery is
 
-* query for a random node set
+* retrieve a random node set, which is achieved by querying for a set of randomly chosen node IDs
 * filter the returned nodes on the query path based on Waku v2 capability via the [Waku v2 ENR](https://rfc.vac.dev/spec/31/)
 * repeat until enough Waku v2 capable nodes are found
 
@@ -256,6 +256,8 @@ In an eclipse attack, nodes controlled by the attacker poison the routing tables
 When a controlled node is asked for the next step in a path,
 it provides another controlled node as the next step,
 effectively navigating the querying node around or away from certain areas of the DHT.
+While several mitigation techniques have been researched, there is no definitive protection against eclipse attacks available as of yet.
+One mitigation technique is increasing $\alpha$, the number of parallel queries, and following each concurrent path independently for the lookup.
 
 The eclipse attack becomes very powerful in combination with a successful Sybil attack;
 especially when the attacker can freely choose the position of the Sybil nodes.
@@ -267,7 +269,7 @@ The aforementioned new topic discovery of discv5 provides a good balance between
 
 While discv5 based ambient peer discovery has many desirable properties, resource restricted nodes and nodes behind restrictive NAT setups cannot run discv5 satisfactory.
 With these nodes in mind, we started working on a simple *peer exchange protocol* based on ideas proposed [here](https://github.com/libp2p/specs/issues/222).
-The peer exchange protocol will allow nodes to ask peers for further peers.
+The peer exchange protocol will allow nodes to ask peers for additional peers.
 Similar to discv5, the peer exchange protocol will also support capability discovery.
 
 The new peer exchange protocol can be seen as a simple replacement for the [Rendezvous protocol](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/rendezvous/README.md), which Waku v2 does not support.
@@ -309,7 +311,7 @@ We will investigate security implications, especially when sending full capabili
 
 ## NAT traversal
 
-For [NAT traversal](https://docs.libp2p.io/concepts/nat/), Waku v2 currently supports the port mapping protocols [UPNP](https://en.wikipedia.org/wiki/Universal_Plug_and_Play) and [NAT-PMP](https://datatracker.ietf.org/doc/html/rfc6886) / [PCP](https://datatracker.ietf.org/doc/html/rfc6887).
+For [NAT traversal](https://docs.libp2p.io/concepts/nat/), Waku v2 currently supports the port mapping protocols [UPnP](https://en.wikipedia.org/wiki/Universal_Plug_and_Play) and [NAT-PMP](https://datatracker.ietf.org/doc/html/rfc6886) / [PCP](https://datatracker.ietf.org/doc/html/rfc6887).
 
 In the future, we plan to add support for parts of [ICE](https://datatracker.ietf.org/doc/html/rfc8445), e.g. [STUN](https://datatracker.ietf.org/doc/html/rfc7350).
 We do not plan to support [TURN](https://www.rfc-editor.org/rfc/rfc5928) because TURN relays would introduce a centralized element.
@@ -370,7 +372,7 @@ To mitigate information leakage by transmitting peer lists, we plan to only repl
 - [Waku v2 discv5](https://rfc.vac.dev/spec/33/)
 - [Gossipsub peer exchange](https://github.com/libp2p/specs/blob/10712c55ab309086a52eec7d25f294df4fa96528/pubsub/gossipsub/gossipsub-v1.1.md#prune-backoff-and-peer-exchange)
 - [NAT traversal](https://docs.libp2p.io/concepts/nat/)
-- [UPNP](https://en.wikipedia.org/wiki/Universal_Plug_and_Play)
+- [UPnP](https://en.wikipedia.org/wiki/Universal_Plug_and_Play)
 - [NAT-PMP](https://datatracker.ietf.org/doc/html/rfc6886)
 - [PCP](https://datatracker.ietf.org/doc/html/rfc6887).
 - [Discv5 topic efficiency issue](https://github.com/ethereum/devp2p/issues/199)
