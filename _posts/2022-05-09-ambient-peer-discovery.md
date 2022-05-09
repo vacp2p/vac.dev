@@ -2,10 +2,10 @@
 layout: post
 name:  "Waku v2 Ambient Peer Discovery"
 title:  "Waku v2 Ambient Peer Discovery"
-date: 2022-04-21 10:00:00 +0200
-author: Daniel
+date: 2022-05-09 10:00:00 +0200
+author: kaiserd
 published: true
-permalink: /wakuv2-apd-2022-21
+permalink: /wakuv2-apd
 categories: research
 summary: Introducing and discussing ambient peer discovery methods currently used by Waku v2, as well as future plans in this area.
 image: /assets/img/waku_v2_discv5_random_walk_estimation.svg
