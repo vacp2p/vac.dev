@@ -1,0 +1,72 @@
+{
+  "theme":{
+    "palettes":{
+      "dark":{
+        "background":"#FFFFFF",
+        "text":"#000000",
+        "accentActive":"#7187ff",
+        "accentMute":"#dedede"
+      },
+      "light":{
+        "background":"#000000",
+        "text":"#FFFFFF",
+        "accentActive":"#7187ff",
+        "accentMute":"#30363d"
+      }
+    },
+    "fontFamily":"sans-serif",
+    "codeTheme":"prism/duotone-dark"
+  },
+  "template": "academia",
+  "static_assets_folder": "static-assets",
+  "external_sources": [],
+  "navigation":{
+    "home":"vac.md",
+    "fileOrdersInSidenav": [
+      "vac.md",
+      "research-areas.md",
+      "projects.md",
+      "tool-and-workflows.md"
+    ],
+    "folderOrdersInSidenav": [
+      "research",
+      "outreach",
+      "about"
+    ],
+    "external_links": [
+      {
+        "text": "Research & experimentation",
+        "url": "https://github.com/vacp2p/research/",
+        "category": "Resources"
+      },
+      {
+        "text": "Vac RFCs/Specs",
+        "url": "https://rfc.vac.dev/",
+        "category": "Resources"
+      },
+      {
+        "text": "Vac RFCs/Specs",
+        "url": "https://forum.vac.dev/",
+        "category": "Resources"
+      },
+      {
+        "text": "Waku v2 training session",
+        "url": "https://drive.google.com/file/d/19P3oDNXGBDClfcS6Sgp0t9LYr3UbIFGt/view",
+        "category": "Resources"
+      }
+    ]
+  },
+  "ds_id": "codex",
+  "seo": {
+    "title": "Codex",
+    "description": "Codex is a Decentralized Durability Engine",
+    "image": "logos-site-preview-image.png",
+    "url": "https://codex-storage-v0.vercel.app",
+    "social_media": [
+      {
+        "provider": "twitter",
+        "handler": "vacp2p"
+      }
+    ]
+  }
+}
