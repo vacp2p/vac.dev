@@ -1,0 +1,15 @@
+---
+---
+
+<!DOCTYPE html>
+<html class="h-full" lang="en-US">
+  {% include head.html %}
+  <body class="h-full flex flex-col font-body">
+    <div class="flex-grow container max-w-screen-xl mx-auto px-5 md:px-12 lg:pt-6">
+      {% include header.html %}
+
+      <main class="bg-white text-black flex flex-col">{{ content }}</main>
+    </div>
+    {% include footer.html %} {% include scripts.html %}
+  </body>
+</html>

@@ -1,0 +1,21 @@
+---
+- link: https://jobs.status.im/?search=Vac
+  src: /assets/img/logo.svg
+  title: "Join the team"
+  text: "We are a remote team of researchers dedicated to building a fair
+    internet."
+  linkText: "View open roles"
+
+- link: https://discord.gg/PQFdubGt6d
+  src: /assets/img/discord.svg
+  title: "Join the convo"
+  text: "Ask questions or speak with us about our work as we research new
+    means of communication."
+  linkText: "Join our Discord"
+
+- link: https://github.com/vacp2p
+  src: /assets/img/github.svg
+  title: "Contribute on Github"
+  text: "Our work is open source and free for anyone to contribute to, use,
+    and modify for their needs."
+  linkText: "Contribute"

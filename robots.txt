@@ -1,0 +1,4 @@
+Sitemap: https://vac.dev/sitemap.xml
+
+User-agent: *
+Disallow:

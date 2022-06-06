@@ -1,0 +1,27 @@
+---
+- title: "Researching All Layers"
+  text: "Concerned with all layers in the stack including underlying
+    transports, p2p overlays and routing, initial trust establishment, and
+    semantics for things like group chat."
+
+- title: "Peer-to-Peer"
+  text: "The protocols we work on are pure peer-to-peer, and aim to minimize
+    centralization. This too is in opposition to many initiatives in the
+    secure messaging space."
+
+- title: "Security, Privacy, Censorship Resistance"
+  text: "Assumes the basics such as end-to-end encryption, forward secrecy,
+    avoiding MITM-attacks. Vac also places a premium on privacy and
+    censorship resistance from port blocking, traffic analysis, and
+    similar."
+
+- title: "Modular System"
+  text: "Provide options at each layer in the stack, instead of having a
+    tightly coupled set of protocols. Allowing developers to choose what
+    they use and ensure they know each choice comes with different
+    trade-offs."
+
+- title: "Generalized Messaging"
+  text: " This includes both human to human communication, as well as machine to
+    machine communication. Texting, data transfer, financial transactions,
+    state channels and more."
