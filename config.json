@@ -5,7 +5,7 @@
         "background":"#FFFFFF",
         "text":"#000000",
         "accentActive":"#7187ff",
-        "accentMute":"#dedede"
+        "accentMute":"#F7F7F7"
       },
       "light":{
         "background":"#000000",
@@ -56,12 +56,12 @@
       }
     ]
   },
-  "ds_id": "codex",
+  "ds_id": "vac",
   "seo": {
-    "title": "Codex",
-    "description": "Codex is a Decentralized Durability Engine",
-    "image": "logos-site-preview-image.png",
-    "url": "https://codex-storage-v0.vercel.app",
+    "title": "Vac",
+    "description": "Vac is an R&D org creating modular p2p protocols for private, secure, censorship resistant communication.",
+    "image": "vac-site-preview-image.png",
+    "url": "https://staging.vac.dev",
     "social_media": [
       {
         "provider": "twitter",
