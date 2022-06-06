@@ -1,0 +1,34 @@
+{
+  "name": "vac.dev",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "main": "gulpfile.babel.js",
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "autoprefixer": "10.3.1",
+    "babel-preset-env": "1.7.0",
+    "babel-register": "^6.26.0",
+    "browser-sync": "2.27.5",
+    "cross-env": "7.0.3",
+    "cross-spawn": "7.0.3",
+    "cssnano": "5.0.7",
+    "gh-pages": "^3.2.3",
+    "gulp": "4.0.2",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-minify": "^3.1.0",
+    "gulp-postcss": "9.0.0",
+    "postcss": "8.3.6",
+    "postcss-import": "14.0.2",
+    "tailwindcss": "^2.2.7"
+  },
+  "scripts": {
+    "build:production": "cross-env NODE_ENV=production gulp build",
+    "build:dev": "cross-env NODE_ENV=development gulp build",
+    "build": "yarn run build:production",
+    "devel": "cross-env NODE_ENV=development gulp devel",
+    "dev": "yarn run devel",
+    "start": "yarn run devel",
+    "clean": "git clean -fdx",
+    "deploy": "node scripts/deploy.js"
+  }
+}
