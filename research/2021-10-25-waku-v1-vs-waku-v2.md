@@ -8,7 +8,7 @@ published: true
 permalink: /waku-v1-v2-bandwidth-comparison
 categories: research
 summary: A local comparison of bandwidth profiles showing significantly improved scalability in Waku v2 over Waku v1.
-image: /assets/img/waku1-vs-waku2/waku1-vs-waku2-overall-network-size.png
+image: /img/waku1-vs-waku2/waku1-vs-waku2-overall-network-size.png
 discuss: https://forum.vac.dev/t/discussion-waku-v1-vs-waku-v2-bandwidth-comparison/110
 ---
 

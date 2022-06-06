@@ -8,7 +8,7 @@ published: true
 permalink: /wakuv2-apd
 categories: research
 summary: Introducing and discussing ambient peer discovery methods currently used by Waku v2, as well as future plans in this area.
-image: /assets/img/waku_v2_discv5_random_walk_estimation.svg
+image: /img/waku_v2_discv5_random_walk_estimation.svg
 discuss: https://forum.vac.dev/t/discussion-waku-v2-ambient-peer-discovery/133
 ---
 
@@ -178,11 +178,7 @@ $$P(W^q) = 1 - (1-p/100)^{kq} \iff  q = log_{(1-p/100)^k}(1-P(W^q))$$
 
 Figure 1 shows a log-log plot for $P(W^q) = 90\%$.
 
-<p align="center">
-    <img src="../assets/img/waku_v2_discv5_random_walk_estimation.svg"  width="75%" />
-    <br />
-    Figure 1: log-log plot showing the number of queries necessary to retrieve a Waku v2 node with a probability of 90% in relation to the Waku v2 node concentration in the network.
-</p>
+![Figure 1: log-log plot showing the number of queries necessary to retrieve a Waku v2 node with a probability of 90% in relation to the Waku v2 node concentration in the network.](/img/waku_v2_discv5_random_walk_estimation.svg")
 
 Assuming $p=0.1$, we would need
 

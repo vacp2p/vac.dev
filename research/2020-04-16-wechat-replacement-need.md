@@ -8,7 +8,7 @@ published: true
 permalink: /wechat-replacement-need
 categories: research
 summary: What would a self-sovereign, private, censorship-resistant and open alternative to WeChat look like?
-image: /assets/img/tianstatue.jpg
+image: /img/tianstatue.jpg
 discuss: https://forum.vac.dev/t/discussion-what-would-a-wechat-replacement-need/42
 ---
 

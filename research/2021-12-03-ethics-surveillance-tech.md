@@ -8,7 +8,7 @@ published: true
 permalink: /ethics-surveillance-tech
 categories: research
 summary: A look at typical ethical shortfalls in the global surveillance tech industry.
-image: /assets/img/vac.png
+image: /img/vac.png
 discuss:
 ---
 

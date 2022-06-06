@@ -8,7 +8,7 @@ published: true
 permalink: /feasibility-semaphore-rate-limiting-zksnarks
 categories: research
 summary: A research log. Zero knowledge signaling as a rate limiting mechanism to prevent spam in p2p networks.
-image: /assets/img/peacock-signaling.jpg
+image: /img/peacock-signaling.jpg
 discuss: https://forum.vac.dev/t/discussion-feasibility-study-semaphore-rate-limiting-through-zksnarks/21
 ---
 

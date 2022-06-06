@@ -8,7 +8,7 @@ published: true
 permalink: /waku-v2-ethereum-coscup
 categories: research
 summary: Learn more about Waku v2, its origins, goals, protocols, implementation and ongoing research. Understand how it is used and how it can be useful for messaging in Ethereum.
-image: /assets/img/coscup-waku/talk.png
+image: /img/coscup-waku/talk.png
 discuss: https://forum.vac.dev/t/discussion-talk-at-coscup-vac-waku-v2-and-ethereum-messaging/95
 ---
 

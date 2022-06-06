@@ -8,7 +8,7 @@ published: true
 permalink: /waku-v2-plan
 categories: research
 summary: Read about our plans for Waku v2, moving to libp2p, better routing, adaptive nodes and accounting!
-image: /assets/img/status_scaling_model_fig4.png
+image: /img/status_scaling_model_fig4.png
 discuss: https://forum.vac.dev/t/waku-version-2-pitch/52
 ---
 

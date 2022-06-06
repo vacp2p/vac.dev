@@ -8,7 +8,7 @@ published: true
 permalink: /introducing-nwaku
 categories: research
 summary: Introducing nwaku, a Nim-based Waku v2 client, including a summary of recent developments and preview of current and future focus areas.
-image: /assets/img/vac.png
+image: /img/vac.png
 discuss: https://forum.vac.dev/
 ---
 

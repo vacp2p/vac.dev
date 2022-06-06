@@ -6,7 +6,7 @@ published: true
 permalink: /p2p-data-sync-for-mobile
 categories: research
 summary: A research log. Reliable and decentralized, pick two.
-image: /assets/img/mvds_interactive.png
+image: /img/mvds_interactive.png
 ---
 
 Together with decanus, I've been working on the problem of data sync lately.
@@ -64,10 +64,10 @@ The spec is fairly minimal. You have nodes that exchange records over some secur
 There are two different modes of syncing, interactive and batch mode. See sequence diagrams below.
 
 Interactive mode:
-<img src="{{site.baseurl}}/assets/img/mvds_interactive.png">
+![Interactive mode](/img/mvds_interactive.png)
 
 Batch mode:
-<img src="{{site.baseurl}}/assets/img/mvds_batch.png">
+![Batch mode](/img/mvds_batch.png)
 
 Which mode should you choose? It's a tradeoff of latency and bandwidth. If you want to minimize latency, batch mode is better. If you care about preserving bandwidth interactive mode is better. The choice is up to each node.
 

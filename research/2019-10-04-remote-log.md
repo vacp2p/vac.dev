@@ -8,7 +8,7 @@ published: true
 permalink: /remote-log
 categories: research
 summary: A research log. Asynchronous P2P messaging? Remote logs to the rescue!
-image: /assets/img/remote-log.png
+image: /img/remote-log.png
 ---
 
 A big problem when doing end-to-end data sync between mobile nodes is that most devices are offline most of the time. With a naive approach, you quickly run into issues of 'ping-pong' behavior, where messages have to be constantly retransmitted. We saw some basic calculations of what this bandwidth multiplier looks like in a [previous post](https://vac.dev/p2p-data-sync-for-mobile).
@@ -56,13 +56,7 @@ The *remote log* is the data format of what is stored in the name system.
 
 ### Flow
 
-<!-- diagram -->
-
-<p align="center">
-    <img src="{{site.baseurl}}/assets/img/remote-log.png">
-    <br />
-    Figure 1: Remote log data synchronization.
-</p>
+![Figure 1: Remote log data synchronization.](/img/remote-log.png)
 
 ### Data format
 

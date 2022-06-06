@@ -8,7 +8,7 @@ published: true
 permalink: /waku-v2-update
 categories: research
 summary: A research log. Read on to find out what is going on with Waku v2, a messaging protocol. What has been happening? What is coming up next?
-image: /assets/img/vac.png
+image: /img/vac.png
 discuss: https://forum.vac.dev/t/discussion-waku-v2-update/56
 ---
 
