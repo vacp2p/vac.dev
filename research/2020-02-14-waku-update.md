@@ -72,7 +72,7 @@ For more details on these bottlenecks, see [Scalability estimate: How many users
 
 The ultimate test is real-world usage. Until then, we have a simulation thanks to Kim De Mey from the Nimbus team!
 
-![](assets/img/waku_simulation.jpeg)
+![](/img/waku_simulation.jpeg)
 
 We have two network topologies, Star and full mesh. Both networks have 6 full nodes, one traditional light node with bloom filter, and one Waku light node.
 

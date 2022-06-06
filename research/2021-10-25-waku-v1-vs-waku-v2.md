@@ -99,7 +99,7 @@ essentially flooding every message on every connection in a similar fashion to W
 If our expectations are confirmed, it helps validate our methodology,
 showing that it gives more or less equivalent results between Waku v1 and Waku v2 networks.
 
-![](/assets/img/waku1-vs-waku2/waku1-vs-waku2-10-nodes.png)
+![](//img/waku1-vs-waku2/waku1-vs-waku2-10-nodes.png)
 
 Sure enough, the figure shows that in this small-scale setup,
 Waku v1 actually has a lower per-peer bandwidth usage than Waku v2.
@@ -114,7 +114,7 @@ At this point, the Waku v2 nodes will start pruning some connections to limit th
 while the Waku v1 nodes will continue flooding messages to all connected peers.
 We therefore expect to see a somewhat improved bandwidth usage in Waku v2 over Waku v1.
 
-![](/assets/img/waku1-vs-waku2/waku1-vs-waku2-30-nodes.png)
+![](//img/waku1-vs-waku2/waku1-vs-waku2-30-nodes.png)
 
 Bandwidth usage in Waku v2 has increased only slightly from the smaller network of 10 nodes (hovering between 2000 and 3000 kbps).
 This is because there are only a few more full-message peerings than before.
@@ -127,7 +127,7 @@ For an even larger network of 50 highly connected nodes,
 the divergence between Waku v1 and Waku v2 is even larger.
 The following figure shows comparative average bandwidth usage for a throughput of 50 messages per second.
 
-![](/assets/img/waku1-vs-waku2/waku1-vs-waku2-50-nodes.png)
+![](//img/waku1-vs-waku2/waku1-vs-waku2-50-nodes.png)
 
 Average bandwidth usage (for the same message rate) has remained roughly the same for Waku v2 as it was for 30 nodes,
 indicating that the number of full-message peerings per node has not increased.
@@ -140,7 +140,7 @@ Due to local resource constraints, the effective throughput for Waku v1 falls to
 so the v1 results below have been normalized and are therefore approximate.
 The local Waku v2 simulation maintains the message throughput rate without any problems.
 
-![](/assets/img/waku1-vs-waku2/waku1-vs-waku2-85-nodes.png)
+![](//img/waku1-vs-waku2/waku1-vs-waku2-85-nodes.png)
 
 ### Iteration 5: 150 nodes
 
@@ -149,7 +149,7 @@ Due to local resource constraints, we run this simulation at a lower rate -
 35 messages per second -
 and for a shorter amount of time. 
 
-![](/assets/img/waku1-vs-waku2/waku1-vs-waku2-150-nodes.png)
+![](//img/waku1-vs-waku2/waku1-vs-waku2-150-nodes.png)
 
 Notice how the Waku v1 bandwidth usage is now more than 10 times worse than that of Waku v2.
 This is to be expected, as each Waku v1 node will try to flood each new message to 149 other peers,
@@ -161,7 +161,7 @@ Let's summarize average bandwidth growth against network growth for a constant m
 Since we are particularly interested in how Waku v1 compares to Waku v2 in terms of bandwidth usage,
 the results are normalised to the Waku v2 average bandwidth usage for each network size.
 
-![](/assets/img/waku1-vs-waku2/waku1-vs-waku2-overall-network-size.png)
+![](//img/waku1-vs-waku2/waku1-vs-waku2-overall-network-size.png)
 
 Extrapolation is a dangerous game,
 but it's safe to deduce that the divergence will only grow for even larger network topologies.
@@ -177,7 +177,7 @@ In reality, however, active users (and therefore message rates) are likely to gr
 This will have an effect on bandwidth for both Waku v1 and Waku v2, though not in equal measure.
 Consider the impact of an increasing rate of messages in a network of constant size:
 
-![](/assets/img/waku1-vs-waku2/waku1-vs-waku2-overall-message-rate.png)
+![](//img/waku1-vs-waku2/waku1-vs-waku2-overall-message-rate.png)
 
 The _rate_ of increase in bandwidth for Waku v2 is slower than that for Waku v1 for a corresponding increase in message propagation rate.
 In fact, for a network of 30 densely-connected nodes,

@@ -115,7 +115,7 @@ different contexts.
 In order to test the protocol we have setup a testnet across all implementations
 called Huilong. Yes, that's the Taipei subway station!
 
-![](assets/img/coscup-waku/huilong.jpg)
+![](/img/coscup-waku/huilong.jpg)
 
 Among us core devs we have disabled the main #waku Discord channel used for
 development, and people run their own node connected to this toy chat application.
@@ -201,7 +201,7 @@ WalletConnect is an open protocol for connecting dapps to wallets with a QR
 code. Version 2 is using Waku v2 as a communication channel to do so in a
 decentralized and private fashion.
 
-![](assets/img/coscup-waku/walletconnect.png)
+![](/img/coscup-waku/walletconnect.png)
 
 See for more: https://docs.walletconnect.org/v/2.0/tech-spec
 

@@ -231,7 +231,7 @@ for more detail on the model and its assumptions.
 3. Waku mode (case 8) is an additional capability that doesn’t require other nodes to change, for nodes that put a premium on performance.
 4. The next bottleneck after this is the partitioned topics (app/network specific), which either needs to gracefully (and potentially quickly) grow, or an alternative way of consuming those messages needs to be deviced.
 
-![](assets/img/whisper_scalability.png)
+![](/img/whisper_scalability.png)
 
 The results are summarized in the graph above. Notice the log-log scale. The
 colored backgrounds correspond to the following bandwidth usage:

@@ -35,11 +35,11 @@ the primary bottleneck for full nodes, and the bottleneck is still bandwidth. To
 
 Figure 1-5:
 
-![](assets/img/status_scaling_model_fig1.png)
-![](assets/img/status_scaling_model_fig2.png)
-![](assets/img/status_scaling_model_fig3.png)
-![](assets/img/status_scaling_model_fig4.png)
-![](assets/img/status_scaling_model_fig5.png)
+![](/img/status_scaling_model_fig1.png)
+![](/img/status_scaling_model_fig2.png)
+![](/img/status_scaling_model_fig3.png)
+![](/img/status_scaling_model_fig4.png)
+![](/img/status_scaling_model_fig5.png)
 
 See <https://colab.research.google.com/drive/1Fz-oxRxxAFPpM1Cowpnb0nT52V1-yeRu#scrollTo=Yc3417FUJJ_0> for the full report.
 
@@ -80,7 +80,7 @@ Let's first look at the baseline, and then go into some of the tracks and their 
 Here's where we are at now. In reality, the amplification factor are likely even worse than this (15 in the graph below), up to 20-30. Especially with an open network, where we can't easily control connectivity and availability of nodes. Left unchecked, with a full mesh, it could even go as high x100, though this is likely excessive and can be dialed down. See scaling model for more details.
 
 
-![](assets/img/waku_v1_routing_small.png)
+![](/img/waku_v1_routing_small.png)
 
 ## Track 1 - Move to libp2p
 
@@ -98,7 +98,7 @@ One difference that is worth noting is that the app topics would **not** be the 
 
 Why can't we use Waku topics for routing directly? PubSub over libp2p isn't built for rare and ephemeral topics, and nodes have to explicitly subscribe to a topic. See topic sharding section for more on this.
 
-![](assets/img/waku_v2_routing_flood_small.png)
+![](/img/waku_v2_routing_flood_small.png)
 
 
 Moving to FloodSub over libp2p would also be an opportunity to clean up and simplify some components that are no longer needed in the Waku v1 protocol, see point below.
@@ -141,12 +141,12 @@ This is a subprotocol of FloodSub in the libp2p world. Moving to GossipSub would
 
 Explaining how GossipSub works is out of scope of this document. It is implemented in nim-libp2p and used by Nimbus as part of Eth2. You can read the specs here in more detail if you are interested: <https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md> and <https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md>
 
-![](assets/img/waku_v2_routing_gossip_small.png)
+![](/img/waku_v2_routing_gossip_small.png)
 
-![](assets/img/status_scaling_model_fig8.png)
-![](assets/img/status_scaling_model_fig9.png)
-![](assets/img/status_scaling_model_fig10.png)
-![](assets/img/status_scaling_model_fig11.png)
+![](/img/status_scaling_model_fig8.png)
+![](/img/status_scaling_model_fig9.png)
+![](/img/status_scaling_model_fig10.png)
+![](/img/status_scaling_model_fig11.png)
 
 While we technically could implement this over existing Waku, we'd have to re-implement it, and we'd lose out on all the other benefits libp2p would provide, as well as the ecosystem of people and projects working on improving the scalability and security of these protocols.
 
@@ -154,10 +154,10 @@ While we technically could implement this over existing Waku, we'd have to re-im
 
 This one is slightly more speculative in terms of its ultimate impact. The basic idea is to split the application topic into N shards, say 10, and then each full node can choose which shards to listen to. This can reduce amplification factors by another factor of 10.
 
-![](assets/img/waku_v2_routing_sharding_small.png)
+![](/img/waku_v2_routing_sharding_small.png)
 
-![](assets/img/status_scaling_model_fig12.png)
-![](assets/img/status_scaling_model_fig13.png)
+![](/img/status_scaling_model_fig12.png)
+![](/img/status_scaling_model_fig13.png)
 
 Note that this means a light node that listens to several topics would have to be connected to more full nodes to get connectivity. For a more exotic version of this, see <https://forum.vac.dev/t/rfc-topic-propagation-extension-to-libp2p-pubsub/47>
 
