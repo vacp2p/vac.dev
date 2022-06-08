@@ -41,11 +41,6 @@
       },
       {
         "text": "Vac RFCs/Specs",
-        "url": "https://rfc.vac.dev/",
-        "category": "Resources"
-      },
-      {
-        "text": "Vac RFCs/Specs",
         "url": "https://forum.vac.dev/",
         "category": "Resources"
       },
@@ -60,6 +55,7 @@
   "seo": {
     "title": "Vac",
     "description": "Vac is an R&D org creating modular p2p protocols for private, secure, censorship resistant communication.",
+    "cc": "Vac researches peer-to-peer, private, censorship resistant communication",
     "image": "vac-site-preview-image.png",
     "url": "https://staging.vac.dev",
     "social_media": [
