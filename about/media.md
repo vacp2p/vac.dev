@@ -1,3 +1,5 @@
+[Waku: Enabling a New Dimension for dApps](https://www.youtube.com/watch?v=GXU5Fd6gMVw&t=21692s)
+
 [Vac, Waku v2 and Ethereum Messaging](https://www.youtube.com/watch?v=s0ATpQ4_XFc&ab_channel=OsakaThorp)
 
 [ZKPodcast: ZKPs for Spam Protection & Decentralized Messaging with Status](https://www.youtube.com/watch?v=S782Ppzvkd0&ab_channel=ZeroKnowledge)

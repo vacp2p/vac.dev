@@ -25,12 +25,10 @@
     "fileOrdersInSidenav": [
       "vac.md",
       "research-areas.md",
-      "projects.md",
-      "tool-and-workflows.md"
+      "projects.md"
     ],
     "folderOrdersInSidenav": [
       "research",
-      "outreach",
       "about"
     ],
     "external_links": [
@@ -41,6 +39,11 @@
       },
       {
         "text": "Vac RFCs/Specs",
+        "url": "https://rfc.vac.dev/",
+        "category": "Resources"
+      },
+      {
+        "text": "Vac Forum",
         "url": "https://forum.vac.dev/",
         "category": "Resources"
       },
@@ -61,6 +64,14 @@
     "social_media": [
       {
         "provider": "twitter",
+        "handler": "vacp2p"
+      },
+      {
+        "provider": "discord",
+        "handler": "PQFdubGt6d"
+      },
+      {
+        "provider": "github",
         "handler": "vacp2p"
       }
     ]
