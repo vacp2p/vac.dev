@@ -10,26 +10,8 @@ categories: research
 summary: Introducing and discussing ambient peer discovery methods currently used by Waku v2, as well as future plans in this area.
 image: /img/waku_v2_discv5_random_walk_estimation.svg
 discuss: https://forum.vac.dev/t/discussion-waku-v2-ambient-peer-discovery/133
+_includes: [math]
 ---
-
-<script type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML">
-</script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [['$','$'], ['\\(','\\)']],
-      processEscapes: true},
-      jax: ["input/TeX","input/MathML","input/AsciiMath","output/CommonHTML"],
-      extensions: ["tex2jax.js","mml2jax.js","asciimath2jax.js","MathMenu.js","MathZoom.js","AssistiveMML.js", "[Contrib]/a11y/accessibility-menu.js"],
-      TeX: {
-      extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
-      equationNumbers: {
-      autoNumber: "AMS"
-      }
-    }
-  });
-</script>
 
 [Waku v2](https://rfc.vac.dev/spec/10/) comprises a set of modular protocols for secure, privacy preserving communication.
 Avoiding centralization, these protocols exchange messages over a P2P network layer.
