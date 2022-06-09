@@ -6,7 +6,6 @@ title: Main
 
 ## About Vac
 Vac is an R&D org creating modular p2p protocols for private, secure, censorship resistant communication.
-Researching All Layers
 
 ### Researching All Layers
 Concerned with all layers in the stack including underlying transports, p2p overlays and routing, initial trust establishment, and semantics for things like group chat.

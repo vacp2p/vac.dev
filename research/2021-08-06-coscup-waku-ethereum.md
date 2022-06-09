@@ -12,7 +12,9 @@ image: /img/coscup-waku/talk.png
 discuss: https://forum.vac.dev/t/discussion-talk-at-coscup-vac-waku-v2-and-ethereum-messaging/95
 ---
 
-*This is the English version of a talk originally given in Chinese at COSCUP in Taipei. There is a [video recording](https://www.youtube.com/watch?v=s0ATpQ4_XFc) with Chinese and English subtitles.*
+*This is the English version of a talk originally given in Chinese at COSCUP in Taipei.*
+
+[video recording with Chinese and English subtitles.](https://www.youtube.com/watch?v=s0ATpQ4_XFc)
 
 ---
 
