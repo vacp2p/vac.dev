@@ -2,7 +2,7 @@
 layout: post
 name:  "Vac - A Rough Overview"
 title:  "Vac - A Rough Overview"
-date:   2019-08-02 12:00:00 +0800
+date:   2019-08-02 12:00:00
 author: oskarth
 published: true
 permalink: /vac-overview

@@ -2,7 +2,7 @@
 layout: post
 name:  "What Would a WeChat Replacement Need?"
 title:  "What Would a WeChat Replacement Need?"
-date:   2020-04-16 12:00:00 +0800
+date:   2020-04-16 12:00:00
 author: oskarth
 published: true
 permalink: /wechat-replacement-need

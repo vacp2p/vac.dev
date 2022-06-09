@@ -2,7 +2,7 @@
 layout: post
 name:  "What's the Plan for Waku v2?"
 title:  "What's the Plan for Waku v2?"
-date:   2020-07-01 12:00:00 +0800
+date:   2020-07-01 12:00:00
 author: oskarth
 published: true
 permalink: /waku-v2-plan

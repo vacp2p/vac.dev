@@ -2,7 +2,7 @@
 layout: post
 name:  "Feasibility Study: Semaphore rate limiting through zkSNARKs"
 title:  "Feasibility Study: Semaphore rate limiting through zkSNARKs"
-date:   2019-11-08 12:00:00 +0800
+date:   2019-11-08 12:00:00
 author: oskarth
 published: true
 permalink: /feasibility-semaphore-rate-limiting-zksnarks

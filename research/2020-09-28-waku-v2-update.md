@@ -2,7 +2,7 @@
 layout: post
 name:  "Waku v2 Update"
 title:  "Waku v2 Update"
-date:   2020-09-28 12:00:00 +0800
+date:   2020-09-28 12:00:00
 author: oskarth
 published: true
 permalink: /waku-v2-update

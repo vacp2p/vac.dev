@@ -2,7 +2,7 @@
 layout: post
 name:  "Introducing nwaku"
 title:  "Introducing nwaku"
-date:   2022-04-12 10:00:00 +0200
+date:   2022-04-12 10:00:00
 author: hanno
 published: true
 permalink: /introducing-nwaku

@@ -2,7 +2,7 @@
 layout: post
 name:  "Waku v1 vs Waku v2: Bandwidth Comparison"
 title:  "Waku v1 vs Waku v2: Bandwidth Comparison"
-date:   2021-11-03 10:00:00 +0200
+date:   2021-11-03 10:00:00
 author: hanno
 published: true
 permalink: /waku-v1-v2-bandwidth-comparison

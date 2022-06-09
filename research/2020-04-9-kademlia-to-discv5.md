@@ -2,7 +2,7 @@
 layout: post
 name:  "From Kademlia to Discv5"
 title:  "From Kademlia to Discv5"
-date:   2020-04-9 16:00:00 +0100
+date:   2020-04-9 16:00:00
 author: dean
 published: true
 permalink: /kademlia-to-discv5

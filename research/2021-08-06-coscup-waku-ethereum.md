@@ -2,7 +2,7 @@
 layout: post
 name:  "[Talk at COSCUP] Vac, Waku v2 and Ethereum Messaging"
 title:  "[Talk at COSCUP] Vac, Waku v2 and Ethereum Messaging"
-date:   2021-08-06 12:00:00 +0800
+date:   2021-08-06 12:00:00
 author: oskarth
 published: true
 permalink: /waku-v2-ethereum-coscup

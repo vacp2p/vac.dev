@@ -2,7 +2,7 @@
 layout: post
 name: "Presenting JS-Waku: Waku v2 in the Browser"
 title: "Presenting JS-Waku: Waku v2 in the Browser"
-date: 2021-06-04 12:00:00 +0800
+date: 2021-06-04 12:00:00
 author: franck
 published: true
 permalink: /presenting-js-waku

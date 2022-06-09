@@ -2,7 +2,7 @@
 layout: post
 name:  "Feasibility Study: Discv5"
 title:  "Feasibility Study: Discv5"
-date:   2020-04-27 12:00:00 +0800
+date:   2020-04-27 12:00:00
 author: dean
 published: true
 permalink: /feasibility-discv5

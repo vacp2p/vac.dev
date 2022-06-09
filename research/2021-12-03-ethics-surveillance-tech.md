@@ -2,7 +2,7 @@
 layout: post
 name:  "Opinion: Pseudo-ethics in the Surveillance Tech Industry"
 title:  "Opinion: Pseudo-ethics in the Surveillance Tech Industry"
-date:   2021-12-03 10:00:00 +0200
+date:   2021-12-03 10:00:00
 author: circe
 published: true
 permalink: /ethics-surveillance-tech

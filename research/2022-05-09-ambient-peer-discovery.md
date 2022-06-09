@@ -2,7 +2,7 @@
 layout: post
 name:  "Waku v2 Ambient Peer Discovery"
 title:  "Waku v2 Ambient Peer Discovery"
-date: 2022-05-09 10:00:00 +0200
+date: 2022-05-09 10:00:00
 author: kaiserd
 published: true
 permalink: /wakuv2-apd

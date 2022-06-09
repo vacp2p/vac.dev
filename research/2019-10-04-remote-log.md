@@ -2,7 +2,7 @@
 layout: post
 name:  "P2P Data Sync with a Remote Log"
 title:  "P2P Data Sync with a Remote Log"
-date:   2019-10-04 12:00:00 +0800
+date:   2019-10-04 12:00:00
 author: oskarth
 published: true
 permalink: /remote-log
