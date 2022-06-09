@@ -25,13 +25,14 @@ Provide options at each layer in the stack, instead of having a tightly coupled 
 This includes both human to human communication, as well as machine to machine communication. Texting, data transfer, financial transactions, state channels and more.
 
 ## Principles
-[missing content]
+See https://our.status.im/our-principles/
 
 ## Research
 The research team is focused on research and specifications of protocols within the general scope of Vac. Waku v2 is the current main focus, and the main client is nim-waku.
 
 [Go to research page](/research)
 
-Vac RFCs: https://rfc.vac.dev/
-Specs repo: https://github.com/vacp2p/rfc
-Board: https://github.com/orgs/vacp2p/projects/5
+Vac RFCs: https://rfc.vac.dev/ |
+Specs repo: https://github.com/vacp2p/rfc |
+Board: https://github.com/orgs/vacp2p/projects/5 |
+Forum: https://forum.vac.dev/
