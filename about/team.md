@@ -1,0 +1,4 @@
+---
+title: team
+injects: [authors]
+---
