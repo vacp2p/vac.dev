@@ -64,7 +64,8 @@ Privacy typically does not use integrity and confidentiality. An adversary who h
 Waku is privacy-preserving. It offers:
 
 * confidentiality, because message content is only disclosed to the indented receivers.
-  We have various mechanisms in place to guarantee this, the strongest one being the [Noise Protocol Framework](https://noiseprotocol.org/).
+  We have various mechanisms in place to guarantee confidentiality.
+  The strongest option are secure channels setup with the help of the [Noise Protocol Framework](https://noiseprotocol.org/).
 * meta-data protection, 
   - TODO: what meta-data (outside of anonymity related) should be protected by the privacy-preserving property
 
