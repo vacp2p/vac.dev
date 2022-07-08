@@ -1,8 +1,8 @@
 
 ---
 layout: post
-name:  "Privacy and Anonymity Analysis Part I: Basics and Waku Relay"
-title: "Privacy and Anonymity Analysis Part I: Basics and Waku Relay"
+name:  "Waku Privacy and Anonymity Analysis Part I: Basics and Waku Relay"
+title: "Waku Privacy and Anonymity Analysis Part I: Basics and Waku Relay"
 date: 2022-07-15 10:00:00
 author: Daniel
 published: true
