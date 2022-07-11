@@ -172,7 +172,7 @@ which Waku uses for ambient peer discovery.
 
 ### External
 
-An external attacker can only see encrypted traffic (protected by Noise).
+An external attacker can only see encrypted traffic (protected by a secure channel set up with [Noise](https://rfc.vac.dev/spec/35/)).
 Because an internal position can be easily obtained,
 in practice external attackers would mount combined attacks that leverage both internal an external attacks.
 We cover this more below when describing attacks.
