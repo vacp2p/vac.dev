@@ -130,6 +130,10 @@ We will cover this in more detail in later sections.
 Waku's goal, being a modular set of protocols, is to offer any combination of two out of these three properties, as well as blends.
 An example for blending is an adjustable number of pubsub topics and peers in the respective pubsub topic mesh; this allows tuning the trade-off between anonymity and bandwidth.
 
+A forth factor that influences [the anonymity trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html) is *user description*, which expresses the pattern and frequency of messages.
+The more messages there are, and the more randomly distributed they are, the better the anonymity protection offered by a given anonymous communication protocol.
+So, incentivising users to use the protocol, for instance by lowering entry barriers, helps protecting the anonymity of all users.
+The user description factor is also related to the above described k-anonymity.
 
 ## Attacker Types
 
