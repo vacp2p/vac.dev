@@ -108,7 +108,8 @@ However, if done wrongly, such sharding of pubsub topics can breach anonymity.
 A formal specification of anonymity-preserving topic sharding building on the concepts of [partitioned topics](https://specs.status.im/spec/10#partitioned-topic) is part of our roadmap.
 
 Also, Waku is not directly concerned with 1:1 communication, so for this post, 1:1 communication is out of scope.
-A 1:1 communication protocol might be added to Waku in the future.
+Channels for 1:1 communication can be implemented on top of Waku relay.
+In the future, a 1:1 communication protocol might be added to Waku.
 Similar to topic sharding, it would maintain receiver anonymity leveraging [partitioned topics](https://specs.status.im/spec/10#partitioned-topic).
 
 #### Sender Anonymity
