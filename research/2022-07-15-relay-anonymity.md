@@ -69,7 +69,6 @@ Using these secure channels, message content is only disclosed to the indented r
 They also provide good metadata protection properties.
 However, we do not have a metadata protection analysis as of yet,
 which is part of our privacy/anonymity roadmap.
-Only after completing this analysis, and after addressing possibly upcoming issues, we will declare Waku v2 as privacy-preserving with respect to metadata protection.
 
 
 ### Anonymity
