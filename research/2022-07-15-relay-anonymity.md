@@ -235,7 +235,7 @@ In libp2p gossipsub, and by extension Waku v2 relay, nodes can simply send a gra
 If the victim node still has open slots, the attacker gets the desired position.
 This only requires the attacker to know the gossipsub multiaddress of the victim node.
 
-A linearly scaling nodes attacker can leverage DHT based discovery systems to boost the probability of evil nodes being returned, which in turn significantly increases the probability of attacker nodes ending up in the peer lists of victim nodes.
+A linearly scaling nodes attacker can leverage DHT based discovery systems to boost the probability of malicious nodes being returned, which in turn significantly increases the probability of attacker nodes ending up in the peer lists of victim nodes.
 [Waku v2 discv5](https://vac.dev/wakuv2-apd) will employ countermeasures that mitigate the amplifying effect this attacker type can achieve.
 
 ### Replay Attack
