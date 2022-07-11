@@ -64,10 +64,9 @@ This neither makes privacy and security the same, nor the one a sub category of 
 While security is abstract itself (its properties can be realized in various ways), privacy lives on a more abstract level using security properties.
 Privacy typically does not use integrity and confidentiality. An adversary who has no access to the private data, because the message has been encrypted, could still alter the message.
 
-Waku offers confidentiality, because message content is only disclosed to the indented receivers.
-We have various mechanisms in place to guarantee confidentiality.
-The strongest option are secure channels setup with the help of the [Noise Protocol Framework](https://noiseprotocol.org/).
-These secure channels also provide good metadata protection properties.
+Waku offers confidentiality via secure channels set up with the help of the [Noise Protocol Framework](https://noiseprotocol.org/).
+Using these secure channels, message content is only disclosed to the indented receivers.
+They also provide good metadata protection properties.
 However, we do not have a metadata protection analysis as of yet,
 which is part of our privacy/anonymity roadmap.
 Only after completing this analysis, and after addressing possibly upcoming issues, we will declare Waku v2 as privacy-preserving with respect to metadata protection.
