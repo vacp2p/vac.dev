@@ -9,7 +9,7 @@ published: true
 permalink: /wakuv2-relay-anon
 categories: research
 summary: Introducing a basic threat model and privacy/anonymity analysis for the Waku v2 relay protocol.
-image: /img/vac.png
+image: ../static-assets/img/anonymity_trilemma.svg
 discuss: https://forum.vac.dev/t/discussion-waku-privacy-and-anonymity-analysis/149
 ---
 
@@ -28,6 +28,8 @@ We also provide attacker models, an attack-based threat model, and a first anony
 Waku comprises many protocols that can be combined in a modular way.
 For our privacy and anonymity analysis, we start with the relay protocol because it is at the core of Waku v2 enabling Waku's publish subscribe approach to P2P messaging.
 In its current form, Waku relay is a minor extension of [libp2p GossipSub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md).
+
+![Figure 1: The Waku v2 relay mesh is based on the [GossipSub mesh](https://docs.libp2p.io/concepts/publish-subscribe#types-of-peering)](../static-assets/img/libp2p_gossipsub_types_of_peering.png)
 
 ## Informal Definitions: Security, Privacy, and Anonymity
 
@@ -130,7 +132,7 @@ We will cover this in more detail in later sections.
 Waku's goal, being a modular set of protocols, is to offer any combination of two out of these three properties, as well as blends.
 An example for blending is an adjustable number of pubsub topics and peers in the respective pubsub topic mesh; this allows tuning the trade-off between anonymity and bandwidth.
 
-<!-- ![Figure 1: Anonymity Trilemma: pick two. ](/img/anonymity_trilemma.pdf) -->
+![Figure 2: Anonymity Trilemma: pick two. ](../static-assets/img/anonymity_trilemma.svg){width=250px}
 
 A forth factor that influences [the anonymity trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html) is *user description*, which expresses the pattern and frequency of messages.
 The more messages there are, and the more randomly distributed they are, the better the anonymity protection offered by a given anonymous communication protocol.

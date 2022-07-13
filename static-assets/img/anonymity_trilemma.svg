@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="21.312113mm"
+   height="24.866722mm"
+   viewBox="0 0 21.312113 24.866722"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer1"
+     transform="translate(-3.6534834,-6.1593984)">
+    <ellipse
+       style="fill:#c80000;fill-opacity:0.2;fill-rule:evenodd;stroke-width:0.264583"
+       id="path39-3"
+       cx="-8.0949116"
+       cy="15.378538"
+       rx="9.3927078"
+       ry="3.96875"
+       transform="rotate(-60.733613)" />
+    <ellipse
+       style="fill:#000064;fill-opacity:0.2;fill-rule:evenodd;stroke-width:0.264583"
+       id="path39-6"
+       cx="14.110243"
+       cy="22.468628"
+       rx="9.3927078"
+       ry="3.96875" />
+    <ellipse
+       style="fill:#280028;fill-opacity:0.3;fill-rule:evenodd;stroke-width:0.195901"
+       id="path39-7"
+       cx="14.123329"
+       cy="29.074236"
+       rx="10.469846"
+       ry="1.9518851" />
+    <ellipse
+       style="fill:#006400;fill-opacity:0.2;fill-rule:evenodd;stroke-width:0.264583"
+       id="ellipse787"
+       cx="-22.112312"
+       cy="-9.6345501"
+       rx="9.3927078"
+       ry="3.96875"
+       transform="matrix(-0.48887076,-0.87235622,-0.87235622,0.48887076,0,0)" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.54155px;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0385386"
+       x="-10.632305"
+       y="16.366579"
+       id="text4259"
+       transform="rotate(-55.029807)"><tspan
+         id="tspan4257"
+         style="stroke-width:0.0385386"
+         x="-10.632305"
+         y="16.366579">low latency</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.60517px;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0401294"
+       x="17.13574"
+       y="-8.752326"
+       id="text10323"
+       transform="rotate(58.02919)"><tspan
+         id="tspan10321"
+         style="stroke-width:0.0401294"
+         x="17.13574"
+         y="-8.752326">low bandwidth</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.55346px;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0388367"
+       x="7.4750786"
+       y="22.9354"
+       id="text12943"><tspan
+         id="tspan12941"
+         style="stroke-width:0.0388367"
+         x="7.4750786"
+         y="22.9354">strong anonymity</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:1.49621px;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0374053"
+       x="6.167841"
+       y="29.687925"
+       id="text14383"><tspan
+         id="tspan14381"
+         style="stroke-width:0.0374053"
+         x="6.167841"
+         y="29.687925">frequency / pattern</tspan></text>
+  </g>
+</svg>
