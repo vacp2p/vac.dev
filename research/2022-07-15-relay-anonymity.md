@@ -9,7 +9,7 @@ published: true
 permalink: /wakuv2-relay-anon
 categories: research
 summary: Introducing a basic threat model and privacy/anonymity analysis for the Waku v2 relay protocol.
-image: /assets/img/vac.png
+image: /img/vac.png
 discuss: https://forum.vac.dev/t/discussion-waku-privacy-and-anonymity-analysis/149
 ---
 
@@ -130,10 +130,25 @@ We will cover this in more detail in later sections.
 Waku's goal, being a modular set of protocols, is to offer any combination of two out of these three properties, as well as blends.
 An example for blending is an adjustable number of pubsub topics and peers in the respective pubsub topic mesh; this allows tuning the trade-off between anonymity and bandwidth.
 
+<!-- ![Figure 1: Anonymity Trilemma: pick two. ](/img/anonymity_trilemma.pdf) -->
+
 A forth factor that influences [the anonymity trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html) is *user description*, which expresses the pattern and frequency of messages.
 The more messages there are, and the more randomly distributed they are, the better the anonymity protection offered by a given anonymous communication protocol.
 So, incentivising users to use the protocol, for instance by lowering entry barriers, helps protecting the anonymity of all users.
 The user description factor is also related to the above described k-anonymity.
+
+### Censorship Resistance
+
+Another security related property that Waku aims to offer is censorship resistance.
+Censorship resistance guarantees that users can participate even if an attacker tries to deny them access.
+So, censorship resistance ties into the availability aspect of security.
+In the context of Waku that means users should be able to send messages as well as receive all messages they are interested in,
+even if an attacker tries to prevent them from disseminating messages or tries to deny them access to messages.
+
+Currently, Waku only guarantees censorship resistance in the weak single node attacker model.
+While currently employed secure channels mitigate targeted censorship, e.g. blocking specific content topics,
+general censorship resistance in strong attacker models is part of our roadmap.
+Among other options, we will investigate [Pluggable Transports](https://www.pluggabletransports.info/about/) in future articles.
 
 ## Attacker Types
 
@@ -157,6 +172,7 @@ This attacker controls a single node.
 Because this position corresponds to normal usage of Waku relay, it is trivial to obtain.
 
 #### Multi Node
+
 
 This attacker controls several nodes. We assume a smaller static number of controlled nodes.
 The multi node position can be achieved relatively easily by setting up multiple nodes.
