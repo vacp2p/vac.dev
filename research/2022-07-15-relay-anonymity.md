@@ -134,10 +134,10 @@ An example for blending is an adjustable number of pubsub topics and peers in th
 
 ![Figure 2: Anonymity Trilemma: pick two. ](../static-assets/img/anonymity_trilemma.svg){width=250px}
 
-A forth factor that influences [the anonymity trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html) is *user description*, which expresses the pattern and frequency of messages.
+A forth factor that influences [the anonymity trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html) is *frequency and patterns* of messages.
 The more messages there are, and the more randomly distributed they are, the better the anonymity protection offered by a given anonymous communication protocol.
 So, incentivising users to use the protocol, for instance by lowering entry barriers, helps protecting the anonymity of all users.
-The user description factor is also related to the above described k-anonymity.
+The frequency/patterns factor is also related to the above described k-anonymity.
 
 ### Censorship Resistance
 
