@@ -264,15 +264,16 @@ Further, replay attacks will be punished by [RLN](https://rfc.vac.dev/spec/17/) 
 
 ### Neighbourhood Surveillance
 
-This attack can be performed by a single node attacker that is connected to all peers of the victim node $v$ with respect to a specific topic mesh. The attacker also has to be connected to $v$.
-An attacker in this position can monitor the set of messages transmitted by the peers of $v$, and all messages transmitted by $v$.
-Messages that are only transmitted by $v$ but not by its peers must have originated in $v$.
+This attack can be performed by a single node attacker that is connected to peers of the victim node $v$ with respect to a specific topic mesh. 
+The attacker also has to be connected to $v$.
+In this position, the attacker will receive messages $m_v$ sent by $v$ both on the direct path from $v$, and on indirect paths relayed by peers of $v$.
+It will also receive messages $m_x$ that are not sent by $v$. These messages $m_x$ are relayed by both $v$ and the peers of $v$.
+Messages that are received (significantly) faster from $v$ are very likely messages that $v$ sent, because for these messages the attacker is one hop closer to the source.
 
-Even with partial surveillance, meaning the attacker is only connected to a subset of $v$'s peers, the attacker could identify messages that are (very likely) sent by $v$.
-Because the attacker will receive same messages from both $v$ and its peers, it can leverage timing information.
-Messages that are received significantly faster from $v$ are more likely messages that $v$ sent.
 The attacker can (periodically) measure latency between itself and $v$, and between itself and the peers of $v$ to get more accurate estimates for the expected timings.
 An AS attacker (and if the topology allows, even a local attacker) could also learn the latency between $v$ and its well-behaving peers.
+An active AS attacker could also increase the latency between $v$ and its peers to make the timing differences more prominent.
+This, however, might lead to $v$ switching to other peers.
 
 ### Controlled Neighbourhood
 
