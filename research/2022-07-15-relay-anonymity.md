@@ -321,7 +321,7 @@ All of these cannot be fully guaranteed as the [the anonymity trilemma](https://
 Some applications have specific requirements, e.g. low latency, which require a compromise on anonymity.
 Anonymity-preserving mechanisms we plan to investigate and eventually specify as pluggable anonymity protocols for Waku comprise
 
-* [Dandilion++](https://arxiv.org/abs/1805.11060) for lightweight anonymity;
+* [Dandelion++](https://arxiv.org/abs/1805.11060) for lightweight anonymity;
 * [onion routing](https://en.wikipedia.org/wiki/Onion_routing) as a building block adding a low latency anonymization layer;
 * [a mix network](https://en.wikipedia.org/wiki/Mix_network) for providing strong anonymity (on top of onion routing) even in the strongest attacker model at the cost of higher latency.
 
@@ -334,7 +334,7 @@ These protocols comprise
 * [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/), which can violate receiver anonymity as it allows filtering by content topic.
   A countermeasure is using the content topic exclusively for local filters.
 * [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/), which discloses nodes' interest in topics;
-* [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/spec/19/), which also discloses nodes' interest in topics;
+* [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/spec/19/), which also discloses nodes' interest in topics and links the lightpush client as the sender of a message to the lightpush service node;
 * [21/WAKU2-FTSTORE](https://rfc.vac.dev/spec/21/), which discloses nodes' interest in specific time ranges allowing to infer information like online times.
 
 While these protocols are not necessary for the operation of Waku v2, and can be seen as pluggable features,
@@ -363,7 +363,7 @@ we aim to provide alternatives without the cost of lowering the anonymity level.
 * [18/WAKU2-SWAP](https://rfc.vac.dev/spec/18/)
 * [Pluggable Transports](https://www.pluggabletransports.info/about/)
 * [Nym](https://nymtech.net/)
-* [Dandilion++](https://arxiv.org/abs/1805.11060)
+* [Dandelion++](https://arxiv.org/abs/1805.11060)
 * [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
 * [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/)
 * [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/spec/19/)
