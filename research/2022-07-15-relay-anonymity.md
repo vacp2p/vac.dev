@@ -175,7 +175,6 @@ Because this position corresponds to normal usage of Waku relay, it is trivial t
 
 #### Multi Node
 
-
 This attacker controls several nodes. We assume a smaller static number of controlled nodes.
 The multi node position can be achieved relatively easily by setting up multiple nodes.
 Botnets might be leveraged to increase the number of available hosts.
