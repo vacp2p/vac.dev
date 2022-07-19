@@ -67,7 +67,7 @@ While security is abstract itself (its properties can be realized in various way
 Privacy typically does not use integrity and confidentiality. An adversary who has no access to the private data, because the message has been encrypted, could still alter the message.
 
 Waku offers confidentiality via secure channels set up with the help of the [Noise Protocol Framework](https://noiseprotocol.org/).
-Using these secure channels, message content is only disclosed to the indented receivers.
+Using these secure channels, message content is only disclosed to the intended receivers.
 They also provide good metadata protection properties.
 However, we do not have a metadata protection analysis as of yet,
 which is part of our privacy/anonymity roadmap.
