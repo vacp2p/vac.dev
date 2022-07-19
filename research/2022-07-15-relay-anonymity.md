@@ -119,7 +119,7 @@ Similar to topic sharding, it would maintain receiver anonymity leveraging [part
 We define sender anonymity as *unlinkability of users' identities and the data they send and/or related actions*.
 Because the data in the context of Waku is Waku messages, sender anonymity corresponds to *sender-message unlinkability*.
 
-In summary, Waku offers weak anonymity  because of [Waku's strict no sign policy](https://rfc.vac.dev/spec/11/#signature-policy),
+In summary, Waku offers weak sender anonymity because of [Waku's strict no sign policy](https://rfc.vac.dev/spec/11/#signature-policy),
 which has its origins in the [Ethereum consensus specs](https://github.com/ethereum/consensus-specs/blob/dev/specs/phase0/p2p-interface.md#why-are-we-using-the-strictnosign-signature-policy).
 [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/) and [18/WAKU2-SWAP](https://rfc.vac.dev/spec/18/) mitigate replay and injection attacks.
 
