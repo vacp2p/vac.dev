@@ -263,16 +263,22 @@ Further, replay attacks will be punished by [RLN](https://rfc.vac.dev/spec/17/) 
 
 ### Neighbourhood Surveillance
 
-This attack can be performed by a single node attacker that is connected to peers of the victim node $v$ with respect to a specific topic mesh. 
+This attack can be performed by a single node attacker that is connected to all peers of the victim node $v$ with respect to a specific topic mesh. 
 The attacker also has to be connected to $v$.
 In this position, the attacker will receive messages $m_v$ sent by $v$ both on the direct path from $v$, and on indirect paths relayed by peers of $v$.
 It will also receive messages $m_x$ that are not sent by $v$. These messages $m_x$ are relayed by both $v$ and the peers of $v$.
-Messages that are received (significantly) faster from $v$ are very likely messages that $v$ sent, because for these messages the attacker is one hop closer to the source.
+Messages that are received (significantly) faster from $v$ than from any other of $v$'s peers are very likely messages that $v$ sent,
+because for these messages the attacker is one hop closer to the source.
 
 The attacker can (periodically) measure latency between itself and $v$, and between itself and the peers of $v$ to get more accurate estimates for the expected timings.
 An AS attacker (and if the topology allows, even a local attacker) could also learn the latency between $v$ and its well-behaving peers.
 An active AS attacker could also increase the latency between $v$ and its peers to make the timing differences more prominent.
 This, however, might lead to $v$ switching to other peers.
+
+This attack cannot (reliably) distinguish messages $m_v$ sent by $v$ from messages $m_y$ relayed by peers of $v$ the attacker is not connected to.
+Still, there are hop-count variations that might be leveraged.
+Messages $m_v$ always have a hop-count of 1 from $v$ to the attacker, while all other paths are longer.
+Messages $m_y$ might have the same hop-count on the path from $v$ as well as from other paths.
 
 ### Controlled Neighbourhood
 
