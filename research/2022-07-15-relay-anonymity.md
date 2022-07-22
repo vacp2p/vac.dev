@@ -3,7 +3,7 @@
 layout: post
 name:  "Waku Privacy and Anonymity Analysis Part I: Definitions and Waku Relay"
 title: "Waku Privacy and Anonymity Analysis Part I: Definitions and Waku Relay"
-date: 2022-07-15 10:00:00
+date: 2022-07-22 10:00:00
 author: Daniel
 published: true
 permalink: /wakuv2-relay-anon
