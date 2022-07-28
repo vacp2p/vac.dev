@@ -26,7 +26,6 @@
     "build:dev": "cross-env NODE_ENV=development gulp build",
     "build": "yarn run build:production",
     "devel": "cross-env NODE_ENV=development gulp devel",
-    "dev": "yarn run devel",
     "start": "yarn run devel",
     "clean": "git clean -fdx",
     "deploy": "node scripts/deploy.js"

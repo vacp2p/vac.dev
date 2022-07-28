@@ -15,7 +15,6 @@ Originally created by [EthWorks](https://ethworks.io/).
   ```
 - For development or server:
   ```
-  yarn run dev
   yarn run start
   ```
 
