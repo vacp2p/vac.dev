@@ -4,7 +4,7 @@ Originally created by [EthWorks](https://ethworks.io/).
 
 # Development
 
-- Install Depndencies:
+- Install Dependencies:
   ```
   yarn install
   bundle install
