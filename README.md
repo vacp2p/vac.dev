@@ -1,6 +1,6 @@
 # Vac.dev Website
 
-made and deployed with [logos site-builder](https://github.com/acid-info/logos-site-builder)
+Made and deployed with [logos site-builder](https://github.com/acid-info/logos-site-builder).
 
 # Continuous Deloyment
 
