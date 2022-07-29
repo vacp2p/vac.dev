@@ -2,15 +2,15 @@
 title: Main
 ---
 
-## Vac - Communication, Privacy, Etc.
+# Vac - Communication, Privacy, Etc.
 
-### About Vac
+## About Vac
 
 Vac **builds** [public good](https://en.wikipedia.org/wiki/Public_good) protocols for the decentralized web.
 
 We do applied research based on which we build protocols, libraries and publications. Custodians of protocols that reflect [a set of principles](vac.dev/principles) - liberty, privacy, etc.
 
-### Our Principles
+## Our Principles
 
 Liberty, censorship resistance, security, privacy, transparency, openness, decentralization, inclusivity, continuance, resourcefulness.
 
@@ -18,7 +18,7 @@ These principles act as tools. Tools for thinking, for communication, and for de
 
 The full list can be found here: [Vac Principles](vac.dev/principles).
 
-### Projects
+## Projects
 
 **Secure Messaging**. We design modular, p2p protocols for private, anonymous, secure and censorship-resistant communications. The main focus is [Waku](https://waku.org), the communication layer for Web3.
 
@@ -28,7 +28,7 @@ The full list can be found here: [Vac Principles](vac.dev/principles).
 
 **Applied ZK & Explorations**. We build tools to enable new fundamental building blocks using cutting-edge zero-knowledge proof systems.
 
-### Links
+## Links
 
 - [Write-ups](/research)
 - [Vac RFCs](https://rfc.vac.dev)
