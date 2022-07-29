@@ -24,41 +24,40 @@
     "home":"vac.md",
     "fileOrdersInSidenav": [
       "vac.md",
+      "principles.md",
       "research-areas.md",
-      "projects.md"
+      "projects.md",
+      "open-problems.md",
+      "contribute.md",
+      "media.md",
     ],
     "folderOrdersInSidenav": [
-      "research",
-      "about"
+      "research"
     ],
     "external_links": [
       {
-        "text": "Research & experimentation",
-        "url": "https://github.com/vacp2p/research/",
-        "category": "Resources"
-      },
-      {
-        "text": "Vac RFCs/Specs",
+        "text": "Specs/RFCs",
         "url": "https://rfc.vac.dev/",
         "category": "Resources"
       },
       {
-        "text": "Vac Forum",
+        "text": "Forum",
         "url": "https://forum.vac.dev/",
         "category": "Resources"
       },
       {
-        "text": "Waku v2 training session",
-        "url": "https://drive.google.com/file/d/19P3oDNXGBDClfcS6Sgp0t9LYr3UbIFGt/view",
+        "text": "Waku.org",
+        "url": "https://waku.org",
         "category": "Resources"
       }
+
     ]
   },
   "ds_id": "vac",
   "seo": {
-    "title": "Vac",
-    "description": "Vac is an R&D org creating modular p2p protocols for private, secure, censorship-resistant communication.",
-    "cc": "Vac researches peer-to-peer, private, censorship-resistant communication",
+    "title": "Vac Research",
+    "description": "Vac - Communication, Privacy, Etc.",
+    "cc": "Vac - Communication, Privacy, Etc",
     "image": "vac-site-preview-image.png",
     "url": "https://staging.vac.dev",
     "social_media": [
