@@ -14,7 +14,9 @@ We do applied research based on which we build protocols, libraries and publicat
 
 Liberty, censorship resistance, security, privacy, transparency, openness, decentralization, inclusivity, continuance, resourcefulness.
 
-Full list can be found here: [Vac Principles](vac.dev/principles).
+These principles act as tools. Tools for thinking, for communication, and for decentralized decision making. They keep us honest about where we are failing short of our vision.
+
+The full list can be found here: [Vac Principles](vac.dev/principles).
 
 ### Projects
 
@@ -22,9 +24,9 @@ Full list can be found here: [Vac Principles](vac.dev/principles).
 
 **zk-WASM**. Research into making private and provable computation using WASM that is verified using zero-knowledge proofs.
 
-**RFCs**. We build specifications for self-sustainable robust protocols with strong and modular privacy guarantees. Rough consensus and running code.
+**RAD - RFCs & Dissemination**. We build specifications for self-sustainable robust protocols with strong and modular privacy guarantees. Rough consensus and running code. We also write papers and aim collaborate closely with other institutions to build a bridge between industry and academia.
 
-**Applied ZK/Explorations**. We build tools to enable privacy-enhanced computations using cutting-edge zero-knowledge proof systems.
+**Applied ZK & Explorations**. We build tools to enable new fundamental building blocks using cutting-edge zero-knowledge proof systems.
 
 ### Links
 
