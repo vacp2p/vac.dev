@@ -2,9 +2,9 @@
 title: Projects
 ---
 
-# Vac projects
+# Projects
 
-There are several projects under Vac.
+There are several projects under Vac Research.
 These are largely independent and can be seen as specific bets.
 
 ## Secure Messaging
@@ -15,10 +15,13 @@ We design modular, p2p protocols for private, anonymous, secure and censorship-r
 
 Research into making private and provable computation using WASM that is verified using zero-knowledge proofs.
 
-## RFC
+### RAD - RFCs & Dissemination
 
-We build specifications for self-sustainable robust protocols with strong and modular privacy guarantees. Rough consensus and running code.
+**RFCs**: We build specifications for self-sustainable robust protocols with strong and modular privacy guarantees. Rough consensus and running code.
 
-## Applied ZK/Explorations
+**Dissemination**: We write papers and aim collaborate closely with other
+institution to build a bridge between industry and academia.
 
-We build tools to enable privacy-enhanced computations using cutting-edge zero-knowledge proof systems.
+## Applied ZK & Explorations
+
+We build tools to enable new fundamental building blocks using cutting-edge zero-knowledge proof systems.
