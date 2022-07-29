@@ -16,7 +16,7 @@ Liberty, censorship resistance, security, privacy, transparency, openness, decen
 
 These principles act as tools. Tools for thinking, for communication, and for decentralized decision making. They keep us honest about where we are failing short of our vision.
 
-The full list can be found here: [Vac Principles](vac.dev/principles).
+The meaning of these principles are elaboarted on here: [Vac Principles](vac.dev/principles).
 
 ## Projects
 
