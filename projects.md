@@ -19,7 +19,7 @@ Research into making private and provable computation using WASM that is verifie
 
 **RFCs**: We build specifications for self-sustainable robust protocols with strong and modular privacy guarantees. [Rough consensus and running code](https://www.ietf.org/about/participate/tao/).
 
-**Dissemination**: We write papers and aim collaborate closely with other
+**Dissemination**: We write papers and aim to collaborate closely with other
 institutions to build a bridge between industry and academia.
 
 ## Applied ZK & Explorations
