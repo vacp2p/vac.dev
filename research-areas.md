@@ -28,7 +28,9 @@ End to end data application synchronization protocols, FT Store, interfacing wit
 
 ## P2P/Networking
 
-Things related to P2P protocols and networking, including usage of WebRTC, Discovery for resource restricted devices, new p2p protocols with different trade-offs etc.
+R&D related to P2P protocols and networking, including usage of WebRTC,
+Discovery for resource restricted devices,
+and new p2p protocols with different trade-offs.
 
 ## Censorship resistance
 
