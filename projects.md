@@ -17,7 +17,7 @@ Research into making private and provable computation using WASM that is verifie
 
 ### RAD - RFCs & Dissemination
 
-**RFCs**: We build specifications for self-sustainable robust protocols with strong and modular privacy guarantees. Rough consensus and running code.
+**RFCs**: We build specifications for self-sustainable robust protocols with strong and modular privacy guarantees. [Rough consensus and running code](https://www.ietf.org/about/participate/tao/).
 
 **Dissemination**: We write papers and aim collaborate closely with other
 institution to build a bridge between industry and academia.
