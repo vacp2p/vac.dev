@@ -8,7 +8,7 @@ Vac has several research areas it is interested in and has or is developing expe
 
 ## Incentivization
 
-In a open p2p network, nodes have to be incentivized for services provided to the network. Additionally, these should be privacy-preserving and as trust-minimized as possible. This research areas includes things such as: RLN, service credentials, peer reputation, and protocol revenue.
+In an open p2p network, nodes have to be incentivized for services provided to the network. Additionally, these should be privacy-preserving and as trust-minimized as possible. This research area includes (but is not limited to): RLN, service credentials, peer reputation, and protocol revenue.
 
 ## Applied ZK
 
