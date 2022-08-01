@@ -38,4 +38,6 @@ Censorship resistance at all layers of the stack, including obfuscated transport
 
 ## Identity/Trust
 
-Identity and key management required for non-trivial secure messaging. Multi device management, group management, trust, reputation etc. Especially in a private and secure fashion.
+Identity and key management required for non-trivial secure messaging.
+This includes multi device management, group management, trust, and reputation.
+Especially in a private and secure fashion.
