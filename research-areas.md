@@ -32,7 +32,7 @@ Things related to P2P protocols and networking, including usage of WebRTC, Disco
 
 ## Censorship resistance
 
-Censorship resistance at all layers of the stack, including obfuscated transports, running in hostile environments, etc.
+Censorship resistance at all layers of the stack, including obfuscated transports and running in hostile environments.
 
 ## Identity/Trust
 
