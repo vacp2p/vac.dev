@@ -1,3 +1,5 @@
+[Waku v2 training session](https://drive.google.com/file/d/19P3oDNXGBDClfcS6Sgp0t9LYr3UbIFGt/view)
+
 [Waku: Enabling a New Dimension for dApps](https://www.youtube.com/watch?v=GXU5Fd6gMVw&t=21692s)
 
 [Vac, Waku v2 and Ethereum Messaging](https://www.youtube.com/watch?v=s0ATpQ4_XFc&ab_channel=OsakaThorp)
