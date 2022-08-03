@@ -1,3 +1,6 @@
+*These principles have been inherited from https://our.status.im/our-principles/
+Only minor stylistic changes have been made to them.*
+
 # Principles
 
 The goal of Vac is widespread adoption of the decentralized web.
