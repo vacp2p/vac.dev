@@ -15,13 +15,14 @@ We design modular, p2p protocols for private, anonymous, secure and censorship-r
 
 Research into making private and provable computation using WASM that is verified using zero-knowledge proofs.
 
-### RAD - RFCs & Dissemination
+## RAD - RFCs & Dissemination
 
-**RFCs**: We build specifications for self-sustainable robust protocols with strong and modular privacy guarantees. [Rough consensus and running code](https://www.ietf.org/about/participate/tao/).
+**RFCs**: We build [specifications](https://rfc.vac.dev) for self-sustainable robust protocols with strong and modular privacy guarantees. [Rough consensus and running code](https://www.ietf.org/about/participate/tao/).
 
-**Dissemination**: We write papers and aim to collaborate closely with other
-institutions to build a bridge between industry and academia.
+**Dissemination**: We write papers and collaborate closely with other projects/institutions, and aim to build a bridge between industry and academia.
 
 ## Applied ZK & Explorations
 
-We build tools to enable new fundamental building blocks using cutting-edge zero-knowledge proof systems.
+We build tools to enable new fundamental building blocks using cutting-edge zero-knowledge proof systems. For example, [Zerokit](https://github.com/vacp2p/zerokit/).
+
+
