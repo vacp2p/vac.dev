@@ -6,7 +6,7 @@ date:   2022-08-01 00:00:00 +0000
 author: franck
 published: true
 permalink: /waku-product
-categories: product, platform, operator
+categories: waku, product, platform, operator
 summary: Introduce Waku Product, a project to ensure that Waku is usable and used.
 image: /img/black-waku-logo-with-name.png
 discuss: TODO
@@ -80,7 +80,7 @@ so it is easier for a developer to find the right information.
 
 We call the task of pushing for Waku to be used by other projects _platform outreach_.
 
-This year, we will also start the _operator outreach_ effort to push for operators to run Waku nodes.
+This year, we will also start the _operator outreach_ effort to push for users to run their own Waku nodes.
 Nwaku's documentation, stability and performance has improved,
 it is now easier to run your [own Waku node](https://github.com/status-im/nwaku/tree/master/docs/operators).
 
