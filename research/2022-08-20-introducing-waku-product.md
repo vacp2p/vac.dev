@@ -39,7 +39,7 @@ and [PoCs](https://github.com/status-iM/gnosis-safe-waku).
 We branded this overall web app outreach effort as Waku Connect:
 Waku Connect's goal was to create docs, SDKs, PoCs to promote and facilitate the usage of Waku in the browser.
 
-As we discussed with Waku userse and watch it being adopted, we learn a few facts:
+By discussing with Waku users and watching it being adopted, we learn a few facts:
 
 1. The potential use cases for Waku are varied, complex and numerous,
 2. Many projects are interested in having an embedded decentralized chat feature in their dApp,
