@@ -96,3 +96,17 @@ We are committed to make Waku, the communication layer of Web3, a success.
 For this endeavour, the Vac program is focusing on inventing and improving the Waku protocols
 (among other [topics](https://github.com/vacp2p/research/issues/112)).
 And now, the Waku Product project is focusing on stabilizing, promoting, documenting Waku Software and supporting Waku users.
+
+What you can expect next:
+
+- [Scalability and performance studies](https://forum.vac.dev/t/waku-v2-scalability-studies/142/9) and improvement across Waku software,
+- [New websites](https://github.com/waku-org/waku.org/issues/15) to easily find documentation about Waku and its implementations,
+- Delivery of the latest Waku protocols in all code bases and cross client PoCs
+  ([noise](https://rfc.vac.dev/spec/35/), [noise-sessions](https://rfc.vac.dev/spec/37/),
+  [waku-rln-relay](https://rfc.vac.dev/spec/17/), etc),
+- Easier to [run your own waku node](https://github.com/status-im/nwaku/issues/828),
+- Improvement of existing protocols based on field-testing feedback and functional requirements
+  (e.g. [Waku Filter](https://github.com/vacp2p/rfc/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc++12%2FWAKU2-FILTER)),
+- More communication & marketing effort around Waku and the Waku developer community.
+
+If you want to help us, we are [hiring](https://jobs.status.im/!
