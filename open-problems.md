@@ -5,7 +5,7 @@ title: Open Research Problems
 # Open Research Problems
 
 We are seeking to collaborate with researchers in the following topic areas.
-Feel free to join our [Discord](https://discord.gg/DXHGzzGX) for discussion.
+Feel free to join our [Discord](https://discord.gg/PQFdubGt6d) for discussion.
 
 ### DHT (distributed hash table) security / privacy / anonymity
 
