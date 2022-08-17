@@ -16,3 +16,23 @@ A focus on [Node Discovery Protocol v5 (discv5)](https://github.com/ethereum/dev
 
 Further background on the usage of discv5 in Waku can be found in our [research log](https://vac.dev/wakuv2-apd).
 A new version of discv5 that is both efficient and provides eclipse mitigation is [currently being researched](https://github.com/harnen/service-discovery-paper).
+
+
+### Privacy-Preserving Incentivizations of waku protocols
+
+* Incentivise relay
+
+### Devising novel applications of the Waku protocol stack
+
+examples comprise
+
+* p2p social network
+* evoting system
+
+### Waku simulator
+
+### Halo2 in a browser
+
+### Meshnet transports and libp2p
+
+### Applied ZK
