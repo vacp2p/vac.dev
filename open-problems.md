@@ -36,3 +36,24 @@ examples comprise
 ### Meshnet transports and libp2p
 
 ### Applied ZK
+
+### Robust P2P network - NAT traversal
+
+[Waku relay](https://rfc.vac.dev/spec/11/), Waku's core protocol, is based on a [gossipsub mesh](https://github.com/libp2p/specs/tree/master/pubsub/gossipsub),
+while [Waku discv5](https://rfc.vac.dev/spec/33/) uses a [DHT](https://en.wikipedia.org/wiki/Distributed_hash_table) overlay.
+Both significantly benefit from robust and reliable P2P connections.
+Better connectivity allows nodes to contribute more to the network and improve overall availability, efficiency, and by extension, anonymity ([see k-anonymity](https://en.wikipedia.org/wiki/K-anonymity)).
+
+[NAT](https://en.wikipedia.org/wiki/Network_address_translation) is a well known problem to P2P connectivity.
+There are various types of NATs whose behaviours are described in [RFC 4787](https://www.rfc-editor.org/rfc/rfc4787).
+[Carrier-Grade NATs](https://www.rfc-editor.org/rfc/rfc6888) add another layer of indirection, which complicates the matter further.
+Various [NAT traversal](https://en.wikipedia.org/wiki/NAT_traversal) protocols have been developed to overcome the different types of NATs.
+[RFC 8445](https://www.rfc-editor.org/rfc/rfc8445) specifies Interactive Connectivity Establishment (ICE), which integrates a set of NAT traversal techniques.
+Waku currently uses [libp2p NAT traversal](https://docs.libp2p.io/concepts/nat/),
+specifically [STUN](https://docs.libp2p.io/concepts/nat/#hole-punching-stun) (leveraging the [identify protocol](https://docs.libp2p.io/concepts/protocols/#identify))
+and [AutoNAT](https://docs.libp2p.io/concepts/nat/#hole-punching-stun#autonat).
+
+The main focus of this topic is on researching novel ICE-complementary NAT traversal techniques that are decentralized and have desirable privacy and anonymity properties.
+The topic also comprises integrating and specifying ICE for [Waku v2](https://rfc.vac.dev/spec/10/).
+
+
