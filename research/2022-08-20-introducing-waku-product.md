@@ -15,10 +15,8 @@ discuss: TODO
 # Waku for Web DApps
 
 In 2021, we started to push for the adoption of Waku by projects other than the Status app.
-
 Waku is the communication component of the Web3 trifecta,
 which originally was Ethereum (contracts), Swarm (storage) and Whisper (communication).
-
 Hence, it made sense to first target dApps which already uses one of the Web3 pillar: Ethereum. 
 
 As most dApps are web apps,
@@ -39,16 +37,16 @@ and [PoCs](https://github.com/status-iM/gnosis-safe-waku).
 We branded this overall web app outreach effort as Waku Connect:
 Waku Connect's goal was to create docs, SDKs, PoCs to promote and facilitate the usage of Waku in the browser.
 
-By discussing with Waku users and watching it being adopted, we learn a few facts:
+By discussing with Waku users and watching it being adopted, we learned a few facts:
 
 1. The potential use cases for Waku are varied, complex and numerous,
 2. Many projects are interested in having an embedded decentralized chat feature in their dApp,
-3. There are a number of complex applications, which are not a simple web app, that needs a solution like Waku
+3. There are a number of complex applications, which are not a simple web app, that need Waku as a solution.
 
-(1) means that it is not that easy to create SDKs that makes using js-waku easier.
+(1) means that it is not that easy to create SDKs that facilitate using js-waku's usage.
 
 (2) was a clear candidate for an SDK.
-However, building a chat app is a complex task so the effort was done by the app team in the form of [Status Web](https://github.com/status-im/status-web/).
+However, building a chat app is a complex task so the effort was done by the Status app team in the form of [Status Web](https://github.com/status-im/status-web/).
 
 Finally, (3) was the most important lesson.
 We learned that complex platforms which include mobile, web, backend and desktop software
@@ -59,7 +57,7 @@ Said projects need to integrate Waku in their Golang or NodeJS backend, in their
 As we tackled the effort to make Waku [multi](https://github.com/status-im/go-waku/tree/master/examples)-[platform](https://github.com/status-im/waku-react-native),
 we realized we had to pivot the outreach effort beyond web dApps.
 
-We understood that we should see the whole Waku software Suite (js-waku, nwaku, go-waku) as an asset for the success of Waku.
+We understood that we should see the whole Waku software auite (js-waku, nwaku, go-waku) as an asset for the success of Waku.
 Outreach, marketing, documentation must not be limited to the web, but target all platforms, from mobile to desktop to the cloud to the web.
 
 # Waku Product
@@ -70,10 +68,10 @@ We are retiring the _Waku Connect_ branding in favour of the _Waku_ branding.
 When promoting, documenting or discussing Waku with Web3 projects,
 we are able to leverage all Waku implementations to better serve the user's needs:
 
-- Running a node for your projects and want to use Waku? Use nwaku.
-- Going mobile? Use Waku React Native.
-- C++ Desktop Game? Use Waku C-Bindings.
-- And of course, web app? Use js-waku.
+- Running a node for your projects and want to use Waku? Use [nwaku](https://github.com/status-im/nwaku).
+- Going mobile? Use [Waku React Native](https://github.com/status-im/waku-react-native).
+- C++ Desktop Game? Use [go-waku's C-Bindings](https://github.com/status-im/go-waku/tree/master/examples/c-bindings).
+- And of course, web app? Use [js-waku](https://github.com/status-im/js-waku).
 
 We are also consolidating the documentation for all implementations on a single website (work in progress)
 so it is easier for a developer to find the right information.
