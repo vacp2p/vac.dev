@@ -48,7 +48,12 @@ Better connectivity allows nodes to contribute more to the network and improve o
 There are various types of NATs whose behaviours are described in [RFC 4787](https://www.rfc-editor.org/rfc/rfc4787).
 [Carrier-Grade NATs](https://www.rfc-editor.org/rfc/rfc6888) add another layer of indirection, which complicates the matter further.
 Various [NAT traversal](https://en.wikipedia.org/wiki/NAT_traversal) protocols have been developed to overcome the different types of NATs.
-[RFC 8445](https://www.rfc-editor.org/rfc/rfc8445) specifies Interactive Connectivity Establishment (ICE), which leverages a set of NAT traversal techniques.
+[RFC 8445](https://www.rfc-editor.org/rfc/rfc8445) specifies Interactive Connectivity Establishment (ICE), which integrates a set of NAT traversal techniques.
+Waku currently uses [libp2p NAT traversal](https://docs.libp2p.io/concepts/nat/),
+specifically [STUN](https://docs.libp2p.io/concepts/nat/#hole-punching-stun) (leveraging the [identify protocol](https://docs.libp2p.io/concepts/protocols/#identify))
+and [AutoNAT](https://docs.libp2p.io/concepts/nat/#hole-punching-stun#autonat).
 
-This topic comprises integrating and specifying ICE for [Waku v2](https://rfc.vac.dev/spec/10/),
-as well as researching novel complementary NAT traversal techniques that are decentralized and have desirable privacy and anonymity properties.
+The main focus of this topic is on researching novel ICE-complementary NAT traversal techniques that are decentralized and have desirable privacy and anonymity properties.
+The topic also comprises integrating and specifying ICE for [Waku v2](https://rfc.vac.dev/spec/10/).
+
+
