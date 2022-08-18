@@ -27,6 +27,8 @@ Done in close collaboration with other teams in the space.
 Specifically metadata privacy.
 This includes anonymity studies and providing a modular suite of protocols with clear trade-offs and threat models.
 
+[Privacy/Anonymity Roadmap](https://github.com/vacp2p/research/issues/107)
+
 ## Scalability
 
 Making the network scalable in terms of number of nodes, messages supported, discovering of nodes, caching of historical messages etc.
@@ -42,6 +44,8 @@ Guiding principle is to provide additional guarantees for users of Waku (etc) in
 R&D related to P2P protocols and networking, including usage of WebRTC,
 Discovery for resource restricted devices,
 and new p2p protocols with different trade-offs.
+
+[Ambient Peer Discovery Roadmap](https://github.com/vacp2p/research/issues/116)
 
 ## Censorship resistance
 
