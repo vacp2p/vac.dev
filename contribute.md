@@ -1,9 +1,17 @@
 # Contribute
 
-This page is a stub.
+## How to Contribute
 
-For now, please check out the following links:
+Get in touch with us
+[joining our Discord](https://discord.gg/PQFdubGt6d),
+[opening a threat in our forum](https://forum.vac.dev/),
+or [opening issues / PRs on GitHub](https://github.com/vacp2p).
 
-- [Contribute on Github](https://github.com/vacp2p)
-- [Join our Discord](https://discord.gg/PQFdubGt6d)
-- [Open roles](https://jobs.status.im/?search=Vac)
+Also, see our [Current Job Openings](https://jobs.status.im/?search=Vac).
+
+## What to Contribute
+
+We are interested in both research and code contributions.
+For research contributions,
+see our [open research problems page](https://vac.dev/open-problems),
+or browse our [research areas](https://vac.dev/research-areas).
