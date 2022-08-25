@@ -36,7 +36,7 @@ Largely focused on Waku right now, but things like scalable group chats also rel
 
 ## Data synchronization
 
-End to end data application synchronization protocols, FT Store, interfacing with long term storage, message bus guarantees, possibly CRDTs etc.
+End to end data application synchronization protocols, [FT Store](https://rfc.vac.dev/spec/21/), interfacing with long term storage, message bus guarantees, possibly CRDTs etc.
 Guiding principle is to provide additional guarantees for users of Waku (etc) in terms of user experience.
 
 ## P2P/Networking
