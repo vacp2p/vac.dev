@@ -2,7 +2,7 @@
 
 ## How to Contribute
 
-Get in touch with us
+Get in touch with us by
 [joining our Discord](https://discord.gg/PQFdubGt6d),
 [opening a thread in our forum](https://forum.vac.dev/),
 or [opening issues / PRs on GitHub](https://github.com/vacp2p).
