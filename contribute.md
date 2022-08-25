@@ -21,6 +21,6 @@ or browse our [research areas](https://vac.dev/research-areas).
 For code contributions, see our "good first issue" lists for various Vac related code bases:
 
 * [nwaku](https://github.com/status-im/nwaku/labels/good%20first%20issue)
-* [js-waku](https://github.com/status-im/js-waku/good%20first%20issue)
+* [js-waku](https://github.com/status-im/js-waku/labels/good%20first%20issue)
 * [go-waku](https://github.com/status-im/go-waku/labels/good%20first%20issue)
 * [zerokit](https://github.com/vacp2p/zerokit/labels/good%20first%20issue)
