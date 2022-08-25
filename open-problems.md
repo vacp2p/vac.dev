@@ -31,6 +31,20 @@ examples comprise
 
 ### Halo2 in a browser
 
+[Halo2](https://halo2.dev) is an emerging proof system that,
+in combination with [PLONK](https://eprint.iacr.org/2019/953) and a polynomial commitment scheme based on the Inner Product Argument, 
+allows creation of short zero-knowledge proofs for arbitrary statements.
+Halo2 gained interest from the community because, 
+in contrast to the well enstablished [Groth16](https://eprint.iacr.org/2016/260.pdf) proof system, 
+it doesn't require a trusted setup 
+and allows proof recursion, 
+that is the possibility to compute an efficiently-verifiable ZK proof that attests correctness of an arbitrary number of other ZK proofs.
+
+However, at the [current stage](https://github.com/zcash/halo2), Halo2 requires more research and engineering work to make it work efficiently as Groth16 in practice.
+
+This topic focuses on researching and implementing all those possible optimiziations to PLONK/Halo2 in order to ultimately allow proof computations and verification in the browser, using WASM.
+
+
 ### Meshnet transports and libp2p
 
 Waku protocols are built on top of [libp2p's modular network stack](https://libp2p.io/).
