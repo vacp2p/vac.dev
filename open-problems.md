@@ -29,11 +29,26 @@ examples comprise
 * p2p social network
 * evoting system
 
-### Waku simulator
-
 ### Halo2 in a browser
 
 ### Meshnet transports and libp2p
+
+Waku protocols are built on top of [libp2p's modular network stack](https://libp2p.io/).
+This in essence allows the Waku network to be overlayed on existing network links. 
+Several transports are already supported:
+depending on the specific underlying libp2p implementation,
+supported transports could include WebSockets, QUIC, TCP, WebRTC, etc. 
+However, currently all transports are IP-based
+and require Waku nodes to have an active Internet connection to communicate outside of the local IP network.
+Not only does this presuppose access to reliable Internet connectivity,
+but such links are vulnerable to data profiling and censorship by ISPs or other entities.
+
+This topic focuses on using Waku over non-IP routed networks,
+such as [Wireless Mesh Networks](https://www.pcworld.com/article/407165/mesh-network-explained.html)
+to improve accessibility and strengthen resistance against censorship.
+It also investigates how appropriate the libp2p network stack is for such environments
+and if Waku could benefit from using different networking stacks
+that may function better in very restrictive environments.
 
 ### Applied ZK
 
