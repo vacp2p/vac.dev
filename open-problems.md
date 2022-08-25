@@ -56,4 +56,10 @@ and [AutoNAT](https://docs.libp2p.io/concepts/nat/#hole-punching-stun#autonat).
 The main focus of this topic is on researching novel ICE-complementary NAT traversal techniques that are decentralized and have desirable privacy and anonymity properties.
 The topic also comprises integrating and specifying ICE for [Waku v2](https://rfc.vac.dev/spec/10/).
 
+# Further Research Collaboration Opportunities
+
+Besides the open research problems listed in the section above,
+you may browse our [Research Areas](https://vac.dev/research-areas) page
+and check our roadmaps for various research topics.
+
 
