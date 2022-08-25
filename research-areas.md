@@ -18,7 +18,7 @@ RLN, service credentials, peer reputation, and protocol revenue.
 ## Applied ZK
 
 Applied ZK opens up the door to many new constructs, especially related to privacy.
-This research area includes things like RLN, Unirep and similar novel constructs,
+This research area includes the development of primitives like RLN, Unirep and similar novel constructs,
 but also research and development related to zero-knowledge technology, such as ZK frameworks like Circom and Halo2, ZK-VM, WASM in the browser, and efficient zk proof systems running on restricted-resource devices.
 Done in close collaboration with other teams in the space.
 
