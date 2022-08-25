@@ -60,6 +60,6 @@ The topic also comprises integrating and specifying ICE for [Waku v2](https://rf
 
 Besides the open research problems listed in the section above,
 you may browse our [Research Areas](https://vac.dev/research-areas) page
-and check our roadmaps for various research areas.
+and check our roadmaps for various research topics.
 
 
