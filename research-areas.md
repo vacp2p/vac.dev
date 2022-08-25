@@ -19,7 +19,7 @@ RLN, service credentials, peer reputation, and protocol revenue.
 
 Applied ZK opens up the door to many new constructs, especially related to privacy.
 This research area includes the development of primitives like RLN, Unirep and similar novel constructs,
-but also research and development related to zero-knowledge technology, such as ZK frameworks like Circom and Halo2, ZK-VM, WASM in the browser, and efficient zk proof systems running on restricted-resource devices.
+but also research and development related to zero-knowledge technology, such as ZK frameworks like Circom and Halo2, ZK-VM, WASM in the browser, and efficient zk proof systems running on resource-restricted devices.
 Done in close collaboration with other teams in the space.
 
 ## Privacy/Anonymity
@@ -36,13 +36,14 @@ Largely focused on Waku right now, but things like scalable group chats also rel
 
 ## Data synchronization
 
-End-to-end data application synchronization protocols, [FT Store](https://rfc.vac.dev/spec/21/), interfacing with long term storage, message bus guarantees, possibly CRDTs etc.
+End-to-end data application synchronization protocols, [FT Store](https://rfc.vac.dev/spec/21/), interfacing with long-term storage, message bus guarantees,
+possibly [CRDTs](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) etc.
 Guiding principle is to provide additional guarantees for users of Waku (etc) in terms of user experience.
 
 ## P2P/Networking
 
 R&D related to P2P protocols and networking, including usage of WebRTC,
-Discovery for resource restricted devices,
+Discovery for resource-restricted devices,
 and new p2p protocols with different trade-offs.
 
 [Ambient Peer Discovery Roadmap](https://github.com/vacp2p/research/issues/116)
