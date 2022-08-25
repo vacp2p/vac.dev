@@ -31,7 +31,7 @@ This includes anonymity studies and providing a modular suite of protocols with 
 
 ## Scalability
 
-Making the network scalable in terms of number of nodes, messages supported, discovering of nodes, caching of historical messages etc.
+Making the network scalable in terms of number of nodes, message rate, discovering of nodes, caching of historical messages etc.
 Largely focused on Waku right now, but things like scalable group chats also relevant here.
 
 ## Data synchronization
