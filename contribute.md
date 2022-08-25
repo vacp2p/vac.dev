@@ -4,7 +4,7 @@
 
 Get in touch with us
 [joining our Discord](https://discord.gg/PQFdubGt6d),
-[opening a threat in our forum](https://forum.vac.dev/),
+[opening a thread in our forum](https://forum.vac.dev/),
 or [opening issues / PRs on GitHub](https://github.com/vacp2p).
 
 Also, see our [Current Job Openings](https://jobs.status.im/?search=Vac).
