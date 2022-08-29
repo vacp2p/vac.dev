@@ -32,7 +32,7 @@ examples comprise
 ### Halo2 in a browser
 
 [Halo2](https://halo2.dev) is an emerging proof system that,
-in combination with [PLONK](https://eprint.iacr.org/2019/953) and a polynomial commitment scheme based on the Inner Product Argument, 
+in combination with [PLONK](https://eprint.iacr.org/2019/953) and a polynomial commitment scheme [based on the Inner Product Argument](https://zcash.github.io/halo2/design/proving-system/inner-product.html), 
 allows creation of short zero-knowledge proofs for arbitrary statements.
 Halo2 gained interest from the community because, 
 in contrast to the well enstablished [Groth16](https://eprint.iacr.org/2016/260.pdf) proof system, 
@@ -43,7 +43,6 @@ that is the possibility to compute an efficiently-verifiable ZK proof that attes
 However, at the [current stage](https://github.com/zcash/halo2), Halo2 requires more research and engineering work to make it work efficiently as Groth16 in practice.
 
 This topic focuses on researching and implementing all those possible optimiziations to PLONK/Halo2 in order to ultimately allow proof computations and verification in the browser, using WASM.
-
 
 ### Meshnet transports and libp2p
 
@@ -65,6 +64,21 @@ and if Waku could benefit from using different networking stacks
 that may function better in very restrictive environments.
 
 ### Applied ZK
+
+To help scale and secure Waku network,
+nodes should be incentivezed to join and thoroughly provide services to users
+like [Relay](https://rfc.vac.dev/spec/11/), [Store](https://rfc.vac.dev/spec/13/), [Filter](https://rfc.vac.dev/spec/12/), and so on.
+
+However, providing services costs network nodes computational and hardware resources.
+
+In this topic we would like to design a protocol that, tailored to Waku, can:
+- incentivize Waku nodes to provide services (e.g., economically); 
+- provide an high level of privacy and anonimyty for both users consuming services and nodes providing them;
+- disincentivize non protocol-compliant behaviours;
+
+We envision a private fungible settlment among consumers and service providers 
+based on zero-knowledge proofs for high privacy guarantees 
+and on-chain smart-contracts to economically incentivize protocol-compliant behaviours.
 
 ### Robust P2P network - NAT traversal
 
