@@ -126,7 +126,7 @@ GiOytfFQQCDNkGE0RAo=
 
 
 This public key can be also downloaded [here](https://mail-api.proton.me/pks/lookup?op=get&search=contribute@vac.dev),
-by using Proton public APIs.
+by using Proton's public APIs.
 
 Since a bad encryption will result in our impossibility to access your contribution,
 we invite you to check the official documentation of your e-mail client or provider in order to correctly setup the appropriate PGP keys
