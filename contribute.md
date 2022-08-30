@@ -94,7 +94,7 @@ Once done, send us an email to **`contribute@vac.dev`** providing as
 - body message: a short description of your contribution; 
 - attachments: all `.patch` files in `<folder>`.
 
-Note that we automatically discard received e-mails containing one or more attachments which do not have a `.patch` extension.
+Note that we automatically discard e-mails containing one or more attachments which do not have a `.patch` extension.
 
 Once received, we will review your contribution and eventually create a pull request on your behalf.
 
