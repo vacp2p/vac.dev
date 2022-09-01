@@ -66,14 +66,15 @@ that may function better in very restrictive environments.
 ### Applied ZK
 
 To help scale and secure Waku network,
-nodes should be incentivezed to join and thoroughly provide services to users
+nodes should be incentivized to join and reliably provide services to users
 like [Relay](https://rfc.vac.dev/spec/11/), [Store](https://rfc.vac.dev/spec/13/), [Filter](https://rfc.vac.dev/spec/12/), and so on.
 
 However, providing services costs network nodes computational and hardware resources.
 
 In this topic we would like to design a protocol that, tailored to Waku, can:
+
 - incentivize Waku nodes to provide services (e.g., economically); 
-- provide an high level of privacy and anonimyty for both users consuming services and nodes providing them;
+- provide a high level of privacy and anonimyty for both users consuming services and nodes providing them;
 - disincentivize non protocol-compliant behaviours;
 
 We envision a private fungible settlment among consumers and service providers 
