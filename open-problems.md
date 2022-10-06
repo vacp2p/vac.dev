@@ -24,10 +24,20 @@ A new version of discv5 that is both efficient and provides eclipse mitigation i
 
 ### Devising novel applications of the Waku protocol stack
 
-examples comprise
-
-* p2p social network
-* evoting system
+Waku provides a suite of modular p2p protocols to enable realization of web2 applications in the decentralized web3 world in the form of DApps. 
+Waku protocol stack features all the necessary components for the DApp developers namely, networking / routing layer, and multiple discovery methods.
+It also provides various request-reply protocols to allow resource provisioning for the resource limited devices. 
+For example, store protocol (to account for storage limitations), filter and lightpush protocols (to aid bandwidth constrained peers).
+It means that literally any famous web2 services e.g., email, social networking, e-voting systems, for which typically a large and powerful infrastructure is need, can now be translated to their corresponding decentralized and p2p and privacy-preserving version by relying on the Waku. 
+Here, Waku allows individual peers with limited capacities to accumulate their resources to form the required infrastructure for the intended service.
+One of the greatest product built on top of Waku is the decentralized messaging application of [Status](status.im).
+However, we believe that the usage of Waku is not limited to the messaging applications, and in this research problem, we would like to encourage researchers and developers to design and build other decentralized systems based on Waku.
+Below is a just a sample list of usecases, but we strongly recommend to get creative and build what it means the most to you and your community
+* P2P social network
+* E-voting system
+* P2P Email service
+* Online p2p Games
+* P2P scoring and recommendation systems
 
 ### Halo2 in a browser
 
