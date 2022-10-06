@@ -19,8 +19,20 @@ A new version of discv5 that is both efficient and provides eclipse mitigation i
 
 
 ### Privacy-Preserving Incentivizations of waku protocols
+Waku protocols are designed in such a way that resource-limited devices can make up for their lack of resources by relying on the more powerful peers in the network.
+This can be seen at all the layer of the Waku protocol stack.
+One of which is the Waku relay protocol in which peers volunteerly join the routing layer of Waku and aid message propagation.
+While contributing peers may have altruistic reasons, or are stake holder in some higher level application and would like to deliver high quality service via reliable infrastructure.
+However, this cannot be generalized to all the peers hence  peers need to be incentivized for their participation and contribution in the network regardless of being tied to any specific application, or neccessarily having altruistic wills.
 
-* Incentivise relay
+One of the most challenging protocols of Waku for incentivization is the Waku Relay protocol.
+This is because the supplied service is in the form of bandwidth, and due to the Gossip-based nature of the routing protocol it is hard to verify which peers are the legit routers hence are eligible for any designated reward.
+Also, there is no trivial requester-responder relationship in that protocol. 
+The reason is that every published message is routed by every other peer in the network.
+Thus we face a one to many relationship.
+In this research problem, researchers and engineers are asked to design and develop an incentivazation mechansim that would account for the said issues and also is game theoretically sound, in the sense that all the participants would be rationally incentivized to follow the protocol description. 
+
+
 
 ### Devising novel applications of the Waku protocol stack
 
