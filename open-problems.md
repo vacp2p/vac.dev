@@ -41,11 +41,11 @@ Waku provides a suite of modular p2p protocols to enable the realization of web2
 Waku protocol stack features all the necessary components for the DApp developers namely, the networking/routing layer, and multiple discovery methods.
 It also provides various request-response protocols to allow resource provisioning for resource-limited devices. 
 For example, store protocol (to account for storage limitations), and filter and lightpush protocols (to aid bandwidth-constrained peers).
-It means that literally any famous web2 services e.g., email, social networking, and e-voting systems, for which typically a large and powerful infrastructure is needed, can now be translated to their corresponding decentralized and p2p and privacy-preserving version by relying on the Waku. 
+It means that literally any famous web2 services e.g., email, social networking, and e-voting systems, for which typically a large and powerful infrastructure is needed, can now be translated to their corresponding decentralized and p2p and privacy-preserving version by relying on Waku. 
 Here, Waku allows individual peers with limited capacities to accumulate their resources to form the required infrastructure for the intended service.
 One of the greatest products built on top of Waku is the decentralized messaging application of [Status](status.im).
 However, we believe that the usage of Waku is not limited to messaging applications, and in this research problem, we would like to encourage researchers and developers to design and build other decentralized systems on top of Waku.
-Below is just a sample list of use cases, but we strongly recommend getting creative and building what it means the most to you and your community
+Below is just a sample list of use cases. We strongly recommend getting creative and building what it means the most to you and your community.
 * P2P social network
 * E-voting system
 * P2P Email service
