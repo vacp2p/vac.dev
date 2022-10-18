@@ -20,14 +20,37 @@ A new version of discv5 that is both efficient and provides eclipse mitigation i
 
 ### Privacy-Preserving Incentivizations of waku protocols
 
-* Incentivise relay
+Waku protocols are designed in such a way that resource-limited devices can make up for their lack of resources by relying on the more powerful peers in the network.
+This can be seen at all the layers of the Waku protocol stack.
+One such layer is the Waku relay protocol in which peers voluntarily join the routing layer of Waku and aid message propagation.
+Some peers may have altruistic reasons for contributing or are stakeholders in some higher-level application requiring reliable infrastructure to deliver a high-quality service.
+However, this cannot be generalized to all, therefore peers need to be incentivized for their participation and contribution in the network regardless of being tied to any specific application, or necessarily having altruistic wills.
+
+One of the most challenging protocols of Waku for incentivization is the Waku Relay protocol.
+This is because the supplied service is in the form of bandwidth, and due to the Gossip-based nature of the routing protocol it is hard to verify which peers are the legit routers and hence are eligible for any designated reward.
+Also, there is no trivial requester-responder relationship in that protocol. 
+The reason is that every published message is routed by every other peer in the network.
+Thus we face a one-to-many relationship.
+In this research problem, researchers and engineers are asked to design and develop an incentivization mechanism that would account for the said issues and also is game theoretically sound, in the sense that all the participants would be rationally incentivized to follow the protocol description. 
+
+
 
 ### Devising novel applications of the Waku protocol stack
 
-examples comprise
-
-* p2p social network 
-* evoting system
+Waku provides a suite of modular p2p protocols to enable the realization of web2 applications in the decentralized web3 world in the form of DApps. 
+Waku protocol stack features all the necessary components for the DApp developers namely, the networking/routing layer, and multiple discovery methods.
+It also provides various request-response protocols to allow resource provisioning for resource-limited devices. 
+For example, store protocol (to account for storage limitations), and filter and lightpush protocols (to aid bandwidth-constrained peers).
+It means that literally any famous web2 services e.g., email, social networking, and e-voting systems, for which typically a large and powerful infrastructure is needed, can now be translated to their corresponding decentralized and p2p and privacy-preserving version by relying on Waku. 
+Here, Waku allows individual peers with limited capacities to accumulate their resources to form the required infrastructure for the intended service.
+One of the greatest products built on top of Waku is the decentralized messaging application of [Status](status.im).
+However, we believe that the usage of Waku is not limited to messaging applications, and in this research problem, we would like to encourage researchers and developers to design and build other decentralized systems on top of Waku.
+Below is just a sample list of use cases. We strongly recommend getting creative and building what it means the most to you and your community.
+* P2P social network
+* E-voting system
+* P2P Email service
+* Online p2p Games
+* P2P scoring and recommendation systems
 
 ### Halo2 in a browser
 
