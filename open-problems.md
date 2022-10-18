@@ -26,7 +26,7 @@ A new version of discv5 that is both efficient and provides eclipse mitigation i
 
 examples comprise
 
-* p2p social network
+* p2p social network 
 * evoting system
 
 ### Halo2 in a browser
