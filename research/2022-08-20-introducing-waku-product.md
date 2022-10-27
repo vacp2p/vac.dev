@@ -1,8 +1,8 @@
 ---
 layout: post
-name:  "Waku Product"
-title:  "Waku Product"
-date:   2022-08-20 00:00:00 +0000
+name:  "Waku as a Product"
+title:  "Waku as a Product"
+date:   2022-11-01 00:00:00 +0000
 author: franck
 published: true
 permalink: /waku-product
@@ -17,7 +17,7 @@ discuss: TODO
 In 2021, we started to push for the adoption of Waku by projects other than the Status app.
 Waku is the communication component of the Web3 trifecta,
 which originally was Ethereum (contracts), Swarm (storage) and Whisper (communication).
-Hence, it made sense to first target dApps which already uses one of the Web3 pillar: Ethereum. 
+Hence, it made sense to first target dApps which already uses one of the Web3 pillars: Ethereum. 
 
 As most dApps are web apps,
 we naturally started the development of [js-waku for the browser](https://vac.dev/presenting-js-waku).
@@ -34,12 +34,12 @@ Finally, we created a number of web apps:
 [examples](https://docs.wakuconnect.dev/docs/examples/)
 and [PoCs](https://github.com/status-iM/gnosis-safe-waku).
 
-We branded this overall web app outreach effort as Waku Connect:
+We branded this overall web app adoption effort as Waku Connect:
 Waku Connect's goal was to create docs, SDKs, PoCs to promote and facilitate the usage of Waku in the browser.
 
 By discussing with Waku users and watching it being adopted, we learned a few facts:
 
-1. The potential use cases for Waku are varied, complex and numerous,
+1. The potential use cases for Waku are varied and numerous,
 2. Many projects are interested in having an embedded decentralized chat feature in their dApp,
 3. There are a number of complex applications, which are not a simple web app, that need Waku as a solution.
 
@@ -57,12 +57,16 @@ Said projects need to integrate Waku in their Golang or NodeJS backend, in their
 As we tackled the effort to make Waku [multi](https://github.com/status-im/go-waku/tree/master/examples)-[platform](https://github.com/status-im/waku-react-native),
 we realized we had to pivot the outreach effort beyond web dApps.
 
-We understood that we should see the whole Waku software auite (js-waku, nwaku, go-waku) as an asset for the success of Waku.
+We understood that we should see the whole Waku software suite
+([js-waku](https://github.com/waku-org/js-waku),
+[nwaku](https://github.com/status-im/nwaku),
+[go-waku](https://github.com/status-im/go-waku),
+[waku-react-native](https://github.com/waku-org/waku-react-native)) as an asset for the success of Waku.
 Outreach, marketing, documentation must not be limited to the web, but target all platforms, from mobile to desktop to the cloud to the web.
 
-# Waku Product
+# Waku as a Product
 
-The Waku Product project is born from the need of having a consolidated effort to make the various Waku implementations **usable and used**.
+In 2022, we shifted our focus to Waku as a Product by consolidating our efforts to make the various Waku implementations **usable and used**.
 
 We are retiring the _Waku Connect_ branding in favour of the _Waku_ branding.
 When promoting, documenting or discussing Waku with Web3 projects,
@@ -76,16 +80,17 @@ we are able to leverage all Waku implementations to better serve the user's need
 We are also consolidating the documentation for all implementations on a single website (work in progress)
 so it is easier for a developer to find the right information.
 
-We call the task of pushing for Waku to be used by other projects _platform outreach_.
-
-This year, we will also start the _operator outreach_ effort to push for users to run their own Waku nodes.
+This year, we also started the _operator outreach_ effort to push for users to run their own Waku nodes.
+We have recently concluded our [first operator trial run](https://github.com/status-im/nwaku/issues/828).
 Nwaku's documentation, stability and performance has improved,
 it is now easier to run your [own Waku node](https://github.com/status-im/nwaku/tree/master/docs/operators).
 
-Today, operators wannabes are most likely running their own nodes to support or use the Waku network.
+Today, operator wannabes are most likely running their own nodes to support or use the Waku network.
 
-As we are [dogfooding Waku RLN](https://github.com/status-im/nwaku/issues/827), our novel economic spam protection protocol
-and looking at [incentivizating the Waku Store protocol](https://github.com/vacp2p/research/issues/99),
+As we are [dogfooding](https://twitter.com/oskarth/status/1582027828295790593?s=20&t=DPEP6fXK6KWbBjV5EBCBMA)
+[Waku RLN](https://github.com/status-im/nwaku/issues/827),
+our novel economic spam protection protocol,
+and looking at [incentivizing the Waku Store protocol](https://github.com/vacp2p/research/issues/99),
 we are adding further reasons to run your own Waku node.
 
 # In Conclusion
@@ -105,6 +110,8 @@ What you can expect next:
 - Easier to [run your own waku node](https://github.com/status-im/nwaku/issues/828),
 - Improvement of existing protocols based on field-testing feedback and functional requirements
   (e.g. [Waku Filter](https://github.com/vacp2p/rfc/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc++12%2FWAKU2-FILTER)),
+- Continue our focus on ensuring that Waku can run anywhere: Browser,
+  [Raspberry Pi Zero](https://twitter.com/richardramos_me/status/1574405469912932355?s=20&t=DPEP6fXK6KWbBjV5EBCBMA) and other restricted-resource environments,
 - More communication & marketing effort around Waku and the Waku developer community.
 
 If you want to help us, we are [hiring](https://jobs.status.im/!
