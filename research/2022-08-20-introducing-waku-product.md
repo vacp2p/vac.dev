@@ -75,7 +75,8 @@ We understood that we should see the whole Waku software suite
 ([js-waku](https://github.com/waku-org/js-waku),
 [nwaku](https://github.com/status-im/nwaku),
 [go-waku](https://github.com/status-im/go-waku),
-[waku-react-native](https://github.com/waku-org/waku-react-native)) as an asset for the success of Waku.
+[waku-react-native](https://github.com/waku-org/waku-react-native),
+[etc](https://github.com/waku-org)) as an asset for the success of Waku.
 Outreach, marketing, documentation must not be limited to the web, but target all platforms, from mobile to desktop to the cloud to the web.
 
 # Waku for All DApps
@@ -98,55 +99,54 @@ We have recently concluded our [first operator trial run](https://github.com/sta
 Nwaku's documentation, stability and performance has improved,
 it is now easier to run your [own Waku node](https://github.com/status-im/nwaku/tree/master/docs/operators).
 
-Today, operator wannabes are most likely running their own nodes to support or use the Waku network.
-
+Today, operator wannabes most likely run their own nodes to support or use the Waku network.
 As we are [dogfooding](https://twitter.com/oskarth/status/1582027828295790593?s=20&t=DPEP6fXK6KWbBjV5EBCBMA)
 [Waku RLN](https://github.com/status-im/nwaku/issues/827),
 our novel economic spam protection protocol,
 and looking at [incentivizing the Waku Store protocol](https://github.com/vacp2p/research/issues/99),
 we are adding further reasons to run your own Waku node.
 
-For those who were following us in 2021, note that we are retiring the _Waku Connect_ branding in favour of the _Waku_ branding.
+For those who were following us in 2021, note that we are retiring the web focused _Waku Connect_ branding in favour of the _Waku_ branding.
 
 # Waku for Your Project
 
-As discussed, Waku is now available on various platforms. So, how can Waku benefit your project?
+As discussed, Waku is now available on various platforms. The question remains: How can Waku benefit **your** project?
 
 Here are a couple of use cases we recently investigated:
 
-## Layer 2 decentralization
+## Layer-2 Decentralization
 
-Most Roll-ups use a centralized sequencer or equivalent. Running several sequencers is not as straightforward as running several execution nodes.
+Most (all?) roll-ups use a centralized sequencer or equivalent. Running several sequencers is not as straightforward as running several execution nodes.
 Waku can help:
 
-- Provide a neutral marketplace for a mempool: If sequencers compete for L2 tx fees, they may not be incentivized to share user transactions with others sequencers.
+- Provide a neutral marketplace for a mempool: If sequencers compete for L2 tx fees, they may not be incentivized to share user transactions with other sequencers.
   Waku nodes can act as a neutral network to enable all sequences to access transactions (as Waku nodes are agnostic to message payloads).
-- Enable censorship-resistant wallet<>L2 communication: By integration Waku in user's wallets and sequencer/validators, interaction with the L2 could be done in a decentralized manner, avoid the usage of a single failure point (RPC URL).
-- Provide rate limiting mechanism for spam protection: If the data exchanged between sequencers is encrypted or split (block chunks), then a rate limit mechanism may be needed to avoid DDOS attacks. Waku RLN can provide this.
+- Enable censorship-resistant wallet<>L2 communication: By integration Waku in user wallets and sequencers, interaction with the L2 could be done in a decentralized manner, avoiding the usage of a single point of failure (RPC URL).
+- Provide rate limiting mechanism for spam protection: If the data exchanged between sequencers/nodes is encrypted or split (block chunks), then a rate limit mechanism may be needed to avoid DDOS attacks. [RLN](https://rfc.vac.dev/spec/32/) can provide this.
 
 ## Device pairing and communication
 
-Using [Waku Device Pairing](https://rfc.vac.dev/spec/43/), it would be possible for a user to pair devices and enables a secure encrypted communication channel between them.
+Using [Waku Device Pairing](https://rfc.vac.dev/spec/43/), it will be possible for a user to pair devices and enable a secure encrypted communication channel between them.
 As this channel would operate over Waku, it would be censorship-resistant and privacy preserving.
 This two devices could be:
 
-- Ethereum node and browser wallet for remote admin
-- Alice's phone and Bob's phone
-- Mobile wallet and desktop/browser dApp
+- Ethereum node and mobile phone to access a remote admin panel,
+- Alice's phone and Bob's phone for any kind of secure communication,
+- Mobile wallet and desktop/browser dApp for transaction and signature exchange.
 
-Check [js-waku#950](https://github.com/waku-org/js-waku/issues/950) for the latest update on a PoC. 
+Check [js-waku#950](https://github.com/waku-org/js-waku/issues/950) for the latest update on this. 
 
 # Get Involved
 
-If you are a developer, grab any of the Waku implementation and integrate it in your app: https://waku.org/platform.
+If you are a developer, grab any of the Waku implementations and integrate it in your app: https://waku.org/platform.
 
-Research? See https://vac.dev/contribute on how to contribute.
+Researcher? See https://vac.dev/contribute on how to participate to Waku research.
 
 Not a developer but techie enough? Try to run your own node: https://waku.org/operator.
 
 Otherwise, you can play around with the various web examples: https://github.com/waku-org/js-waku-examples#readme.
 
-If you want to help, we are [hiring](https://jobs.status.im/!
+If you want to help, we are [hiring](https://jobs.status.im/)!
 
 # Moving Forward
 
@@ -166,5 +166,5 @@ What you can expect next:
 
 ---
 
-- <a id="footnote1">[1]</a> Waku is modular, composed of several protocols, hence some Waku protocols maybe mature and widely used while new protocols are still being designed.
-  Which means that research continues to be _ongoing_ while Waku is already used by some application. 
+- <a id="footnote1">[1]</a> Waku is modular, composed of several protocols, hence some Waku protocols may be mature and widely used while new protocols are still being designed.
+  Which means that research continues to be _ongoing_ while Waku is already used in production. 
