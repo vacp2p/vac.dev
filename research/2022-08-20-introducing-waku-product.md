@@ -1,20 +1,37 @@
 ---
 layout: post
-name:  "Waku as a Product"
-title:  "Waku as a Product"
+name:  "Waku for All DApps"
+title:  "Waku for All DApps"
 date:   2022-11-01 00:00:00 +0000
 author: franck
 published: true
-permalink: /waku-product
-categories: waku, product, platform, operator
-summary: Introduce Waku Product, a project to ensure that Waku is usable and used.
+permalink: /waku-for-all-dapps
+categories: waku, dapp, platform, operator
+summary: Waku adoption push has shifted from Web to all platforms. 
 image: /img/black-waku-logo-with-name.png
 discuss: TODO
 ---
 
-# Waku for Web DApps
+<!--
+  Audience: Reader curious about Waku/following Waku
+  Goal:
+    - Trigger Ha-ha moment for Waku possibilities
+      - Explain shift from Web to all dApps
+    - Make it clear that Waku is being field tested, it is more than a research project
+    - Ideas on how to contribute/participate/play with Waku
+-->
 
-In 2021, we started to push for the adoption of Waku by projects other than the Status app.
+# Waku for the Web
+
+We are building Waku to be the communication layer for Web3:
+a network and suite of protocols to enable secure, censorship-resistant, privacy-preserving communications that can run on any device.
+
+This involves research efforts in various domains:
+conversational security, protocol incentivization, zero-knowledge, anonymity to name a few.
+
+To ensure we reach our goals, we knew that early dogfooding of Waku was necessary, even if research was still _in progress_ [[1]](#footnote1).
+Thus, we started to push for the adoption of Waku by projects other than the Status app starting 2021.
+
 Waku is the communication component of the Web3 trifecta,
 which originally was Ethereum (contracts), Swarm (storage) and Whisper (communication).
 Hence, it made sense to first target dApps which already uses one of the Web3 pillars: Ethereum. 
@@ -33,9 +50,6 @@ that we would facilitate with the help of [SDKs](https://github.com/status-im/wa
 Finally, we created a number of web apps:
 [examples](https://docs.wakuconnect.dev/docs/examples/)
 and [PoCs](https://github.com/status-iM/gnosis-safe-waku).
-
-We branded this overall web app adoption effort as Waku Connect:
-Waku Connect's goal was to create docs, SDKs, PoCs to promote and facilitate the usage of Waku in the browser.
 
 By discussing with Waku users and watching it being adopted, we learned a few facts:
 
@@ -64,11 +78,10 @@ We understood that we should see the whole Waku software suite
 [waku-react-native](https://github.com/waku-org/waku-react-native)) as an asset for the success of Waku.
 Outreach, marketing, documentation must not be limited to the web, but target all platforms, from mobile to desktop to the cloud to the web.
 
-# Waku as a Product
+# Waku for All DApps
 
-In 2022, we shifted our focus to Waku as a Product by consolidating our efforts to make the various Waku implementations **usable and used**.
+In 2022, we shifted our focus to make the various Waku implementations **usable and used**.
 
-We are retiring the _Waku Connect_ branding in favour of the _Waku_ branding.
 When promoting, documenting or discussing Waku with Web3 projects,
 we are able to leverage all Waku implementations to better serve the user's needs:
 
@@ -93,12 +106,49 @@ our novel economic spam protection protocol,
 and looking at [incentivizing the Waku Store protocol](https://github.com/vacp2p/research/issues/99),
 we are adding further reasons to run your own Waku node.
 
-# In Conclusion
+For those who were following us in 2021, note that we are retiring the _Waku Connect_ branding in favour of the _Waku_ branding.
 
-We are committed to make Waku, the communication layer of Web3, a success.
-For this endeavour, the Vac program is focusing on inventing and improving the Waku protocols
-(among other [topics](https://github.com/vacp2p/research/issues/112)).
-And now, the Waku Product project is focusing on stabilizing, promoting, documenting Waku Software and supporting Waku users.
+# Waku for Your Project
+
+As discussed, Waku is now available on various platforms. So, how can Waku benefit your project?
+
+Here are a couple of use cases we recently investigated:
+
+## Layer 2 decentralization
+
+Most Roll-ups use a centralized sequencer or equivalent. Running several sequencers is not as straightforward as running several execution nodes.
+Waku can help:
+
+- Provide a neutral marketplace for a mempool: If sequencers compete for L2 tx fees, they may not be incentivized to share user transactions with others sequencers.
+  Waku nodes can act as a neutral network to enable all sequences to access transactions (as Waku nodes are agnostic to message payloads).
+- Enable censorship-resistant wallet<>L2 communication: By integration Waku in user's wallets and sequencer/validators, interaction with the L2 could be done in a decentralized manner, avoid the usage of a single failure point (RPC URL).
+- Provide rate limiting mechanism for spam protection: If the data exchanged between sequencers is encrypted or split (block chunks), then a rate limit mechanism may be needed to avoid DDOS attacks. Waku RLN can provide this.
+
+## Device pairing and communication
+
+Using [Waku Device Pairing](https://rfc.vac.dev/spec/43/), it would be possible for a user to pair devices and enables a secure encrypted communication channel between them.
+As this channel would operate over Waku, it would be censorship-resistant and privacy preserving.
+This two devices could be:
+
+- Ethereum node and browser wallet for remote admin
+- Alice's phone and Bob's phone
+- Mobile wallet and desktop/browser dApp
+
+Check [js-waku#950](https://github.com/waku-org/js-waku/issues/950) for the latest update on a PoC. 
+
+# Get Involved
+
+If you are a developer, grab any of the Waku implementation and integrate it in your app: https://waku.org/platform.
+
+Research? See https://vac.dev/contribute on how to contribute.
+
+Not a developer but techie enough? Try to run your own node: https://waku.org/operator.
+
+Otherwise, you can play around with the various web examples: https://github.com/waku-org/js-waku-examples#readme.
+
+If you want to help, we are [hiring](https://jobs.status.im/!
+
+# Moving Forward
 
 What you can expect next:
 
@@ -107,11 +157,14 @@ What you can expect next:
 - Delivery of the latest Waku protocols in all code bases and cross client PoCs
   ([noise](https://rfc.vac.dev/spec/35/), [noise-sessions](https://rfc.vac.dev/spec/37/),
   [waku-rln-relay](https://rfc.vac.dev/spec/17/), etc),
-- Easier to [run your own waku node](https://github.com/status-im/nwaku/issues/828),
+- Easier to [run your own waku node](https://github.com/status-im/nwaku/issues/828), more operator trials,
 - Improvement of existing protocols based on field-testing feedback and functional requirements
   (e.g. [Waku Filter](https://github.com/vacp2p/rfc/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc++12%2FWAKU2-FILTER)),
 - Continue our focus on ensuring that Waku can run anywhere: Browser,
   [Raspberry Pi Zero](https://twitter.com/richardramos_me/status/1574405469912932355?s=20&t=DPEP6fXK6KWbBjV5EBCBMA) and other restricted-resource environments,
 - More communication & marketing effort around Waku and the Waku developer community.
 
-If you want to help us, we are [hiring](https://jobs.status.im/!
+---
+
+- <a id="footnote1">[1]</a> Waku is modular, composed of several protocols, hence some Waku protocols maybe mature and widely used while new protocols are still being designed.
+  Which means that research continues to be _ongoing_ while Waku is already used by some application. 
