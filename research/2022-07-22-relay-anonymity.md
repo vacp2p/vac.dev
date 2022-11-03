@@ -62,7 +62,8 @@ Identities are protected by the [anonymity property](#anonymity).
 Often privacy is realized by the confidentiality property of security.
 This neither makes privacy and security the same, nor the one a sub category of the other.
 While security is abstract itself (its properties can be realized in various ways), privacy lives on a more abstract level using security properties.
-Privacy typically does not use integrity and confidentiality. An adversary who has no access to the private data, because the message has been encrypted, could still alter the message.
+Privacy typically does not use integrity and availability.
+An adversary who has no access to the private data, because the message has been encrypted, could still alter the message.
 
 Waku offers confidentiality via secure channels set up with the help of the [Noise Protocol Framework](https://noiseprotocol.org/).
 Using these secure channels, message content is only disclosed to the intended receivers.
@@ -132,7 +133,7 @@ An example for blending is an adjustable number of pubsub topics and peers in th
 
 ![Figure 2: Anonymity Trilemma: pick two. ](/img/anonymity_trilemma.svg)
 
-A forth factor that influences [the anonymity trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html) is *frequency and patterns* of messages.
+A fourth factor that influences [the anonymity trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html) is *frequency and patterns* of messages.
 The more messages there are, and the more randomly distributed they are, the better the anonymity protection offered by a given anonymous communication protocol.
 So, incentivising users to use the protocol, for instance by lowering entry barriers, helps protecting the anonymity of all users.
 The frequency/patterns factor is also related to the above described k-anonymity.
