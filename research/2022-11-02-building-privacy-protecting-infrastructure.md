@@ -321,9 +321,11 @@ with our example p2p chat application, and it does so through three different
 clients, nwaku, go-waku and js-waku for browsers. This is our first p2p
 cross-client testnet for RLN Relay.
 
-Here's a screenshot of a short demo. This shows a user registering in a browser,
-signaling through JS-Waku. It then gets relayed to a nwaku node, that verifies
-the proof. When more than one message is sent in a given epoch, it detects it as
+Here's a [video](https://www.youtube.com/watch?v=-vVrJWW0fls) that shows a user
+registering in a browser, signaling through JS-Waku. It then gets relayed to a
+nwaku node, that verifies the proof. The second
+[video](https://www.youtube.com/watch?v=Xz5q2ZhkFYs) shows what happens in the
+spam case. when more than one message is sent in a given epoch, it detects it as
 spam and discards it. Slashing hasn't been implemented fully yet in the client
 and is a work in progress.
 
@@ -335,8 +337,6 @@ setup for all clients so you can play around with it.
 As part of this, and to make it work in multiple different environments, we've
 also been developing a new library called Zerokit. I'll talk about this a bit
 later.
-
-![Cross-client testnet](/img/building_private_infra_testnet.png)
 
 ### Private settlement / Service credentials
 
