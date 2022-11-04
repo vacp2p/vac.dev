@@ -105,8 +105,8 @@ privacy-protection guarantees would be very useful for high-value targets.
 This doesn't begin to touch on the so called "dapps" that make a lot of
 sacrifices in how they function, from the way domains work, to how websites are
 hosted and the reliance on centralized services for communication. We see this
-time and time again, where centralized, single points of failure systems works
-for a while, but then eventually fails.
+time and time again, where centralized, single points of failure systems work
+for a while, but then eventually fail.
 
 In many cases an individual user might not care enough though, and for platforms
 the lure to take shortcuts is strong. That is why it is important to be
@@ -212,10 +212,10 @@ zkSNARKs.
 
 I'm not going to go into too much detail of RLN here. If you are interested, I
 gave a [talk](https://www.youtube.com/watch?v=g41nHQ0mLoA) in Amsterdam at
-Devconnect about this. We also have some write-ups on
-[here](https://vac.dev/rln-relay) Sanaz who has been pushing a lot of this from
-our side. There's also another talk at Devcon by Taylor going into RLN in more
-detail.
+Devconnect about this. We have some write-ups on RLN
+[here](https://vac.dev/rln-relay) bhy Sanaz who has been pushing a lot of this
+from our side. There's also another talk at Devcon by Taylor going into RLN in
+more detail.
 
 I'll briefly go over what it is, the interface and circuit and then talk about
 how it is used in Waku.
@@ -381,11 +381,11 @@ splitting the peer pool into two slots, or only providing a few cheap queries
 for free.
 
 The service provisioning is general, and can be generalized for any kind of
-req-resp service provisoning that we want to keep private.
+request/response service provisoning that we want to keep private.
 
 This isn't a perfect solution, but it is an incremental improvement on top of
 the status quo. It can be augmented with more advanced techniques such as better
-non-repuditable node reputation, proof of correct service provisioning, etc.
+non-repudiable node reputation, proof of correct service provisioning, etc.
 
 We are currently in the raw spec / proof of concept stage of this. We expect to
 launch a testnet of this later this year or early next year.
@@ -408,7 +408,7 @@ API that can be used through web browsers.
 Waku is p2p infrastructure running in many different environments, such as
 Nim/JS/Go/Rust, so this a requirement for us.
 
-Circom and JS strengths is access to Dapp developers, tooling, generating
+Circom and JS strengths are access to Dapp developers, tooling, generating
 verification code, circuits etc.  Rust strengths is that it is systems-based and
 easy to interface with other language runtime such as Nim, Go, Rust, C. It also
 gives access to other Rust ZK ecosystems such as arkworks. This opens door for
@@ -441,7 +441,7 @@ interface with academia. There's a lot of good researchers out there and we want
 to build a better bridge between academia and industry.
 
 Another thing is [network](https://vac.dev/wakuv2-relay-anon)
-[privacy](https://github.com/vacp2p/research/issues/107u). Waku is modular with
+[privacy](https://github.com/vacp2p/research/issues/107). Waku is modular with
 respect to privacy guarantees, and there are a lot of knobs to turn here
 depending on specific deployments. For example, if you are running the full
 relay protocol you currently have much stronger receiver anonymity than if you
