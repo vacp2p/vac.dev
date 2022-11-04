@@ -2,7 +2,7 @@
 layout: post
 name:  "Building Privacy-Protecting Infrastructure"
 title:  "Building Privacy-Protecting Infrastructure"
-date:   2022-10-04 12:00:00
+date:   2022-11-04 12:00:00
 author: oskarth
 published: true
 permalink: /building-privacy-protecting-infrastructure
