@@ -445,7 +445,7 @@ Another thing is [network](https://vac.dev/wakuv2-relay-anon)
 respect to privacy guarantees, and there are a lot of knobs to turn here
 depending on specific deployments. For example, if you are running the full
 relay protocol you currently have much stronger receiver anonymity than if you
-are running filter protocol from a bandwidth or connectivity restricted node.
+are running filter protocol from a bandwidth or connectivity-restricted node.
 
 We aim to make this pluggable depending on user needs. E.g. mixnets such as Nym
 come with some trade-offs but are a useful tool in the arsenal. A good mental
