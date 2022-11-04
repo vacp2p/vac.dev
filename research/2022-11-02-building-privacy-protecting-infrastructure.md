@@ -20,9 +20,9 @@ In this write-up, we are going to talk about building privacy-protecting
 infrastructure.  What is it, why do we need it and how can we build it?
 
 We'll look at Waku, the communication layer for Web3. We'll look at how we are
-using ZK technology to incentivize and protect the Waku network. We'll also look
-at Zerokit, a library we are writing to make ZKP easier to use in different
-environments.
+using Zero Knowledge (ZK) technology to incentivize and protect the Waku
+network. We'll also look at Zerokit, a library we are writing to make ZKP easier
+to use in different environments.
 
 At the end of this write-up, I hope you'll come away with an understanding of
 the importance of privacy-protecting infrastructure and how we can build it.
@@ -36,9 +36,9 @@ of protocols that reflect a set of principles.
 
 ![Principles](/img/building_private_infra_principles.png)
 
-It has its origins in the Status app and trying to improve the underlying
-protocols and infrastructure. We build [Waku](https://waku.org/), among other
-things.
+It has its origins in the [Status app](https://status.im/) and trying to improve
+the underlying protocols and infrastructure. We build [Waku](https://waku.org/),
+among other things.
 
 ### Why build privacy-protecting infrastructure?
 
@@ -85,8 +85,9 @@ censorship-resistant and encourage meaningful freedom of expression.
 Infrastructure is what lies underneath. Many ways of looking at this but I'll
 keep it simple as per the original Web3 vision. You had Ethereum for
 compute/consensus, Swarm for storage, and Whisper for messaging. Waku has taken
-over the mantle from Whisper and is a lot more usable today than Whisper ever
-was, for many reasons.
+over the mantle from Whisper and is a lot more
+[usable](https://vac.dev/fixing-whisper-with-waku) today than Whisper ever was,
+for many reasons.
 
 ![Web3 Infrastructure](/img/web3_holy_trinity.png)
 
@@ -120,7 +121,7 @@ money, ZKPs allow us to express fundamentally new things. In line with the great
 tradition of trust-minimization, we can prove statement while revealing the
 absolute minimum information necessary. This fits the definition of privacy, the
 power to selectively reveal yourself, perfectly. I'm sure I don't need to tell
-anyone in this room but this is truly revolutionary. The technology is advancing
+anyone reading this but this is truly revolutionary. The technology is advancing
 extremely fast and often it is our imagination that is the limit.
 
 ![Zero knowledge](/img/building_private_infra_zk.png)
@@ -213,9 +214,9 @@ zkSNARKs.
 I'm not going to go into too much detail of RLN here. If you are interested, I
 gave a [talk](https://www.youtube.com/watch?v=g41nHQ0mLoA) in Amsterdam at
 Devconnect about this. We have some write-ups on RLN
-[here](https://vac.dev/rln-relay) bhy Sanaz who has been pushing a lot of this
+[here](https://vac.dev/rln-relay) by Sanaz who has been pushing a lot of this
 from our side. There's also another talk at Devcon by Taylor going into RLN in
-more detail.
+more detail. Finally, here's the [RLN spec](https://rfc.vac.dev/spec/32/).
 
 I'll briefly go over what it is, the interface and circuit and then talk about
 how it is used in Waku.
@@ -272,8 +273,10 @@ signal output nullifier;
 
 ### RLN - Shamir's secret sharing
 
-This is done using Shamir's secret sharing. Shamir’s secret sharing is based on
-idea of splitting a secret into shares. This is how we enable slashing of funds.
+This is done using [Shamir's secret
+sharing](https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing). Shamir’s
+secret sharing is based on idea of splitting a secret into shares. This is how
+we enable slashing of funds.
 
 In this case, we have two shares. If a given identity `a0` signals twice in
 epoch/external nullifier, `a1` is the same. For a given RLN app,
@@ -457,7 +460,7 @@ additions](https://github.com/vacp2p/research/issues/119) to the relay/gossip
 protocol, which would provide for stronger sender anonymity, especially in a
 multi-node/botnet attacker model. As part of this we are looking into different
 parameters choices and general possibilities for lower latency usage. This could
-make it more amendable for latency sensitive environments, such as validator
+make it more amenable for latency sensitive environments, such as validator
 privacy, for specific threat models. The general theme here is we want to be
 rigorous with the guarantees we provide, under what conditions and for what
 threat models.
