@@ -159,7 +159,7 @@ for and consumed.
 
 ### Waku - protocol interactions 
 
-There are many protocols that interact. Waku Relay protocol is based libp2p
+There are many protocols that interact. Waku Relay protocol is based on libp2p
 GossipSub for p2p messaging. We have filter for bandwidth-restricted nodes to
 only receive subset of messages. Lightpush for nodes with short connection
 windows to push messages into network. Store for nodes that want to retrieve
