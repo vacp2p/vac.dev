@@ -252,7 +252,7 @@ is a share of the secret equation, and the (internal) nullifier acts as a unique
 fingerprint for a given app/user/epoch combination. How do we calculate `y` and
 the internal nullifier?
 
-```circom
+```
 // Private input
 signal input identity_secret;
 signal input path_elements[n_levels][1];
@@ -268,8 +268,6 @@ signal output y;
 signal output root;
 signal output nullifier;
 ```
-
-<!-- ![Circuit](/img/building_private_infra_circuit.png) -->
 
 ### RLN - Shamir's secret sharing
 
