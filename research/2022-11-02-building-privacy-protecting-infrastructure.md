@@ -16,7 +16,7 @@ discuss: https://forum.vac.dev/t/TODO
 
 ### Intro
 
-In this write-up we are going to talk about building privacy-protecting
+In this write-up, we are going to talk about building privacy-protecting
 infrastructure.  What is it, why do we need it and how can we build it?
 
 We'll look at Waku, the communication layer for Web3. We'll look at how we are
