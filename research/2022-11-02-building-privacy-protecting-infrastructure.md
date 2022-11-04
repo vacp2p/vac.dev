@@ -9,7 +9,7 @@ permalink: /building-privacy-protecting-infrastructure
 categories: research
 summary: What is privacy-protecting infrastructure? Why do we need it and how we can build it? We'll look at Waku, the communication layer for Web3. We'll see how it uses ZKPs to incentivize and protect the Waku network. We'll also look at Zerokit, a library that makes it easier to use ZKPs in different environments. After reading this, I hope you'll better understand the importance of privacy-protecting infrastructure and how we can build it.
 image: /img/building_private_infra_intro.png
-discuss: https://forum.vac.dev/t/TODO
+discuss: https://forum.vac.dev/t/discussion-building-privacy-protecting-infrastructure/161
 ---
 
 *This write-up is based on a talk given at DevCon 6 in Bogota, a video can be found [here](https://www.youtube.com/watch?v=CW1DYJifdhs)*
