@@ -429,7 +429,7 @@ have with something like Foundry.
 ### Other research
 
 I also want to mention a few other things we are doing. One thing is
-[https://rfc.vac.dev/](protocol specifications). We think this is very important
+[protocol specifications](https://rfc.vac.dev/). We think this is very important
 for p2p infra, and we see a lot of other projects that claim to do it p2p
 infrastructure but they aren't clear about guarantees or how stable something
 is. That makes it hard to have multiple implementations, to collaborate across
