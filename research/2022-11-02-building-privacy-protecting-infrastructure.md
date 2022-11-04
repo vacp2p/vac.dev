@@ -327,7 +327,7 @@ spam and discards it. Slashing hasn't been implemented fully yet in the client
 and is a work in progress.
 
 If you are curious and want to participate, you can join the effort on our [Vac
-Discord(https://discord.gg/PQFdubGt6d). We also have
+Discord](https://discord.gg/PQFdubGt6d). We also have
 [tutorials](https://github.com/status-im/nwaku/blob/master/docs/tutorial/rln-chat-cross-client.md)
 setup for all clients so you can play around with it.
 
