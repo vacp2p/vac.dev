@@ -239,7 +239,7 @@ either economic or social, and if you double signal you get slashed.
 
 ### RLN - Circuit
 
-Here's what the private and public input to the circuit looks like. The identity
+Here's what the private and public inputs to the circuit look like. The identity
 secret is generated locally, and we create an identity commitment that is
 inserted into a Merkle tree. We then use Merkle proofs to prove membership.
 Registered member can only signal once for a given epoch or external nullifier,
