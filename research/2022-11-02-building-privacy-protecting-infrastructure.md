@@ -113,7 +113,7 @@ the lure to take shortcuts is strong. That is why it is important to be
 principled, but also pragmatic in terms of the trade-offs that you allow on top.
 We'll touch more on this in the design goals around modularity that Waku has.
 
-### ZK for Privacy-protecting infrastructure
+### ZK for privacy-protecting infrastructure
 
 ZKPs are a wonderful new tool. Just like smart contracts enables programmable
 money, ZKPs allow us to express fundamentally new things. In line with the great
