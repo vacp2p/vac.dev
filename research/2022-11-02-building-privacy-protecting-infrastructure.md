@@ -276,7 +276,7 @@ This is done using Shamir's secret sharing. Shamir’s secret sharing is based o
 idea of splitting a secret into shares. This is how we enable slashing of funds.
 
 In this case, we have two shares. If a given identity `a0` signals twice in
-epoch/external nullifier, a1 is the same. For a given RLN app,
+epoch/external nullifier, `a1` is the same. For a given RLN app,
 `internal_nullifier` then stays the same. `x` is signal hash which is different,
 and `y` is public, so we can reconstruct `identity_secret`. With the identity
 secret revealed, this gives access to e.g. financial stake.
