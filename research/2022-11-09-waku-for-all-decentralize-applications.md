@@ -1,7 +1,7 @@
 ---
 layout: post
-name:  "Waku for All Decentralized Application and Infrastructure"
-title:  "Waku for All Decentralized Application and Infrastructure"
+name:  "Waku for All Decentralized Applications and Infrastructures"
+title:  "Waku for All Decentralized Applications and Infrastructures"
 date:   2022-11-09 00:00:00 +0000
 author: franck
 published: true
@@ -24,31 +24,32 @@ discuss: TODO
     - Ideas on how to contribute/participate/play with Waku
 -->
 
-# Waku for the Web
+# Background
 
-We are building Waku to be the communication layer for Web3:
-a network and suite of protocols to enable secure, censorship-resistant, privacy-preserving communications that can run on any device.
+We have built Waku to be a communication layer for Web3. Waku is a collection of protocols to chose from for your
+messaging needs. It enables secure, censorship-resistant, privacy-preserving, spam-protected communication for its user.
+It is designed to run on any device, from mobile to the cloud.
 
-This involves research efforts in various domains:
-conversational security, protocol incentivization, zero-knowledge, anonymity to name a few.
 
-To ensure we reach our goals, we knew that early dogfooding of Waku was necessary, even if research was still _in progress_ [[1]](#footnote1).
-Thus, we started to push for the adoption of Waku by projects other than the Status app starting 2021.
+<!-- TODO: more about Waku Readiness -->
 
-Waku is the communication component of the Web3 trifecta,
-which originally was Ethereum (contracts), Swarm (storage) and Whisper (communication).
-Hence, it made sense to first target dApps which already uses one of the Web3 pillars: Ethereum. 
+This involves research efforts in various domains: conversational security, protocol incentivization, zero-knowledge,
+anonymity to name a few.
 
-As most dApps are web apps,
-we naturally started the development of [js-waku for the browser](https://vac.dev/presenting-js-waku).
+To ensure we reach our goals, we knew that early dogfooding of Waku was necessary, even if research was still
+_in progress_ [[1]](#footnote1). Thus, as soon as Waku protocols and software were usable, we started to push for the
+adoption of Waku. This started back in 2021.
 
-Once ready,
-we reached out to dApps to integrate Waku,
-added [prizes to hackathons](https://twitter.com/waku_org/status/1451400128791605254?s=20&t=Zhc0BEz6RVLkE_SeE6UyFA)
+Waku is the communication component of the Web3 trifecta, which originally was Ethereum (contracts), Swarm (storage)
+and Whisper (communication). Hence, it made sense to first target dApps which already uses one of the Web3 pillars: Ethereum. 
+
+As most dApps are web apps, we naturally started the development of [js-waku for the browser](https://vac.dev/presenting-js-waku).
+
+Once ready, we reached out to dApps to integrate Waku, added [prizes to hackathons](https://twitter.com/waku_org/status/1451400128791605254?s=20&t=Zhc0BEz6RVLkE_SeE6UyFA)
 and gave [talks](https://docs.wakuconnect.dev/docs/presentations/).
 
-We also assumed that we would see patterns in the usage of Waku,
-that we would facilitate with the help of [SDKs](https://github.com/status-im/wakuconnect-vote-poll-sdk).
+We also assumed that we would see patterns in the usage of Waku, that we would facilitate with the help of
+[SDKs](https://github.com/status-im/wakuconnect-vote-poll-sdk).
 
 Finally, we created a number of web apps:
 [examples](https://docs.wakuconnect.dev/docs/examples/)
@@ -82,7 +83,7 @@ We understood that we should see the whole Waku software suite
 [etc](https://github.com/waku-org)) as an asset for the success of Waku.
 Outreach, marketing, documentation must not be limited to the web, but target all platforms, from mobile to desktop to the cloud to the web.
 
-# Waku for All DApps
+# Waku for All Decentralized Applications and Infrastructures
 
 In 2022, we shifted our focus to make the various Waku implementations **usable and used**.
 
