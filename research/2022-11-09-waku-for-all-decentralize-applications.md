@@ -8,9 +8,11 @@ published: true
 permalink: /waku-for-all
 categories: waku, dapp, infrastructure, public good, platform, operator
 summary: | 
-  Waku is the communication layer for Web3. Decentralized communication that scales. Private. Secure. Runs anywhere. 
+  Waku is an open communication protocol and network that decentralized apps and infrastructure can use for their
+  communication needs. It is designed to enable dApps and decentralized infrastructure projects to have secure, private,
+  scalable communication. Waku is available in several languages and platforms, from Web to mobile to desktop to cloud. 
   We initially pushed Waku adoption to the Web ecosystem, we learned that Waku is usable in a variety of complex applications
-  and infrastructure projects. We have shifted our effort to make Waku usable on various platforms.
+  and infrastructure projects. We have prioritized our effort to make Waku usable on various platforms and environments.
 image: /img/black-waku-logo-with-name.png
 discuss: TODO
 ---
