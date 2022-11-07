@@ -1,13 +1,16 @@
 ---
 layout: post
-name:  "Waku for All DApps"
-title:  "Waku for All DApps"
-date:   2022-11-01 00:00:00 +0000
+name:  "Waku for All Decentralized Application and Infrastructure"
+title:  "Waku for All Decentralized Application and Infrastructure"
+date:   2022-11-09 00:00:00 +0000
 author: franck
 published: true
-permalink: /waku-for-all-dapps
-categories: waku, dapp, platform, operator
-summary: Waku adoption push has shifted from Web to all platforms. 
+permalink: /waku-for-all
+categories: waku, dapp, infrastructure, public good, platform, operator
+summary: | 
+  Waku is the communication layer for Web3. Decentralized communication that scales. Private. Secure. Runs anywhere. 
+  We initially pushed Waku adoption to the Web ecosystem, we learned that Waku is usable in a variety of complex applications
+  and infrastructure projects. We have shifted our effort to make Waku usable on various platforms.
 image: /img/black-waku-logo-with-name.png
 discuss: TODO
 ---
@@ -96,7 +99,7 @@ so it is easier for a developer to find the right information.
 
 This year, we also started the _operator outreach_ effort to push for users to run their own Waku nodes.
 We have recently concluded our [first operator trial run](https://github.com/status-im/nwaku/issues/828).
-Nwaku's documentation, stability and performance has improved,
+[Nwaku](https://vac.dev/introducing-nwaku)'s documentation, stability and performance has improved,
 it is now easier to run your [own Waku node](https://github.com/status-im/nwaku/tree/master/docs/operators).
 
 Today, operator wannabes most likely run their own nodes to support or use the Waku network.
