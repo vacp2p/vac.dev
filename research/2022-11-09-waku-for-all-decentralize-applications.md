@@ -59,9 +59,19 @@ and [PoCs](https://github.com/status-iM/gnosis-safe-waku).
 
 By discussing with Waku users and watching it being adopted, we learned a few facts:
 
-1. The potential use cases for Waku are varied and numerous,
+1. The potential use cases for Waku are varied and numerous:
+  - Wallet <> dApp communication: [WalletConnect](https://medium.com/walletconnect/walletconnect-v2-0-protocol-whats-new-3243fa80d312), [XMTP](https://xmtp.org/docs/dev-concepts/architectural-overview/)
+  - Off-chain (and private) marketplace:
+    [RAILGUN](https://twitter.com/RAILGUN_Project/status/1556780629848727552?s=20&t=NEKQJiJAfg5WJqvuF-Ym_Q) & 
+    [Decentralized Uber](https://twitter.com/TheBojda/status/1455557282318721026)
+  - Signature exchange for a multi-sign wallet: [Gnosis Safe x Waku](https://github.com/status-im/gnosis-safe-waku)
+  - Off-chain Game moves/actions: [Super Card Game (EthOnline 2021)](https://showcase.ethglobal.com/ethonline2021/super-card-game)
+  - Decentralized Pastebin: [Debin](https://debin.io/)
 2. Many projects are interested in having an embedded decentralized chat feature in their dApp,
-3. There are a number of complex applications, which are not a simple web app, that need Waku as a solution.
+3. There are a number of complex applications, which are not a simple web app, that need Waku as a solution. Taking RAILGUN as an example:
+  - Web wallet
+  - + React Native mobile wallet
+  - + NodeJS node/backend.
 
 (1) means that it is not that easy to create SDKs that facilitate using js-waku's usage.
 
@@ -73,6 +83,13 @@ We learned that complex platforms which include mobile, web, backend and desktop
 need Waku for decentralized and censorship-resistant communications.
 For these projects, js-waku is simply not enough.
 Said projects need to integrate Waku in their Golang or NodeJS backend, in their C# desktop application and React Native mobile app.
+
+From a business angle, we were also able to identify several actors and to better position Waku as a product:
+
+- platforms: Projects that uses Waku to handle communication, projects have their own end users,
+- operators: Operators run Waku nodes and are incentivized to do so because they are also platforms or they use Waku's incentivization protocols,
+- developers: Developers are usually part of a platforms or solo hackers learning Web3,
+- contributors: Developers and researchers keen to contribute to Waku due to their interest in the domain of decentralization, privacy, censorship-resistance, zero-knowledge, etc.
 
 As we tackled the effort to make Waku [multi](https://github.com/status-im/go-waku/tree/master/examples)-[platform](https://github.com/status-im/waku-react-native),
 we realized we had to pivot the outreach effort beyond web dApps.
@@ -122,7 +139,7 @@ Here are a couple of use cases we recently investigated:
 
 ## Layer-2 Decentralization
 
-Most (all?) roll-ups use a centralized sequencer or equivalent. Running several sequencers is not as straightforward as running several execution nodes.
+Most ([[2] [3]](#references) roll-ups use a centralized sequencer or equivalent. Running several sequencers is not as straightforward as running several execution nodes.
 Waku can help:
 
 - Provide a neutral marketplace for a mempool: If sequencers compete for L2 tx fees, they may not be incentivized to share user transactions with other sequencers.
@@ -172,5 +189,9 @@ What you can expect next:
 
 ---
 
+## References
+
 - <a id="footnote1">[1]</a> Waku is modular, composed of several protocols, hence some Waku protocols may be mature and widely used while new protocols are still being designed.
   Which means that research continues to be _ongoing_ while Waku is already used in production. 
+- [[2]](https://community.optimism.io/docs/how-optimism-works/#block-production) The Optimism Foundation runs the only block produce on the Optimism network.
+- [[3]](https://l2beat.com/) Top 10 L2s are documented has having a centralized operator.
