@@ -1,8 +1,8 @@
 ---
 layout: post
-name:  "Waku for All Decentralized Applications and Infrastructures"
-title:  "Waku for All Decentralized Applications and Infrastructures"
-date:   2022-11-08 00:00:00 +0000
+name: "Waku for All Decentralized Applications and Infrastructures"
+title: "Waku for All Decentralized Applications and Infrastructures"
+date: 2022-11-08 00:00:00
 author: franck
 published: true
 permalink: /waku-for-all
