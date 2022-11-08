@@ -19,7 +19,7 @@ discuss: TODO
 
 # Background
 
-We have built Waku to be a communication layer for Web3. Waku is a collection of protocols to chose from for your
+We have built Waku to be the communication layer for Web3. Waku is a collection of protocols to chose from for your
 messaging needs. It enables secure, censorship-resistant, privacy-preserving, spam-protected communication for its user.
 It is designed to run on any device, from mobile to the cloud.
 
