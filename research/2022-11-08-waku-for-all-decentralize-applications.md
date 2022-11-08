@@ -29,7 +29,7 @@ This involved research efforts in various domains: conversational security, prot
 etc.
 
 Waku uses novel technologies. Hence, we knew that early dogfooding of Waku was necessary. Even if research
-was still _in progress_ [[1]](#footnote1). Thus, as soon as Waku protocols and software were usable, we started to push
+was still _in progress_ [[1]](#references). Thus, as soon as Waku protocols and software were usable, we started to push
 for the adoption of Waku. This started back in 2021.
 
 Waku is the communication component of the Web3 trifecta. This trifecta was Ethereum (contracts), Swarm
@@ -179,7 +179,7 @@ What you can expect next:
 
 ## References
 
-- <a id="footnote1">[1]</a> Waku is modular; it is a suite of protocols; hence some Waku protocols may be mature, while
+- \[1\] Waku is modular; it is a suite of protocols; hence some Waku protocols may be mature, while
   new protocols are still being designed. Which means that research continues to be _ongoing_ while
   Waku is already used in production. 
 - [[2]](https://community.optimism.io/docs/how-optimism-works/#block-production) The Optimism Foundation runs the only block produce on the Optimism network.
