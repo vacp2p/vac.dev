@@ -33,15 +33,15 @@ was still _in progress_ [[1]](#footnote1). Thus, as soon as Waku protocols and s
 for the adoption of Waku. This started back in 2021.
 
 Waku is the communication component of the Web3 trifecta. This trifecta was Ethereum (contracts), Swarm
-(storage) and Whisper (communication). Hence, it made sense to first target dApps which already uses one of the Web3
-pillars: Ethereum. 
+(storage) and Whisper (communication). Hence, it made sense to first target dApps which already uses one of the pillars:
+Ethereum. 
 
 As most dApps are web apps, we started the development of [js-waku for the browser](https://vac.dev/presenting-js-waku).
 
 Once ready, we reached out to dApps to integrate Waku, added [prizes to hackathons](https://twitter.com/waku_org/status/1451400128791605254?s=20&t=Zhc0BEz6RVLkE_SeE6UyFA)
 and gave [talks](https://docs.wakuconnect.dev/docs/presentations/).
 
-We also assumed that we would see patterns in the usage of Waku, that we would facilitate with the help of
+We also assumed we would see patterns in the usage of Waku, that we would facilitate with the help of
 [SDKs](https://github.com/status-im/wakuconnect-vote-poll-sdk).
 
 Finally, we created several web apps:
@@ -59,12 +59,12 @@ By discussing with Waku users and watching it being used, we learned a few facts
   - Off-chain Game moves/actions: [Super Card Game (EthOnline 2021)](https://showcase.ethglobal.com/ethonline2021/super-card-game)
   - Decentralized Pastebin: [Debin](https://debin.io/)
 2. Many projects are interested in having an embedded chat in their dApp,
-3. There are complex applications, which are not a simple web app, that need Waku as a solution. Taking RAILGUN as an example:
+3. There are complex applications that need Waku as a solution. Taking RAILGUN as an example:
   - Web wallet
-  - + React Native mobile wallet
-  - + NodeJS node/backend.
+  - \+ React Native mobile wallet
+  - \+ NodeJS node/backend.
 
-(1) means that it is not that easy to create SDKs that facilitate using js-waku's usage.
+(1) means that it is not that easy to create SDKs for common use cases.
 
 (2) was a clear candidate for an SDK. Yet, building a chat app is a complex task. Hence, the Status app team tackled
 this in the form of [Status Web](https://github.com/status-im/status-web/).
@@ -79,9 +79,9 @@ We understood that we should see the whole Waku software suite
 [go-waku](https://github.com/status-im/go-waku),
 [waku-react-native](https://github.com/waku-org/waku-react-native),
 [etc](https://github.com/waku-org)) as an asset for its success.
-That we should not limit outreach, marketing, documentation efforts to the web, but to target all platforms.
+That we should not limit outreach, marketing, documentation efforts to the web, but target all platforms.
 
-From a market perspective, we identified several actors to target:
+From a market perspective, we identified several actors:
 
 - platforms: Projects that uses Waku to handle communication,
 - operators: Operators run Waku nodes and are incentivized to do so,
@@ -93,7 +93,7 @@ From a market perspective, we identified several actors to target:
 
 In 2022, we shifted our focus to make the various Waku implementations **usable and used**.
 
-We made Waku [multi](https://github.com/status-im/go-waku/tree/master/examples)-[platform](https://github.com/status-im/waku-react-native).
+We made Waku [multi-plaform](https://github.com/status-im/go-waku/tree/master/examples).
 
 We shifted Waku positioning to leverage all Waku implementations and better serve the user's needs:
 
