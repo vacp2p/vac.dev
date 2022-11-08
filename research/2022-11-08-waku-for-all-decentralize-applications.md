@@ -14,7 +14,7 @@ summary: |
   Initially, We pushed Waku adoption to the Web ecosystem, we learned that Waku is usable in a variety of complex applications
   and infrastructure projects. We have prioritized our effort to make Waku usable on various platforms and environments.
 image: /img/black-waku-logo-with-name.png
-discuss: TODO
+discuss: https://forum.vac.dev/t/discussion-waku-for-all-decentralized-applications-and-infrastructures/163
 ---
 
 # Background
