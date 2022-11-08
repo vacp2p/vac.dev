@@ -23,7 +23,7 @@ We have built Waku to be a communication layer for Web3. Waku is a collection of
 messaging needs. It enables secure, censorship-resistant, privacy-preserving, spam-protected communication for its user.
 It is designed to run on any device, from mobile to the cloud.
 
-<!-- TODO: more about Waku Readiness -->
+Waku is available on many systems and environments and used by several applications and SDKs for decentralized communications.
 
 This involved research efforts in various domains: conversational security, protocol incentivization, zero-knowledge,
 etc.
