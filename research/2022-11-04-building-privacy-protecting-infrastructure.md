@@ -215,7 +215,7 @@ I'm not going to go into too much detail of RLN here. If you are interested, I
 gave a [talk](https://www.youtube.com/watch?v=g41nHQ0mLoA) in Amsterdam at
 Devconnect about this. We have some write-ups on RLN
 [here](https://vac.dev/rln-relay) by Sanaz who has been pushing a lot of this
-from our side. There's also another talk at Devcon by Taylor going into RLN in
+from our side. There's also another talk at Devcon by Tayler going into RLN in
 more detail. Finally, here's the [RLN spec](https://rfc.vac.dev/spec/32/).
 
 I'll briefly go over what it is, the interface and circuit and then talk about
