@@ -123,6 +123,19 @@ and [AutoNAT](https://docs.libp2p.io/concepts/nat/#hole-punching-stun#autonat).
 The main focus of this topic is on researching novel ICE-complementary NAT traversal techniques that are decentralized and have desirable privacy and anonymity properties.
 The topic also comprises integrating and specifying ICE for [Waku v2](https://rfc.vac.dev/spec/10/).
 
+### Peer scoring in peer-to-peer networks
+
+Peer-to-peer networks are made of multiple nodes or peers, typically in the range of hundreds or even thousands. This makes it impossible to keep all nodes connected in a full-mesh network since it would involve an exponentially increasing number of connections. This means that each node has to just connect to a small subset of all nodes, which has to be chosen wisely. Some unanswered questions:
+* Which nodes do we connect to? Based on what criteria?
+* How do we keep quality peers while being forgiving with nodes with fewer resources or that are syncing?
+* Can we handle our peers in a way that prevents eclipse attacks?
+* Can we give each peer a score and select the best one based on it?
+* Which parameters should be considered in the score? Can we make the score Waku-specific?
+* What kind of behavior should we consider as bad? Can we make it Waku-specific?
+
+This not only involves an efficient peer discovery strategy, which gives us a pool of peers to select from, but also strategies to select the ones we are interested in and drop connections with the ones we are not. Protocols like GossipSub have their [score](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#the-score-function)](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#the-score-function) and its something that can be used as a baseline, but unfortunately does not take into account Waku specifics.
+
+
 # Further Research Collaboration Opportunities
 
 Besides the open research problems listed in the section above,
