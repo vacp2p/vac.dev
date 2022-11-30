@@ -13,3 +13,7 @@ Made and deployed with [logos site-builder](https://github.com/acid-info/logos-s
 2. Proceed with changes, push to `origin` and open a Pull Request against `staging`;
 3. Once approved, merge pull request, check changes on [staging.vac.dev](https://staging.vac.dev);
 4. Once ready to promote to live website, rebase master on staging: `git checkout master; git pull master; git rebase origin/staging; git push`.
+
+# Copyright
+
+For all research posts under https://vac.dev/research, copyright and related rights are waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
