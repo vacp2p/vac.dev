@@ -1,0 +1,11 @@
+:root{
+            --dark-background-color: #FFFFFF;
+            --dark-text-color: #000000;
+            --dark-accent-active-color: #7187ff;
+            --dark-accent-mute-color: #F7F7F7;
+            --light-background-color: #000000;
+            --light-text-color: #FFFFFF;
+            --light-accent-active-color: #7187ff;
+            --light-accent-mute-color: #30363d;
+            --fontFamily: sans-serif
+        }

@@ -1,0 +1,320 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><title>Fixing Whisper with Waku</title><meta name="viewport" content="initial-scale=1.0, width=device-width"/><meta name="description" content="A research log. Why Whisper doesn&#x27;t scale and how to fix it."/><link rel="shortcut icon" href="/assets/logo/vac/favicon.ico"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:creator" content="vacp2p"/><meta name="twitter:site" content="@vacp2p"/><meta name="twitter:title" content="Fixing Whisper with Waku"/><meta name="twitter:description" content="A research log. Why Whisper doesn&#x27;t scale and how to fix it."/><meta name="twitter:image" content="https://staging.vac.dev/compiled-assets/img/whisper_scalability.png"/><meta property="og:url" content="https://staging.vac.dev//fixing-whisper-with-waku"/><meta property="og:image" content="https://staging.vac.dev/compiled-assets/img/whisper_scalability.png"/><meta property="og:site_name" content="Fixing Whisper with Waku"/><meta property="og:title" content="Fixing Whisper with Waku"/><meta property="og:description" content="A research log. Why Whisper doesn&#x27;t scale and how to fix it."/><meta name="next-head-count" content="16"/><link rel="preload" href="/_next/static/css/e068b41030ceede6.css" as="style"/><link rel="stylesheet" href="/_next/static/css/e068b41030ceede6.css" data-n-g=""/><link rel="preload" href="/_next/static/css/cdd95df0746869ac.css" as="style"/><link rel="stylesheet" href="/_next/static/css/cdd95df0746869ac.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-5cd94c89d3acac5f.js"></script><script src="/_next/static/chunks/webpack-a14325fd952bf0eb.js" defer=""></script><script src="/_next/static/chunks/framework-fc97f3f1282ce3ed.js" defer=""></script><script src="/_next/static/chunks/main-ada0258e433ba222.js" defer=""></script><script src="/_next/static/chunks/pages/_app-91f05ffa21c9a6ec.js" defer=""></script><script src="/_next/static/chunks/eb1842f2-90eb16656390ba2a.js" defer=""></script><script src="/_next/static/chunks/399-b4b9981c243e7c94.js" defer=""></script><script src="/_next/static/chunks/108-374a17adb21bb412.js" defer=""></script><script src="/_next/static/chunks/pages/%5B%5B...path%5D%5D-9c3054039bf889f4.js" defer=""></script><script src="/_next/static/-5vfLOflCSkQPJRugO7ZO/_buildManifest.js" defer=""></script><script src="/_next/static/-5vfLOflCSkQPJRugO7ZO/_ssgManifest.js" defer=""></script><script src="/_next/static/-5vfLOflCSkQPJRugO7ZO/_middlewareManifest.js" defer=""></script></head><body><div id="__next"><svg width="0" height="0" xmlns="http://www.w3.org/2000/svg" style="display:none"><defs><filter id="colored"><feColorMatrix type="matrix" values="1.00 0 0 0 0 0 1.00 0 0 0 0 0 1.00 0 0 0 0 0 1 0"></feColorMatrix></filter></defs></svg><style nonce="logos">
+      #nprogress {
+        pointer-events: none;
+      }
+      #nprogress .bar {
+        background: #000000;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+      }
+      #nprogress .peg {
+        display: block;
+        position: absolute;
+        right: 0px;
+        width: 100px;
+        height: 100%;
+        box-shadow: 0 0 10px #000000, 0 0 5px #000000;
+        opacity: 1;
+        -webkit-transform: rotate(3deg) translate(0px, -4px);
+        -ms-transform: rotate(3deg) translate(0px, -4px);
+        transform: rotate(3deg) translate(0px, -4px);
+      }
+      #nprogress .spinner {
+        display: block;
+        position: fixed;
+        z-index: 1031;
+        top: 15px;
+        right: 15px;
+      }
+      #nprogress .spinner-icon {
+        width: 18px;
+        height: 18px;
+        box-sizing: border-box;
+        border: solid 2px transparent;
+        border-top-color: #000000;
+        border-left-color: #000000;
+        border-radius: 50%;
+        -webkit-animation: nprogresss-spinner 400ms linear infinite;
+        animation: nprogress-spinner 400ms linear infinite;
+      }
+      .nprogress-custom-parent {
+        overflow: hidden;
+        position: relative;
+      }
+      .nprogress-custom-parent #nprogress .spinner,
+      .nprogress-custom-parent #nprogress .bar {
+        position: absolute;
+      }
+      @-webkit-keyframes nprogress-spinner {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+      @keyframes nprogress-spinner {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style><div class="Style_container__qv2Yk Styles_common_container__u_XHj template-container"><header class="Styles_container__5FUI_ Style_header__IYvBP undefined"><div class="Styles_innerWrapper__ZInvp"><div class="logo-holder button vac" style="display:inline-block"><svg width="45" height="43" viewBox="0 0 35 43" fill="none" xmlns="http://www.w3.org/2000/svg" class="vac-logo"><g clip-path="url(#clip0_917_3082)"><path d="M24.9034 14.8217C24.6824 11.2666 23.5308 7.8298 21.5623 4.84994C22.543 4.19721 23.7374 3.93844 24.9034 4.12603C25.492 4.23064 26.0472 4.4722 26.5233 4.83086C26.9994 5.18951 27.3828 5.65504 27.6421 6.18916C28.0141 7.1512 28.1335 8.19117 27.989 9.21147C27.9754 9.6728 27.8955 10.1299 27.7516 10.5688C27.6613 10.8504 27.5322 11.1183 27.3682 11.3651C27.166 11.69 26.9466 12.0041 26.7109 12.3062C26.1084 13.1206 25.5607 14.0073 24.9034 14.8217Z" fill="#999999"></path><path d="M16.7058 7.58268C15.8382 5.99003 14.5344 4.67263 12.9447 3.78217L10.9546 2.69631C10.9546 2.69631 13.2551 -0.778436 16.1945 0.162641C19.134 1.10372 18.1846 7.4017 17.5821 9.80869" fill="#4D4D4D"></path><path d="M20.3209 41.6243C17.4179 40.4118 16.2129 38.3668 14.6975 36.919C13.1821 35.4711 12.8717 29.3903 13.1638 24.6126C13.456 19.8348 17.4909 11.528 17.5822 9.80869C17.6735 8.08941 15.4643 5.17569 13.5655 3.78217C11.6491 2.2631 9.29769 1.38272 6.84668 1.2666L8.36207 2.51534C9.74965 3.67359 9.42101 3.98125 9.22018 6.26155C9.01935 8.54185 8.72722 15.6904 8.70896 21.8436C8.70896 30.3495 6.73713 32.7022 13.0178 38.8373C14.1564 40.1358 15.6863 41.0368 17.3814 41.4072C21.6902 43.036 24.228 43.2712 20.3209 41.6243Z" fill="#1A1A1A"></path><path d="M17.9839 7.07618C17.5904 9.58823 16.8212 12.0281 15.7016 14.3152C14.6765 16.6746 13.7925 19.0918 13.0543 21.5543C12.076 25.3846 11.8405 29.3642 12.3605 33.2816C12.4325 34.6426 12.8065 35.9712 13.4559 37.1726C14.1362 38.1272 14.9759 38.9596 15.939 39.6338C17.8321 41.3312 20.1651 42.4718 22.6761 42.9276C20.068 40.8547 18.189 38.0165 17.3083 34.8199C16.3002 31.5246 16.6412 27.9684 18.2577 24.9205C18.7142 24.0699 19.2436 23.2555 19.7731 22.4411L24.4653 15.3287C24.7022 15.0187 24.8815 14.6694 24.9948 14.2971C25.0769 13.891 25.0769 13.4727 24.9948 13.0665C24.3347 9.48034 22.792 6.11109 20.5034 3.25758C19.9266 2.35717 19.1529 1.59688 18.2395 1.033C17.3262 0.46911 16.2966 0.116066 15.2269 0C15.7121 0.03052 16.1783 0.198543 16.5699 0.484084C16.9616 0.769625 17.2622 1.16066 17.4361 1.61069C17.8159 2.51034 18.0085 3.47679 18.0021 4.45202C18.0507 5.32627 18.0446 6.20267 17.9839 7.07618Z" fill="#808080"></path><path d="M34.927 21.7174C34.8742 21.5895 34.8068 21.4681 34.7261 21.3554C34.5725 21.0145 34.3893 20.6875 34.1784 20.3781C34.0141 20.1429 33.8315 19.9257 33.6489 19.7085C33.2107 19.1294 33.0829 18.3874 32.5352 17.8988C32.2726 17.6504 32.0907 17.33 32.0126 16.9787C31.9346 16.6273 31.964 16.2609 32.097 15.9261C32.2066 15.6366 32.4074 15.4013 32.5352 15.1298C32.6706 14.7258 32.7195 14.2982 32.6786 13.8744C32.6378 13.4505 32.5081 13.0398 32.2979 12.6685C31.7956 11.6016 31.1838 10.5888 30.4721 9.64624C29.5227 8.32511 28.5185 7.05828 27.4596 5.82764C27.6672 6.89431 27.6423 7.99266 27.3865 9.04902C27.2386 9.62495 27.0432 10.1879 26.8023 10.7321C26.4264 11.4007 26.0118 12.0473 25.5608 12.6685C23.2238 16.2881 20.832 19.9076 18.349 23.4004C17.0435 25.5573 16.3321 28.0161 16.2859 30.5309C16.0848 32.9993 16.618 35.472 17.8195 37.6433C18.5687 38.8742 19.4502 40.021 20.4486 41.0637C21.0694 41.7334 21.7814 42.8735 22.6395 43.0726C22.7491 42.041 22.9499 40.6475 23.096 39.6159C23.3338 37.934 23.8782 36.3089 24.7027 34.8201C25.1895 33.7601 26.0543 32.9158 27.1309 32.4493C27.9135 32.2862 28.7218 32.2862 29.5044 32.4493C29.9422 32.4221 30.3812 32.4221 30.819 32.4493C31.2686 32.4735 31.7149 32.3597 32.097 32.1235C32.3186 31.968 32.5024 31.7655 32.6351 31.5307C32.7677 31.2959 32.8459 31.0347 32.8638 30.7662C32.9186 30.2791 32.9186 29.7874 32.8638 29.3003C32.8245 28.9868 32.8685 28.6686 32.9916 28.3773C33.2473 27.8525 34.0141 27.6172 34.0689 27.02C34.0476 26.7523 33.9665 26.4927 33.8315 26.2599C33.7604 26.1456 33.7228 26.014 33.7228 25.8798C33.7228 25.7456 33.7604 25.614 33.8315 25.4998C33.8315 25.4998 34.0506 25.355 34.1236 25.2464C34.2051 25.1396 34.2492 25.0093 34.2492 24.8754C34.2492 24.7415 34.2051 24.6112 34.1236 24.5044C33.9428 24.2955 33.8006 24.0566 33.7037 23.7986C33.695 23.6656 33.715 23.5323 33.7622 23.4075C33.8094 23.2827 33.8828 23.1692 33.9776 23.0747C34.1732 22.888 34.3945 22.7295 34.6348 22.6041C34.7511 22.5516 34.8541 22.4739 34.9362 22.3769C35.0183 22.2798 35.0776 22.1658 35.1095 22.0431C35.0688 21.9246 35.0069 21.8143 34.927 21.7174Z" fill="#CCCCCC"></path><path d="M34.3062 20.5771C34.478 20.8248 34.619 21.0922 34.7261 21.3734C34.8037 21.4816 34.8709 21.5967 34.9269 21.7173L34.3062 20.5771Z" fill="#CCCCCC"></path><path d="M10.133 33.4262C9.0523 28.5693 8.7138 23.5789 9.12886 18.6223C9.12886 16.1429 11.265 2.44302 7.79605 1.41145C4.85656 0.524668 2.53783 3.94512 2.53783 3.94512C0.667683 7.68216 -0.206002 11.8316 1.36513e-05 15.9982C2.30048 38.8193 17.6735 41.4615 18.2577 41.7149C18.2577 41.7149 11.4476 39.2898 10.133 33.4262Z" fill="#09212A"></path></g><defs><clipPath id="clip0_917_3082"><rect width="35" height="43"></rect></clipPath></defs></svg></div><div class="Styles_searchBox__5X2m1"><div class="Styles_container__ddCFx "><div class="logos-search-box Styles_searchBox__xWHyX"><div><input type="text" placeholder="Search Vac Research" value=""/></div></div></div></div></div></header><div class="page-info"><h1 style="display:none">Vac Research</h1><div class="page-info-sub"><i>Mar 16 2023</i><br/><span>staging.vac.dev</span></div></div><main class="undefined Styles_common_main__4v7gP Styles_common_main__4v7gP"><aside class="Styles_container__3yUcn Style_sidebar__mLS5A Styles_common_sidebar__QAVov hidden-scroll Styles_hideDesktopToggleButton__L_Rik"><div class="sidebar-toggle-button button Styles_mobile___qAwf"><svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1 4h14c.55 0 1-.45 1-1s-.45-1-1-1H1c-.55 0-1 .45-1 1s.45 1 1 1Zm14 8H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1Zm0-5H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1Z" fill="#F2F2F2"></path></svg></div><div class="logo-holder button vac" style="display:inline-block"><svg width="45" height="43" viewBox="0 0 35 43" fill="none" xmlns="http://www.w3.org/2000/svg" class="vac-logo"><g clip-path="url(#clip0_917_3082)"><path d="M24.9034 14.8217C24.6824 11.2666 23.5308 7.8298 21.5623 4.84994C22.543 4.19721 23.7374 3.93844 24.9034 4.12603C25.492 4.23064 26.0472 4.4722 26.5233 4.83086C26.9994 5.18951 27.3828 5.65504 27.6421 6.18916C28.0141 7.1512 28.1335 8.19117 27.989 9.21147C27.9754 9.6728 27.8955 10.1299 27.7516 10.5688C27.6613 10.8504 27.5322 11.1183 27.3682 11.3651C27.166 11.69 26.9466 12.0041 26.7109 12.3062C26.1084 13.1206 25.5607 14.0073 24.9034 14.8217Z" fill="#999999"></path><path d="M16.7058 7.58268C15.8382 5.99003 14.5344 4.67263 12.9447 3.78217L10.9546 2.69631C10.9546 2.69631 13.2551 -0.778436 16.1945 0.162641C19.134 1.10372 18.1846 7.4017 17.5821 9.80869" fill="#4D4D4D"></path><path d="M20.3209 41.6243C17.4179 40.4118 16.2129 38.3668 14.6975 36.919C13.1821 35.4711 12.8717 29.3903 13.1638 24.6126C13.456 19.8348 17.4909 11.528 17.5822 9.80869C17.6735 8.08941 15.4643 5.17569 13.5655 3.78217C11.6491 2.2631 9.29769 1.38272 6.84668 1.2666L8.36207 2.51534C9.74965 3.67359 9.42101 3.98125 9.22018 6.26155C9.01935 8.54185 8.72722 15.6904 8.70896 21.8436C8.70896 30.3495 6.73713 32.7022 13.0178 38.8373C14.1564 40.1358 15.6863 41.0368 17.3814 41.4072C21.6902 43.036 24.228 43.2712 20.3209 41.6243Z" fill="#1A1A1A"></path><path d="M17.9839 7.07618C17.5904 9.58823 16.8212 12.0281 15.7016 14.3152C14.6765 16.6746 13.7925 19.0918 13.0543 21.5543C12.076 25.3846 11.8405 29.3642 12.3605 33.2816C12.4325 34.6426 12.8065 35.9712 13.4559 37.1726C14.1362 38.1272 14.9759 38.9596 15.939 39.6338C17.8321 41.3312 20.1651 42.4718 22.6761 42.9276C20.068 40.8547 18.189 38.0165 17.3083 34.8199C16.3002 31.5246 16.6412 27.9684 18.2577 24.9205C18.7142 24.0699 19.2436 23.2555 19.7731 22.4411L24.4653 15.3287C24.7022 15.0187 24.8815 14.6694 24.9948 14.2971C25.0769 13.891 25.0769 13.4727 24.9948 13.0665C24.3347 9.48034 22.792 6.11109 20.5034 3.25758C19.9266 2.35717 19.1529 1.59688 18.2395 1.033C17.3262 0.46911 16.2966 0.116066 15.2269 0C15.7121 0.03052 16.1783 0.198543 16.5699 0.484084C16.9616 0.769625 17.2622 1.16066 17.4361 1.61069C17.8159 2.51034 18.0085 3.47679 18.0021 4.45202C18.0507 5.32627 18.0446 6.20267 17.9839 7.07618Z" fill="#808080"></path><path d="M34.927 21.7174C34.8742 21.5895 34.8068 21.4681 34.7261 21.3554C34.5725 21.0145 34.3893 20.6875 34.1784 20.3781C34.0141 20.1429 33.8315 19.9257 33.6489 19.7085C33.2107 19.1294 33.0829 18.3874 32.5352 17.8988C32.2726 17.6504 32.0907 17.33 32.0126 16.9787C31.9346 16.6273 31.964 16.2609 32.097 15.9261C32.2066 15.6366 32.4074 15.4013 32.5352 15.1298C32.6706 14.7258 32.7195 14.2982 32.6786 13.8744C32.6378 13.4505 32.5081 13.0398 32.2979 12.6685C31.7956 11.6016 31.1838 10.5888 30.4721 9.64624C29.5227 8.32511 28.5185 7.05828 27.4596 5.82764C27.6672 6.89431 27.6423 7.99266 27.3865 9.04902C27.2386 9.62495 27.0432 10.1879 26.8023 10.7321C26.4264 11.4007 26.0118 12.0473 25.5608 12.6685C23.2238 16.2881 20.832 19.9076 18.349 23.4004C17.0435 25.5573 16.3321 28.0161 16.2859 30.5309C16.0848 32.9993 16.618 35.472 17.8195 37.6433C18.5687 38.8742 19.4502 40.021 20.4486 41.0637C21.0694 41.7334 21.7814 42.8735 22.6395 43.0726C22.7491 42.041 22.9499 40.6475 23.096 39.6159C23.3338 37.934 23.8782 36.3089 24.7027 34.8201C25.1895 33.7601 26.0543 32.9158 27.1309 32.4493C27.9135 32.2862 28.7218 32.2862 29.5044 32.4493C29.9422 32.4221 30.3812 32.4221 30.819 32.4493C31.2686 32.4735 31.7149 32.3597 32.097 32.1235C32.3186 31.968 32.5024 31.7655 32.6351 31.5307C32.7677 31.2959 32.8459 31.0347 32.8638 30.7662C32.9186 30.2791 32.9186 29.7874 32.8638 29.3003C32.8245 28.9868 32.8685 28.6686 32.9916 28.3773C33.2473 27.8525 34.0141 27.6172 34.0689 27.02C34.0476 26.7523 33.9665 26.4927 33.8315 26.2599C33.7604 26.1456 33.7228 26.014 33.7228 25.8798C33.7228 25.7456 33.7604 25.614 33.8315 25.4998C33.8315 25.4998 34.0506 25.355 34.1236 25.2464C34.2051 25.1396 34.2492 25.0093 34.2492 24.8754C34.2492 24.7415 34.2051 24.6112 34.1236 24.5044C33.9428 24.2955 33.8006 24.0566 33.7037 23.7986C33.695 23.6656 33.715 23.5323 33.7622 23.4075C33.8094 23.2827 33.8828 23.1692 33.9776 23.0747C34.1732 22.888 34.3945 22.7295 34.6348 22.6041C34.7511 22.5516 34.8541 22.4739 34.9362 22.3769C35.0183 22.2798 35.0776 22.1658 35.1095 22.0431C35.0688 21.9246 35.0069 21.8143 34.927 21.7174Z" fill="#CCCCCC"></path><path d="M34.3062 20.5771C34.478 20.8248 34.619 21.0922 34.7261 21.3734C34.8037 21.4816 34.8709 21.5967 34.9269 21.7173L34.3062 20.5771Z" fill="#CCCCCC"></path><path d="M10.133 33.4262C9.0523 28.5693 8.7138 23.5789 9.12886 18.6223C9.12886 16.1429 11.265 2.44302 7.79605 1.41145C4.85656 0.524668 2.53783 3.94512 2.53783 3.94512C0.667683 7.68216 -0.206002 11.8316 1.36513e-05 15.9982C2.30048 38.8193 17.6735 41.4615 18.2577 41.7149C18.2577 41.7149 11.4476 39.2898 10.133 33.4262Z" fill="#09212A"></path></g><defs><clipPath id="clip0_917_3082"><rect width="35" height="43"></rect></clipPath></defs></svg></div><div class="Styles_desktop__VH2y3 defaultSidebar Styles_container__4YC7p"><nav class="sidebarNav hidden-scroll"><ul class="sidebar-menu mainMenu Styles_menu__izFC1"><li class="Styles_menuItem__BqRqE menuitem level-0"><span></span><ul class="sidebar-menu  Styles_menu__izFC1"><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="Main" href="/">Main</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="principles" href="/principles">Principles</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="Research areas" href="/research-areas">Research areas</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="Projects" href="/projects">Projects</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="Open Research Problems" href="/open-problems">Open Research Problems</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="publications" href="/publications">Publications</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="contribute" href="/contribute">Contribute</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="media" href="/media">Media</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li></ul><br/></li></ul><br/><ul class="sidebar-menu subMenu Styles_menu__izFC1"><li class="Styles_menuItem__BqRqE menuitem level-0"><a class="" title="research" href="/research">Research</a><ul class="sidebar-menu  Styles_menu__izFC1"><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="Waku for All Decentralized Applications and Infrastructures" href="/waku-for-all">Waku for All Decentralized Applications and Infrastructures</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="Building Privacy-Protecting Infrastructure" href="/building-privacy-protecting-infrastructure">Building Privacy-Protecting Infrastructure</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="Waku Privacy and Anonymity Analysis Part I: Definitions and Waku Relay" href="/wakuv2-relay-anon">Waku Privacy and Anonymity Analysis Part I: Definitions and Waku Relay</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="Noise handshakes as key-exchange mechanism for Waku" href="/wakuv2-noise">Noise handshakes as key-exchange mechanism for Waku</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="Waku v2 Ambient Peer Discovery" href="/wakuv2-apd">Waku v2 Ambient Peer Discovery</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="Introducing nwaku" href="/introducing-nwaku">Introducing nwaku</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li class="Styles_menuItem__BqRqE menuitem level-1"><a class="" title="Opinion: Pseudo-ethics in the Surveillance Tech Industry" href="/ethics-surveillance-tech">Opinion: Pseudo-ethics in the Surveillance Tech Industry</a><ul class="sidebar-menu  Styles_menu__izFC1"></ul></li><li><span class="button">...</span></li></ul><br/></li></ul><div class="external_links"><div><div class="menuitem-title"><span class="cap">Resources</span></div><ul><li><a href="https://rfc.vac.dev/" target="_blank">&gt; Specs/RFCs</a></li><li><a href="https://forum.vac.dev/" target="_blank">&gt; Forum</a></li><li><a href="https://waku.org" target="_blank">&gt; Waku.org</a></li></ul></div></div></nav></div></aside><article class="Styles_container__pG0bG Style_content__NTXHZ Styles_common_content__Myi5Z"><div class="Style_container__qc2tD"><h2 class="Style_container__eSI4Q serif">Fixing Whisper with Waku</h2><div class="serif"><i>Dec 03 2019</i><i> - </i>by<!-- --><a title="oskarth" href="/authors/oskarth"><span><i> <!-- -->oskarth<!-- --></i></span></a></div></div><p>This post will introduce Waku. Waku is a fork of Whisper that attempts to
+addresses some of Whisper&#x27;s shortcomings in an iterative fashion. We will also
+introduce a theoretical scaling model for Whisper that shows why it doesn&#x27;t
+scale, and what can be done about it.<!-- --></p>
+<!-- --><h2><a class="anchor" id="introduction"></a><a class="ha" href="#introduction">Introduction<!-- --></a></h2>
+<!-- --><p>Whisper is a gossip-based communication protocol or an ephemeral key-value store
+depending on which way you look at it. Historically speaking, it is the
+messaging pilllar of <!-- --><a href="http://gavwood.com/dappsweb3.html">Web3<!-- --></a>, together with
+Ethereum for consensus and Swarm for storage.<!-- --></p>
+<!-- --><p>Whisper, being a somewhat esoteric protocol and with some fundamental issues,
+hasn&#x27;t seen a lot of usage. However, applications such as Status are using it,
+and have been making minor ad hoc modifications to it to make it run on mobile
+devices.<!-- --></p>
+<!-- --><p>What are these fundamental issues? In short:<!-- --></p>
+<!-- --><ol>
+<!-- --><li>scalability, most immediately when it comes to bandwidth usage<!-- --></li>
+<!-- --><li>spam-resistance, proof of work is a poor mechanism for heterogeneous nodes<!-- --></li>
+<!-- --><li>no incentivized infrastructure, leading to centralized choke points<!-- --></li>
+<!-- --><li>lack of formal and unambiguous specification makes it hard to analyze and implement<!-- --></li>
+<!-- --><li>running over devp2p, which limits where it can run and how<!-- --></li>
+<!-- --></ol>
+<!-- --><p>In this post, we&#x27;ll focus on the first problem, which is scalability through bandwidth usage.<!-- --></p>
+<!-- --><h2><a class="anchor" id="whisper-theoretical-scalability-model"></a><a class="ha" href="#whisper-theoretical-scalability-model">Whisper theoretical scalability model<!-- --></a></h2>
+<!-- --><p><em>(Feel free to skip this section if you want to get right to the results).<!-- --></em></p>
+<!-- --><p>There&#x27;s widespread implicit knowledge that Whisper &quot;doesn&#x27;t scale&quot;, but it is less understood exactly why. This theoretical model attempts to encode some characteristics of it. Specifically for use case such as one by Status (see <!-- --><a href="https://specs.status.im/spec/3">Status Whisper usage
+spec<!-- --></a>).<!-- --></p>
+<!-- --><h3><a class="anchor" id="caveats"></a><a class="ha" href="#caveats">Caveats<!-- --></a></h3>
+<!-- --><p>First, some caveats: this model likely contains bugs, has wrong assumptions, or completely misses certain dimensions. However, it acts as a form of existence proof for unscalability, with clear reasons.<!-- --></p>
+<!-- --><p>If certain assumptions are wrong, then we can challenge them and reason about them in isolation. It doesn’t mean things will definitely work as the model predicts, and that there aren’t unknown unknowns.<!-- --></p>
+<!-- --><p>The model also only deals with receiving bandwidth for end nodes, uses mostly static assumptions of averages, and doesn’t deal with spam resistance, privacy guarantees, accounting, intermediate node or network wide failures.<!-- --></p>
+<!-- --><h3><a class="anchor" id="goals"></a><a class="ha" href="#goals">Goals<!-- --></a></h3>
+<!-- --><ol>
+<!-- --><li>Ensure network scales by being user or usage bound, as opposed to bandwidth growing in proportion to network size.<!-- --></li>
+<!-- --><li>Staying with in a reasonable bandwidth limit for limited data plans.<!-- --></li>
+<!-- --><li>Do the above without materially impacting existing nodes.<!-- --></li>
+<!-- --></ol>
+<!-- --><p>It proceeds through various case with clear assumptions behind them, starting from the most naive assumptions. It shows results for 100 users, 10k users and 1m users.<!-- --></p>
+<!-- --><h3><a class="anchor" id="model"></a><a class="ha" href="#model">Model<!-- --></a></h3>
+<!-- --><pre><code>Case 1. Only receiving messages meant for you [naive case]
+
+Assumptions:
+- A1. Envelope size (static): 1024kb
+- A2. Envelopes / message (static): 10
+- A3. Received messages / day (static): 100
+- A4. Only receiving messages meant for you.
+
+For 100 users, receiving bandwidth is 1000.0KB/day
+For 10k users, receiving bandwidth is 1000.0KB/day
+For  1m users, receiving bandwidth is 1000.0KB/day
+
+------------------------------------------------------------
+
+Case 2. Receiving messages for everyone [naive case]
+
+Assumptions:
+- A1. Envelope size (static): 1024kb
+- A2. Envelopes / message (static): 10
+- A3. Received messages / day (static): 100
+- A5. Received messages for everyone.
+
+For 100 users, receiving bandwidth is   97.7MB/day
+For 10k users, receiving bandwidth is    9.5GB/day
+For  1m users, receiving bandwidth is  953.7GB/day
+
+------------------------------------------------------------
+
+Case 3. All private messages go over one discovery topic [naive case]
+
+Assumptions:
+- A1. Envelope size (static): 1024kb
+- A2. Envelopes / message (static): 10
+- A3. Received messages / day (static): 100
+- A6. Proportion of private messages (static): 0.5
+- A7. Public messages only received by relevant recipients (static).
+- A8. All private messages are received by everyone (same topic) (static).
+
+For 100 users, receiving bandwidth is   49.3MB/day
+For 10k users, receiving bandwidth is    4.8GB/day
+For  1m users, receiving bandwidth is  476.8GB/day
+
+------------------------------------------------------------
+
+Case 4. All private messages are partitioned into shards [naive case]
+
+Assumptions:
+- A1. Envelope size (static): 1024kb
+- A2. Envelopes / message (static): 10
+- A3. Received messages / day (static): 100
+- A6. Proportion of private messages (static): 0.5
+- A7. Public messages only received by relevant recipients (static).
+- A9. Private messages partitioned across partition shards (static), n=5000
+
+For 100 users, receiving bandwidth is 1000.0KB/day
+For 10k users, receiving bandwidth is    1.5MB/day
+For  1m users, receiving bandwidth is   98.1MB/day
+
+------------------------------------------------------------
+
+Case 5. 4 + Bloom filter with false positive rate
+
+Assumptions:
+- A1. Envelope size (static): 1024kb
+- A2. Envelopes / message (static): 10
+- A3. Received messages / day (static): 100
+- A6. Proportion of private messages (static): 0.5
+- A7. Public messages only received by relevant recipients (static).
+- A9. Private messages partitioned across partition shards (static), n=5000
+- A10. Bloom filter size (m) (static): 512
+- A11. Bloom filter hash functions (k) (static): 3
+- A12. Bloom filter elements, i.e. topics, (n) (static): 100
+- A13. Bloom filter assuming optimal k choice (sensitive to m, n).
+- A14. Bloom filter false positive proportion of full traffic, p=0.1
+
+For 100 users, receiving bandwidth is   10.7MB/day
+For 10k users, receiving bandwidth is  978.0MB/day
+For  1m users, receiving bandwidth is   95.5GB/day
+
+NOTE: Traffic extremely sensitive to bloom false positives
+This completely dominates network traffic at scale.
+With p=1% we get 10k users ~100MB/day and 1m users ~10gb/day)
+
+------------------------------------------------------------
+
+Case 6. Case 5 + Benign duplicate receives
+
+Assumptions:
+- A1. Envelope size (static): 1024kb
+- A2. Envelopes / message (static): 10
+- A3. Received messages / day (static): 100
+- A6. Proportion of private messages (static): 0.5
+- A7. Public messages only received by relevant recipients (static).
+- A9. Private messages partitioned across partition shards (static), n=5000
+- A10. Bloom filter size (m) (static): 512
+- A11. Bloom filter hash functions (k) (static): 3
+- A12. Bloom filter elements, i.e. topics, (n) (static): 100
+- A13. Bloom filter assuming optimal k choice (sensitive to m, n).
+- A14. Bloom filter false positive proportion of full traffic, p=0.1
+- A15. Benign duplicate receives factor (static): 2
+- A16. No bad envelopes, bad PoW, expired, etc (static).
+
+For 100 users, receiving bandwidth is   21.5MB/day
+For 10k users, receiving bandwidth is    1.9GB/day
+For  1m users, receiving bandwidth is  190.9GB/day
+
+------------------------------------------------------------
+
+Case 7. 6 + Mailserver under good conditions; small bloom fp; mostly offline
+
+Assumptions:
+- A1. Envelope size (static): 1024kb
+- A2. Envelopes / message (static): 10
+- A3. Received messages / day (static): 100
+- A6. Proportion of private messages (static): 0.5
+- A7. Public messages only received by relevant recipients (static).
+- A9. Private messages partitioned across partition shards (static), n=5000
+- A10. Bloom filter size (m) (static): 512
+- A11. Bloom filter hash functions (k) (static): 3
+- A12. Bloom filter elements, i.e. topics, (n) (static): 100
+- A13. Bloom filter assuming optimal k choice (sensitive to m, n).
+- A14. Bloom filter false positive proportion of full traffic, p=0.1
+- A15. Benign duplicate receives factor (static): 2
+- A16. No bad envelopes, bad PoW, expired, etc (static).
+- A17. User is offline p% of the time (static) p=0.9
+- A18. No bad request, dup messages for mailservers; overlap perfect (static).
+- A19. Mailserver requests can change false positive rate to be p=0.01
+
+For 100 users, receiving bandwidth is    3.9MB/day
+For 10k users, receiving bandwidth is  284.8MB/day
+For  1m users, receiving bandwidth is   27.8GB/day
+
+------------------------------------------------------------
+
+Case 8. No metadata protection w bloom filter; 1 node connected; static shard
+
+Aka waku mode.
+
+Next step up is to either only use contact code, or shard more aggressively.
+Note that this requires change of other nodes behavior, not just local node.
+
+Assumptions:
+- A1. Envelope size (static): 1024kb
+- A2. Envelopes / message (static): 10
+- A3. Received messages / day (static): 100
+- A6. Proportion of private messages (static): 0.5
+- A7. Public messages only received by relevant recipients (static).
+- A9. Private messages partitioned across partition shards (static), n=5000
+
+For 100 users, receiving bandwidth is 1000.0KB/day
+For 10k users, receiving bandwidth is    1.5MB/day
+For  1m users, receiving bandwidth is   98.1MB/day
+
+------------------------------------------------------------
+</code></pre>
+<!-- --><p>See <!-- --><a href="https://github.com/vacp2p/research/tree/master/whisper_scalability">source<!-- --></a>
+for more detail on the model and its assumptions.<!-- --></p>
+<!-- --><h3><a class="anchor" id="takeaways"></a><a class="ha" href="#takeaways">Takeaways<!-- --></a></h3>
+<!-- --><ol>
+<!-- --><li>Whisper as it currently works doesn’t scale, and we quickly run into unacceptable bandwidth usage.<!-- --></li>
+<!-- --><li>There are a few factors of this, but largely it boils down to noisy topics usage and use of bloom filters. Duplicate (e.g. see <!-- --><a href="https://our.status.im/whisper-pss-comparison/">Whisper vs PSS<!-- --></a>) and bad envelopes are also factors, but this depends a bit more on specific deployment configurations.<!-- --></li>
+<!-- --><li>Waku mode (case 8) is an additional capability that doesn’t require other nodes to change, for nodes that put a premium on performance.<!-- --></li>
+<!-- --><li>The next bottleneck after this is the partitioned topics (app/network specific), which either needs to gracefully (and potentially quickly) grow, or an alternative way of consuming those messages needs to be deviced.<!-- --></li>
+<!-- --></ol>
+<!-- --><figure class="rehype-figure"><img src="/compiled-assets/img/whisper_scalability.png" alt=""/></figure>
+<!-- --><p>The results are summarized in the graph above. Notice the log-log scale. The
+colored backgrounds correspond to the following bandwidth usage:<!-- --></p>
+<!-- --><ul>
+<!-- --><li>Blue: &lt;10mb/d (&lt;~300mb/month)<!-- --></li>
+<!-- --><li>Green: &lt;30mb/d (&lt;~1gb/month)<!-- --></li>
+<!-- --><li>Yellow: &lt;100mb/d (&lt;~3gb/month)<!-- --></li>
+<!-- --><li>Red: &gt;100mb/d (&gt;3gb/month)<!-- --></li>
+<!-- --></ul>
+<!-- --><p>These ranges are somewhat arbitrary, but are based on <!-- --><a href="https://github.com/status-im/status-react/issues/9081">user
+requirements<!-- --></a> for users
+on a limited data plan, with comparable usage for other messaging apps.<!-- --></p>
+<!-- --><h2><a class="anchor" id="introducing-waku"></a><a class="ha" href="#introducing-waku">Introducing Waku<!-- --></a></h2>
+<!-- --><h3><a class="anchor" id="motivation-for-a-new-protocol"></a><a class="ha" href="#motivation-for-a-new-protocol">Motivation for a new protocol<!-- --></a></h3>
+<!-- --><p>Apps such as Status will likely use something like Whisper for the forseeable
+future, and we want to enable them to use it with more users on mobile devices
+without bandwidth exploding with minimal changes.<!-- --></p>
+<!-- --><p>Additionally, there&#x27;s not a clear cut alternative that maps cleanly to the
+desired use cases (p2p, multicast, privacy-preserving, open, etc).<!-- --></p>
+<!-- --><p>We are actively researching, developing and collaborating with more greenfield
+approaches. It is likely that Waku will either converge to those, or Waku will
+lay the groundwork (clear specs, common issues/components) necessary to make
+switching to another protocol easier. In this project we want to emphasize
+iterative work with results on the order of weeks.<!-- --></p>
+<!-- --><h3><a class="anchor" id="briefly-on-waku-mode"></a><a class="ha" href="#briefly-on-waku-mode">Briefly on Waku mode<!-- --></a></h3>
+<!-- --><ul>
+<!-- --><li>Doesn’t impact existing clients, it’s just a separate node and capability.<!-- --></li>
+<!-- --><li>Other nodes can still use Whisper as is, like a full node.<!-- --></li>
+<!-- --><li>Sacrifices metadata protection and incurs higher connectivity/availability requirements for scalbility<!-- --></li>
+<!-- --></ul>
+<!-- --><p><strong>Requirements:<!-- --></strong></p>
+<!-- --><ul>
+<!-- --><li>Exposes API to get messages from a set of list of topics (no bloom filter)<!-- --></li>
+<!-- --><li>Way of being identified as a Waku node (e.g. through version string)<!-- --></li>
+<!-- --><li>Option to statically encode this node in app, e.g. similar to custom bootnodes/mailserver<!-- --></li>
+<!-- --><li>Only node that needs to be connected to, possibly as Whisper relay / mailserver hybrid<!-- --></li>
+<!-- --></ul>
+<!-- --><p><strong>Provides:<!-- --></strong></p>
+<!-- --><ul>
+<!-- --><li>likely provides scalability of up to 10k users and beyond<!-- --></li>
+<!-- --><li>with some enhancements to partition topic logic, can possibly scale up to 1m users (app/network specific)<!-- --></li>
+<!-- --></ul>
+<!-- --><p><strong>Caveats:<!-- --></strong></p>
+<!-- --><ul>
+<!-- --><li>hasn’t been tested in a large-scale simulation<!-- --></li>
+<!-- --><li>other network and intermediate node bottlenecks might become apparent (e.g. full bloom filter and private cluster capacity; can likely be dealt with in isolation using known techniques, e.g. load balancing) (deployment specific)<!-- --></li>
+<!-- --></ul>
+<!-- --><h3><a class="anchor" id="progress-so-far"></a><a class="ha" href="#progress-so-far">Progress so far<!-- --></a></h3>
+<!-- --><p>In short, we have a <!-- --><a href="https://rfc.vac.dev/spec/5">Waku version 0 spec up<!-- --></a> as well as a <!-- --><a href="https://github.com/status-im/nim-eth/pull/120">PoC<!-- --></a> for backwards compatibility. In the coming weeks, we are going to solidify the specs, get a more fully featured PoC for <!-- --><a href="https://github.com/status-im/nim-eth/pull/114">Waku mode<!-- --></a>. See <!-- --><a href="https://github.com/vacp2p/pm/issues/5">rough roadmap<!-- --></a>, project board [link deprecated] and progress thread on the <!-- --><a href="https://forum.vac.dev/t/waku-project-and-progress/24">Vac forum<!-- --></a>.<!-- --></p>
+<!-- --><p>The spec has been rewrittten for clarity, with ABNF grammar and less ambiguous language. The spec also incorporates several previously <!-- --><a href="https://rfc.vac.dev/spec/6/#additional-capabilities">ad hoc implemented features<!-- --></a>, such as light nodes and mailserver/client support. This has already caught a few incompatibilities between the <!-- --><code>geth</code> (Go), <!-- --><code>status/whisper</code> (Go) and <!-- --><code>nim-eth</code> (Nim) versions, specifically around light node usage and the handshake.<!-- --></p>
+<!-- --><p>If you are interested in this effort, please check out <!-- --><a href="https://forum.vac.dev/">our forum<!-- --></a> for questions, comments and proposals. We already have some discussion for better <!-- --><a href="https://forum.vac.dev/t/stake-priority-based-queuing/26">spam protection<!-- --></a> (see <!-- --><a href="https://vac.dev/feasibility-semaphore-rate-limiting-zksnarks">previous post<!-- --></a> for a more complex but privacy-preserving proposal), something that is likely going to be addressed in future versions of Waku, along with many other fixes and enhancement.<!-- --></p></article><aside class="Styles_container__3DqFl Style_toc__v7JJe Styles_common_toc__nMHyQ hidden-scroll"><nav class="Styles_tocComponent__fhPld hidden-scroll"><ul><li class="h-2"><a class="" href="/fixing-whisper-with-waku#introduction">Introduction</a></li><li class="h-2"><a class="" href="/fixing-whisper-with-waku#whisper-theoretical-scalability-model">Whisper theoretical scalability model</a></li><li class="h-3"><a class="" href="/fixing-whisper-with-waku#caveats">Caveats</a></li><li class="h-3"><a class="" href="/fixing-whisper-with-waku#goals">Goals</a></li><li class="h-3"><a class="" href="/fixing-whisper-with-waku#model">Model</a></li><li class="h-3"><a class="" href="/fixing-whisper-with-waku#takeaways">Takeaways</a></li><li class="h-2"><a class="" href="/fixing-whisper-with-waku#introducing-waku">Introducing Waku</a></li><li class="h-3"><a class="" href="/fixing-whisper-with-waku#motivation-for-a-new-protocol">Motivation for a new protocol</a></li><li class="h-3"><a class="" href="/fixing-whisper-with-waku#briefly-on-waku-mode">Briefly on Waku mode</a></li><li class="h-3"><a class="" href="/fixing-whisper-with-waku#progress-so-far">Progress so far</a></li></ul></nav></aside></main><footer class="Styles_container___YkOC undefined Styles_common_footer__1rPoh"><div class="footer-content-container Styles_content__0jn9p"><div><p><span class="copy-left">©</span><span>2023<!-- --></span><span> Vac Research</span><span> - </span><span>Vac - Communication, Privacy, Etc</span></p></div><div class="Styles_bottomPart__CsMh_"><div class="Styles_socialMedia__AmAKz "><span><a href="https://twitter.com/vacp2p" class="button"><svg xmlns="http://www.w3.org/2000/svg" width="30" viewBox="0 0 543.684 543.684" xml:space="preserve"><path d="M527.657 106.697a231.362 231.362 0 0 1-8.041 2.191c-16.384 4.137-17.89-1.322-6.028-13.366a109.306 109.306 0 0 0 14.082-17.607c9.137-14.217 1.212-20.417-14.333-13.776a224.853 224.853 0 0 1-16.897 6.432c-16.017 5.379-38.746-2.735-53.018-11.787-18.018-11.426-38.495-17.136-61.438-17.136-32.137 0-59.529 11.334-82.192 33.984-22.656 22.662-33.99 50.062-33.99 82.191 0 4.394.251 8.855.747 13.378.814 7.362-11.585 12.699-28.317 10.336-36.194-5.11-70.582-16.077-103.171-32.889-32.32-16.671-60.845-37.65-85.57-62.938-11.819-12.086-27.804-11.045-32.217 5.27-2.644 9.78-3.959 19.951-3.959 30.515 0 19.908 4.675 38.372 14.027 55.392 4.651 8.47 10.098 16.138 16.353 22.999 10.521 11.549 8.911 18.25-5.734 14.144-14.639-4.106-25.367-10.202-25.367-9.804v.722c0 28.048 8.807 52.693 26.432 73.911 10.857 13.072 23.47 23.17 37.834 30.282 15.147 7.503 22.203 11.688 13.733 12.784-5.11.661-10.251.991-15.422.991-3.5 0-7.172-.159-11.003-.483-6.059-.514-7.148 12.111 2.038 26.298 7.301 11.273 16.646 21.193 28.03 29.762 11.579 8.721 24.058 14.981 37.417 18.794 16.255 4.633 19.517 13.073 5.024 21.763-35.863 21.519-75.551 32.277-119.058 32.277-4.902 0-9.578-.11-14.045-.324-7.754-.373-2.552 6.456 12.417 14.296 46.775 24.499 97.43 36.738 151.972 36.738 41.237 0 79.964-6.529 116.176-19.596 36.199-13.066 67.136-30.576 92.791-52.516 25.655-21.94 47.779-47.173 66.365-75.711 18.581-28.537 32.424-58.33 41.543-89.376 9.106-31.053 13.666-62.167 13.666-93.342 0-2.809-.024-5.331-.067-7.552-.086-4.174 10.955-15.472 23.28-27.032a242.397 242.397 0 0 0 15.937-16.444c11.179-12.688 6.228-18.502-9.997-13.771z"></path></svg></a></span><span><a href="https://discord.gg/PQFdubGt6d" class="button"><svg width="30" viewBox="0 0 71 55" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#discord_svg__a)"><path d="M60.105 4.898A58.55 58.55 0 0 0 45.653.415a.22.22 0 0 0-.233.11 40.784 40.784 0 0 0-1.8 3.697c-5.456-.817-10.886-.817-16.23 0-.485-1.164-1.201-2.587-1.828-3.697a.228.228 0 0 0-.233-.11 58.386 58.386 0 0 0-14.451 4.483.207.207 0 0 0-.095.082C1.578 18.73-.944 32.144.293 45.39a.244.244 0 0 0 .093.167c6.073 4.46 11.955 7.167 17.729 8.962a.23.23 0 0 0 .249-.082 42.08 42.08 0 0 0 3.627-5.9.225.225 0 0 0-.123-.312 38.772 38.772 0 0 1-5.539-2.64.228.228 0 0 1-.022-.378c.372-.279.744-.569 1.1-.862a.22.22 0 0 1 .23-.03c11.619 5.304 24.198 5.304 35.68 0a.219.219 0 0 1 .233.027c.356.293.728.586 1.103.865a.228.228 0 0 1-.02.378 36.384 36.384 0 0 1-5.54 2.637.227.227 0 0 0-.121.315 47.249 47.249 0 0 0 3.624 5.897.225.225 0 0 0 .249.084c5.801-1.794 11.684-4.502 17.757-8.961a.228.228 0 0 0 .092-.164c1.48-15.315-2.48-28.618-10.497-40.412a.18.18 0 0 0-.093-.084Zm-36.38 32.427c-3.497 0-6.38-3.211-6.38-7.156 0-3.944 2.827-7.156 6.38-7.156 3.583 0 6.438 3.24 6.382 7.156 0 3.945-2.827 7.156-6.381 7.156Zm23.593 0c-3.498 0-6.38-3.211-6.38-7.156 0-3.944 2.826-7.156 6.38-7.156 3.582 0 6.437 3.24 6.38 7.156 0 3.945-2.798 7.156-6.38 7.156Z" fill="#23272A"></path></g><defs><clipPath id="discord_svg__a"><path fill="#fff" d="M0 0h71v55H0z"></path></clipPath></defs></svg></a></span><span><a href="https://github.com/vacp2p" class="button"><svg width="30" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M512 0C229.12 0 0 229.12 0 512c0 226.56 146.56 417.92 350.08 485.76 25.6 4.48 35.2-10.88 35.2-24.32 0-12.16-.64-52.48-.64-95.36-128.64 23.68-161.92-31.36-172.16-60.16-5.76-14.72-30.72-60.16-52.48-72.32-17.92-9.6-43.52-33.28-.64-33.92 40.32-.64 69.12 37.12 78.72 52.48 46.08 77.44 119.68 55.68 149.12 42.24 4.48-33.28 17.92-55.68 32.64-68.48-113.92-12.8-232.96-56.96-232.96-252.8 0-55.68 19.84-101.76 52.48-137.6-5.12-12.8-23.04-65.28 5.12-135.68 0 0 42.88-13.44 140.8 52.48 40.96-11.52 84.48-17.28 128-17.28 43.52 0 87.04 5.76 128 17.28 97.92-66.56 140.8-52.48 140.8-52.48 28.16 70.4 10.24 122.88 5.12 135.68 32.64 35.84 52.48 81.28 52.48 137.6 0 196.48-119.68 240-233.6 252.8 18.56 16 34.56 46.72 34.56 94.72 0 68.48-.64 123.52-.64 140.8 0 13.44 9.6 29.44 35.2 24.32C877.44 929.92 1024 737.92 1024 512 1024 229.12 794.88 0 512 0Z" fill="#1B1F23"></path></svg></a></span></div><nav class="Styles_legal__0ciDG"><a title="Privacy Policy" href="/privacy-policy">Privacy Policy</a></nav></div></div></footer></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"markdown":{"content":"\nThis post will introduce Waku. Waku is a fork of Whisper that attempts to\naddresses some of Whisper's shortcomings in an iterative fashion. We will also\nintroduce a theoretical scaling model for Whisper that shows why it doesn't\nscale, and what can be done about it.\n\n## Introduction\n\nWhisper is a gossip-based communication protocol or an ephemeral key-value store\ndepending on which way you look at it. Historically speaking, it is the\nmessaging pilllar of [Web3](http://gavwood.com/dappsweb3.html), together with\nEthereum for consensus and Swarm for storage.\n\nWhisper, being a somewhat esoteric protocol and with some fundamental issues,\nhasn't seen a lot of usage. However, applications such as Status are using it,\nand have been making minor ad hoc modifications to it to make it run on mobile\ndevices.\n\nWhat are these fundamental issues? In short:\n\n1. scalability, most immediately when it comes to bandwidth usage\n2. spam-resistance, proof of work is a poor mechanism for heterogeneous nodes\n3. no incentivized infrastructure, leading to centralized choke points\n4. lack of formal and unambiguous specification makes it hard to analyze and implement\n5. running over devp2p, which limits where it can run and how\n\nIn this post, we'll focus on the first problem, which is scalability through bandwidth usage.\n\n## Whisper theoretical scalability model\n\n*(Feel free to skip this section if you want to get right to the results).*\n\nThere's widespread implicit knowledge that Whisper \"doesn't scale\", but it is less understood exactly why. This theoretical model attempts to encode some characteristics of it. Specifically for use case such as one by Status (see [Status Whisper usage\nspec](https://specs.status.im/spec/3)).\n\n### Caveats\n\nFirst, some caveats: this model likely contains bugs, has wrong assumptions, or completely misses certain dimensions. However, it acts as a form of existence proof for unscalability, with clear reasons.\n\nIf certain assumptions are wrong, then we can challenge them and reason about them in isolation. It doesn’t mean things will definitely work as the model predicts, and that there aren’t unknown unknowns.\n\nThe model also only deals with receiving bandwidth for end nodes, uses mostly static assumptions of averages, and doesn’t deal with spam resistance, privacy guarantees, accounting, intermediate node or network wide failures.\n\n### Goals\n\n1. Ensure network scales by being user or usage bound, as opposed to bandwidth growing in proportion to network size.\n2. Staying with in a reasonable bandwidth limit for limited data plans.\n3. Do the above without materially impacting existing nodes.\n\nIt proceeds through various case with clear assumptions behind them, starting from the most naive assumptions. It shows results for 100 users, 10k users and 1m users.\n\n### Model\n\n```\nCase 1. Only receiving messages meant for you [naive case]\n\nAssumptions:\n- A1. Envelope size (static): 1024kb\n- A2. Envelopes / message (static): 10\n- A3. Received messages / day (static): 100\n- A4. Only receiving messages meant for you.\n\nFor 100 users, receiving bandwidth is 1000.0KB/day\nFor 10k users, receiving bandwidth is 1000.0KB/day\nFor  1m users, receiving bandwidth is 1000.0KB/day\n\n------------------------------------------------------------\n\nCase 2. Receiving messages for everyone [naive case]\n\nAssumptions:\n- A1. Envelope size (static): 1024kb\n- A2. Envelopes / message (static): 10\n- A3. Received messages / day (static): 100\n- A5. Received messages for everyone.\n\nFor 100 users, receiving bandwidth is   97.7MB/day\nFor 10k users, receiving bandwidth is    9.5GB/day\nFor  1m users, receiving bandwidth is  953.7GB/day\n\n------------------------------------------------------------\n\nCase 3. All private messages go over one discovery topic [naive case]\n\nAssumptions:\n- A1. Envelope size (static): 1024kb\n- A2. Envelopes / message (static): 10\n- A3. Received messages / day (static): 100\n- A6. Proportion of private messages (static): 0.5\n- A7. Public messages only received by relevant recipients (static).\n- A8. All private messages are received by everyone (same topic) (static).\n\nFor 100 users, receiving bandwidth is   49.3MB/day\nFor 10k users, receiving bandwidth is    4.8GB/day\nFor  1m users, receiving bandwidth is  476.8GB/day\n\n------------------------------------------------------------\n\nCase 4. All private messages are partitioned into shards [naive case]\n\nAssumptions:\n- A1. Envelope size (static): 1024kb\n- A2. Envelopes / message (static): 10\n- A3. Received messages / day (static): 100\n- A6. Proportion of private messages (static): 0.5\n- A7. Public messages only received by relevant recipients (static).\n- A9. Private messages partitioned across partition shards (static), n=5000\n\nFor 100 users, receiving bandwidth is 1000.0KB/day\nFor 10k users, receiving bandwidth is    1.5MB/day\nFor  1m users, receiving bandwidth is   98.1MB/day\n\n------------------------------------------------------------\n\nCase 5. 4 + Bloom filter with false positive rate\n\nAssumptions:\n- A1. Envelope size (static): 1024kb\n- A2. Envelopes / message (static): 10\n- A3. Received messages / day (static): 100\n- A6. Proportion of private messages (static): 0.5\n- A7. Public messages only received by relevant recipients (static).\n- A9. Private messages partitioned across partition shards (static), n=5000\n- A10. Bloom filter size (m) (static): 512\n- A11. Bloom filter hash functions (k) (static): 3\n- A12. Bloom filter elements, i.e. topics, (n) (static): 100\n- A13. Bloom filter assuming optimal k choice (sensitive to m, n).\n- A14. Bloom filter false positive proportion of full traffic, p=0.1\n\nFor 100 users, receiving bandwidth is   10.7MB/day\nFor 10k users, receiving bandwidth is  978.0MB/day\nFor  1m users, receiving bandwidth is   95.5GB/day\n\nNOTE: Traffic extremely sensitive to bloom false positives\nThis completely dominates network traffic at scale.\nWith p=1% we get 10k users ~100MB/day and 1m users ~10gb/day)\n\n------------------------------------------------------------\n\nCase 6. Case 5 + Benign duplicate receives\n\nAssumptions:\n- A1. Envelope size (static): 1024kb\n- A2. Envelopes / message (static): 10\n- A3. Received messages / day (static): 100\n- A6. Proportion of private messages (static): 0.5\n- A7. Public messages only received by relevant recipients (static).\n- A9. Private messages partitioned across partition shards (static), n=5000\n- A10. Bloom filter size (m) (static): 512\n- A11. Bloom filter hash functions (k) (static): 3\n- A12. Bloom filter elements, i.e. topics, (n) (static): 100\n- A13. Bloom filter assuming optimal k choice (sensitive to m, n).\n- A14. Bloom filter false positive proportion of full traffic, p=0.1\n- A15. Benign duplicate receives factor (static): 2\n- A16. No bad envelopes, bad PoW, expired, etc (static).\n\nFor 100 users, receiving bandwidth is   21.5MB/day\nFor 10k users, receiving bandwidth is    1.9GB/day\nFor  1m users, receiving bandwidth is  190.9GB/day\n\n------------------------------------------------------------\n\nCase 7. 6 + Mailserver under good conditions; small bloom fp; mostly offline\n\nAssumptions:\n- A1. Envelope size (static): 1024kb\n- A2. Envelopes / message (static): 10\n- A3. Received messages / day (static): 100\n- A6. Proportion of private messages (static): 0.5\n- A7. Public messages only received by relevant recipients (static).\n- A9. Private messages partitioned across partition shards (static), n=5000\n- A10. Bloom filter size (m) (static): 512\n- A11. Bloom filter hash functions (k) (static): 3\n- A12. Bloom filter elements, i.e. topics, (n) (static): 100\n- A13. Bloom filter assuming optimal k choice (sensitive to m, n).\n- A14. Bloom filter false positive proportion of full traffic, p=0.1\n- A15. Benign duplicate receives factor (static): 2\n- A16. No bad envelopes, bad PoW, expired, etc (static).\n- A17. User is offline p% of the time (static) p=0.9\n- A18. No bad request, dup messages for mailservers; overlap perfect (static).\n- A19. Mailserver requests can change false positive rate to be p=0.01\n\nFor 100 users, receiving bandwidth is    3.9MB/day\nFor 10k users, receiving bandwidth is  284.8MB/day\nFor  1m users, receiving bandwidth is   27.8GB/day\n\n------------------------------------------------------------\n\nCase 8. No metadata protection w bloom filter; 1 node connected; static shard\n\nAka waku mode.\n\nNext step up is to either only use contact code, or shard more aggressively.\nNote that this requires change of other nodes behavior, not just local node.\n\nAssumptions:\n- A1. Envelope size (static): 1024kb\n- A2. Envelopes / message (static): 10\n- A3. Received messages / day (static): 100\n- A6. Proportion of private messages (static): 0.5\n- A7. Public messages only received by relevant recipients (static).\n- A9. Private messages partitioned across partition shards (static), n=5000\n\nFor 100 users, receiving bandwidth is 1000.0KB/day\nFor 10k users, receiving bandwidth is    1.5MB/day\nFor  1m users, receiving bandwidth is   98.1MB/day\n\n------------------------------------------------------------\n```\n\nSee [source](https://github.com/vacp2p/research/tree/master/whisper_scalability)\nfor more detail on the model and its assumptions.\n\n### Takeaways\n\n1. Whisper as it currently works doesn’t scale, and we quickly run into unacceptable bandwidth usage.\n2. There are a few factors of this, but largely it boils down to noisy topics usage and use of bloom filters. Duplicate (e.g. see [Whisper vs PSS](https://our.status.im/whisper-pss-comparison/)) and bad envelopes are also factors, but this depends a bit more on specific deployment configurations.\n3. Waku mode (case 8) is an additional capability that doesn’t require other nodes to change, for nodes that put a premium on performance.\n4. The next bottleneck after this is the partitioned topics (app/network specific), which either needs to gracefully (and potentially quickly) grow, or an alternative way of consuming those messages needs to be deviced.\n\n![](/img/whisper_scalability.png)\n\nThe results are summarized in the graph above. Notice the log-log scale. The\ncolored backgrounds correspond to the following bandwidth usage:\n\n- Blue: \u003c10mb/d (\u003c~300mb/month)\n- Green: \u003c30mb/d (\u003c~1gb/month)\n- Yellow: \u003c100mb/d (\u003c~3gb/month)\n- Red: \u003e100mb/d (\u003e3gb/month)\n\nThese ranges are somewhat arbitrary, but are based on [user\nrequirements](https://github.com/status-im/status-react/issues/9081) for users\non a limited data plan, with comparable usage for other messaging apps.\n\n## Introducing Waku\n\n### Motivation for a new protocol\n\nApps such as Status will likely use something like Whisper for the forseeable\nfuture, and we want to enable them to use it with more users on mobile devices\nwithout bandwidth exploding with minimal changes.\n\nAdditionally, there's not a clear cut alternative that maps cleanly to the\ndesired use cases (p2p, multicast, privacy-preserving, open, etc).\n\nWe are actively researching, developing and collaborating with more greenfield\napproaches. It is likely that Waku will either converge to those, or Waku will\nlay the groundwork (clear specs, common issues/components) necessary to make\nswitching to another protocol easier. In this project we want to emphasize\niterative work with results on the order of weeks.\n\n### Briefly on Waku mode\n\n- Doesn’t impact existing clients, it’s just a separate node and capability.\n- Other nodes can still use Whisper as is, like a full node.\n- Sacrifices metadata protection and incurs higher connectivity/availability requirements for scalbility\n\n**Requirements:**\n\n- Exposes API to get messages from a set of list of topics (no bloom filter)\n- Way of being identified as a Waku node (e.g. through version string)\n- Option to statically encode this node in app, e.g. similar to custom bootnodes/mailserver\n- Only node that needs to be connected to, possibly as Whisper relay / mailserver hybrid\n\n**Provides:**\n\n- likely provides scalability of up to 10k users and beyond\n- with some enhancements to partition topic logic, can possibly scale up to 1m users (app/network specific)\n\n**Caveats:**\n\n- hasn’t been tested in a large-scale simulation\n- other network and intermediate node bottlenecks might become apparent (e.g. full bloom filter and private cluster capacity; can likely be dealt with in isolation using known techniques, e.g. load balancing) (deployment specific)\n\n### Progress so far\n\nIn short, we have a [Waku version 0 spec up](https://rfc.vac.dev/spec/5) as well as a [PoC](https://github.com/status-im/nim-eth/pull/120) for backwards compatibility. In the coming weeks, we are going to solidify the specs, get a more fully featured PoC for [Waku mode](https://github.com/status-im/nim-eth/pull/114). See [rough roadmap](https://github.com/vacp2p/pm/issues/5), project board [link deprecated] and progress thread on the [Vac forum](https://forum.vac.dev/t/waku-project-and-progress/24).\n\nThe spec has been rewrittten for clarity, with ABNF grammar and less ambiguous language. The spec also incorporates several previously [ad hoc implemented features](https://rfc.vac.dev/spec/6/#additional-capabilities), such as light nodes and mailserver/client support. This has already caught a few incompatibilities between the `geth` (Go), `status/whisper` (Go) and `nim-eth` (Nim) versions, specifically around light node usage and the handshake. \n\nIf you are interested in this effort, please check out [our forum](https://forum.vac.dev/) for questions, comments and proposals. We already have some discussion for better [spam protection](https://forum.vac.dev/t/stake-priority-based-queuing/26) (see [previous post](https://vac.dev/feasibility-semaphore-rate-limiting-zksnarks) for a more complex but privacy-preserving proposal), something that is likely going to be addressed in future versions of Waku, along with many other fixes and enhancement.\n","metadata":{"layout":"post","name":"Fixing Whisper with Waku","title":"Fixing Whisper with Waku","date":"2019-12-03T12:00:00.000Z","author":"oskarth","published":true,"permalink":"/fixing-whisper-with-waku","categories":"research","summary":"A research log. Why Whisper doesn't scale and how to fix it.","image":"/img/whisper_scalability.png","discuss":"https://forum.vac.dev/t/discussion-fixing-whisper-with-waku/27"},"toc":[{"content":"Introduction","slug":"introduction","lvl":2,"i":0,"seen":0},{"content":"Whisper theoretical scalability model","slug":"whisper-theoretical-scalability-model","lvl":2,"i":1,"seen":0},{"content":"Caveats","slug":"caveats","lvl":3,"i":2,"seen":0},{"content":"Goals","slug":"goals","lvl":3,"i":3,"seen":0},{"content":"Model","slug":"model","lvl":3,"i":4,"seen":0},{"content":"Takeaways","slug":"takeaways","lvl":3,"i":5,"seen":0},{"content":"Introducing Waku","slug":"introducing-waku","lvl":2,"i":6,"seen":0},{"content":"Motivation for a new protocol","slug":"motivation-for-a-new-protocol","lvl":3,"i":7,"seen":0},{"content":"Briefly on Waku mode","slug":"briefly-on-waku-mode","lvl":3,"i":8,"seen":0},{"content":"Progress so far","slug":"progress-so-far","lvl":3,"i":9,"seen":0}]},"navProps":{"metadata":{"published":true,"title":"Fixing Whisper with Waku","layout":"post","name":"Fixing Whisper with Waku","date":"2019-12-03T12:00:00.000Z","author":"oskarth","permalink":"/fixing-whisper-with-waku","categories":"research","summary":"A research log. Why Whisper doesn't scale and how to fix it.","image":"img/whisper_scalability.png","discuss":"https://forum.vac.dev/t/discussion-fixing-whisper-with-waku/27"},"navOrder":1575374400,"localPath":"research/2019-12-03-fixing-whisper-with-waku.md","path":["fixing-whisper-with-waku"],"children":[],"isDir":false},"routeParams":{"path":["fixing-whisper-with-waku"]}},"__N_SSG":true},"page":"/[[...path]]","query":{"path":["fixing-whisper-with-waku"]},"buildId":"-5vfLOflCSkQPJRugO7ZO","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
