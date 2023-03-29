@@ -1,73 +1,102 @@
+---
+layout: post
+name:  "The Future of Waku Network: Scaling, Incentivization, and Heterogeneity"
+title:  "The Future of Waku Network: Scaling, Incentivization, and Heterogeneity"
+date:   2023-03-31 12:00:00
+author: franck
+published: true
+permalink: /future-of-waku-network
+categories: platform, operator, network
+summary: Learn how the Waku Network is evolving through scaling, incentivization, and diverse ecosystem development and what the future might look like.
+image: /img/black-waku-logo-with-name.png
+discuss: TODO
+---
 
+# The Future of Waku Network: Scaling, Incentivization, and Heterogeneity
 
-We are getting Waku ready for production
-focus is on the Status Communities use case.
+Waku is preparing for production with a focus on the Status Communities use case. In this blog post, we will provide an
+overview of recent discussions and research outputs, aiming to give you a better understanding of how the Waku network
+may look like in terms of scaling and incentivization.
 
-We are looking at DOS protection that would work now for Status Communities.
+## DOS Protection for Status Communities
 
-RLN is still the go to DOS protection because it is privacy preserving, and censorship resistant.
+Waku is actively exploring DOS protection mechanisms suitable for Status Communities. While RLN
+(Rate Limiting Nullifiers) remains the go-to DOS protection solution due to its privacy-preserving and
+censorship-resistant properties, there is still more work to be done. We are excited to collaborate with PSE
+(Privacy & Scaling Explorations) in this endeavor. Learn more about their latest progress in this [tweet](https://twitter.com/CPerezz19/status/1640373940634939394?s=20).
 
-There is more work to be done on RLN and we are glad it is a [collaborative effort with PSE (Privacy & Scaling Explorations)](https://twitter.com/CPerezz19/status/1640373940634939394?s=20)
+## A Heterogeneous Waku Network
 
-We are starting to see how heterogeneous the Waku network would be
+As we noted in a previous [forum post](https://forum.vac.dev/t/waku-payment-models/166/3), Waku's protocol
+incentivization model needs to be flexible to accommodate various business models. Flexibility ensures that projects
+can choose how they want to use Waku based on their specific needs.
 
-As previously mentioned in this [forum post](https://forum.vac.dev/t/waku-payment-models/166/3), the Waku protocol incentivization model needs to be flexible.
-Flexible meaning that it needs to enable several business models.
-so that projects can decide how they want to use Waku depending on their own business model.
+### Reversing the Incentivization Question
 
-Stepping back about incentivization.
+Traditionally, the question of incentivization revolves around how to incentivize operators to run nodes. We'd like to
+reframe the question and instead ask, "How do we pay for the infrastructure?"
 
-this terminology asks the question "how can we incentivize operators to run node"
+Waku does not intend to offer a free lunch. Ethereum's infrastructure relies on transaction fees, where users pay for
+each transaction they push onto the network. However, this model does not suit a communication network like Waku.
+Users and platforms would not want to pay for every single message they send. Additionally, Waku aims to support instant
+ephemeral messages that do not require consensus or long-term storage.
 
-I would like to reverse the question and instead ask "How do we pay for the infrastructure"
+Projects that use Waku to enable user interactions, whether for chat messages, gaming, private DeFi, notifications, or
+inter-wallet communication, may have different value extraction models. Some users might provide services for the
+project and expect to receive value by running nodes, while others may pay for the product or run infrastructure to
+contribute back. Waku aims to support each of these use cases, which means there will be various ways to "pay for the
+infrastructure."
 
-There is no such thing as a free lunch and WAku does not intend to change this.
+In [his talk](https://vac.dev/building-privacy-protecting-infrastructure), Oskar addressed two strategies: RLN and service credentials.
 
-Ethereum's infrastructure is supported by transaction fee. Users pay for each transaction they push on the network.
+### RLN and Service Credentials
 
-This models does not suite a communication network. Users and platforms would not pay for every single message they send.
-It also does not fit for other reasons as Waku aims to support instant ephemeral messages, there is no consensus involved
-or long storage needed.
+RLN enables DOS protection across the network in a privacy-preserving and permission-less manner: stake in a contract,
+and you can send messages.
 
-Projects that wishes to use Waku, to enable interaction between their users, whether it's for chat messages, gaming,
-zero-knowledge smart contract enabling privacy on defi, notification or inter-wallet communication.
-May have different model on how they receive value from their users.
-Maybe some users are service provider for the project and expect to receive value by running node,
-or maybe all users pay for the product, or maybe users run the infra as they use the product.
+Service credentials establish a customer-provider relationship. Users might pay to have messages they are interested in
+stored and served by a provider. Alternatively, a community owner could pay a service provider to host their community.
 
-Waku aims to enable each of this use cases. Which means that there will be various way to "pay for the infrastructure"
+Providers could offer trial or limited free services to Waku users, similar to Slack or Discord. Once a trial is expired or outgrown,
+a community owner could pay for more storage or bandwidth, similar to Slack's model.
+Alternatively, individual users could contribute financially, akin to Discord's Server Boost, or by sharing their own
+resources with their community.
 
-In this talk, Oskar addressed two strategies: RLN and service credentials.
+We anticipate witnessing various scenarios across the spectrum: from users sharing resources to users paying for access to the network and everything in between.
 
-RLN enables DOS protection across the network in a privacy preserving and permission less manner: stake in a contract,
-you can now send messages.
+## Waku Network: Ethereum or Cosmos?
 
-Service credentials enables a customer-provider relationship. Maybe each user will pay to have messages they are
-interested in stored and served by this provider.
-Or possibly, a _community owner_ could be paying a service provider to host their community.
+Another perspective is to consider whether the Waku network will resemble Ethereum or Cosmos. We want Waku to be
+decentralized to provide censorship resistance and privacy-preserving communication. If each application deploys its
+own network, we will not achieve this goal. Therefore, we aim for a more decentralized network, like Ethereum.
 
-Providers, could provide trial or free limited services to Waku users. Similar to Slack or Discord.
-Once a trial is outgrown, a community owner could pay a la Slack to have more storage or bandwidth available.
-Or individual useres could financially chip in a la Discord Server Boost, or by sharing their own resources to the community.
+However, the fee model is different and varied, which is why we are likely to see a mix: separate gossipsub networks
+with different funding models. Since there is no consensus on Waku, each individual operator can decide which network
+to support, enabling Waku to maintain its permission-less property.
 
-We expect to witness the two end of the spectrum: from users that share resources to users that pay for access to the network and
-maybe scenario in between.
+Most likely, the Waku network will be heterogeneous, and node operators will choose the incentivization model they prefer.
 
-Another way to think about it is to wonder whether the Waku network will be more like Ethereum or Cosmos.
-We want Waku to be decentralized so it can provide censorship resistance and privacy preserving communication.
-If each application have to deploy their own network, then we will not achieve this goal. Which is why we are aiming more for a decentralized network a la Ethereum.
-However, the fee model is different and varied, and hence we are likely to see a mix: Separate gossipsub networks with different funding models.
-Yet, there is no consensus on Waku, meaning that each individual operator will be able to decide what network they will support, allowing Waku to retain a permission-less property. 
+# Scalability and Discovery Protocols
 
-The Waku network will be heteregeneous and node operators will be able to choose which model they prefer to support.
+To enable scalability, the flow of messages in the Waku network will be divided so that not every node has to forward
+every message. Discovery protocols will facilitate users finding the right nodes to receive the messages they are interested in.
 
-The flow of messages in the waku network will be split to enables scalability: not every node of the network can be expected
-to forward every messages of the network.
-This will be enabled by discovery protocols that allows users to find the right node to receive the messages they are interested in.
+Marketplace protocols may also be developed to help operators understand how they can best support the network and where
+their resources are most needed. However, we are still far from establishing or even assert that such a marketplace will be needed.
 
-I also see marketplace protocol being developed, to help operators understand how they can best support the network,
-where would their resources be most needed. We are far away from a marketplace for operators.
+# The Evolving Waku Network
 
-What defines the "Waku Network" will most likely change over time.
-In the near future, it will move from a single gossipsub network to a sharded set of networks brought together
-by a common discovery layer.
+The definition of the "Waku Network" will likely change over time. In the near future, it will transition from a single
+gossipsub network to a sharded set of networks unified by a common discovery layer. This change will promote scalability
+and allow various payment models to coexist within the Waku ecosystem.
+
+In conclusion, the future of Waku Network entails growth, incentivization, and heterogeneity while steadfastly
+maintaining its core principles. As Waku continues to evolve, we expect it to accommodate a diverse range of use cases
+and business models, all while preserving privacy, resisting censorship, avoiding surveillance, and remaining accessible
+to devices with limited resources.
+
+# References
+
+- [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/)
+- [57/STATUS-Simple-Scaling](https://rfc.vac.dev/spec/57/)
+- [58/RLN-V2](https://rfc.vac.dev/spec/58/)
