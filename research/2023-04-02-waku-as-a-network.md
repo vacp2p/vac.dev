@@ -70,17 +70,17 @@ Another perspective is to consider whether the Waku network will resemble Ethere
 
 For those not familiar with the difference between both, in a very concise manner:
 - Ethereum is a set of protocols and software that are designed to operate on one common network and infrastructure
-- Cosmos is a set of protocols and software (SDKs) designed to be deployed in separate yet interoperable network and infrastructure by third parties
+- Cosmos is a set of protocols and software (SDKs) designed to be deployed in separate yet interoperable networks and infrastructures by third parties
 
 We want Waku to be decentralized to provide censorship resistance and privacy-preserving communication.
 If each application has to deploy its own network, we will not achieve this goal.
 Therefore, we aim Waku to be not only an open source set of protocols, but also a shared infrastructure that anyone can leverage to build applications on top, with some guarantees in terms of decentralization and anonymity.
-This is closer to Ethereum than Cosmos in spirit.
+This approach is closer in spirit to Ethereum than Cosmos.
 Do note that, similarly to Ethereum, anyone is free to take Waku software and protocols and deploy their own network.
 
-However, the fee model is different and varied, which is why we are likely to see a mix: separate gossipsub networks
-with different funding models. Since there is no consensus on Waku, each individual operator can decide which network
-to support, enabling Waku to maintain its permission-less property.
+Yet, because of the difference in the fee model, the Waku Network is unlikely to be as unified as Ethereum's.
+We currently assume that there will be separate gossipsub networks with different funding models.
+Since there is no consensus on Waku, each individual operator can decide which network to support, enabling Waku to maintain its permission-less property.
 
 Most likely, the Waku network will be heterogeneous, and node operators will choose the incentivization model they prefer.
 
