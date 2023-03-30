@@ -86,8 +86,11 @@ Most likely, the Waku network will be heterogeneous, and node operators will cho
 
 # Scalability and Discovery Protocols
 
-To enable scalability, the flow of messages in the Waku network will be divided so that not every node has to forward
-every message. Discovery protocols will facilitate users finding the right nodes to receive the messages they are interested in.
+To enable scalability, the flow of messages in the Waku network will be divided in shards,
+so that not every node has to forward every message of the whole network.
+Discovery protocols will facilitate users connecting to the right nodes to receive the messages they are interested in.
+
+Different shards could be subject to a variety of rate limiting techniques (globally, targeted to that shard or something in-between).
 
 Marketplace protocols may also be developed to help operators understand how they can best support the network and where
 their resources are most needed. However, we are still far from establishing or even assert that such a marketplace will be needed.
