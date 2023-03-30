@@ -18,9 +18,9 @@ Waku is preparing for production with a focus on the Status Communities use case
 overview of recent discussions and research outputs, aiming to give you a better understanding of how the Waku network
 may look like in terms of scaling and incentivization.
 
-## DOS Protection for Status Communities
+## DOS Mitigation for Status Communities
 
-Waku is actively exploring DOS protection mechanisms suitable for Status Communities. While RLN
+Waku is actively exploring DOS mitigation mechanisms suitable for Status Communities. While RLN
 (Rate Limiting Nullifiers) remains the go-to DOS protection solution due to its privacy-preserving and
 censorship-resistant properties, there is still more work to be done. We are excited to collaborate with PSE
 (Privacy & Scaling Explorations) in this endeavor. Learn more about their latest progress in this [tweet](https://twitter.com/CPerezz19/status/1640373940634939394?s=20).
