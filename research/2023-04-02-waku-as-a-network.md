@@ -95,6 +95,22 @@ Different shards could be subject to a variety of rate limiting techniques (glob
 Marketplace protocols may also be developed to help operators understand how they can best support the network and where
 their resources are most needed. However, we are still far from establishing or even assert that such a marketplace will be needed.
 
+## Open Problems
+
+Splitting traffic between shards reduces bandwidth consumption for every Waku Relay node.
+This improvement increases the likelihood that users with home connections can participate and contribute to the gossipsub network without encountering issues.
+
+However, it does not cap traffic.
+There are still open problems regarding how to guarantee that someone can use Waku with lower Internet bandwidth or run critical services, such as a validation node, on the same connection.
+
+We have several ongoing initiatives:
+
+- Analyzing the Status Community protocol to confirm efficient usage of Waku [[4]](https://github.com/vacp2p/research/issues/177)
+- Simulating the Waku Network to measure actual bandwidth usage [[5]](https://github.com/waku-org/pm/issues/2)
+- Segregating chat messages from control and media messages [[6]](https://rfc.vac.dev/spec/57/#control-message-shards)
+
+The final solution will likely be a combination of protocols that reduce bandwidth usage or mitigate the risk of DOS attacks, providing flexibility for users and platforms to enable the best experience.
+
 # The Evolving Waku Network
 
 The definition of the "Waku Network" will likely change over time. In the near future, it will transition from a single
@@ -108,6 +124,9 @@ to devices with limited resources.
 
 # References
 
-- [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/)
-- [57/STATUS-Simple-Scaling](https://rfc.vac.dev/spec/57/)
-- [58/RLN-V2](https://rfc.vac.dev/spec/58/)
+1. [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/)
+2. [57/STATUS-Simple-Scaling](https://rfc.vac.dev/spec/57/)
+3. [58/RLN-V2](https://rfc.vac.dev/spec/58/)
+4. [Scaling Status Communities: Potential Problems](https://github.com/vacp2p/research/issues/177)
+5. [Waku Network Testing](https://github.com/waku-org/pm/issues/2)
+6. [51/WAKU2-RELAY-SHARDING: Control Message Shards](https://rfc.vac.dev/spec/57/#control-message-shards)
