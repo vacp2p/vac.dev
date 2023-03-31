@@ -36,8 +36,9 @@ can choose how they want to use Waku based on their specific needs.
 Traditionally, the question of incentivization revolves around how to incentivize operators to run nodes. We'd like to
 reframe the question and instead ask, "How do we pay for the infrastructure?"
 
-Waku does not intend to offer a free lunch. Ethereum's infrastructure relies on transaction fees, where users pay for
-each transaction they push onto the network. However, this model does not suit a communication network like Waku.
+Waku does not intend to offer a free lunch.
+Ethereum's infrastructure is supported by transaction fees and inflation, with validators receiving rewards from both sources.
+However, this model does not suit a communication network like Waku.
 Users and platforms would not want to pay for every single message they send. Additionally, Waku aims to support instant
 ephemeral messages that do not require consensus or long-term storage.
 
