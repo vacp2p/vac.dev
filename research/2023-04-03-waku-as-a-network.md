@@ -9,7 +9,7 @@ permalink: /future-of-waku-network
 categories: platform, operator, network
 summary: Learn how the Waku Network is evolving through scaling, incentivization, and diverse ecosystem development and what the future might look like.
 image: /img/black-waku-logo-with-name.png
-discuss: TODO
+discuss: https://forum.vac.dev/t/discussion-the-future-of-waku-network-scaling-incentivization-and-heterogeneity/173
 ---
 
 # The Future of Waku Network: Scaling, Incentivization, and Heterogeneity
