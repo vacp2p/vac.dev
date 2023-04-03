@@ -2,7 +2,7 @@
 layout: post
 name:  "The Future of Waku Network: Scaling, Incentivization, and Heterogeneity"
 title:  "The Future of Waku Network: Scaling, Incentivization, and Heterogeneity"
-date:   2023-03-31 12:00:00
+date:   2023-04-03 00:00:00
 author: franck
 published: true
 permalink: /future-of-waku-network
