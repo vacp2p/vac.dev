@@ -30,9 +30,10 @@ To demonstrate how device pairing can be achieved using Waku and Noise, we have 
 The process works as follows:
 
 Actors:
-    a.  Alice the initiator
-    b.  Bob the responder
-    
+
+- Alice the initiator
+- Bob the responder
+
 1. The first step in achieving secure device pairing using Noise and Waku is for Bob generate the pairing information which could be transmitted out-of-band. For this, Bob opens https://examples.waku.org/noise-js/ and a QR code is generated, containing the data required to do the handshake. This pairing QR code is timeboxed, meaning that after 2 minutes, it will become invalid and a new QR code must be generated
 2. Alice scans the QR code using a mobile phone. This will open the app with the QR code parameters initiating the handshake process which is described in [43/WAKU2-DEVICE-PAIRING](https://rfc.vac.dev/spec/43/#protocol-flow). These messages are exchanged between two devices over Waku to establish a secure connection. The handshake messages consist of three main parts: the initiator's message, the responder's message, and the final message, which are exchanged to establish a secure connection. While using js-noise, the developer is abstracted of this process, since the messaging happens automatically depending on the actions performed by the actors in the pairing process.
 3. Both Alice and Bob will be asked to verify each other's identity. This is done by confirming if an 8-digits authorization code match in both devices. If both actors confirm that the authorization code is valid, the handshake concludes succesfully
