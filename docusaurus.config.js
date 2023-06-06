@@ -39,6 +39,9 @@ const config = {
               default: {
                 content: {
                   authors,
+                  authorPage: {
+                    sidebar: 'main',
+                  },
                 },
               },
             },

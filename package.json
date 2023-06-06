@@ -15,7 +15,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@acid-info/logos-docusaurus-preset": "^1.0.0-alpha.28",
+    "@acid-info/logos-docusaurus-preset": "^1.0.0-alpha.29",
     "@docusaurus/core": "2.4.1",
     "@docusaurus/preset-classic": "2.4.1",
     "@docusaurus/theme-mermaid": "^2.4.1",
