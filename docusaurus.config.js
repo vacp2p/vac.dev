@@ -23,8 +23,6 @@ const config = {
     locales: ['en'],
   },
 
-  staticDirectories: ['static/'],
-
   presets: [
     [
       '@acid-info/logos-docusaurus-preset',
