@@ -1,8 +1,9 @@
 ---
 title: Open Research Problems
 ---
+# 
 
-# Open Research Problems
+## Open Research Problems
 
 We are seeking to collaborate with researchers in the following topic areas.
 Feel free to join our [Discord](https://discord.gg/PQFdubGt6d) for discussion.
@@ -137,7 +138,7 @@ Peer-to-peer networks are made of multiple nodes or peers, typically in the rang
 This not only involves an efficient peer discovery strategy, which gives us a pool of peers to select from, but also strategies to select the ones we are interested in and drop connections with the ones we are not. Protocols like GossipSub have their [score](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#the-score-function) and it's something that can be used as a baseline, but unfortunately does not take into account Waku specifics.
 
 
-# Further Research Collaboration Opportunities
+## Further Research Collaboration Opportunities
 
 Besides the open research problems listed in the section above,
 you may browse our [Research Areas](https://vac.dev/research-areas) page

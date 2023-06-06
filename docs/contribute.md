@@ -25,7 +25,7 @@ For code contributions, see our "good first issue" lists for various Vac related
 * [go-waku](https://github.com/status-im/go-waku/labels/good%20first%20issue)
 * [zerokit](https://github.com/vacp2p/zerokit/labels/good%20first%20issue)
 
-# Contribute Pseudonymously
+## Contribute Pseudonymously
 
 We welcome everyone to contribute to our projects by submitting an issue or a pull request to any of the repository hosted in our [Vac](https://github.com/vacp2p) GitHub page.
 
@@ -98,7 +98,7 @@ Note that we automatically discard e-mails containing one or more attachments wh
 
 Once received, we will review your contribution and eventually create a pull request on your behalf.
 
-#### E-Mail Encryption
+### E-Mail Encryption
 
 Our `contribute@vac.dev` e-mail address is based on [Proton](https://proton.me) services.
 

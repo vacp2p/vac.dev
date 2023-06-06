@@ -2,7 +2,7 @@
 title: Research areas
 ---
 
-# Overview
+## Overview
 
 Vac has several research areas it is interested in and has or is developing expertise in.
 Here’s an overview of some of these areas along with motivation and what type of topics are included.
