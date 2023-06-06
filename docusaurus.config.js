@@ -80,8 +80,8 @@ const config = {
                 href: 'https://jobs.status.im/',
               },
               {
-                label: 'Privacy Policy',
-                to: '/privacy-policy',
+                label: 'Terms & Conditions',
+                to: '/terms',
               },
             ],
           },
