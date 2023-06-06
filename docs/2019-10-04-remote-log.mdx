@@ -11,6 +11,10 @@ summary: A research log. Asynchronous P2P messaging? Remote logs to the rescue!
 image: /img/remote-log.png
 ---
 
+import { DocMetadata } from '@site/src/components/mdx'
+
+<DocMetadata />
+
 A big problem when doing end-to-end data sync between mobile nodes is that most devices are offline most of the time. With a naive approach, you quickly run into issues of 'ping-pong' behavior, where messages have to be constantly retransmitted. We saw some basic calculations of what this bandwidth multiplier looks like in a [previous post](https://vac.dev/p2p-data-sync-for-mobile).
 
 While you could do some background processing, this is really battery-draining, and on iOS these capabilities are limited. A better approach instead is to loosen the constraint that two nodes need to be online at the same time. How do we do this? There are two main approaches, one is the *store and forward model*, and the other is a *remote log*.

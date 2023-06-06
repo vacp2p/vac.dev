@@ -12,6 +12,10 @@ toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
 
+import { DocMetadata } from '@site/src/components/mdx'
+
+<DocMetadata />
+
 Together with decanus, I've been working on the problem of data sync lately.
 
 In building p2p messaging systems, one problem you quickly come across is the problem of reliably transmitting data. If there's no central server with high availability guarantees, you can't meaningfully guarantee that data has been transmitted. One way of solving this problem is through a synchronization protocol.

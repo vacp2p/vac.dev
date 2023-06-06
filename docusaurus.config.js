@@ -2,6 +2,8 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 require('dotenv').config()
 
+const authors = require('./data/authors')
+
 const math = require('remark-math')
 const katex = require('rehype-katex')
 
@@ -33,6 +35,13 @@ const config = {
           name: 'default',
           options: {
             customCss: [require.resolve('./src/css/custom.scss')],
+            docs: {
+              default: {
+                content: {
+                  authors,
+                },
+              },
+            },
           },
         },
         docs: {
@@ -45,7 +54,6 @@ const config = {
     ],
   ],
   themes: ['@docusaurus/theme-mermaid'],
-
   themeConfig:
     /** @type {import('@acid-info/logos-docusaurus-preset').ThemeConfig} */
     ({
