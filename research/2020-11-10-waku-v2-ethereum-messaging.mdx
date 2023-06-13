@@ -1,22 +1,21 @@
 ---
 layout: post
-name:  "[Talk] Vac, Waku v2 and Ethereum Messaging"
-title:  "[Talk] Vac, Waku v2 and Ethereum Messaging"
-date:   2020-11-10 12:00:00
-author: oskarth
+name: '[Talk] Vac, Waku v2 and Ethereum Messaging'
+title: '[Talk] Vac, Waku v2 and Ethereum Messaging'
+date: 2020-11-10 12:00:00
+authors: oskarth
 published: true
 slug: waku-v2-ethereum-messaging
 categories: research
-summary: Talk from Taipei Ethereum Meetup. Read on to find out about our journey from Whisper to Waku v2, as well as how Waku v2 can be useful for Etherum Messaging.
 image: /img/taipei_ethereum_meetup_slide.png
 discuss: https://forum.vac.dev/t/discussion-talk-vac-waku-v2-and-ethereum-messaging/60
 ---
 
-import { DocMetadata } from '@site/src/components/mdx'
+Talk from Taipei Ethereum Meetup. Read on to find out about our journey from Whisper to Waku v2, as well as how Waku v2 can be useful for Etherum Messaging.
 
-<DocMetadata />
+<!--truncate-->
 
-*The following post is a transcript of the talk given at the [Taipei Ethereum meetup, November 5](https://www.meetup.com/Taipei-Ethereum-Meetup/events/274033344/). There is also a [video recording]( https://www.youtube.com/watch?v=lUDy1MoeYnI).*
+_The following post is a transcript of the talk given at the [Taipei Ethereum meetup, November 5](https://www.meetup.com/Taipei-Ethereum-Meetup/events/274033344/). There is also a [video recording](https://www.youtube.com/watch?v=lUDy1MoeYnI)._
 
 ---
 
@@ -72,9 +71,9 @@ Taking a step back, what problem does Waku v2 attempt to solve compared to all t
 
 3. **Resource restricted**. These applications often run in constrained environments, where resources or the environment is restricted in some fashion. E.g.:
 
-    - limited bandwidth, CPU, memory, disk, battery, etc
-    - not being publicly connectable
-    - only being intermittently connected; mostly-offline
+   - limited bandwidth, CPU, memory, disk, battery, etc
+   - not being publicly connectable
+   - only being intermittently connected; mostly-offline
 
 4. **Privacy**. These applications have a desire for some privacy guarantees, such as pseudonymity, metadata protection in transit, etc.
 
@@ -90,12 +89,12 @@ It is running over libp2p and we had our second internal testnet last week or so
 
 The main implementation is written in Nim using nim-libp2p, which is also powering Nimbus, an Ethereum 2 client. There is also a PoC for running Waku v2 in the browser. On a spec level, we have the following specifications that corresponds to the components that make up Waku v2:
 
--   Waku v2 - this is the main spec that explains the goals of providing generalized messaging, in a p2p context, with a focus on privacy and running on resources restricted devices.
--   Relay - this is the main PubSub spec that provides better routing. It builds on top of GossipSub, which is what Eth2 heavily relies on as well.
--   Store - this is a 1-1 protocol for light nodes to get historical messages, if they are mostly-offline.
--   Filter - this is a 1-1 protocol for light nodes that are bandwidth restricted to only (or mostly) get messages they care about.
--   Message - this explains the payload, to get some basic encryption and content topics. It corresponds roughly to envelopes in Whisper/Waku v1.
--   Bridge - this explains how to do bridging between Waku v1 and Waku v2 for compatibility.
+- Waku v2 - this is the main spec that explains the goals of providing generalized messaging, in a p2p context, with a focus on privacy and running on resources restricted devices.
+- Relay - this is the main PubSub spec that provides better routing. It builds on top of GossipSub, which is what Eth2 heavily relies on as well.
+- Store - this is a 1-1 protocol for light nodes to get historical messages, if they are mostly-offline.
+- Filter - this is a 1-1 protocol for light nodes that are bandwidth restricted to only (or mostly) get messages they care about.
+- Message - this explains the payload, to get some basic encryption and content topics. It corresponds roughly to envelopes in Whisper/Waku v1.
+- Bridge - this explains how to do bridging between Waku v1 and Waku v2 for compatibility.
 
 Right now, all protocols, with the exception of bridge, are in draft mode, meaning they have been implemented but are not yet being relied upon in production.
 
@@ -113,10 +112,10 @@ There are also some changes we made to at what level content encryption happens,
 
 More generally, beyond getting to production-ready use, there are a few bigger pieces that we are working on or will work on soon. These are things like:
 
--   Better scaling, by using topic sharding.
--   Accounting and user-run nodes, to account for and incentives full nodes.
--   Stronger and more rigorous privacy guarantees, e.g. through study of GossipSub, unlinkable packet formats, etc.
--   Rate Limit Nullifier for privacy preserving spam protection, a la what Barry Whitehat has presented before.
+- Better scaling, by using topic sharding.
+- Accounting and user-run nodes, to account for and incentives full nodes.
+- Stronger and more rigorous privacy guarantees, e.g. through study of GossipSub, unlinkable packet formats, etc.
+- Rate Limit Nullifier for privacy preserving spam protection, a la what Barry Whitehat has presented before.
 
 As well as better support for Ethereum M2M Messaging. Which is what I'll talk about next.
 
@@ -130,12 +129,12 @@ It is easy to think that Waku v2 is only for human to human messaging, since tha
 
 What is Ethereum M2M messaging? Going back to the Holy Trinity of Ethereum/Whisper/Swarm, the messaging component was seen as something that could facilitate messages between dapps and acts as a building block. This can help with things such as:
 
--   Reducing on-chain transactions
--   Reduce latency for operations
--   Decentralize centrally coordinated services (like WalletConnect)
--   Improve UX of dapps
--   Broadcast live information
--   A message transport layer for state channels
+- Reducing on-chain transactions
+- Reduce latency for operations
+- Decentralize centrally coordinated services (like WalletConnect)
+- Improve UX of dapps
+- Broadcast live information
+- A message transport layer for state channels
 
 And so on.
 
@@ -143,11 +142,11 @@ And so on.
 
 What are some examples of practical things Waku as used for Ethereum Messaging could solve?
 
--   Multisig transfers only needing one on chain transaction
--   DAO votes only needing one one chain transaction
--   Giving dapps ability to direct push notifications to users
--   Giving users ability to directly respond to requests from daps
--   Decentralized Wallet Connect
+- Multisig transfers only needing one on chain transaction
+- DAO votes only needing one one chain transaction
+- Giving dapps ability to direct push notifications to users
+- Giving users ability to directly respond to requests from daps
+- Decentralized Wallet Connect
 
 Etc.
 

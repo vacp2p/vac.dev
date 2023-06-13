@@ -1,5 +1,5 @@
 ---
-displayed_sidebar: main
+displayed_sidebar: null 
 ---
 
 # Terms of Use

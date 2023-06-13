@@ -1,20 +1,19 @@
 ---
 layout: post
-name:  "Waku v1 vs Waku v2: Bandwidth Comparison"
-title:  "Waku v1 vs Waku v2: Bandwidth Comparison"
-date:   2021-11-03 10:00:00
-author: hanno
+name: 'Waku v1 vs Waku v2: Bandwidth Comparison'
+title: 'Waku v1 vs Waku v2: Bandwidth Comparison'
+date: 2021-11-03 10:00:00
+authors: hanno
 published: true
 slug: waku-v1-v2-bandwidth-comparison
 categories: research
-summary: A local comparison of bandwidth profiles showing significantly improved scalability in Waku v2 over Waku v1.
 image: /img/waku1-vs-waku2/waku1-vs-waku2-overall-network-size.png
 discuss: https://forum.vac.dev/t/discussion-waku-v1-vs-waku-v2-bandwidth-comparison/110
 ---
 
-import { DocMetadata } from '@site/src/components/mdx'
+A local comparison of bandwidth profiles showing significantly improved scalability in Waku v2 over Waku v1.
 
-<DocMetadata />
+<!--truncate-->
 
 ## Background
 
@@ -41,7 +40,7 @@ and compares bandwidth usage for similar message propagation scenarios.
 
 ## Theoretical improvements in Waku v2
 
-Messages are propagated in Waku v1 using [flood routing](https://en.wikipedia.org/wiki/Flooding_(computer_networking)).
+Messages are propagated in Waku v1 using [flood routing](<https://en.wikipedia.org/wiki/Flooding_(computer_networking)>).
 This means that every peer will forward every new incoming message to all its connected peers (except the one it received the message from).
 This necessarily leads to unnecessary duplication (termed _amplification factor_),
 wasting bandwidth and resources.
@@ -69,23 +68,24 @@ Hybrid topologies similarly show only a difference between Waku v1 and Waku v2 f
 where routing decisions need to be made.
 
 For this reason, the following approach applies to all iterations:
+
 1. Simulations are run **locally**.
-This limits the size of possible scenarios due to local resource constraints,
-but is a way to quickly get an approximate comparison.
+   This limits the size of possible scenarios due to local resource constraints,
+   but is a way to quickly get an approximate comparison.
 2. Nodes are treated as a **blackbox** for which we only measure bandwidth,
-using an external bandwidth monitoring tool.
-In other words, we do not consider differences in the size of the envelope (for v1) or the message (for v2).
+   using an external bandwidth monitoring tool.
+   In other words, we do not consider differences in the size of the envelope (for v1) or the message (for v2).
 3. Messages are published at a rate of **50 new messages per second** to each network,
-except where explicitly stated otherwise.
+   except where explicitly stated otherwise.
 4. Each message propagated in the network carries **8 bytes** of random payload, which is **encrypted**.
-The same symmetric key cryptographic algorithm (with the same keys) are used in both Waku v1 and v2.
+   The same symmetric key cryptographic algorithm (with the same keys) are used in both Waku v1 and v2.
 5. Traffic in each network is **generated from 10 nodes** (randomly-selected) and published in a round-robin fashion to **10 topics** (content topics for Waku v2).
-In practice, we found no significant difference in _average_ bandwidth usage when tweaking these two parameters (the number of traffic generating nodes and the number of topics).
+   In practice, we found no significant difference in _average_ bandwidth usage when tweaking these two parameters (the number of traffic generating nodes and the number of topics).
 6. Peers are connected in a decentralized **full mesh topology**,
-i.e. each peer is connected to every other peer in the network.
-Waku v1 is expected to flood all messages across all existing connections.
-Waku v2 gossipsub will GRAFT some of these connections for full-message peerings,
-with the rest being gossip-only peerings.
+   i.e. each peer is connected to every other peer in the network.
+   Waku v1 is expected to flood all messages across all existing connections.
+   Waku v2 gossipsub will GRAFT some of these connections for full-message peerings,
+   with the rest being gossip-only peerings.
 7. After running each iteration, we **verify that messages propagated to all peers** (comparing the number of published messages to the metrics logged by each peer).
 
 For Waku v1, nodes are configured as "full" nodes (i.e. with full bloom filter),
@@ -124,7 +124,6 @@ Bandwidth usage in Waku v2 has increased only slightly from the smaller network 
 This is because there are only a few more full-message peerings than before.
 Compare this to the much higher increase in bandwidth usage for Waku v1, which now requires more than 4000 kbps on average.
 
-
 ### Iteration 3: 50 nodes
 
 For an even larger network of 50 highly connected nodes,
@@ -151,7 +150,7 @@ The local Waku v2 simulation maintains the message throughput rate without any p
 Finally, we simulate message propagation in a network of 150 nodes.
 Due to local resource constraints, we run this simulation at a lower rate -
 35 messages per second -
-and for a shorter amount of time. 
+and for a shorter amount of time.
 
 ![](//img/waku1-vs-waku2/waku1-vs-waku2-150-nodes.png)
 
@@ -192,9 +191,9 @@ A similar traffic increase in Waku v2 requires on average 40kbps more bandwidth 
 ## Conclusions
 
 - **Waku v2 scales significantly better than Waku v1 in terms of average bandwidth usage**,
-especially for densely connected networks.
+  especially for densely connected networks.
 - E.g. for a network consisting of **150** or more densely connected nodes,
-Waku v2 provides more than **10x** better average bandwidth usage rates than Waku v1.
+  Waku v2 provides more than **10x** better average bandwidth usage rates than Waku v1.
 - As the network continues to scale, both in absolute terms (number of nodes) and in network traffic (message rates) the disparity between Waku v2 and Waku v1 becomes even larger.
 
 ## Future work
@@ -202,6 +201,7 @@ Waku v2 provides more than **10x** better average bandwidth usage rates than Wak
 Now that we've confirmed that Waku v2's bandwidth improvements over its predecessor matches theory,
 we can proceed to a more in-depth characterisation of Waku v2's resource usage.
 Some questions that we want to answer include:
+
 - What proportion of Waku v2's bandwidth usage is used to propagate _payload_ versus bandwidth spent on _control_ messaging to maintain the mesh?
 - To what extent is message latency (time until a message is delivered to its destination) affected by network size and message rate?
 - How _reliable_ is message delivery in Waku v2 for different network sizes and message rates?

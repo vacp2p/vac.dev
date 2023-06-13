@@ -1,19 +1,18 @@
 ---
 layout: post
-name:  "Feasibility Study: Discv5"
-title:  "Feasibility Study: Discv5"
-date:   2020-04-27 12:00:00
-author: dean
+name: 'Feasibility Study: Discv5'
+title: 'Feasibility Study: Discv5'
+date: 2020-04-27 12:00:00
+authors: dean
 published: true
 slug: feasibility-discv5
 categories: research
-summary: Looking at discv5 and the theoretical numbers behind finding peers.
 discuss: https://discuss.status.im/t/discv5-feasibility-study/1632
 ---
 
-import { DocMetadata } from '@site/src/components/mdx'
+Looking at discv5 and the theoretical numbers behind finding peers.
 
-<DocMetadata />
+<!--truncate-->
 
 > Disclaimer: some of the numbers found in this write-up could be inaccurate. They are based on the current understanding of theoretical parts of the protocol itself by the author and are meant to provide a rough overview rather than bindable numbers.
 
@@ -27,13 +26,13 @@ Namely, we want to ensure censorship resistance to state-level adversaries. One 
 
 Considering we are talking about resource restricted devices, let's look at the implications and what we need to consider:
 
- - **Battery consumption** - constant connections like websockets consume a lot of battery life.
- - **CPU usage** - certain discovery methods may be CPU incentive, slowing an app down and making it unusable.
- - **Bandwidth consumption** - a lot of users will be using data plans, the discovery method needs to be efficient in order to accommodate those users without using up significant portions of their data plans.
- - **Short connection windows** - the discovery algorithm needs to be low latency, that means it needs to return results fast. This is because many users will only have the app open for a short amount of time.
- - **Not publicly connectable** - There is a good chance that most resource restricted devices are not publicly connectable.
+- **Battery consumption** - constant connections like websockets consume a lot of battery life.
+- **CPU usage** - certain discovery methods may be CPU incentive, slowing an app down and making it unusable.
+- **Bandwidth consumption** - a lot of users will be using data plans, the discovery method needs to be efficient in order to accommodate those users without using up significant portions of their data plans.
+- **Short connection windows** - the discovery algorithm needs to be low latency, that means it needs to return results fast. This is because many users will only have the app open for a short amount of time.
+- **Not publicly connectable** - There is a good chance that most resource restricted devices are not publicly connectable.
 
-For a node to be able to participate as both a provider, and a consumer in the discovery method. Meaning a node both reads from other nodes' stored DHTs and hosts the DHT for other nodes to read from, it needs to be publically connectable. This means another node must be able to connect to some public IP of the given node. 
+For a node to be able to participate as both a provider, and a consumer in the discovery method. Meaning a node both reads from other nodes' stored DHTs and hosts the DHT for other nodes to read from, it needs to be publically connectable. This means another node must be able to connect to some public IP of the given node.
 
 With devices that are behind a NAT, this is easier said than done. Especially mobile devices, that when connected to 4G LTE networks are often stuck behind a symmetric NAT, drastically reducing the the succeess rate of NAT traversal. Keeping this in mind, it becomes obvious that most resource restricted devices will be consumers rather than providers due to this technical limitation.
 
@@ -42,8 +41,9 @@ In order to answer our questions, we formulated the problem with a simple method
 ## Overview
 
 The main things we wanted to investigate was the overhead on finding a peer. This means we wanted to look at both the bandwidth, latency and effectiveness of this. There are 2 methods which we can use to find a peer:
- - We can find a peer with a specific ID, using normal lookup methods as documented by Kademlia.
- - We can find a peer that advertises a capability, this is possible using either capabilities advertised in the ENR or through [topic tables](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md#topic-advertisement).
+
+- We can find a peer with a specific ID, using normal lookup methods as documented by Kademlia.
+- We can find a peer that advertises a capability, this is possible using either capabilities advertised in the ENR or through [topic tables](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md#topic-advertisement).
 
 ## Feasbility
 
@@ -80,7 +80,8 @@ Research has shown that finding a node in the DHT has a relatively low effect on
 One of the main blockers right now is figuring out what the CPU and memory usage of discv5 is on mobile phones, this is a large blocker as it affects one of the core problems for us. We need to consider whether discv5 is an upgrade as it allows us to simplify our current discovery process or if it is too much of an overhead for resource restricted devices. The topic table feature could largely enhance discovery however it is not yet implemented. Given that CPU and memory isn't too high, discv5 could probably be used as the other issues are more "features" than large scale issues. Implementing it would already reduce the ability for state level adversaries to censor our nodes.
 
 ## Acknowledgements
- - Oskar Thoren
- - Dmitry Shmatko
- - Kim De Mey
- - Corey Petty
+
+- Oskar Thoren
+- Dmitry Shmatko
+- Kim De Mey
+- Corey Petty

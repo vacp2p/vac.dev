@@ -1,46 +1,45 @@
 ---
 layout: post
-name:  "Noise handshakes as key-exchange mechanism for Waku"
-title:  "Noise handshakes as key-exchange mechanism for Waku"
+name: 'Noise handshakes as key-exchange mechanism for Waku'
+title: 'Noise handshakes as key-exchange mechanism for Waku'
 date: 2022-05-17 10:00:00
-author: s1fr0
+authors: s1fr0
 published: true
 slug: wakuv2-noise
 categories: research
-summary: We provide an overview of the Noise Protocol Framework as a tool to design efficient and secure key-exchange mechanisms in Waku2.
+summary:
 image: /img/noise/NM.png
 discuss: https://forum.vac.dev/t/discussion-noise-handshakes-as-key-exchange-mechanism-for-waku/137
 _includes: [math]
 ---
 
-import { DocMetadata } from '@site/src/components/mdx'
+We provide an overview of the Noise Protocol Framework as a tool to design efficient and secure key-exchange mechanisms in Waku2.
 
-<DocMetadata />
+<!--truncate-->
 
 ## Introduction
+
 In this post we will provide an overview of how [Waku v2](https://rfc.vac.dev/spec/10/) users can adopt [Noise handshakes](http://www.noiseprotocol.org/noise.html) to agree on cryptographic keys used to securely encrypt messages.
 
 This process belongs to the class of _key-exchange_ mechanisms, consisting of all those protocols that, with different levels of complexity and security guarantees, allow two parties to publicly agree on a secret without letting anyone else know what this secret is.
 
-But why do we need key-exchange mechanisms in the first place? 
+But why do we need key-exchange mechanisms in the first place?
 
 With the advent of [public-key cryptography](https://en.wikipedia.org/wiki/Public-key_cryptography), it become possible to decouple encryption from decryption through use of two distinct cryptographic keys: one _public_, used to encrypt information and that can be made available to anyone, and one _private_ (kept secret), which enables decryption of messages encrypted with its corresponding public key. The same does not happen in the case of [symmetric encryption schemes](https://en.wikipedia.org/wiki/Symmetric-key_algorithm) where, instead, the same key is used for both encryption and decryption operations and hence cannot be publicly revealed as for public keys.
 
+In order to address specific application needs, many different public, symmetric and hybrid cryptographic schemes were designed: [Waku v1](https://rfc.vac.dev/spec/6/) and [Waku v2](https://rfc.vac.dev/spec/10/), which inherits part of their design from the Ethereum messaging protocol [Whisper](https://ethereum.org/en/developers/docs/networking-layer/#whisper), provide [support](https://rfc.vac.dev/spec/26/) to both public-key primitives ([`ECIES`](https://en.wikipedia.org/wiki/Integrated_Encryption_Scheme), [`ECDSA`](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm)) and symmetric primitives ([`AES-256-GCM`](https://en.wikipedia.org/wiki/Galois/Counter_Mode), [`KECCAK-256`](https://en.wikipedia.org/wiki/SHA-3)), used to sign, hash, encrypt and decrypt exchanged messages.
 
-In order to address specific application needs, many different public, symmetric and hybrid cryptographic schemes were designed: [Waku v1](https://rfc.vac.dev/spec/6/) and [Waku v2](https://rfc.vac.dev/spec/10/), which inherits part of their design from the Ethereum messaging protocol [Whisper](https://ethereum.org/en/developers/docs/networking-layer/#whisper), provide [support](https://rfc.vac.dev/spec/26/) to both public-key primitives ([`ECIES`](https://en.wikipedia.org/wiki/Integrated_Encryption_Scheme), [`ECDSA`](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm)) and symmetric primitives ([`AES-256-GCM`](https://en.wikipedia.org/wiki/Galois/Counter_Mode), [`KECCAK-256`](https://en.wikipedia.org/wiki/SHA-3)), used to sign, hash, encrypt and decrypt exchanged messages. 
-
-In principle, when communications employ public-key based encryption schemes (`ECIES`, in the case of Waku), there is no need for a key-agreement among parties: messages can be directly encrypted using the recipient's public-key before being sent over the network. However, public-key encryption and decryption primitives are usually very inefficient in processing large amount of data, and this may constitute a bottleneck for many of today's applications. Symmetric encryption schemes such as `AES-256-GCM`, on the other hand, are much more efficient, but the encryption/decryption key needs to be shared among users beforehand any encrypted messages is exchanged. 
+In principle, when communications employ public-key based encryption schemes (`ECIES`, in the case of Waku), there is no need for a key-agreement among parties: messages can be directly encrypted using the recipient's public-key before being sent over the network. However, public-key encryption and decryption primitives are usually very inefficient in processing large amount of data, and this may constitute a bottleneck for many of today's applications. Symmetric encryption schemes such as `AES-256-GCM`, on the other hand, are much more efficient, but the encryption/decryption key needs to be shared among users beforehand any encrypted messages is exchanged.
 
 To counter the downsides given by each of these two approaches while taking advantage of their strengths, hybrid constructions were designed. In these, public-key primitives are employed to securely agree on a secret key which, in turn, is used with a symmetric cipher for encrypting messages. In other words, such constructions specify a (public-key based) key-agreement mechanism!
 
 Waku, up to [payload version 1](https://rfc.vac.dev/spec/14/#payload-encryption), does not implement nor recommend any protocol for exchanging symmetric ciphers' keys, leaving such task to the application layer. It is important to note that the kind of key-agreement employed has a direct impact on the security properties that can be granted on later encrypted messages, while security requirements usually depend on the specific application for which encryption is needed in the first place.
 
-In this regard, [Status](https://status.im), which  builds on top of Waku, [implements](https://specs.status.im/spec/5) a custom version of the [X3DH](https://signal.org/docs/specifications/x3dh/) key-agreement protocol, in order to allow users to instantiate end-to-end encrypted communication channels. However, although such a solution is optimal when applied to (distributed) E2E encrypted chats, it is not flexible enough to fit or simplify the variety of applications Waku aims to address.
+In this regard, [Status](https://status.im), which builds on top of Waku, [implements](https://specs.status.im/spec/5) a custom version of the [X3DH](https://signal.org/docs/specifications/x3dh/) key-agreement protocol, in order to allow users to instantiate end-to-end encrypted communication channels. However, although such a solution is optimal when applied to (distributed) E2E encrypted chats, it is not flexible enough to fit or simplify the variety of applications Waku aims to address.
 Hence, proposing and implementing one or few key-agreements which provide certain (presumably _strong_) security guarantees, would inevitably degrade performances of all those applications for which, given their security requirements, more tailored and efficient key-exchange mechanisms can be employed.
 
-
 Guided by different examples, in the following sections we will overview Noise, a protocol framework we are [currently integrating](https://rfc.vac.dev/spec/35/) in Waku, for building secure key-agreements between two parties. One of the great advantage of using Noise is that it is possible to add support to new key-exchanges by just specifying users' actions from a predefined list, requiring none to minimal modifications to existing implementations. Furthermore, Noise provides a framework to systematically analyze protocols' security properties and the corresponding attacker threat models. This allows not only to easily design new key-agreements eventually optimized for specific applications we want to address, but also to easily analyze or even [formally verify](https://noiseexplorer.com/) any of such custom protocol!
- 
+
 We believe that with its enormous flexibility and features, Noise represents a perfect candidate for bringing key-exchange mechanisms in Waku.
 
 ## The Diffie-Hellman Key-exchange
@@ -52,10 +51,10 @@ Diffie-Hellman (DH) key-exchange is largely used today and represents the main c
 In turn, the security of DH is based on a mathematical problem called [discrete logarithm](https://en.wikipedia.org/wiki/Discrete_logarithm) which is believed to be hard when the agreement is practically instantiated using certain [elliptic curves](https://en.wikipedia.org/wiki/Elliptic_curve) $E$ defined over finite fields $\mathbb{F}_p$.
 
 Informally, a DH exchange between Alice and Bob proceeds as follows:
+
 - Alice picks a secret scalar $s_A\in\mathbb{F}_p$ and computes, using the underlying [curve's arithmetic](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication), the point $P_A = s_A\cdot P\in E(\mathbb{F}_p)$ for a certain pre-agreed public generator $P$ of the elliptic curve $E(\mathbb{F}_p)$. She then sends $P_A$ to Bob.
 - Similarly, Bob picks a secret scalar $s_B\in\mathbb{F}_p$, computes $P_B = s_B\cdot P\in E(\mathbb{F}_p)$ and sends $P_B$ to Alice.
 - By commutativity of scalar multiplication, both Alice and Bob can now compute the point $P_{AB} = s_As_B\cdot P$, using the elliptic curve point received from the other party and their secret scalar.
-
 
 The assumed hardness of computing discrete logarithms in the elliptic curve, ensures that it is not possible to compute $s_A$ or $s_B$ from $P_A$ and $P_B$, respectively. Another security assumption (named [Computational Diffie-Hellman assumption](https://en.wikipedia.org/wiki/Computational_Diffie%E2%80%93Hellman_assumption)) ensures that it is not possible to compute $P_{AB}$ from $P$, $P_A$ and $P_B$. Hence the point $P_{AB}$ shared by Alice and Bob at the end of the above protocol cannot be efficiently computed by an attacker intercepting $P_A$ and $P_B$, and can then be used to generate a secret to be later employed, for example, as a symmetric encryption key.
 
@@ -68,6 +67,7 @@ Although we assumed that it is practically impossible for an attacker to compute
 To mitigate such issues, multiple DH operations can be combined using two different types of exchanged elliptic curve points or, better, _public keys_: _ephemeral keys_, that is random keys used only once in a DH operation, and long-term _static keys_, used mainly for authentication purposes since employed multiple times.
 
 Just to provide an example, let us suppose Alice and Bob perform the following custom DH-based key-exchange protocol:
+
 - Alice generates an ephemeral key $E_A=e_A\cdot P$ by picking a random scalar $e_A$ and sends $E_A$ to Bob;
 - Similarly, Bob generates an ephemeral key $E_B=e_B\cdot P$ and sends $E_B$ to Alice;
 - Alice and Bob computes $E_{AB} = e_Ae_B \cdot P$ and from it derive a secret encryption key $k$.
@@ -79,7 +79,7 @@ In this protocol, if Alice's and/or Bob's static keys get compromised, it would 
 
 ## The Noise Protocol Framework
 
-In previous section we gave a small intuition on how multiple DH operations over ephemeral and static users' public keys can be combined to create different key-exchange protocols. 
+In previous section we gave a small intuition on how multiple DH operations over ephemeral and static users' public keys can be combined to create different key-exchange protocols.
 
 The [Noise Protocol Framework](http://www.noiseprotocol.org/noise.html), defines various rules for building custom key-exchange protocols while allowing easy analysis of the security properties and threat models provided given the type and order of the DH operations employed.
 
@@ -107,27 +107,30 @@ Two letters tokens, instead, denotes DH operations over the two users' public ke
 
 Since, in order to perform any DH operations users need to share (or pre-share) the corresponding public keys, Noise compactly represents messages' exchanges using the two direction `->` and `<-`, where the `->` denotes a message (arbitrary and/or DH public key) from the initiator to the responder, while `<-` the opposite.
 
-Hence a _message pattern_ consisting of a direction and one or multiple tokens such as `<- e, s, es`  has to be interpreted one token at a time: in this example, the responder is sending his ephemeral and static key to the initiator and is then executing a DH operation over the initiator's ephemeral key `e` (shared in a previously exchanged message pattern) and his static key `s`. On the other hand, such message indicates also that the initiator received the responder's ephemeral and static keys `e` and `s`, respectively, and performed a DH operation over his ephemeral key and the responder's just received static key `s`. In this way, both parties will be able to derive at the end of each message pattern processed the same shared secret, which is eventually used to update any derived symmetric encryption keys computed so far.
+Hence a _message pattern_ consisting of a direction and one or multiple tokens such as `<- e, s, es` has to be interpreted one token at a time: in this example, the responder is sending his ephemeral and static key to the initiator and is then executing a DH operation over the initiator's ephemeral key `e` (shared in a previously exchanged message pattern) and his static key `s`. On the other hand, such message indicates also that the initiator received the responder's ephemeral and static keys `e` and `s`, respectively, and performed a DH operation over his ephemeral key and the responder's just received static key `s`. In this way, both parties will be able to derive at the end of each message pattern processed the same shared secret, which is eventually used to update any derived symmetric encryption keys computed so far.
 
-In some cases, DH public keys employed in a handshake are pre-shared before the handshake itself starts. In order to chronologically separate exchanged keys and DH operations performed before and during a handshake, Noise employs the `...` delimiter. 
+In some cases, DH public keys employed in a handshake are pre-shared before the handshake itself starts. In order to chronologically separate exchanged keys and DH operations performed before and during a handshake, Noise employs the `...` delimiter.
 
 For example, the following message patterns
+
 ```
 <- e
 ...
 -> e, ee
 ```
+
 indicates that the initiator knew the responder's ephemeral key before he sends his own ephemeral key and executes a DH operation between both parties ephemeral keys (similarly, the responder receives the initiator's ephemeral key and does a `ee` DH operation).
 
-
-At this point it should be clear how such notation is able to compactly represent a large variety of DH based key-agreements. Nevertheless, we can easily define additional tokens and processing rules in order to address specific applications and security requirements, such as the [`psk`](http://www.noiseprotocol.org/noise.html#handshake-tokens) token used to process arbitrary pre-shared key material. 
+At this point it should be clear how such notation is able to compactly represent a large variety of DH based key-agreements. Nevertheless, we can easily define additional tokens and processing rules in order to address specific applications and security requirements, such as the [`psk`](http://www.noiseprotocol.org/noise.html#handshake-tokens) token used to process arbitrary pre-shared key material.
 
 As an example of Noise flexibility, the custom protocol we detailed [above](#Ephemeral-and-Static-Public-Keys) can be shortly represented as _(Alice is on the left)_:
+
 ```
 -> e
 <- e, ee, s
 -> s, ss
 ```
+
 where after each DH operation an encryption key is derived (along with the secrets computed by all previously executed DH operations) in order to encrypt/decrypt any subsequent sent/received message.
 
 Another example is given by the possibility to replicate within Noise the well established Signal's [X3DH](https://signal.org/docs/specifications/x3dh/) key-agreement protocols, thus making the latter a general framework to design and study security of many practical and widespread DH-based key-exchange protocols.
@@ -142,22 +145,20 @@ The Handshake State object stores the user's and other party's received ephemera
 
 The Symmetric State, instead, stores a handshake hash value `h`, iteratively updated with any message read/received and DH secret computed, and a chaining key `ck`, updated using a key derivation function every time a DH secret is computed. This object further embeds a Cipher State.
 
-Lastly, the Cipher State stores a symmetric encryption `k` key and a counter `n`  used to encrypt and decrypt messages exchanged during the handshake (not only static keys, but also arbitrary payloads). These key and counter are refreshed every time the chaining key is updated.
+Lastly, the Cipher State stores a symmetric encryption `k` key and a counter `n` used to encrypt and decrypt messages exchanged during the handshake (not only static keys, but also arbitrary payloads). These key and counter are refreshed every time the chaining key is updated.
 
 While processing each handshake's message pattern token, all these objects are updated according to some specific _processing rules_ which employ a combination of public-key primitives, hash and key-derivation functions and symmetric ciphers. It is important to note, however, that at the end of each processed message pattern, the two users will share the same Symmetric and Cipher State embedded in their respective Handshake States.
 
-Once a handshake is complete, users derive two new Cipher States and can then discard the Handshake State object (and, thus, the embedded Symmetric State and Cipher State objects) 
-employed during the handshake. 
+Once a handshake is complete, users derive two new Cipher States and can then discard the Handshake State object (and, thus, the embedded Symmetric State and Cipher State objects)
+employed during the handshake.
 
 These two Cipher states are used to encrypt and decrypt all outbound and inbound after-handshake messages, respectively, and only to these will be granted the confidentiality, authenticity, integrity and identity-hiding properties we detailed above.
 
 For more details on processing rules, we refer to [Noise specifications](http://www.noiseprotocol.org/noise.html).
 
-
 ## Supported Noise Handshakes in Waku
 
-
-The Noise handshakes we provided support to in Waku address four typical scenarios occurring when an encrypted communication channel between Alice and Bob is going to be created: 
+The Noise handshakes we provided support to in Waku address four typical scenarios occurring when an encrypted communication channel between Alice and Bob is going to be created:
 
 - Alice and Bob know each others' static key.
 - Alice knows Bob's static key;
@@ -170,14 +171,12 @@ Nonetheless, due to the pure _token-based_ nature of handshake processing rules,
 
 On a side note, we already mentioned that identity-hiding properties can be guaranteed against a passive attacker that only reads the communication occurring between Alice and Bob. However, an active attacker who compromised one party's static key and actively interferes with the parties' exchanged messages, may lower the identity-hiding security guarantees provided by some handshake patterns. In our security model we exclude such adversary, but, for completeness, in the following we report a summary of possible de-anonymization attacks that can be performed by such an active attacker.
 
-
 For more details on supported handshakes and on how these are implemented in Waku, we refer to [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/) RFC.
-
-
 
 ### The K1K1 Handshake
 
-If Alice and Bob know each others' static key (e.g., these are public or were already exchanged in a previous handshake) , they MAY execute a `K1K1` handshake.  In Noise notation *(Alice is on the left)* this can be sketched as:
+If Alice and Bob know each others' static key (e.g., these are public or were already exchanged in a previous handshake) , they MAY execute a `K1K1` handshake. In Noise notation _(Alice is on the left)_ this can be sketched as:
+
 ```
  K1K1:
     ->  s
@@ -187,6 +186,7 @@ If Alice and Bob know each others' static key (e.g., these are public or were al
     <-  e, ee, es
     ->  se
 ```
+
 We note that here only ephemeral keys are exchanged. This handshake is useful in case Alice needs to instantiate a new separate encrypted communication channel with Bob, e.g. opening multiple parallel connections, file transfers, etc.
 
 **Security considerations on identity-hiding (active attacker)**: no static key is transmitted, but an active attacker impersonating Alice can check candidates for Bob's static key.
@@ -196,6 +196,7 @@ We note that here only ephemeral keys are exchanged. This handshake is useful in
 Here, Alice knows how to initiate a communication with Bob and she knows his public static key: such discovery can be achieved, for example, through a publicly accessible register of users' static keys, smart contracts, or through a previous public/private advertisement of Bob's static key.
 
 A Noise handshake pattern that suits this scenario is `XK1`:
+
 ```
  XK1:
     <-  s
@@ -204,24 +205,25 @@ A Noise handshake pattern that suits this scenario is `XK1`:
     <-  e, ee, es
     ->  s, se
 ```
+
 Within this handshake, Alice and Bob reciprocally authenticate their static keys `s` using ephemeral keys `e`. We note that while Bob's static key is assumed to be known to Alice (and hence is not transmitted), Alice's static key is sent to Bob encrypted with a key derived from both parties ephemeral keys and Bob's static key.
 
 **Security considerations on identity-hiding (active attacker)**: Alice's static key is encrypted with forward secrecy to an authenticated party. An active attacker initiating the handshake can check candidates for Bob's static key against recorded/accepted exchanged handshake messages.
 
-
 ### The XX and XXpsk0 Handshakes
 
-If Alice is not aware of any static key belonging to Bob (and neither Bob knows anything about Alice), she can execute an `XX` handshake, where each party tran**X**mits to the other its own static key. 
+If Alice is not aware of any static key belonging to Bob (and neither Bob knows anything about Alice), she can execute an `XX` handshake, where each party tran**X**mits to the other its own static key.
 
 The handshake goes as follows:
+
 ```
  XX:
     ->  e
     <-  e, ee, s, es
     ->  s, se
 ```
-We note that the main difference with `XK1` is that in second step Bob sends to Alice his own static key encrypted with a key obtained from an ephemeral-ephemeral Diffie-Hellman exchange.
 
+We note that the main difference with `XK1` is that in second step Bob sends to Alice his own static key encrypted with a key obtained from an ephemeral-ephemeral Diffie-Hellman exchange.
 
 This handshake can be slightly changed in case both Alice and Bob pre-shares some secret `psk` which can be used to strengthen their mutual authentication during the handshake execution. One of the resulting protocol, called `XXpsk0`, goes as follow:
 
@@ -231,8 +233,8 @@ This handshake can be slightly changed in case both Alice and Bob pre-shares som
     <-  e, ee, s, es
     ->  s, se
 ```
-The main difference with `XX` is that Alice's and Bob's static keys, when transmitted, would be encrypted with a key derived from `psk` as well.
 
+The main difference with `XX` is that Alice's and Bob's static keys, when transmitted, would be encrypted with a key derived from `psk` as well.
 
 **Security considerations on identity-hiding (active attacker)**: Alice's static key is encrypted with forward secrecy to an authenticated party for both `XX` and `XXpsk0` handshakes. In `XX`, Bob's static key is encrypted with forward secrecy but is transmitted to a non-authenticated user which can then be an active attacker. In `XXpsk0`, instead, Bob's secret key is protected by forward secrecy to a partially authenticated party (through the pre-shared secret `psk` but not through any static key), provided that `psk` was not previously compromised (in such case identity-hiding properties provided by the `XX` handshake applies).
 
@@ -242,23 +244,21 @@ When two users complete a Noise handshake, an encryption/decryption session - or
 
 By identifying Noise session with a `session-id` derived from the handshake's cryptographic material, we can take advantage of the [PubSub/GossipSub](https://github.com/libp2p/specs/tree/master/pubsub) protocols used by Waku for relaying messages in order to manage instantiated Noise sessions.
 
-The core idea is to exchange after-handshake messages  (encrypted with a Cipher State specific to the Noise session), over a content topic derived from the (secret) `session-id` the corresponding session refers to.
+The core idea is to exchange after-handshake messages (encrypted with a Cipher State specific to the Noise session), over a content topic derived from the (secret) `session-id` the corresponding session refers to.
 
-This allows to decouple the handshaking phase from the actual encrypted communication, thus improving users' identity-hiding capabilities. 
+This allows to decouple the handshaking phase from the actual encrypted communication, thus improving users' identity-hiding capabilities.
 
 Furthermore, by publicly revealing a value derived from `session-id` on the corresponding session content topic, a Noise session can be marked as _stale_, enabling peers to save resources by discarding any eventually [stored](https://rfc.vac.dev/spec/13/) message sent to such content topic.
 
-One relevant aspect in today's applications is the possibility for users to employ different devices in their communications. In some cases, this is non-trivial to achieve since, for example, encrypted messages might be required to be synced on different devices which do not necessarily share the necessary key material for  decryption and may be temporarily offline.
+One relevant aspect in today's applications is the possibility for users to employ different devices in their communications. In some cases, this is non-trivial to achieve since, for example, encrypted messages might be required to be synced on different devices which do not necessarily share the necessary key material for decryption and may be temporarily offline.
 
-We address this by requiring each user's device to instantiate multiple Noise sessions either with all user's other devices which, in turn, all together share a Noise session with the other party, or by directly instantiating a Noise session with all other party's devices. 
+We address this by requiring each user's device to instantiate multiple Noise sessions either with all user's other devices which, in turn, all together share a Noise session with the other party, or by directly instantiating a Noise session with all other party's devices.
 
 We named these two approaches $N11M$ and $NM$, respectively, which are in turn loosely based on the paper [“Multi-Device for Signal”](https://eprint.iacr.org/2019/1363.pdf) and [Signal’s Sesame Algorithm](https://signal.org/docs/specifications/sesame/).
 
-
 ![](//img/noise/N11M.png)
 
-
-Informally, in the $N11M$ session management scheme, once the first Noise session between any of Alice’s and Bob’s device is instantiated, its session information is securely propagated to all other devices using previously instantiated Noise sessions. Hence, all devices are able to send and receive new messages on the content topic associated to such session. 
+Informally, in the $N11M$ session management scheme, once the first Noise session between any of Alice’s and Bob’s device is instantiated, its session information is securely propagated to all other devices using previously instantiated Noise sessions. Hence, all devices are able to send and receive new messages on the content topic associated to such session.
 
 ![](//img/noise/NM.png)
 
@@ -279,14 +279,15 @@ The possibility to manage Noise sessions over multiple devices and the fact that
 ## Future steps
 
 The available [implementation](https://github.com/status-im/nwaku/tree/master/waku/v2/waku_noise) of Noise in `nwaku`, although mostly complete, is still in its testing phase. As future steps we would like to:
+
 - have an extensively tested and robust Noise implementation;
 - formalize, implement and test performances of the two proposed $N11M$ and $NM$ session management mechanisms and their suitability for common use-case scenarios;
 - provide Waku network nodes a native protocol to readily support key-exchanges, strongly-encrypted communication and multi-device session management mechanisms with none-to-little interaction besides applications' connection requests.
- 
+
 ## References
 
 - [6/WAKU1](https://rfc.vac.dev/spec/6/)
-- [10/WAKU2](https://rfc.vac.dev/spec/10/) 
+- [10/WAKU2](https://rfc.vac.dev/spec/10/)
 - [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
 - [26/WAKU-PAYLOAD](https://rfc.vac.dev/spec/26/)
 - [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/)
@@ -306,8 +307,8 @@ The available [implementation](https://github.com/status-im/nwaku/tree/master/wa
 - [The Discrete Logarithm Problem](https://en.wikipedia.org/wiki/Discrete_logarithm)
 - [Computational Diffie-Hellman Assumption](https://en.wikipedia.org/wiki/Computational_Diffie%E2%80%93Hellman_assumption)
 - [The ECIES Encryption Algorithm](https://en.wikipedia.org/wiki/Integrated_Encryption_Scheme)
-- [The ECDSA Signature Algorithm](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm) 
-- [The Galois Counter Mode mode of operation](https://en.wikipedia.org/wiki/Galois/Counter_Mode) 
+- [The ECDSA Signature Algorithm](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm)
+- [The Galois Counter Mode mode of operation](https://en.wikipedia.org/wiki/Galois/Counter_Mode)
 - [The ChaChaPoly AEAD Cipher](https://datatracker.ietf.org/doc/html/rfc7539)
 - [The BLAKE2b Hash Function](https://datatracker.ietf.org/doc/html/rfc7693)
 - [The SHA-3 Hash Function](https://en.wikipedia.org/wiki/SHA-3)

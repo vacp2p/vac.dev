@@ -1,13 +1,12 @@
 ---
 layout: post
-name:  "Feasibility Study: Semaphore rate limiting through zkSNARKs"
-title:  "Feasibility Study: Semaphore rate limiting through zkSNARKs"
-date:   2019-11-08 12:00:00
-author: oskarth
+name: 'Feasibility Study: Semaphore rate limiting through zkSNARKs'
+title: 'Feasibility Study: Semaphore rate limiting through zkSNARKs'
+date: 2019-11-08 12:00:00
+authors: oskarth
 published: true
 slug: feasibility-semaphore-rate-limiting-zksnarks
 categories: research
-summary: A research log. Zero knowledge signaling as a rate limiting mechanism to prevent spam in p2p networks.
 image: /img/peacock-signaling.jpg
 discuss: https://forum.vac.dev/t/discussion-feasibility-study-semaphore-rate-limiting-through-zksnarks/21
 
@@ -15,9 +14,9 @@ toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
 
-import { DocMetadata } from '@site/src/components/mdx'
+A research log. Zero knowledge signaling as a rate limiting mechanism to prevent spam in p2p networks.
 
-<DocMetadata />
+<!--truncate-->
 
 **tldr: Moon math promising for solving spam in Whisper, but to get there we need to invest more in performance work and technical upskilling.**
 
@@ -40,13 +39,13 @@ In addition to above, there are a lot of related problems that share similaritie
 
 ## Basic terminology
 
-A *zero-knowledge proof* allows a *prover* to show a *verifier* that they know something, without revealing what that something is. This means you can do trust-minimized computation that is also privacy preserving. As a basic example, instead of showing your ID when going to a bar you simply give them a proof that you are over 18, without showing the doorman your id.
+A _zero-knowledge proof_ allows a _prover_ to show a _verifier_ that they know something, without revealing what that something is. This means you can do trust-minimized computation that is also privacy preserving. As a basic example, instead of showing your ID when going to a bar you simply give them a proof that you are over 18, without showing the doorman your id.
 
-*zkSNARKs* is a form of zero-knowledge proofs. There are many types of zero-knowledge proofs, and the field is evolving rapidly. They come with various trade-offs in terms of things such as: trusted setup, cryptographic assumptions, proof/verification key size, proof/verification time, proof size, etc. See section below for more.
+_zkSNARKs_ is a form of zero-knowledge proofs. There are many types of zero-knowledge proofs, and the field is evolving rapidly. They come with various trade-offs in terms of things such as: trusted setup, cryptographic assumptions, proof/verification key size, proof/verification time, proof size, etc. See section below for more.
 
-*Semaphore* is a framework/library/construct on top of zkSNARks. It allows for zero-knowledge signaling, specifically on top of Ethereum. This means an approved user can broadcast some arbitrary string without revealing their identity, given some specific constraints. An approved user is someone who has been added to a certain merkle tree. See [current Github home](https://github.com/kobigurk/semaphore) for more.
+_Semaphore_ is a framework/library/construct on top of zkSNARks. It allows for zero-knowledge signaling, specifically on top of Ethereum. This means an approved user can broadcast some arbitrary string without revealing their identity, given some specific constraints. An approved user is someone who has been added to a certain merkle tree. See [current Github home](https://github.com/kobigurk/semaphore) for more.
 
-*Circom* is a DSL for writing arithmetic circuits that can be used in zkSNARKs, similar to how you might write a NAND gate. See [Github](https://github.com/iden3/circom) for more.
+_Circom_ is a DSL for writing arithmetic circuits that can be used in zkSNARKs, similar to how you might write a NAND gate. See [Github](https://github.com/iden3/circom) for more.
 
 ## Basic flow
 
@@ -54,28 +53,23 @@ We start with a private voting example, and then extend it to the slashable rate
 
 1. A user registers an identity (arbitrary keypair), along with a small fee, to a smart contract. This adds them to a merkle tree and allows them to prove that they are member of that group, without revealing who they are.
 
-2. When a user wants to send a message, they compute a zero-knowledge proof. This ensures certain invariants, have some *public outputs*, and can be verified by anyone (including a smart contract).
-   
+2. When a user wants to send a message, they compute a zero-knowledge proof. This ensures certain invariants, have some _public outputs_, and can be verified by anyone (including a smart contract).
 3. Any node can verify the proof, including smart contracts on chain (as of Byzantinum HF). Additionally, a node can have rules for the public output. In the case of voting, one such rule is that a specific output hash has to be equal to some predefined value, such as "2020-01-01 vote on Foo Bar for president".
-   
 4. Because of how the proof is constructed, and the rules around output values, this ensures that: a user is part of the approved set of voters and that a user can only vote once.
-   
 5. As a consequence of above, we have a system where registered users can only vote once, no one can see who voted for what, and this can all be proven and verified.
-   
+
 ### Rate limiting example
 
 In the case of rate limiting, we do want nodes to send multiple messages. This changes step 3-5 above somewhat.
 
-*NOTE: It is a bit more involved than this, and if we precompute proofs the flow might look a bit different. But the general idea is the same*.
+_NOTE: It is a bit more involved than this, and if we precompute proofs the flow might look a bit different. But the general idea is the same_.
 
 1. Instead of having a rule that you can only vote once, we have a rule that you can only send a message per epoch. Epoch here can be every second, as defined by UTC date time +-20s.
-   
 2. Additionally, if a users sends more than one message per epoch, one of the public outputs is a random share of a private key. Using Shamir's Secret Sharing (similar to a multisig) and 2/3 key share as an example threshold: in the normal case only 1/3 private keys is revealed, which is insufficient to have access. In the case where two messages are sent in an epoch, probabilistically 2/3 shares is sufficient to have access to the key (unless you get the same random share of the key).
-   
 3. This means any untrusted user who detects a spamming user, can use it to access their private key corresponding to funds in the contract, and thus slash them.
 
 4. As a consequence of above, we have a system where registered users can only messages X times per epoch, and no one can see who is sending what messages. Additionally, if a user is violating the above rate limit, they can be punished and any user can profit from it.
-   
+
 ### Briefly on scope of 'approved users'
 
 In the case of an application like Status, this construct can either be a global StatusNetwork group, or one per chat, or network, etc. It can be applied both at the network and user level. There are no specific limitations on where or who deploys this, and it is thus more of a UX consideration.
@@ -126,7 +120,7 @@ See [details](https://github.com/vacp2p/research/issues/11).
 
 #### Licensing issues
 
-Currently Circom [uses a GPL license](https://github.com/iden3/circom/blob/master/COPYING ), which can get tricky when it comes to the App Store etc.
+Currently Circom [uses a GPL license](https://github.com/iden3/circom/blob/master/COPYING), which can get tricky when it comes to the App Store etc.
 
 See [details](https://github.com/vacp2p/research/issues/12).
 
@@ -156,4 +150,4 @@ For example, this might also include leveraging largely ready made solutions suc
 
 Thanks to Barry Whitehat for patient explanation and pointers. Thanks to WJ for helping with runtime issues.
 
-*Peacock header image from [Tonos](https://en.wikipedia.org/wiki/File:Flickr_-_lo.tangelini_-_Tonos_(1).jpg).*
+_Peacock header image from [Tonos](<https://en.wikipedia.org/wiki/File:Flickr_-_lo.tangelini_-_Tonos_(1).jpg>).\_

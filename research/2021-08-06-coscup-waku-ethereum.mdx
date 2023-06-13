@@ -1,22 +1,21 @@
 ---
 layout: post
-name:  "[Talk at COSCUP] Vac, Waku v2 and Ethereum Messaging"
-title:  "[Talk at COSCUP] Vac, Waku v2 and Ethereum Messaging"
-date:   2021-08-06 12:00:00
-author: oskarth
+name: '[Talk at COSCUP] Vac, Waku v2 and Ethereum Messaging'
+title: '[Talk at COSCUP] Vac, Waku v2 and Ethereum Messaging'
+date: 2021-08-06 12:00:00
+authors: oskarth
 published: true
 slug: waku-v2-ethereum-coscup
 categories: research
-summary: Learn more about Waku v2, its origins, goals, protocols, implementation and ongoing research. Understand how it is used and how it can be useful for messaging in Ethereum.
 image: /img/coscup-waku/talk.png
 discuss: https://forum.vac.dev/t/discussion-talk-at-coscup-vac-waku-v2-and-ethereum-messaging/95
 ---
 
-import { DocMetadata } from '@site/src/components/mdx'
+Learn more about Waku v2, its origins, goals, protocols, implementation and ongoing research. Understand how it is used and how it can be useful for messaging in Ethereum.
 
-<DocMetadata />
+<!--truncate-->
 
-*This is the English version of a talk originally given in Chinese at COSCUP in Taipei.*
+_This is the English version of a talk originally given in Chinese at COSCUP in Taipei._
 
 [video recording with Chinese and English subtitles.](https://www.youtube.com/watch?v=s0ATpQ4_XFc)
 
@@ -174,7 +173,7 @@ For more on topics, see https://rfc.vac.dev/spec/23/
 In the Status protocol, content topics - topics in Whisper/Waku v1 - are used for several things:
 
 - Contact code topic to discover X3DH bundles for perfect forward secrecy
-	- Partitioned into N (currently 5000) content topics to balance privacy with efficiency
+  - Partitioned into N (currently 5000) content topics to balance privacy with efficiency
 - Public chats correspond to hash of the plaintext name
 - Negotiated topic for 1:1 chat with DHKE derived content topic
 

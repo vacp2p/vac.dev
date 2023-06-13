@@ -1,20 +1,19 @@
 ---
 layout: post
-name:  "Fixing Whisper with Waku"
-title:  "Fixing Whisper with Waku"
-date:   2019-12-03 12:00:00
-author: oskarth
+name: 'Fixing Whisper with Waku'
+title: 'Fixing Whisper with Waku'
+date: 2019-12-03 12:00:00
+authors: oskarth
 published: true
 slug: fixing-whisper-with-waku
 categories: research
-summary: A research log. Why Whisper doesn't scale and how to fix it.
 image: /img/whisper_scalability.png
 discuss: https://forum.vac.dev/t/discussion-fixing-whisper-with-waku/27
 ---
 
-import { DocMetadata } from '@site/src/components/mdx'
+A research log. Why Whisper doesn't scale and how to fix it.
 
-<DocMetadata />
+<!--truncate-->
 
 This post will introduce Waku. Waku is a fork of Whisper that attempts to
 addresses some of Whisper's shortcomings in an iterative fashion. We will also
@@ -45,7 +44,7 @@ In this post, we'll focus on the first problem, which is scalability through ban
 
 ## Whisper theoretical scalability model
 
-*(Feel free to skip this section if you want to get right to the results).*
+_(Feel free to skip this section if you want to get right to the results)._
 
 There's widespread implicit knowledge that Whisper "doesn't scale", but it is less understood exactly why. This theoretical model attempts to encode some characteristics of it. Specifically for use case such as one by Status (see [Status Whisper usage
 spec](https://specs.status.im/spec/3)).
@@ -293,6 +292,6 @@ iterative work with results on the order of weeks.
 
 In short, we have a [Waku version 0 spec up](https://rfc.vac.dev/spec/5) as well as a [PoC](https://github.com/status-im/nim-eth/pull/120) for backwards compatibility. In the coming weeks, we are going to solidify the specs, get a more fully featured PoC for [Waku mode](https://github.com/status-im/nim-eth/pull/114). See [rough roadmap](https://github.com/vacp2p/pm/issues/5), project board [link deprecated] and progress thread on the [Vac forum](https://forum.vac.dev/t/waku-project-and-progress/24).
 
-The spec has been rewrittten for clarity, with ABNF grammar and less ambiguous language. The spec also incorporates several previously [ad hoc implemented features](https://rfc.vac.dev/spec/6/#additional-capabilities), such as light nodes and mailserver/client support. This has already caught a few incompatibilities between the `geth` (Go), `status/whisper` (Go) and `nim-eth` (Nim) versions, specifically around light node usage and the handshake. 
+The spec has been rewrittten for clarity, with ABNF grammar and less ambiguous language. The spec also incorporates several previously [ad hoc implemented features](https://rfc.vac.dev/spec/6/#additional-capabilities), such as light nodes and mailserver/client support. This has already caught a few incompatibilities between the `geth` (Go), `status/whisper` (Go) and `nim-eth` (Nim) versions, specifically around light node usage and the handshake.
 
 If you are interested in this effort, please check out [our forum](https://forum.vac.dev/) for questions, comments and proposals. We already have some discussion for better [spam protection](https://forum.vac.dev/t/stake-priority-based-queuing/26) (see [previous post](https://vac.dev/feasibility-semaphore-rate-limiting-zksnarks) for a more complex but privacy-preserving proposal), something that is likely going to be addressed in future versions of Waku, along with many other fixes and enhancement.

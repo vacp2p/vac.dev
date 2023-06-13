@@ -2,8 +2,6 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 require('dotenv').config()
 
-const authors = require('./data/authors')
-
 const math = require('remark-math')
 const katex = require('rehype-katex')
 
@@ -35,20 +33,10 @@ const config = {
           name: 'default',
           options: {
             customCss: [require.resolve('./src/css/custom.scss')],
-            docs: {
-              default: {
-                content: {
-                  authors,
-                  authorPage: {
-                    sidebar: 'main',
-                  },
-                },
-              },
-            },
           },
         },
         docs: {
-          routeBasePath: '/',
+          routeBasePath: '/about',
           sidebarPath: 'docs/sidebars.js',
           remarkPlugins: [math],
           rehypePlugins: [katex],
@@ -57,9 +45,41 @@ const config = {
     ],
   ],
   themes: ['@docusaurus/theme-mermaid'],
+  plugins: [
+    [
+      '@docusaurus/plugin-content-blog',
+      /** @type {import('@docusaurus/plugin-content-blog').PluginOptions} */
+      ({
+        id: 'blog',
+        routeBasePath: '/',
+        path: 'research',
+        blogSidebarCount: 'ALL',
+        blogSidebarTitle: 'All our posts',
+        authorsMapPath: 'authors.yml',
+        remarkPlugins: [math],
+        rehypePlugins: [katex],
+      }),
+    ],
+  ],
+
   themeConfig:
     /** @type {import('@acid-info/logos-docusaurus-preset').ThemeConfig} */
     ({
+      navbar: {
+        items: [
+          {
+            type: 'search',
+          },
+          {
+            label: 'About',
+            to: '/about',
+          },
+          {
+            label: 'Research',
+            to: '/',
+          },
+        ],
+      },
       footer: {
         links: [
           {
@@ -90,7 +110,7 @@ const config = {
               },
               {
                 label: 'Terms & Conditions',
-                to: '/terms',
+                to: '/about/terms',
               },
             ],
           },

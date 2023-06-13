@@ -1,20 +1,17 @@
 ---
 layout: post
-name:  "Device Pairing in Js-waku and Go-waku"
-title:  "Device Pairing in Js-waku and Go-waku"
-date:   2023-04-24 12:00:00
-author: rramos
+name: 'Device Pairing in Js-waku and Go-waku'
+title: 'Device Pairing in Js-waku and Go-waku'
+date: 2023-04-24 12:00:00
+authors: rramos
 published: true
 slug: device-pairing-in-js-waku-and-go-waku
 categories: platform
-summary: Device pairing and secure message exchange using Waku and noise protocol
 ---
 
-import { DocMetadata } from '@site/src/components/mdx'
+Device pairing and secure message exchange using Waku and noise protocol.
 
-# Device Pairing in Js-waku and Go-waku
-
-<DocMetadata />
+<!--truncate-->
 
 As the world becomes increasingly connected through the internet, the need for secure and reliable communication becomes paramount. In [this article](https://vac.dev/wakuv2-noise) it is described how the Noise protocol can be used as a key-exchange mechanism for Waku.
 
@@ -26,7 +23,7 @@ One of the key benefits of using Noise is that it provides end-to-end encryption
 
 ### Device Pairing
 
-In today's digital world, device pairing has become an integral part of our lives. Whether it's connecting our smartphones with other computers or web applications, the need for secure device pairing has become more crucial than ever. With the increasing threat of cyber-attacks and data breaches, it's essential to implement secure protocols for device pairing to ensure data privacy and prevent unauthorized access. 
+In today's digital world, device pairing has become an integral part of our lives. Whether it's connecting our smartphones with other computers or web applications, the need for secure device pairing has become more crucial than ever. With the increasing threat of cyber-attacks and data breaches, it's essential to implement secure protocols for device pairing to ensure data privacy and prevent unauthorized access.
 
 To demonstrate how device pairing can be achieved using Waku and Noise, we have examples available at https://examples.waku.org/noise-js/. You can try pairing different devices, such as mobile and desktop, via a web application. This can be done by scanning a QR code or opening a URL that contains the necessary data for a secure handshake.
 
@@ -45,13 +42,15 @@ Actors:
 The above example demonstrates device pairing using js-waku. Additionally, You can also try building and experimenting with other noise implementations like nwaku, or go-waku, with an example available at https://github.com/waku-org/go-waku/tree/master/examples/noise in which the same flow described before is done with Bob (the receiver) using go-waku instead of js-waku.
 
 ### Conclusion
+
 With its easy to use API built on top of the Noise Protocol framework and the LibP2P networking stack, if you are a developer looking to implement secure messaging in their applications that are both decentralized and censorship resistant, Waku is definitely an excellent choice worth checking out!
 
 Waku is also Open source with a MIT and APACHEv2 licenses, which means that developers are encouraged to contribute code, report bugs, and suggest improvements to make it even better.
 
-Don't hesitate to try the live example at https://examples.waku.org/noise-js and build your own webapp using https://github.com/waku-org/js-noise, https://github.com/waku-org/js-waku and  https://github.com/waku-org/go-waku. This will give you a hands-on experience of implementing secure communication protocols using the Noise Protocol framework in a practical setting. Happy coding!
+Don't hesitate to try the live example at https://examples.waku.org/noise-js and build your own webapp using https://github.com/waku-org/js-noise, https://github.com/waku-org/js-waku and https://github.com/waku-org/go-waku. This will give you a hands-on experience of implementing secure communication protocols using the Noise Protocol framework in a practical setting. Happy coding!
 
 ### References
+
 - [Noise handshakes as key-exchange mechanism for Waku](https://vac.dev/wakuv2-noise)
 - [Noise Protocols for Waku Payload Encryption](https://rfc.vac.dev/spec/35/)
 - [Session Management for Waku Noise](https://rfc.vac.dev/spec/37/)

@@ -1,0 +1,44 @@
+circe:
+  name: 'Circe'
+  twitter: 'vacp2p'
+  github: 'thecirce'
+
+dean:
+  name: 'Dean'
+  twitter: 'DeanEigenmann'
+  github: 'decanus'
+  website: 'https://dean.eigenmann.me'
+
+franck:
+  name: 'Franck'
+  twitter: 'fryorcraken'
+  github: 'fryorcraken'
+
+hanno:
+  name: 'Hanno Cornelius'
+  twitter: '4aelius'
+  github: 'jm-clius'
+
+kaiserd:
+  name: 'Daniel'
+  github: 'kaiserd'
+
+oskarth:
+  name: 'Oskar'
+  twitter: 'oskarth'
+  github: 'oskarth'
+
+rramos:
+  name: 'Richard'
+  twitter: 'richardramos_me'
+  github: 'richard-ramos'
+  website: 'https://richard-ramos.github.io/'
+
+s1fr0:
+  name: 's1fr0'
+  github: 's1fr0'
+
+sanaz:
+  name: 'Sanaz'
+  twitter: 'sanaz2016'
+  github: 'staheri14'

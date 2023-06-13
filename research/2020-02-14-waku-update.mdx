@@ -1,22 +1,21 @@
 ---
 layout: post
-name:  "Waku Update"
-title:  "Waku Update"
-date:   2020-02-14 12:00:00
-author: oskarth
+name: 'Waku Update'
+title: 'Waku Update'
+date: 2020-02-14 12:00:00
+authors: oskarth
 published: true
 slug: waku-update
 categories: research
-summary: A research log. What's the current state of Waku? How many users does it support? What are the bottlenecks? What's next?
 image: /img/waku_infrastructure_sky.jpg
 discuss: https://forum.vac.dev/t/waku-update-where-are-we-at/34
 ---
 
-import { DocMetadata } from '@site/src/components/mdx'
+A research log. What's the current state of Waku? How many users does it support? What are the bottlenecks? What's next?
 
-<DocMetadata />
+<!--truncate-->
 
-Waku is our fork of Whisper where we address the shortcomings of Whisper in an iterative manner. We've seen a in [previous post](https://vac.dev/fixing-whisper-with-waku) that Whisper doesn't scale, and why. In this post we'll talk about what the current state of Waku is, how many users it can support, and future plans. 
+Waku is our fork of Whisper where we address the shortcomings of Whisper in an iterative manner. We've seen a in [previous post](https://vac.dev/fixing-whisper-with-waku) that Whisper doesn't scale, and why. In this post we'll talk about what the current state of Waku is, how many users it can support, and future plans.
 
 ## Current state
 
@@ -55,12 +54,13 @@ We have a [simulation](https://github.com/status-im/nim-waku/blob/master/waku/v1
 This is our current understanding of how many users a network running Waku can support. Specifically in the context of the Status chat app, since that's the most immediate consumer of Waku. It should generalize fairly well to most deployments.
 
 **tl;dr (for Status app):**
+
 - beta: 100 DAU
 - v1: 1k DAU
 - v1.1 (waku only): 10k DAU (up to x10 with deployment hotfixes)
 - v1.2 (waku+dns): 100k DAU (can optionally be folded into v1.1)
 
-*Assuming 10 concurrent users = 100 DAU. Estimate uncertainty increases for each order of magnitude until real-world data is observed.*
+_Assuming 10 concurrent users = 100 DAU. Estimate uncertainty increases for each order of magnitude until real-world data is observed._
 
 As far as we know right now, these are the bottlenecks we have:
 
@@ -87,30 +87,31 @@ For light node, bloom filter is set to almost 10% false positive (bloom filter: 
 **Star network:**
 
 | Description     | Peers | Valid | Invalid |
-|-----------------|-------|-------|---------|
-| Master node     |     7 | 10001 |       0 |
-| Full node 1     |     3 | 10001 |       0 |
-| Full node 2     |     1 | 10001 |       0 |
-| Full node 3     |     1 | 10001 |       0 |
-| Full node 4     |     1 | 10001 |       0 |
-| Full node 5     |     1 | 10001 |       0 |
-| Light node      |     2 |   815 |       0 |
-| Waku light node |     2 |     1 |       0 |
+| --------------- | ----- | ----- | ------- |
+| Master node     | 7     | 10001 | 0       |
+| Full node 1     | 3     | 10001 | 0       |
+| Full node 2     | 1     | 10001 | 0       |
+| Full node 3     | 1     | 10001 | 0       |
+| Full node 4     | 1     | 10001 | 0       |
+| Full node 5     | 1     | 10001 | 0       |
+| Light node      | 2     | 815   | 0       |
+| Waku light node | 2     | 1     | 0       |
 
 **Full mesh:**
 
 | Description     | Peers | Valid | Invalid |
-|-----------------|-------|-------|---------|
-| Full node 0     |     7 | 10001 |   20676 |
-| Full node 1     |     7 | 10001 |    9554 |
-| Full node 2     |     5 | 10001 |   23304 |
-| Full node 3     |     5 | 10001 |   11983 |
-| Full node 4     |     5 | 10001 |   24425 |
-| Full node 5     |     5 | 10001 |   23472 |
-| Light node      |     2 |   803 |     803 |
-| Waku light node |     2 |     1 |       1 |
+| --------------- | ----- | ----- | ------- |
+| Full node 0     | 7     | 10001 | 20676   |
+| Full node 1     | 7     | 10001 | 9554    |
+| Full node 2     | 5     | 10001 | 23304   |
+| Full node 3     | 5     | 10001 | 11983   |
+| Full node 4     | 5     | 10001 | 24425   |
+| Full node 5     | 5     | 10001 | 23472   |
+| Light node      | 2     | 803   | 803     |
+| Waku light node | 2     | 1     | 1       |
 
 Things to note:
+
 - Whisper light node with ~10% false positive gets ~10% of total traffic
 - Waku light node gets ~1000x less envelopes than Whisper light node
 - Full mesh results in a lot more duplicate messages, expect for Waku light node
@@ -145,4 +146,4 @@ For the third bottleneck, a likely candidate for fixing this is Kademlia routing
 
 ## Acknowledgements
 
-*Image from "caged sky" by mh.xbhd.org is licensed under CC BY 2.0 (https://ccsearch.creativecommons.org/photos/a9168311-78de-4cb7-a6ad-f92be8361d0e)*
+_Image from "caged sky" by mh.xbhd.org is licensed under CC BY 2.0 (https://ccsearch.creativecommons.org/photos/a9168311-78de-4cb7-a6ad-f92be8361d0e)_
