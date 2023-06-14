@@ -36,7 +36,7 @@ const config = {
           },
         },
         docs: {
-          routeBasePath: '/about',
+          routeBasePath: '/',
           sidebarPath: 'docs/sidebars.js',
           remarkPlugins: [math],
           rehypePlugins: [katex],
@@ -51,10 +51,10 @@ const config = {
       /** @type {import('@docusaurus/plugin-content-blog').PluginOptions} */
       ({
         id: 'blog',
-        routeBasePath: '/',
-        path: 'research',
-        blogSidebarCount: 'ALL',
-        blogSidebarTitle: 'All our posts',
+        routeBasePath: '/rlog',
+        path: 'rlog',
+        blogTitle: 'Rlog - Vac Research Log',
+        blogSidebarCount: 0,
         authorsMapPath: 'authors.yml',
         remarkPlugins: [math],
         rehypePlugins: [katex],
@@ -72,11 +72,11 @@ const config = {
           },
           {
             label: 'About',
-            to: '/about',
+            to: '/',
           },
           {
-            label: 'Research',
-            to: '/',
+            label: 'Research Log',
+            to: '/rlog',
           },
         ],
       },

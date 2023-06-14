@@ -5,3 +5,9 @@ body,
 html {
   overflow-x: hidden;
 }
+
+.blog-wrapper {
+  main {
+    margin-left: 0 !important;
+  }
+}

@@ -1,5 +1,5 @@
 ---
-title: Main
+title: About
 ---
 
 # Vac - Communication & Privacy
