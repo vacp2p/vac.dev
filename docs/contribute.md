@@ -20,10 +20,10 @@ or browse our [research areas](https://vac.dev/research-areas).
 
 For code contributions, see our "good first issue" lists for various Vac related code bases:
 
-* [nwaku](https://github.com/status-im/nwaku/labels/good%20first%20issue)
-* [js-waku](https://github.com/status-im/js-waku/labels/good%20first%20issue)
-* [go-waku](https://github.com/status-im/go-waku/labels/good%20first%20issue)
+* [nim-libp2p](https://github.com/status-im/nim-libp2p)
 * [zerokit](https://github.com/vacp2p/zerokit/labels/good%20first%20issue)
+
+<!---
 
 ## Contribute Pseudonymously
 
@@ -131,3 +131,5 @@ by using Proton's public APIs.
 Since a bad encryption will result in our impossibility to access your contribution,
 we invite you to check the official documentation of your e-mail client or provider in order to correctly setup the appropriate PGP keys
 and automate message encryption and decryption.
+
+--->
