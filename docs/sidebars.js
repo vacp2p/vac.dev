@@ -24,11 +24,6 @@ module.exports = {
           label: 'Forum',
           href: 'https://forum.vac.dev/',
         },
-        {
-          type: 'link',
-          label: 'Waku.org',
-          href: 'https://waku.org',
-        },
       ],
     },
   ],
