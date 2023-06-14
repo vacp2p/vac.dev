@@ -22,6 +22,7 @@ For code contributions, see our "good first issue" lists for various Vac related
 
 * [nim-libp2p](https://github.com/status-im/nim-libp2p)
 * [zerokit](https://github.com/vacp2p/zerokit/labels/good%20first%20issue)
+* [wakurtosis](https://github.com/logos-co/wakurtosis)
 
 <!---
 
