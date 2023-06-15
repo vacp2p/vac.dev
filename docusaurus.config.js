@@ -120,7 +120,7 @@ const config = {
               },
               {
                 label: 'Terms & Conditions',
-                to: '/about/terms',
+                to: '/terms',
               },
             ],
           },
