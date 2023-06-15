@@ -112,10 +112,6 @@ const config = {
           {
             items: [
               {
-                label: 'Contact Us',
-                to: '/',
-              },
-              {
                 label: 'Work With Us',
                 href: 'https://jobs.status.im/',
               },
