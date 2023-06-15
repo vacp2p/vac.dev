@@ -60,6 +60,16 @@ const config = {
         rehypePlugins: [katex],
       }),
     ],
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        createRedirects(existingPath) {
+          return existingPath.startsWith('/rlog') && existingPath !== '/rlog'
+            ? [existingPath.replace('/rlog', '')]
+            : undefined
+        },
+      },
+    ],
   ],
 
   themeConfig:
