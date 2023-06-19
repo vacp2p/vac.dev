@@ -36,6 +36,7 @@ const config = {
           },
         },
         docs: {
+          id: 'Docs',
           routeBasePath: '/',
           sidebarPath: 'docs/sidebars.js',
           remarkPlugins: [math],
@@ -53,7 +54,7 @@ const config = {
         id: 'blog',
         routeBasePath: '/rlog',
         path: 'rlog',
-        blogTitle: 'Rlog - Vac Research Log',
+        blogTitle: 'Research Log',
         blogSidebarCount: 0,
         authorsMapPath: 'authors.yml',
         remarkPlugins: [math],
