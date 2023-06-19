@@ -41,10 +41,10 @@ const config = {
           remarkPlugins: [math],
           rehypePlugins: [katex],
         },
+        og: {},
       }),
     ],
   ],
-  themes: ['@docusaurus/theme-mermaid'],
   plugins: [
     [
       '@docusaurus/plugin-content-blog',
