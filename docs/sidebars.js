@@ -2,9 +2,10 @@ module.exports = {
   main: [
     'index',
     'principles',
-    'research-areas',
-    'projects',
-    'open-problems',
+    'deepresearch',
+    'rfcprocess',
+    'vsus',
+    'vips',
     'publications',
     'contribute',
     'media',
