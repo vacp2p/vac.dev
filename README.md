@@ -44,3 +44,16 @@ This is probably enough in most cases, as the Logos plugins will fill in other c
 You can find the instructions on adding more documentation sections, localization, and versioning on the [Docusaurus](https://docusaurus.io/docs) website.
 
 > Note that theme customization is limited; for further instructions on customizing your theme, head over to [Logos Docusaurus Theme](https://github.com/acid-info/logos-docusaurus-plugins/tree/main/packages/logos-docusaurus-theme/). 
+
+
+## Continuous Deloyment
+
+* `master` branch is deployed to https://vac.dev by [CI](https://ci.infra.status.im/job/website/job/vac.dev/)
+- `develop` branch is deployed to https://dev.vac.dev by [CI](https://ci.infra.status.im/job/website/job/dev.vac.dev/)
+
+## Change Process
+
+1. Create a new working branch from `develop`: `git checkout develop; git checkout -b my-changes`;
+2. Proceed with changes, push to `origin` and open a Pull Request against `develop`;
+3. Once approved, merge pull request, check changes on [dev.vac.dev](https://dev.vac.dev);
+4. Once ready to promote to live website, rebase master on staging: `git checkout master; git pull master; git rebase origin/develop; git push`.
