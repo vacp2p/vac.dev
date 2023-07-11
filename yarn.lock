@@ -16,14 +16,14 @@
     "@easyops-cn/docusaurus-search-local" "^0.33.6"
     lodash "^4.17.21"
 
-"@acid-info/logos-docusaurus-preset@^1.0.0-alpha.65":
-  version "1.0.0-alpha.65"
-  resolved "https://registry.yarnpkg.com/@acid-info/logos-docusaurus-preset/-/logos-docusaurus-preset-1.0.0-alpha.65.tgz#04dcebc3593e213717c8b14ec8aa5b0e0708880e"
-  integrity sha512-1yGpAleC3kF6PhXD6LAvHQRascekQSUTP1oKh3tagTEa5oi91+4GVlgWQlXj1FxNZnHvwSdKldKk10IYOrazrQ==
+"@acid-info/logos-docusaurus-preset@^1.0.0-alpha.75":
+  version "1.0.0-alpha.75"
+  resolved "https://registry.yarnpkg.com/@acid-info/logos-docusaurus-preset/-/logos-docusaurus-preset-1.0.0-alpha.75.tgz#f41a475fac57f192f33eb7a91776c57ad527cb5b"
+  integrity sha512-hG6LsZDzOMexUL/ouv0yaZB4auefiB3sU5inibO/pUufMiBQA1SMffRwvbMHSDf4w/g4N7nVB1Ns8WRFuKgUJA==
   dependencies:
     "@acid-info/docusaurus-og" "^1.0.0-alpha.64"
     "@acid-info/logos-docusaurus-search-local" "^1.0.0-alpha.47"
-    "@acid-info/logos-docusaurus-theme" "^1.0.0-alpha.64"
+    "@acid-info/logos-docusaurus-theme" "^1.0.0-alpha.75"
     "@docusaurus/core" "^2.4.1"
     "@docusaurus/module-type-aliases" "^2.4.1"
     "@docusaurus/preset-classic" "^2.4.1"
@@ -53,10 +53,10 @@
     satori "^0.10.1"
     sharp "^0.32.1"
 
-"@acid-info/logos-docusaurus-theme@^1.0.0-alpha.64":
-  version "1.0.0-alpha.64"
-  resolved "https://registry.yarnpkg.com/@acid-info/logos-docusaurus-theme/-/logos-docusaurus-theme-1.0.0-alpha.64.tgz#1d2401b96e23d8964170ffb3b8cc3618945ddd12"
-  integrity sha512-UybsycsGNKh/XTwADOId0pa9/kXrKyzfPRKr88sBzQrnBGo8ZF6Fne2FVNGPDifJ0ouwRd3Nu31SFFWCarBLBQ==
+"@acid-info/logos-docusaurus-theme@^1.0.0-alpha.75":
+  version "1.0.0-alpha.75"
+  resolved "https://registry.yarnpkg.com/@acid-info/logos-docusaurus-theme/-/logos-docusaurus-theme-1.0.0-alpha.75.tgz#bbeb304ca22c28f3fe86146aa17a3c9d99011e40"
+  integrity sha512-+4Ud7DRrGJ58BYUxA9rq3lwyCH6hyNzDtzNRTB8HaCiaiy3/xqxY4h9b5p+gimup4ROiDxJgOPj8N1OdZfhXPg==
   dependencies:
     "@acid-info/docusaurus-og" "^1.0.0-alpha.64"
     "@acid-info/lsd-react" "^0.1.0-alpha.15"
