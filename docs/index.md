@@ -18,5 +18,5 @@ Liberty, censorship resistance, security, privacy, transparency, openness, decen
 
 These principles act as tools. Tools for thinking, for communication, and for decentralized decision making. They keep us honest about where we are failing short of our vision.
 
-The meaning of these principles are elaboarted on [here](/principles).
+The meaning of these principles are elaborated on [here](/principles).
 
