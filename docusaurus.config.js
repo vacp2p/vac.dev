@@ -64,6 +64,7 @@ const config = {
     [
       '@docusaurus/plugin-client-redirects',
       {
+        redirects: [{ from: '/research', to: '/rlog' }],
         createRedirects(existingPath) {
           return existingPath.startsWith('/rlog') && existingPath !== '/rlog'
             ? [existingPath.replace('/rlog', '')]
