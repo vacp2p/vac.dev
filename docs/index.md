@@ -16,7 +16,7 @@ As custodians of these protocols, our aim is to adhere to [a set of principles](
 
 Liberty, censorship resistance, security, privacy, transparency, openness, decentralization, inclusivity, continuance, resourcefulness.
 
-These principles act as tools. Tools for thinking, for communication, and for decentralized decision making. They keep us honest about where we are failing short of our vision.
+These principles act as tools. Tools for thinking, for communication, and for decentralized decision making. They keep us honest about where we are falling short of our vision.
 
 The meaning of these principles are elaborated on [here](/principles).
 
