@@ -1,0 +1,55 @@
+---
+layout: post
+name: 'Scaling the Waku Protocol: A Performance Analysis with Wakurtosis'
+title: 'Scaling the Waku Protocol: A Performance Analysis with Wakurtosis'
+date: 2023-08-08 12:00:00
+authors: Daimakaimura
+published: true
+slug: wakurtosis-waku-scallability-simulations
+categories: waku, wakurtosis
+---
+
+# Scaling the Waku Protocol: A Performance Analysis with Wakurtosis
+
+<!--truncate-->
+
+### Introduction
+
+The scalability and performance of the Waku protocol are subjects of critical importance to our team. To explore these facets in depth --- i.e. high granularity, we turned to Wakurtosis, a bespoke simulation framework developed by the VAC-DST team. By studying various network sizes and message rates, we aimed to gain valuable insights into the protocol's capabilities and areas that could benefit from further refinement.
+
+### Understanding Wakurtosis
+
+Wakurtosis is a key tool in our analysis, designed specifically for large-scale testing and simulation of blockchain protocols like Waku. It consists of three essential modules:
+
+- Network Generation Module (Gennet): This takes care of generating and initializing networks for simulation.
+- Packet Injection Module (WLS): Responsible for injecting custom data packets to simulate different traffic patterns.
+- Analysis Module: Processes the simulation data to provide an in-depth understanding of network behaviors.
+
+Data sources like Cadvisor/Prometheus, Docker Stats, and process-level monitoring enhance the reliability of Wakurtosis, offering a comprehensive view of system performance.
+
+### Examining the Waku Protocol
+
+Despite certain scalability challenges, Wakurtosis has proved effective in simulating Waku with over 1,000 nodes on a single machine. Our analysis under normal operating conditions revealed promising scalability from a memory standpoint. However, there was evidence of increased memory usage with higher message rates, indicating potential areas for optimization.
+
+Bandwidth utilization exhibited minor fluctuations as the network size increased, and efficiency in bandwidth usage improved with an increase in the message rate. Some inefficiencies were noted in larger networks, suggesting room for improvement.
+
+### The Impact of Discovery v5 on Waku
+
+The introduction of Discovery v5 to the Waku protocol led to noticeable changes in performance. Memory consumption and bandwidth usage rose with the network size and message rate, pointing to additional overhead due to Discv5. The decreased efficiency in data transmission and reception suggests that Discv5’s overhead significantly affects the protocol's performance.
+
+### Future Directions
+
+Our analysis has helped identify limitations in the existing infrastructure supporting the Waku protocol. To handle high-scale simulations and high-rate traffic more effectively, enhancements in infrastructure are required.
+
+The absence of message loss in our simulations bodes well for the protocol’s robustness. These findings, coupled with the insights gained from the study, will guide our continuing development and optimization efforts for the Waku protocol, particularly in high-traffic scenarios.
+Conclusion
+
+The scalability and performance of the Waku protocol are central to its ongoing development. Our study, utilizing Wakurtosis, has provided a nuanced understanding of these aspects. As we look ahead, we are focused on creating a protocol that is efficient, resilient, and scalable to meet diverse application needs. Keep an eye on our blog for more updates on our progress.
+
+### References
+
+- [Tech Report](https://docs.google.com/document/d/1U3bzlbk_Z3ZxN9tPAnORfYdPRWyskMuShXbdxCj4xOM/edit?usp=sharing)
+- [Wakurtosis](https://github.com/vacp2p/wakurtosis)
+- [Waku](https://waku.org/)
+- [Discovery v5](https://rfc.vac.dev/spec/33/)
+- [Kurtosis](https://www.kurtosis.com/)
