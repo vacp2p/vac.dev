@@ -14,10 +14,14 @@ categories: waku, wakurtosis
 <!--truncate-->
 
 ## Introduction
-The scalability and performance of the Waku protocol are subjects of critical importance to our team. To explore these facets in depth --- i.e. high granularity --- we turned to Wakurtosis, a bespoke simulation framework developed by the VAC-DST team. By studying various network sizes, message rates, and peer discovery setups we aimed to better understand the protocol's capabilities and limitations, hence aspects that could benefit from further.
+The scalability and performance of the Waku protocol are subjects of critical importance to our team. 
+To explore these facets in depth --- i.e. high granularity --- we turned to Wakurtosis, a bespoke simulation framework developed by the VAC-DST team. 
+By studying various network sizes, message rates, and peer discovery setups we aimed to better understand the protocol's capabilities and limitations, hence aspects that could benefit from further.
 
 ## Understanding Wakurtosis
-Wakurtosis is a robust simulation framework which integrates Docker and Kurtosis to create a simulation environment which allows to run highly granular, large scale simulations with a variety of traffic and network patterns. At the core of Wakurtosis is Kurtosis — an orchestration tool responsible for managing containers, known as services, within isolated environments called enclaves. These enclaves house virtual networks and their respective containers. In addition to this, several external modules developed in-house expand some of Kurtosis's limited functionalities:
+Wakurtosis is a robust simulation framework which integrates Docker and Kurtosis to create a simulation environment which allows to run highly granular, large scale simulations with a variety of traffic and network patterns. 
+At the core of Wakurtosis is Kurtosis — an orchestration tool responsible for managing containers, known as services, within isolated environments called enclaves. 
+These enclaves house virtual networks and their respective containers. In addition to this, several external modules developed in-house expand some of Kurtosis's limited functionalities:
 - Network Generation Module (Gennet): Initiates and configures networks for the simulation. It's highly modular, supporting the integration of multiple protocols and node traits.
 - Packet Injection Module (WLS): Allows for the insertion of custom data packets, thereby enabling varied traffic patterns and stress tests on the simulations.
 - Analysis Module: Captures and provides insights into resource usage, network behaviors and protocol interactions throught the enclave.
@@ -26,13 +30,20 @@ Wakurtosis is a robust simulation framework which integrates Docker and Kurtosis
 Wakurtosis ensures the accuracy of its data by leveraging multiple sources for hardware metrics:
 
 ##### Cadvisor (a Google tool)
-Cadvisor providess detailed metrics on resource usage and performance characteristics of Docker containers. Cadvisor monitors application containers at the individual level by directly interfacing with Docker's daemon API. While Cadvisor offers real-time metrics, it primarily focuses on container-specific metrics, which may neglect broader system-level insights.
+Cadvisor providess detailed metrics on resource usage and performance characteristics of Docker containers. 
+Cadvisor monitors application containers at the individual level by directly interfacing with Docker's daemon API. 
+While Cadvisor offers real-time metrics, it primarily focuses on container-specific metrics, which may neglect broader system-level insights.
 
 ##### Docker statistics
-Docker statistics provides insights into Docker's overall performance and resource allocation. This native Docker tool captures statistics about running containers using Docker's stats API, collecting cumulative CPU, memory, network, and block I/O metrics. Docker statistics offer a bird's-eye view of the system, which can sometimes miss the granularity of performance fluctuations inside individual containers, particularly when dealing with multiple processes per container.
+Docker statistics provides insights into Docker's overall performance and resource allocation. 
+This native Docker tool captures statistics about running containers using Docker's stats API, collecting cumulative CPU, memory, network, and block I/O metrics. 
+Docker statistics offer a bird's-eye view of the system, which can sometimes miss the granularity of performance fluctuations inside individual containers, particularly when dealing with multiple processes per container.
 
 ##### Process-level monitoring
-Process-level monitoring offers detailed insights by tracking operational traits of processes within containers. This method employs deep inspection of individual processes running inside a container by accessing */proc* kernel files to gather real-time process statistics. Reading from the */proc* filesystem offers a direct window into kernel statistics, providing comprehensive metrics on each process within the containers. However, while it offers granular insights, process-level monitoring can be more resource-intensive and might not always capture overarching system behavior.
+Process-level monitoring offers detailed insights by tracking operational traits of processes within containers. 
+This method employs deep inspection of individual processes running inside a container by accessing */proc* kernel files to gather real-time process statistics. 
+Reading from the */proc* filesystem offers a direct window into kernel statistics, providing comprehensive metrics on each process within the containers. 
+However, while it offers granular insights, process-level monitoring can be more resource-intensive and might not always capture overarching system behavior.
 
 ### Performance Metrics
 Data sources like Cadvisor/Prometheus, Docker Stats, and process-level monitoring enhance the reliability of Wakurtosis, offering a comprehensive view of system performance.
@@ -41,15 +52,28 @@ Data sources like Cadvisor/Prometheus, Docker Stats, and process-level monitorin
 - Topology Level Metrics: Focuses on the efficiency of message propagation across the network, including metrics like message injection, propagation times, and message loss. 
 
 ### Scalability
-To overcome scalability challenges, Wakurtosis employs a multi-node approach, running several nodes within one container. This method supports simulations with over 1,000 nodes on a single machine. However, this can introduce unforeseen network effects, potentially affecting some metrics. Nevertheless, Wakurtosis offers the flexibility to choose between this and a 1-to-1 simulation, catering to the specific needs of each test scenario.
+To overcome scalability challenges, Wakurtosis employs a multi-node approach, running several nodes within one container. 
+This method supports simulations with over 1,000 nodes on a single machine. 
+However, this can introduce unforeseen network effects, potentially affecting some metrics. 
+Nevertheless, Wakurtosis offers the flexibility to choose between this and a 1-to-1 simulation, catering to the specific needs of each test scenario.
 
 ## Examining the Waku Protocol
 
 ### Simulation Setup
-To evaluate Waku under varied conditions, we conducted simulations across a range of network sizes, topologies, and message rates. Each simulation lasted 3 hours to allow the network to stabilize. The network sizes explored included 75, 150, 300, and 600 nodes. For non-Discv5 simulations, we used static topologies with average node degrees of *K=3*, *K=13*, and *K=50*. For Discv5 simulations, we configured max_peers settings of 12 and 50 to approximate similar average degrees. To stress test message throughput, we simulated message rates of 1, 10, and 100 messages per second. This allowed us to observe performance under low, moderate, and high traffic loads. We leveraged Wakurtosis' ability to run multi-node simulations to achieve networks at the scale of 600 nodes. This combination of network sizes, topologies, message rates, and hardware configurations enabled us to comprehensively evaluate Waku's performance and scalability boundaries under diverse conditions.
+To evaluate Waku under varied conditions, we conducted simulations across a range of network sizes, topologies, and message rates. 
+Each simulation lasted 3 hours to allow the network to stabilize. The network sizes explored included 75, 150, 300, and 600 nodes. 
+For non-Discv5 simulations, we used static topologies with average node degrees of *K=3*, *K=13*, and *K=50*. 
+For Discv5 simulations, we configured max_peers settings of 12 and 50 to approximate similar average degrees. 
+To stress test message throughput, we simulated message rates of 1, 10, and 100 messages per second. 
+This allowed us to observe performance under low, moderate, and high traffic loads. We leveraged Wakurtosis' ability to run multi-node simulations to achieve networks at the scale of 600 nodes. 
+This combination of network sizes, topologies, message rates, and hardware configurations enabled us to comprehensively evaluate Waku's performance and scalability boundaries under diverse conditions.
 
 ### Results
-Despite certain scalability challenges, Wakurtosis has proved effective in simulating Waku with over 1,000 nodes on a single machine. We examined the behaviours of the Waku protocol with multiple network sizes, message rates and peer discovery strategies. Our analysis under baseline conditions --- static network with average degrees of *K=3* and *K=13* --- revealed promising scalability and stability from a memory standpoint. However, there was evidence of increased memory usage with higher message rates, indicating potential areas for optimization. Bandwidth utilization exhibited minor fluctuations as the network size increased, and efficiency in bandwidth usage improved with an increase in the message rate. Some inefficiencies were noted in larger networks, suggesting room for improvement but overall Waku displayed very stable behaviour in terms of memoery and bandwidth usage.
+Despite certain scalability challenges, Wakurtosis has proved effective in simulating Waku with over 1,000 nodes on a single machine. 
+We examined the behaviours of the Waku protocol with multiple network sizes, message rates and peer discovery strategies. 
+Our analysis under baseline conditions --- static network with average degrees of *K=3* and *K=13* --- revealed promising scalability and stability from a memory standpoint. 
+Still, there was evidence of increased memory usage with higher message rates, indicating potential areas for optimization. Bandwidth utilization exhibited minor fluctuations as the network size increased, and efficiency in bandwidth usage improved with an increase in the message rate. 
+Some inefficiencies were noted in larger networks, suggesting room for improvement but overall Waku displayed very stable behaviour in terms of memoery and bandwidth usage.
 
 ![Bandidth effiencies multipliers over pure payloads in transmission](/static/img/wakurtosis_waku/waku_bandwidth_rx_efficiency.png)
 ![Bandwidth efficiencies multipliers over pure payloads in reception](/static/img/wakurtosis_waku/waku_bandwidth_tx_efficiency.png)
@@ -60,7 +84,12 @@ Despite certain scalability challenges, Wakurtosis has proved effective in simul
 <!--Although there's still evidence of Discv5 introducing overhead, the updated simulations indicate that the gap in performance between the two configurations is much narrower than initially believed. It's worth noting that while Discv5's design naturally results in increased resource utilization, especially with growing network size and message rate, it may not necessarily translate to inefficiencies in the protocol. Instead, it could be seen as an inherent trade-off for the benefits offered by Discovery v5.-->
 
 ## Conclusion
-This study underscores the Waku protocol's resilience and scalability across varied conditions, but also highlights the need for a more robust simulation infrastructure for demanding Wakurtosis scenarios. The protocol's robustness, evidenced by the absence of message loss, notable stability across network sizes and traffic loads, is a notable takeaway. Guided by these insights, our immediate priority is to keeping studying Waku behaviour for greater scalability and performance, especially under larger network loads, high-traffic situations, and different protocol configurations. Amidst the dynamic landscape of decentralization, our dedication to refining Waku remains unwavering. Stay updated with our progress.
+This study underscores the Waku protocol's resilience and scalability across varied conditions, but also highlights the need for a more robust simulation infrastructure for demanding Wakurtosis scenarios. 
+The protocol's robustness, evidenced by the absence of message loss, notable stability across network sizes and traffic loads, is a notable takeaway. 
+Guided by these insights, our immediate priority is to keeping studying Waku behaviour for greater scalability and performance, especially under larger network loads, high-traffic situations, and different protocol configurations. 
+Amidst the dynamic landscape of decentralization, our dedication to refining Waku remains unwavering. 
+Stay updated with our progress.
+
 ## References
 - [Tech Report](https://docs.google.com/document/d/1U3bzlbk_Z3ZxN9tPAnORfYdPRWyskMuShXbdxCj4xOM/edit?usp=sharing)
 - [Tech Report Addendum](https://docs.google.com/document/d/18gU7Pxn7eBBwhtlj7kz4zbRR_Ae7txaUexo3MJQLbIY/edit?usp=sharing)
