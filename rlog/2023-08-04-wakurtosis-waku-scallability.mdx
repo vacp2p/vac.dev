@@ -52,7 +52,7 @@ To evaluate Waku under varied conditions, we conducted simulations across a rang
 Each simulation lasted 3 hours to rreach a steady state. 
 The network sizes explored included *75*, *150*, *300*, and *600* nodes. 
 For non-Discv5 simulations, we used static topologies with average node degrees of *K=3*, *K=13*, and *K=50*. 
-In simulations with Discv5 enabled, we set the *max_peers* parameter to *12* and *50* to approximate similar average degrees. 
+In simulations with Discv5, we set the *max_peers* parameter to *12* and *50* to approximate similar average degrees. 
 To stress test message throughput, we simulated message rates of *1*, *10*, and *100* messages per second. 
 This combination of network sizes, topologies, message rates, and hardware configurations enabled us to comprehensively evaluate Waku's performance and scalability boundaries under diverse conditions.
 
@@ -75,11 +75,11 @@ This is likely due to the additional routing information that needs to be stored
 When examining the effects on bandwidth utilization, we see varying results.
 For reception rates, with lower message rates we observe that Discv5 consistently utilizes more bandwidth than the corresponding non-Discv5 case.
 However, those differences become less pronounced with higher message rates.
-For transmission rates, both cases show similar performance and both exhibit huge improvements in transmission efficiency at higher loads (*10 msgs/s*).
+For transmission rates, both cases show similar performance and both exhibit huge improvements in transmission efficiency at higher message loads.
 
 ## Conclusion
 This study underscores the Waku protocol’s resilience and scalability across varied conditions, but also highlights the limitations of Wakurtosis and the need for a more robust simulation infrastructure for demanding scenarios. 
 The protocol’s robustness, evidenced by the absence of message loss, notable stability across network sizes and traffic loads, is a notable takeaway. 
-The addition of Discv5 leads to higher memory usage but also improves bandwidth utilization in larger networks, albeit with mixed effects depending on message rate. 
+The addition of Discv5 generally leads to higher memory and bandwidth usage throughout the majority of scenarios. 
 Guided by these insights, our immediate priority is to keeping studying Waku behaviour for greater scalability and performance, especially under larger network loads, high-traffic situations, and different protocol configurations. 
 Stay updated with our progress!
