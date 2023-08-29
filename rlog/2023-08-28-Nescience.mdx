@@ -3,10 +3,383 @@ title: 'Nescience - A zkVM leveraging hiding properties'
 date: 2023-08-28 12:00:00
 authors: Moudy
 published: true
+slug: Nescience-A-zkVM-leveraging-hiding-properties
 categories: research
+
+toc_min_heading_level: 1
+toc_max_heading_level: 5
 ---
 
-Nescience is a privacy-first blockchain project that aims to enable private trans- actions and provide a general-purpose execution environment for classical ap- plications. The goals include creating a state separation architecture for pub- lic/private computation, designing a versatile virtual machine based on main- stream instruction sets, creating proofs for private state updates, implement- ing a kernel-based architecture for correct execution of private functions, and implementing core DeFi protocols such as AMMs and staking from a privacy perspective. It intends to create a user experience that is similar to public blockchains, but with additional privacy features that users can leverage at will. To achieve this goal, Nescience will implement a versatile virtual machine that can be used to implement existing blockchain applications, while also enabling the development of privacy-centric protocols such as private staking and private DEXs.
-To ensure minimal trust assumptions and prevent information leakage, Ne- science proposes a proof system that allows users to create proofs for private state updates, while the verification of the proofs and execution of the public functions inside the virtual machine can be delegated to an external incentivised prover. It also aims to implement a seamless interaction between public and private state, enabling composability between contracts and private and public functions. Finally, Nescience intends to implement permissive licensing, which means that the source code will be open-source, and developers will be able to use and modify the code without any restriction.
+Nescience, a privacy-first blockchain zkVM. 
 
 <!--truncate-->
+
+# Introduction
+Nescience is a privacy-first blockchain project that aims to enable private transactions and provide a general-purpose execution environment for classical applications. The goals include creating a state separation architecture for public/private computation, designing a versatile virtual machine based on mainstream instruction sets, creating proofs for private state updates, implementing a kernel-based architecture for correct execution of private functions, and implementing core DeFi protocols such as AMMs and staking from a privacy perspective. 
+
+It intends to create a user experience that is similar to public blockchains, but with additional privacy features that users can leverage at will. To achieve this goal, Nescience will implement a versatile virtual machine that can be used to implement existing blockchain applications, while also enabling the development of privacy-centric protocols such as private staking and private DEXs.
+
+To ensure minimal trust assumptions and prevent information leakage, Nescience proposes a proof system that allows users to create proofs for private state updates, while the verification of the proofs and execution of the public functions inside the virtual machine can be delegated to an external incentivised prover. 
+
+It also aims to implement a seamless interaction between public and private state, enabling composability between contracts and private and public functions. Finally, Nescience intends to implement permissive licensing, which means that the source code will be open-source, and developers will be able to use and modify the code without any restriction.
+
+
+# Goal 1: Create a state separation architecture
+
+The initial goal revolves around crafting a distinctive architecture that segregates public and private computations, employing an account-based framework for the public state and a UTXO-based structure for the private state. 
+
+The UTXO model, notably utilized in Bitcoin, generates novel UTXOs to serve future transactions, while the account-based paradigm assigns balances to accounts that transactions can modify. Although the UTXO model bolsters privacy by concealing comprehensive balances, the pursuit of a dual architecture mandates a meticulous synchronization of these state models, ensuring that private transactions remain inconspicuous in the wider public network state. 
+
+This task is further complicated by the divergent transaction processing methods intrinsic to each model, necessitating a thoughtful and innovative approach to harmonize their functionality. To seamlessly bring together the dual architecture, harmonizing the account-based model for public state with the UTXO-based model for private state, a comprehensive strategy is essential.
+
+The concept of blending an account-based structure with a UTXO-based model for differentiating between public and private states is intriguing. It seeks to leverage the strengths of both models: the simplicity and directness of the account-based model with the privacy enhancements of the UTXO model.
+
+Here's a breakdown and a potential strategy for harmonizing these models:
+
+### <ins> Rationale Behind the Dual Architecture: </ins>
+
+* **Account-Based Model:** This model is intuitive and easy to work with. Every participant has an account, and transactions directly modify the balances of these accounts. It's conducive for smart contracts and a broad range of applications.
+
+* **UTXO-Based Model:** This model treats every transaction as a new output, which can then be used as an input for future transactions. By not explicitly associating transaction outputs with user identities, it offers a degree of privacy.
+
+### <ins> Harmonizing the Two Systems: </ins>
+
+1. Translation Layer
+
+    * Role: Interface between UTXO and account-based states.
+
+    * _UTXO-to-Account Adapter:_  When UTXOs are spent, the adapter can translate these into the corresponding account balance modifications. This could involve creating a temporary 'pseudo-account' that mirrors the UTXO's attributes.
+
+    * _Account-to-UTXO Adapter:_ When an account wishes to make a private transaction, it would initiate a process converting a part of its balance to a UTXO, facilitating a privacy transaction.
+
+2. Unified Identity Management
+
+    * Role: Maintain a unified identity (or address) system that works across both state models, allowing users to easily manage their public and private states without requiring separate identities.
+
+    * _Deterministic Wallets:_ Use Hierarchical Deterministic (HD) wallets, enabling users to generate multiple addresses (both UTXO and account-based) from a single seed. This ensures privacy while keeping management centralized for the user.
+
+
+3. State Commitments
+
+    * Role: Use cryptographic commitments to commit to the state of both models. This can help in efficiently validating cross-model transactions.
+   
+    * _Merkle-Patricia Trees:_ Utilized in Ethereum, this can help maintain the account-based state, ensuring efficient and cryptographically secure storage.
+
+    * _Mimblewimble-style Aggregation:_ For UTXOs, techniques similar to those used in Mimblewimble can be used to aggregate transactions, keeping the state compact and enhancing privacy.
+
+
+4. Batch Processing & Anonymity Sets
+
+    * Role: Group several UTXO-based private transactions into a single public account-based transaction. This can provide a level of obfuscation and can make synchronization between the two models more efficient.
+
+    * _CoinJoin Technique:_ As seen in Bitcoin, multiple users can combine their UTXO transactions into one, enhancing privacy.
+
+    * _Tornado Cash Principle:_ For account-based systems wanting to achieve privacy, methods like those used in Tornado Cash can be implemented, providing zk-SNARKs-based private transactions.
+
+5. Event Hooks & Smart Contracts
+
+    * Role: Implement event-driven mechanisms that trigger specific actions in one model based on events in the other. For instance, a private transaction (UTXO-based) can trigger a corresponding public notification or event in the account-based model.
+
+    * _Conditional Execution:_ Smart contracts could be set to execute based on events in the UTXO system. For instance, a smart contract might release funds (account-based) once a specific UTXO is spent.
+
+    * _Privacy Smart Contracts:_ Using zk-SNARKs or zk-STARKs to bring privacy to the smart contract layer, allowing for private logic execution.
+
+
+### <ins> Challenges and Solutions </ins>
+
+1. Synchronization Overhead
+
+    * Challenge: Combining two distinct transaction models creates an inherent synchronization challenge.
+
+    * State Channels: By allowing transactions to be conducted off-chain between participants, state channels can alleviate synchronization stresses. Only the final state needs to be settled on-chain, drastically reducing the amount of data and frequency of updates required.
+
+    * Sidechains: These act as auxiliary chains to the main blockchain. Transactions can be processed on the sidechain and then periodically synced with the main chain. This structure helps reduce the immediate load on the primary system.
+
+    * Checkpointing: Introduce periodic checkpoints where the two systems' states are verified and harmonized. This can ensure consistency without constant synchronization.
+
+2. Double Spending
+
+    * Challenge: With two models operating in tandem, there's an increased risk of double-spending attacks.
+
+    * Multi-Signature Transactions: Implementing transactions that require signatures from both systems can prevent unauthorized movements.
+
+    * Cross-Verification Mechanisms: Before finalizing a transaction, it undergoes verification in both UTXO and account-based systems. If discrepancies arise, the transaction can be halted.
+
+    * Timestamping: By attaching a timestamp to each transaction, it's possible to order them sequentially, making it easier to spot and prevent double spending.
+
+3. Complexity in User Experience
+
+    * Challenge: The dual model, while powerful, is inherently complex.
+
+    * Abstracted User Interfaces: Design UIs that handle the complexity behind the scenes, allowing users to make transactions without needing to understand the nuances of the dual model.
+
+    * Guided Tutorials: Offer onboarding tutorials to acquaint users with the system's features, especially emphasizing when and why they might choose one transaction type over the other.
+
+    * Feedback Systems: Implement systems where users can provide feedback on any complexities or challenges they encounter. This real-time feedback can be invaluable for iterative design improvements.
+
+4. Security
+
+    * Challenge: Merging two systems can introduce unforeseen vulnerabilities.
+
+    * Threat Modeling: Regularly conduct threat modeling exercises to anticipate potential attack vectors, especially those that might exploit the interaction between the two systems.
+
+    * Layered Security Protocols: Beyond regular audits, introduce multiple layers of security checks. Each layer can act as a fail-safe if a potential threat bypasses another.
+
+    * Decentralized Watchtowers: These are third-party services that monitor the network for malicious activities. If any suspicious activity is detected, they can take corrective measures or raise alerts.
+
+5. Gas & Fee Management:
+
+    * Challenge: A dual model can lead to convoluted fee structures.
+
+    * Dynamic Fee Adjustment: Implement algorithms that adjust fees based on network congestion and transaction type. This can ensure fairness and prevent network abuse.
+
+    * Fee Estimation Tools: Provide tools that can estimate fees before a transaction is initiated. This helps users understand potential costs upfront.
+
+    * Unified Gas Stations: Design platforms where users can purchase or allocate gas for both transaction types simultaneously, simplifying the gas acquisition process.
+
+
+By addressing these challenges head-on with a detailed and systematic approach, it's possible to unlock the full potential of a dual-architecture system, combining the strengths of both UTXO and account-based models without their standalone limitations.
+
+
+# Goal 2: Virtual machine creation
+
+The second goal entails the creation of an advanced virtual machine by leveraging established mainstream instruction sets like WASM or RISC-V. Alternatively, the objective involves pioneering a new, specialized instruction set meticulously optimized for Zero-Knowledge applications.
+
+This initiative seeks to foster a versatile and efficient environment for executing computations within the privacy-focused context of the project. Both WASM and RISC-V exhibit adaptability to both UTXO and account-based models due to their encompassing nature as general-purpose instruction set architectures.
+
+ _WASM_, operating as a low-level virtual machine, possesses the capacity to execute code derived from a myriad of high-level programming languages and boasts seamless integration across diverse blockchain platforms. 
+ 
+ Meanwhile, _RISC-V_ emerges as a versatile option, accommodating both models, and can be seamlessly integrated with secure enclaves like SGX or TEE, elevating the levels of security and privacy. However, it is crucial to acknowledge that employing WASM or RISC-V might present challenges, given their original design without specific emphasis on optimizing for Zero-Knowledge Proofs (ZKPs). 
+ 
+ Further complexity arises with the consideration of more potent proof systems like (Super)Nova, STARKs, and Sangria, which, while potentially addressing optimization concerns, necessitate extensive research and testing due to their relatively nascent status within the field. This accentuates the need for a judicious balance be- tween established options and innovative solutions in pursuit of an architecture harmoniously amalgamating privacy, security, and performance.
+
+The ambition to build a powerful virtual machine tailored to zero-knowledge (ZK) applications is both commendable and intricate. The combination of two renowned instruction sets, WASM and RISC-V, in tandem with ZK, is an innovation that could redefine privacy standards in blockchain. Let's dissect the challenges and possibilities inherent in this goal:
+
+1. Established Mainstream Instruction Sets - WASM and RISC-V
+
+    * Strengths:
+
+        * _WASM_: Rooted in its ability to execute diverse high-level language codes, its potential for cross-chain compatibility makes it a formidable contender. Serving as a low-level virtual machine, its role in the blockchain realm is analogous to that of the Java Virtual Machine in the traditional computing landscape.
+
+        * _RISC-V_: This open-standard instruction set architecture has made waves due to its customizable nature. Its adaptability to both UTXO and account-based structures coupled with its compatibility with trusted execution environments like SGX and TEE augments its appeal, especially in domains that prioritize security and privacy.
+
+    * Challenges: Neither WASM nor RISC-V was primarily designed with ZKPs in mind. While they offer flexibility, they might lack the necessary optimizations for ZK-centric tasks. Adjustments to these architectures might demand intensive R&D efforts.
+
+
+
+2. Pioneering a New, Specialized Instruction Set
+
+    * Strengths: A bespoke instruction set can be meticulously designed from the ground up with ZK in focus, potentially offering unmatched performance and optimizations tailored to the project's requirements.
+    
+    * Challenges: Crafting a new instruction set is a monumental task requiring vast resources, including expertise, time, and capital. It would also need to garner community trust and support over time.
+
+
+
+3. Contemporary Proof Systems - (Super)Nova, STARKs, Sangria
+
+    * Strengths: These cutting-edge systems, being relatively new, might offer breakthrough cryptographic efficiencies that older systems lack: designed with modern challenges in mind, they could potentially bridge the gap where WASM and RISC-V might falter in terms of ZKP optimization.
+
+    * Challenges: Their nascent nature implies a dearth of exhaustive testing, peer reviews, and potentially limited community support. The unknowns associated with these systems could introduce unforeseen vulnerabilities or complexities. While they could offer optimizations that address challenges presented by WASM and RISC-V, their young status demands rigorous vetting and testing.
+
+
+
+### <ins> Optimization Concerns for WASM and RISC-V: </ins>
+
+* _Cryptography Libraries_: ZKP applications rely heavily on specific cryptographic primitives. Neither WASM nor RISC-V natively supports all of these primitives. Thus, a comprehensive library of cryptographic functions, optimized for these platforms, needs to be developed.
+
+* _Parallel Execution_: Given the heavy computational demands of ZKPs, leveraging parallel processing capabilities can optimize the time taken. Both WASM and RISC-V would need modifications to handle parallel execution of ZKP processes efficiently.
+
+* _Memory Management_: ZKP computations can sometimes require significant amounts of memory, especially during the proof generation phase. Fine-tuned memory management mechanisms are essential to prevent bottlenecks.
+
+
+### <ins> Emerging ZKP Optimized Systems Considerations: </ins>
+
+* _Proof Size_: Different systems generate proofs of varying sizes. A smaller proof size is preferable for blockchain applications to save on storage and bandwidth. The trade-offs between proof size, computational efficiency, and security need to be balanced.
+
+* _Universality_: Some systems can support any computational statement (universal), while others might be tailored to specific tasks. A universal system can be more versatile for diverse applications on the blockchain.
+
+* _Setup Requirements_: Certain ZKP systems, like zk-SNARKs, require a trusted setup, which can be a security concern. Alternatives like zk-STARKs don't have this requirement but come with other trade-offs.
+
+
+### <ins> Strategies for Integration: </ins>
+
+* _Iterative Development_: Given the complexities, an iterative development approach can be beneficial. Start with a basic integration of WASM or RISC-V for general tasks and gradually introduce specialized ZKP functionalities.
+
+* _Benchmarking_: Establish benchmark tests specifically for ZKP operations. This will provide continuous feedback on the performance of the system as modifications are made, ensuring optimization.
+
+* _External Audits & Research_: Regular checks from cryptographic experts and collaboration with academic researchers can help in staying updated and ensuring secure implementations.
+
+
+
+A noteworthy point in our project's journey is our inclination towards the Nova proof system. We believe in its potential alignment with our objectives, but we also uphold a rigorous evaluative stance. Nova, though promising, is a trailblazer and demands critical evaluation. Our approach consists of an in-depth comparative analysis, juxtaposing Nova against notable proof systems like Halo2, Plonky, and Starky. Utilizing the Poseidon recursion technique, we're set to undertake an intensive performance evaluation to determine if Nova indeed holds an edge over its peers.
+
+This analytical undertaking is pivotal. The insights derived will guide our project's trajectory, ensuring our optimization efforts yield the most robust outcomes. This reflects our unwavering commitment to data-driven strategies and epitomizes our aspiration to capitalize on avant-garde technologies to realize our project's vision.
+
+
+# Goal 3: Proofs creation and verification
+
+The process of generating proofs for private state updates is vested in the hands of the user, aligning with our commitment to minimizing trust as- sumptions and enhancing privacy. Concurrently, the responsibility of verifying these proofs and executing public functions within the virtual machine can be effectively delegated to an external prover, a role that is incentivized to operate with utmost honesty and integrity. This intricate balance seeks to safeguard against information leakage, preserving the confidentiality of private transac- tions. Integral to this mechanism is the establishment of a robust incentivization framework.
+
+To ensure the prover’s steadfast commitment to performing tasks with honesty, we should introduce a mechanism that facilitates both rewards for sincere behavior and penalties for any deviation from the expected standards. This two-pronged approach serves as a compelling deterrent against dishonest behavior and fosters an environment of accountability. In addition to incentivization, a crucial consideration is the economic aspect of verification and execution. The verification process has been intentionally designed to be more cost-effective than execution. 
+
+This strategic approach prevents potential malicious actors from exploiting the system by flooding it with spurious proofs, a scenario that could arise when the costs align favorably. By maintaining a cost balance that favors verification, we bolster the system’s resilience against fraudulent activities while ensuring its efficiency. In sum, our multifaceted approach endeavors to strike an intricate equilibrium between user- initiated proof creation, external verification, and incentivization. This delicate interplay of mechanisms ensures a level of trustworthiness that hinges on trans- parency, accountability, and economic viability.
+
+As a result, we are poised to cultivate an ecosystem where users’ privacy is preserved, incentives are aligned, and the overall integrity of the system is fortified against potential adversarial actions. To achieve the goals of user-initiated proof creation, external verification, incentivization, and cost-effective verification over execution, several options and mechanisms can be employed:
+
+1. **User-Initiated Proof Creation:** Users are entrusted with the generation of proofs for private state updates, thus ensuring greater privacy and reducing trust dependencies.
+    
+    * Challenges:
+        
+        * Maintaining the quality and integrity of the proofs generated by users.
+
+        * Ensuring that users have the tools and knowledge to produce valid proofs.
+
+    * Solutions:
+
+        * Offer extensive documentation, tutorials, and user-friendly tools to streamline the proof-generation process.
+
+        * Implement checks at the verifier's end to ensure the quality of proofs.
+
+
+2. **External Verification by Provers:** An external prover verifies the proofs and executes public functions within the virtual machine.
+
+    * Challenges:
+
+        * Ensuring that the external prover acts honestly.
+
+        * Avoiding centralized points of failure.
+    
+    * Solutions:
+
+        * Adopt a decentralized verification approach, with multiple provers cross-verifying each other’s work.
+
+        * Use reputation systems to rank provers based on their past performances, creating a trust hierarchy.
+
+3. ** Incentivization Framework:** A system that rewards honesty and penalizes dishonest actions, ensuring provers' commitment to the task.
+
+    * Challenges:
+
+        * Determining the right balance of rewards and penalties.
+
+        * Ensuring that the system cannot be gamed for undue advantage.
+
+    * Solutions[^1]: 
+
+        * Implement a dynamic reward system that adjusts based on network metrics and provers' performance.
+
+        * Use a staking mechanism where provers need to lock up a certain amount of assets. Honest behavior earns rewards, while dishonest behavior could lead to loss of staked assets.
+
+4. **Economic Viability through Cost Dynamics:** Making verification more cost-effective than execution to deter spamming and malicious attacks.
+
+    * Challenges: 
+
+        * Setting the right cost metrics for both verification and execution.
+
+        * Ensuring that genuine users aren’t priced out of the system.
+
+    * Solutions:
+
+        * Use a dynamic pricing model, adjusting costs in real-time based on network demand.
+
+        * Implement gas-like mechanisms to differentiate operation costs and ensure fairness.
+
+5. **  Maintaining Trustworthiness:** Create a system that's transparent, holds all actors accountable, and is economically sound.
+
+    * Challenges: 
+
+        * Keeping the balance where users feel their privacy is intact, while provers feel incentivized.
+
+        * Ensuring the system remains resilient against adversarial attacks.
+
+    * Solutions:
+
+        * Implement layered checks and balances.
+
+        * Foster community involvement, allowing them to participate in decision-making, potentially through a decentralized autonomous organization (DAO).
+
+    
+
+
+
+[^1]: Incentive Mechanisms:
+    * Token Rewards: Design a token-based reward system where honest provers are compensated with tokens for their verification services. This incentivizes participation and encourages integrity.
+   
+    * Staking and Slashing: Introduce a staking mechanism where provers deposit tokens as collateral. Dishonest behavior results in slashing (partial or complete loss) of the staked tokens, while honest actions are rewarded.
+   
+    * Proof of Work/Proof of Stake: Implement a proof-of-work or proof-of- stake consensus mechanism for verification, aligning incentives with the blockchain’s broader consensus mechanism.
+
+
+
+Each of these options can be combined or customized to suit the specific requirements of your project, striking a balance between user incentives, cost dynamics, and verification integrity. A thoughtful combination of these mech- anisms ensures that the system remains robust, resilient, and conducive to the objectives of user-initiated proof creation, incentivized verification, and cost- effective validation.
+
+
+# Goal 4: Kernel-based architecture implementation
+
+This goal centers on the establishment of a kernel-based architecture, akin to the model observed in ZEXE, to facilitate the attestation of accurate private function executions. This innovative approach employs recursion to construct a call stack, which is then validated through iterative recursive computations. At its core, this technique harnesses a recursive Succinct Non-Interactive Argument of Knowledge (SNARK) mechanism, where each function call’s proof accumulates within the call stack.
+
+The subsequent verification of this stack’s authenticity leverages recursive SNARK validation. While this method offers robust verifi- cation of private function executions, it’s essential to acknowledge its associated intricacies.
+
+The generation of SNARK proofs necessitates a substantial compu- tational effort, which, in turn, may lead to elevated gas fees for users. Moreover, the iterative recursive computations could potentially exhibit computational ex- pansion as the depth of recursion increases. This calls for a meticulous balance between the benefits of recursive verification and the resource implications it may entail.
+
+In essence, Goal 4 embodies a pursuit of enhanced verification accuracy through a kernel-based architecture. By weaving recursion and iterative recur- sive computations into the fabric of our system, we aim to establish a mechanism that accentuates the trustworthiness of private function executions while con- scientiously navigating the computational demands that ensue.
+
+To accomplish the goal of implementing a kernel-based architecture for re- cursive verification of private function executions, several strategic steps and considerations can be undertaken: recursion handling and depth management.
+
+<ins> Recursion Handling </ins>
+
+* _Call Stack Management:_ 
+
+    * Implement a data structure to manage the call stack, recording each recursive function call’s details, parameters, and state.
+
+    * Implement a data structure to manage the call stack, recording each recursive function call’s details, parameters, and state.
+
+* _Proof Accumulation: _
+
+    * Design a mechanism to accumulate proof data for each function call within the call stack. This includes cryptographic commit- ments, intermediate results, and cryptographic challenges.
+
+    * Ensure that the accumulated proof data remains secure and tamper-resistant throughout the recursion process.
+
+* _Intermediary SNARK Proofs:_
+
+    * Develop an intermediary SNARK proof for each function call’s correctness within the call stack. This proof should demonstrate that the function executed correctly and produced expected outputs.
+
+    * Ensure that the intermediary SNARK proof for each recursive call can be aggregated and verified together, maintaining the integrity of the entire call stack.
+
+<ins> Depth management </ins>
+
+* _Depth Limitation:_
+
+    * Define a threshold for the maximum allowable recursion depth based on the system’s computational capacity, gas limitations, and performance considerations.
+
+    * Implement a mechanism to prevent further recursion beyond the defined depth limit, safeguarding against excessive computa- tional growth.
+
+* _Graceful Degradation:_
+
+    * Design a strategy for graceful degradation when the recursion depth approaches or reaches the defined limit. This may involve transitioning to alternative execution modes or optimization techniques.
+
+    * Communicate the degradation strategy to users and ensure that the system gracefully handles scenarios where recursion must be curtailed.
+
+* _Resource Monitoring:_
+
+    * Develop tools to monitor resource consumption (such as gas usage and computational time) as recursion progresses. Provide real-time feedback to users about the cost and impact of recursive execution.
+
+* _Dynamic Depth Adjustment:_
+
+    * Consider implementing adaptive depth management that dynamically adjusts the recursion depth based on network conditions, transaction fees, and available resources.
+
+    * Utilize algorithms to assess the optimal recursion depth for efficient execution while adhering to gas cost constraints.
+
+* _Fallback Mechanisms:_
+
+    * Create fallback mechanisms that activate if the recursion depth limit is reached or if the system encounters resource constraints. These mechanisms could involve alternative verification methods or delayed execution.
+
+* _User Notifications:_
+
+    * Notify users when the recursion depth limit is approaching, en- abling them to make informed decisions about the complexity of their transactions and potential resource usage.
+
+
+Goal 4 underscores the project's ambition to integrate the merits of a kernel-based architecture with recursive verifications to bolster the reliability of private function executions. While the approach promises robust outcomes, it's pivotal to maneuver through its intricacies with astute strategies, ensuring computational efficiency and economic viability. By striking this balance, the architecture can realize its full potential in ensuring trustworthy and efficient private function executions.
+
+
+# Goal 5: Seamless interaction design
+
