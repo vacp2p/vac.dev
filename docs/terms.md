@@ -5,7 +5,7 @@ sidebar_class_name: hidden
 
 # Terms of Use
 
-These terms and conditions ('**Website Terms of Use**') are entered into by you and us, and they govern your access and use of the Website, including any content and functionality contained in the Website.
+These terms of use ('**Website Terms of Use**') are entered into by you and us, and they govern your access and use of the Website, including any content and functionality contained in the Website.
 
 It is your responsibility to read the Website Terms of Use carefully before your use of the Website and your use of the Website means you have agreed to be bound and comply with these Website Terms of Use.
 
@@ -27,13 +27,16 @@ The Website and its contents are made available under free and open-source licen
 
 To the extent the Website provides any links to a third-party website, then its terms and conditions, including privacy policies, govern your use of those third-party websites. We have no control over such third-party websites and will not be liable for your use of or activities on any third-party websites accessed through the Website. If you access such third-party websites through the Website, it is at your own risk and you are solely responsible for your activities on such third-party websites.
 
+The Website may embed videos from Youtube, a service provided by Google LLC, using Youtube’s privacy-enhanced mode. When you interact with such videos, Youtube may place cookies on your personal device which do not directly identify individual users. Unless you are logged in to a Google account, Youtube will not store information to personalise your experience. We do not have any control over these cookies set by Youtube and it is recommended that you review YouTube’s embedding videos information page.
+
 ### Disclaimer
 
-The Website is provided by us on an 'as is' basis, and you use the Website at your own sole discretion and risk.
+The Website is provided by us on an ‘as is’ basis, and you use the Website at your own sole discretion and risk.
 
 We disclaim all warranties of any kind, express or implied, including without limitation the warranties of merchantability, fitness for a particular purpose, and non-infringement of intellectual property or other violation of rights. We do not warrant or make any representations concerning the completeness, accuracy, legality, utility, reliability, suitability, or availability of the use of the Website, the content on this Website, or otherwise relating to the Website, such content, or on any sites linked to this site.
 
 We make no claims that the Website or any of its content is accessible, legally compliant or appropriate in your jurisdiction. Your access or use of the Website is at your own sole discretion and you are solely responsible for complying with any applicable local laws. These disclaimers will apply to the maximum extent permitted by applicable law.
+
 
 ### Limitation of liability
 
@@ -41,7 +44,7 @@ We will not be held liable to you under any contract, negligence, strict liabili
 
 ### Indemnity
 
-You shall indemnify us and hold us harmless from and against any and all claims, damages, and expenses, including attorneys' fees arising from or related to your use of the Website and the content on the Website, including without limitation your violation of these Website Terms of Use.
+You shall indemnify us and hold us harmless from and against any and all claims, damages, and expenses, including attorneys’ fees arising from or related to your use of the Website and the content on the Website, including without limitation your violation of these Website Terms of Use.
 
 ### Modifications
 
@@ -53,13 +56,13 @@ Swiss law governs these Website Terms of Use and any disputes between you and us
 
 ### Disputes
 
-In these terms, 'dispute' has the broadest meaning enforceable by law and includes any claim you make against or controversy you may have in relation to these Website Terms of Use, the Website, the content on the Website, or your use of the Website
+In these terms, ‘dispute’ has the broadest meaning enforceable by law and includes any claim you make against or controversy you may have in relation to these Website Terms of Use, the Website, the content on the Website, or your use of the Website.
 
 We prefer arbitration over litigation as we believe it meets our principle of resolving disputes in the most effective and cost-effective manner. You are bound by the following arbitration clause, which waives your right to litigation and to be heard by a judge. Please note that court review of an arbitration award is limited. You also waive all your rights to a jury trial (if any) in any and all jurisdictions.
 
 If a (potential) dispute arises, you must first use your reasonable efforts to resolve it amicably with us. If these efforts do not result in a resolution of such dispute, you shall then send us a written notice of dispute setting out (i) the nature of the dispute and the claim you are making; and (ii) the remedy you are seeking.
 
-If we and you are unable to further resolve this dispute within sixty (60) calendar days of us receiving this notice of dispute, then any such dispute will be referred to and finally resolved by you and us through arbitration administered by the Swiss Chambers' Arbitration Institution in accordance with the Swiss Rules of International Arbitration for the time being in force, the rules of which are deemed to be incorporated herein by reference. The arbitral decision may be enforced in any court. The arbitration will be held in Zug, Switzerland, and may be conducted via video conference virtual/online methods if possible. The tribunal will consist of one arbitrator, and all proceedings as well as communications between the parties will be kept confidential. The language of the arbitration will be in English. Payment of all relevant fees in respect of the arbitration, including filing, administration, and arbitrator fees, will be in accordance with the Swiss Rules of International Arbitration.
+If we and you are unable to further resolve this dispute within sixty (60) calendar days of us receiving this notice of dispute, then any such dispute will be referred to and finally resolved by you and us through arbitration administered by the Swiss Chambers’ Arbitration Institution in accordance with the Swiss Rules of International Arbitration for the time being in force, the rules of which are deemed to be incorporated herein by reference. The arbitral decision may be enforced in any court. The arbitration will be held in Zug, Switzerland, and may be conducted via video conference virtual/online methods if possible. The tribunal will consist of one arbitrator, and all proceedings as well as communications between the parties will be kept confidential. The language of the arbitration will be in English. Payment of all relevant fees in respect of the arbitration, including filing, administration, and arbitrator fees, will be in accordance with the Swiss Rules of International Arbitration.
 
 Regardless of any applicable statute of limitations, you must bring any claims within one year after the claim arose or the time when you should have reasonably known about the claim. You also waive the right to participate in a class action lawsuit or a classwide arbitration against us.
 
