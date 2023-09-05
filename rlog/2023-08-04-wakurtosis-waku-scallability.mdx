@@ -1,10 +1,10 @@
 ## Introduction
-The scalability and performance of the Waku protocol are subjects of critical importance to the VAC-DST team.
-To explore these facets with high granulatiry across a wide range of scenarios we turned to Wakurtosis, a bespoke simulation framework developed internally. 
+The scalability and performance of the [Waku](https://waku.org/) protocol are of critical importance.
+To explore these facets with high granulatiry across a wide range of scenarios we turned to [Wakurtosis](https://github.com/vacp2p/wakurtosis), a bespoke simulation framework developed internally. 
 By studying various network sizes, message rates, and peer discovery setups we aimed to better understand the protocol's capabilities and limitations, hence aspects that could benefit from further optimisation.
 
 ## Understanding Wakurtosis
-Wakurtosis is a robust simulation framework which integrates Docker and Kurtosis to create a simulation environment which allows to run highly granular, large scale simulations with a variety of traffic and network patterns. 
+Wakurtosis is a robust simulation framework which integrates [Docker](https://www.docker.com/) and [Kurtosis](https://www.kurtosis.com/) to create a simulation environment which allows to run highly granular, large scale simulations with a variety of traffic and network patterns. 
 At the core of Wakurtosis is Kurtosis — an orchestration tool responsible for managing containers, known as services, within isolated environments called enclaves. 
 These enclaves house virtual networks and their respective containers. In addition to this, several external modules developed in-house expand some of Kurtosis's limited functionalities:
 - Network Generation Module (Gennet): Initiates and configures networks for the simulation. It's highly modular, supporting the integration of multiple protocols and node traits.
@@ -15,12 +15,12 @@ These enclaves house virtual networks and their respective containers. In additi
 Wakurtosis ensures the accuracy of its data by leveraging multiple sources for hardware metrics:
 
 ##### Cadvisor (a Google tool)
-Cadvisor provides detailed metrics on resource usage and performance characteristics of Docker containers. 
+[Cadvisor](https://github.com/google/cadvisor) provides detailed metrics on resource usage and performance characteristics of Docker containers. 
 Cadvisor monitors application containers at the individual level by directly interfacing with Docker's daemon API. 
 While Cadvisor offers real-time metrics, it primarily focuses on container-specific metrics, which may neglect broader system-level insights.
 
 ##### Docker statistics
-Docker statistics provides insights into Docker's overall performance and resource allocation. 
+[Docker statistics](https://docs.docker.com/engine/reference/commandline/stats/) provides insights into Docker's overall performance and resource allocation. 
 This native Docker tool captures statistics about running containers using Docker's stats API, collecting cumulative CPU, memory, network, and block I/O metrics. 
 Docker statistics offer a bird's-eye view of the system, which can sometimes miss the granularity of performance fluctuations inside individual containers, particularly when dealing with multiple processes per container.
 
@@ -69,7 +69,7 @@ Bandwidth utilization exhibited minor fluctuations as the network size increased
 Some inefficiencies were noted in larger networks, suggesting room for improvement but overall Waku displayed very stable behaviour in terms of memory and bandwidth usage.
 
 #### Impact of Discovery v5
-To shed light on the effects of Discovery v5, we focus on the denser configurations for both non-Discv5 and Discv5 with *K=50*.
+To shed light on the effects of [Discovery v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md), we focus on the denser configurations for both non-Discv5 and Discv5 with *K=50*.
 The addition of Discv5 leads to higher memory consumption, especially as the network size increases.
 This is likely due to the additional routing information that needs to be stored and maintained.
 When examining the effects on bandwidth utilization, we see varying results.
