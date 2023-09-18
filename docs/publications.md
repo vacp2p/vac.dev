@@ -11,4 +11,4 @@
 
 ## Write-ups
 
-See [write-ups](/research).
+See [write-ups](/rlog).
