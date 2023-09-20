@@ -1,5 +1,6 @@
 ---
 title: Deep Research
+hide_table_of_contents: true
 ---
 
 # Vac Deep Research

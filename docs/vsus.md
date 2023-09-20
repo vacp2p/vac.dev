@@ -1,5 +1,6 @@
 ---
 title: R&D Service Units
+hide_table_of_contents: true
 ---
 
 # Vac R&D Service Units

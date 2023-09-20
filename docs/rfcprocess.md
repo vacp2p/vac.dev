@@ -1,5 +1,6 @@
 ---
 title: RFC Process
+hide_table_of_contents: true
 ---
 
 # Vac RFC Process

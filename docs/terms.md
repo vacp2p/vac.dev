@@ -1,6 +1,7 @@
 ---
 displayed_sidebar: null
 sidebar_class_name: hidden
+hide_table_of_contents: true
 ---
 
 # Terms of Use

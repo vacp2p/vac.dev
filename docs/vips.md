@@ -1,5 +1,6 @@
 ---
 title: Incubator Projects
+hide_table_of_contents: true
 ---
 
 # Vac Incubator Projects

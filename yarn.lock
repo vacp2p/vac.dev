@@ -16,14 +16,14 @@
     "@easyops-cn/docusaurus-search-local" "^0.33.6"
     lodash "^4.17.21"
 
-"@acid-info/logos-docusaurus-preset@^1.0.0-alpha.97":
-  version "1.0.0-alpha.97"
-  resolved "https://registry.yarnpkg.com/@acid-info/logos-docusaurus-preset/-/logos-docusaurus-preset-1.0.0-alpha.97.tgz#96d29bd2f75cf427de8e537616c7f8852e52d760"
-  integrity sha512-Cs0w3pFfrE2jmroaleedGakb8LoEyH8iN5q0Q+WsDLt2qz3xFIXvIW4fiQc5eM37NbHpGgGgvrm7YcB2Fp0ySg==
+"@acid-info/logos-docusaurus-preset@^1.0.0-alpha.100":
+  version "1.0.0-alpha.100"
+  resolved "https://registry.yarnpkg.com/@acid-info/logos-docusaurus-preset/-/logos-docusaurus-preset-1.0.0-alpha.100.tgz#061329adcaf840f5139bf3cceb9f7a3eba7be771"
+  integrity sha512-zWS8zqxmH2IZ8MACERPus6oyuPL3M+Rsa/EFjtx1qmCIT0ik09NPwL1Mf6Y3RmYUkwdYfzRU0wzf6DVCWtroTw==
   dependencies:
     "@acid-info/docusaurus-og" "^1.0.0-alpha.76"
     "@acid-info/logos-docusaurus-search-local" "^1.0.0-alpha.47"
-    "@acid-info/logos-docusaurus-theme" "^1.0.0-alpha.97"
+    "@acid-info/logos-docusaurus-theme" "^1.0.0-alpha.99"
     "@docusaurus/core" "^2.4.1"
     "@docusaurus/module-type-aliases" "^2.4.1"
     "@docusaurus/preset-classic" "^2.4.1"
@@ -53,10 +53,10 @@
     satori "^0.10.1"
     sharp "^0.32.1"
 
-"@acid-info/logos-docusaurus-theme@^1.0.0-alpha.97":
-  version "1.0.0-alpha.97"
-  resolved "https://registry.yarnpkg.com/@acid-info/logos-docusaurus-theme/-/logos-docusaurus-theme-1.0.0-alpha.97.tgz#8b7366238cc0cb177f400af82c0086f88f8f0a45"
-  integrity sha512-iBbH8enlSIhhGZuWWNxRSV5z8rQrO7uxBUq+xjA4PiCrjpbQb90YSuChuTizRUKkawzpswzkcukIdhzIGfc/Eg==
+"@acid-info/logos-docusaurus-theme@^1.0.0-alpha.99":
+  version "1.0.0-alpha.99"
+  resolved "https://registry.yarnpkg.com/@acid-info/logos-docusaurus-theme/-/logos-docusaurus-theme-1.0.0-alpha.99.tgz#2450ca1eea78e20b4b7c5301d9f971de7f825b74"
+  integrity sha512-fwGVbutoUu3M1A7LxmbPLZV64oqIrEvkYrSYiuJClZEiUXOeVQBmf9gl646IgZoPDjW86Owk4XPg796dS+hH7Q==
   dependencies:
     "@acid-info/docusaurus-og" "^1.0.0-alpha.76"
     "@acid-info/lsd-react" "^0.1.0-alpha.17"
