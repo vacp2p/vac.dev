@@ -2,10 +2,7 @@
 title: About Vac
 hide_table_of_contents: true
 ---
-
-# Vac
-
-## About Vac
+# About Vac
 
 Vac builds [public good](https://en.wikipedia.org/wiki/Public_good) protocols for the decentralised web.
 As an integral part of the [Logos collective](https://logos.co/),
