@@ -21,7 +21,7 @@ It is responsible for relaying messages between nodes in the Waku network, effec
 While Waku encompasses a variety of functionalities and improvements for decentralized messaging, Waku Relay specifically focuses on the message propagation aspect within this larger system.
 
 Finally, [Discv5 (Discovery v5)](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) is a peer-to-peer networking protocol designed to facilitate node discovery decentralized networks. It serves as an upgrade to earlier discovery protocols and is designed to be modular and extensible, allowing it to support various types of decentralized systems beyond just Ethereum.  
-The protocol enables nodes to find each other and maintain a distributed hash table for efficient routing.
+The protocol enables nodes to find each other, maintaining a distributed hash table.
 
 The scalability and performance of the Waku protocol are of critical importance. To explore these facets with high granularity across a wide range of scenarios, we turned to [Wakurtosis](https://github.com/vacp2p/wakurtosis), a bespoke simulation framework developed internally.  
 By studying various network sizes, message rates, and peer discovery setups, we aimed to better understand the protocol's capabilities and limitations, and hence aspects that could benefit from further optimization.
