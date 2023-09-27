@@ -1,11 +1,21 @@
-WakurtosisRetro.md
+---
+title: 'Wakurtosis: Lessons Learned for Large-Scale Protocol Simulation'
+date: 2023-09-26 12:00:00
+authors: daimakaimura
+published: true
+slug: Wakurtosis-Retrospective
+categories: wakurtosis, waku, dst
 
-# Wakurtosis: Lessons Learned for Large-Scale Protocol Simulation
-### VAC-DST Team (Alberto Rendo, Ganesh Narayanaswamy, Jordi Arranz)
-### Sep 29, 2023
+toc_min_heading_level: 2
+toc_max_heading_level: 5
+---
 
-### TL;DR
-The Wakurtosis framework aimed to simulate and test the behaviour of the Waku protocol at large scales but faced a plethora of challenges that ultimately led us to pivot to a hybrid approach that relies on Shadow and Kubernetes for greater reliability, flexibility, and scaling.
+## Wakurtosis: Lessons Learned for Large-Scale Protocol Simulation
+
+<!--truncate-->
+
+**TL;DR**
+The Wakurtosis framework aimed to simulate and test the behaviour of the Waku protocol at large scales but faced a plethora of challenges that ultimately led us to pivot to a hybrid approach that relies on Shadow and Kubernetes for greater reliability, flexibility, and scaling. Here we will discuss some of the most important issues we faced and their potential solutions in a new hybrid framework.
 
 ### Introduction
 Wakurtosis sought to stress-test Waku implementations at large scales over 10K nodes. While it achieved success with small-to-medium scale simulations, running intensive tests at larger scales revealed major bottlenecks, largely stemming from inherent restrictions imposed by Kurtosis – the testing and orchestration framework Wakurtosis is built on top of.
@@ -14,7 +24,7 @@ Specifically, the most significant issues arose during middle-scale simulations 
 
 These challenges stemmed from the massive hardware requirements for simulations at such scales and traffic loads, which had to be run on a single machine under Kurtosis. This led to inadequate sampling rates, message loss, and other data inconsistencies. The system struggled to provide the computational power, memory capacity, and I/O throughput needed for smooth operations under such loads.
 
-In summary, while Wakurtosis successfully handled small-to-medium scales, simulations in the range of 600 nodes and 100 msg/s and beyond exposed restrictive bottlenecks tied to the limitations of the underlying Kurtosis platform and constraints around single-machine deployment.
+In summary, while Wakurtosis successfully handled small-to-medium scales, with simulations in the range of 600 nodes and 10 msg/s and beyond exposed restrictive bottlenecks tied to the limitations of the underlying Kurtosis platform and constraints around single-machine deployment.
 
 ### Key Challenges with the Initial Kurtosis Approach
 
@@ -33,21 +43,15 @@ Memory serves as the temporary storage during simulations, holding data that's c
 Disk Input/Output (I/O) refers to the reading (input) and writing (output) of data in the system. In our scenario, the simulations created a heavy load on the I/O operations due to continuous data flow and logging activities for each container. As the number of containers (nodes) increased, the simultaneous read/write operations caused throttling, akin to a traffic jam, leading to slower data access and potential data loss.
 
 ##### ARP table exhaustion
-Another important issue we encounteres is the exhaustion of the ARP table. \The Address Resolution Protocol (ARP) is pivotal for routing, translating IP addresses to MAC addresses so data packets can be correctly delivered within a local network. However, ARP tables have a size limit. With the vast number of containers running, we quickly ran into situations where the ARP tables were filled to capacity, leading to routing failures.
+Another important issue we encounteres is the exhaustion of the ARP table. The Address Resolution Protocol (ARP) is pivotal for routing, translating IP addresses to MAC addresses so data packets can be correctly delivered within a local network. However, ARP tables have a size limit. With the vast number of containers running, we quickly ran into situations where the ARP tables were filled to capacity, leading to routing failures.
 
 
-#### Restrictive Software Environment
-While initially promising, Kurtosis imposed restrictions that challenged large-scale testing:
-- No multi-cluster support, limiting simulations to a single machine's resources.
-- Strategic deprioritization of large simulations, influenced by partnerships. Nullified promised multi-cluster capabilities.
-- Discontinuation of advanced networking features critical for flexible topology modeling.
-- No straightforward way to model key QoS parameters like delay, loss, and bandwidth configurations.
-- Constraints from orchestration language limitations that complicated dynamic topology modeling.
+#### Kurtosis
+The Kurtosis framework, though initially appearing to be a promising solution, presented multiple limitations when applied to large-scale testing. One of its major constraints was the lack of multi-cluster support, which restricted simulations to the resources of a single machine. This limitation became even more pronounced when the platform strategically deprioritized large-scale simulations, a decision seemingly influenced by specific partnerships. This decision effectively nullified any anticipated multi-cluster capabilities.
 
-#### Impact on Testing Scope
-These hardware and software limitations manifested in two key ways:
-- Inflexible Network Topologies: The inability to realistically simulate diverse network configurations and conditions.
-- Superficial Protocol Implementation: A gossip model that lacked nuances critical for gathering meaningful insights.
+Further complicating the situation was Kurtosis's decision to discontinue certain advanced networking features that were previously critical for modeling flexible network topologies. Additionally, the platform lacked an intuitive mechanism to represent key Quality of Service (QoS) parameters, such as delay, loss, and bandwidth configurations. These constraints were exacerbated by limitations in the orchestration language used by Kurtosis, which added complexity to dynamic topology modeling.
+
+The array of hardware and software limitations imposed by Kurtosis had significant ramifications on our testing capabilities. The constraints primarily manifested in the inability to realistically simulate diverse network configurations and conditions. This inflexibility in network topologies was a significant setback. Moreover, when it came to protocol implementation, Kurtosis's approach was rather rudimentary. Relying on a basic gossip model, the platform missed capturing the nuances that are critical for deriving meaningful insights from the simulations.
 
 ### The Pivot to Kubernetes and Shadow
 
@@ -58,7 +62,7 @@ Alongside Kubernetes, we incorporated Shadow into our testing and simulation too
 By combining both Kubernetes and Shadow, we aim to substantially enhance our testing framework. Kubernetes, with its multi-cluster simulation capabilities, will offer a wider array of practical insights during large-scale simulations. On the other hand, Shadow's theoretical modeling strengths allow us to develop a deeper comprehension of potential behaviors in even larger network environments.
 
 #### Conclusion
-The journey to develop Wakurtosis has underscored the inherent challenges in large-scale protocol simulation. While the Kurtosis platform initially showed promise, it quickly struggled to handle the scale and features we were aiming to. Still, Wakurtosis still proved a useful tool for small and medium-scale simulations of the Waku protocol.
+The journey to develop Wakurtosis has underscored the inherent challenges in large-scale protocol simulation. While the Kurtosis platform initially showed promise, it quickly struggled to handle the scale and features we were aiming to. Still, Wakurtosis proved a useful tool for analysing the protocol at moderate scales and loads.
 
 These limitations forced a pivot to a hybrid Kubernetes and Shadow approach, promising enhanced scalability, flexibility, and accuracy for large-scale simulations. This experience emphasized the importance of anticipating potential bottlenecks when scaling up complexity. It also highlighted the value of blending practical testing and theoretical modeling to gain meaningful insights.
 
