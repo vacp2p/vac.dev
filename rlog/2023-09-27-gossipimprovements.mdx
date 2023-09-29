@@ -107,10 +107,12 @@ Ideally, every node should contribute proportionally to the available resources.
 A better solution involves a two-phased operation:
 
 
-1. Every node computes its available bandwidth and selects a node degree $D_i$ proportional to its available bandwidth.
+1. Every node computes its available bandwidth and selects a node degree $D_i$ proportional to its available bandwidth [3].
+
 Different bandwidth estimation approaches are suggested in literature [4,5]. 
 
-we suggest using a simple bandwidth estimation approach similar to the ones used by dynamic adaptive video streaming over HTTP (DASH) [6]. 
+We suggest using a simple bandwidth estimation approach similar to the ones used by dynamic adaptive video streaming over HTTP (DASH) [6]. 
+
 To further conform to the suggested mesh-degree average $D_{avg}$, every node tries achieving this number within its neighborhood, resulting in an overall similar mesh-degree average. 
 
 2. From the available local view, every node tries connecting peers with the lowest latency until $D$ connections are made.
@@ -129,26 +131,31 @@ These solutions include multicast delivery trees, metadata sharing to enable pul
 GossipSub employs a hybrid of eager push (message dissemination through the overlay) and lazy push (a pull-based operation by the nodes requiring information through IWANT messages). 
 
 A better alternative is to use the redundant transmissions as a critical advantage for the GossipSub protocol. 
-Suppose that we have three equal-length messages $x1, x2, x3$. Assuming an XOR coding function, we know two trivial properties: $x1 \oplus x2 \oplus x2 = x1$ and $\vert x1 \vert = \vert x1 \oplus x2 \oplus x2 \vert$. 
+Suppose that we have three equal-length messages $x1, x2, x3$. Assuming an XOR coding function,
+we know two trivial properties: $x1 \oplus x2 \oplus x2 = x1$ and $\vert x1 \vert = \vert x1 \oplus x2 \oplus x2 \vert$. 
+
 This implies that instead of sending messages individually, we can encode and transmit composite message(s) to the network. 
 The receiver can reconstruct the original message from encoded segments. As a result, fewer transmissions are sufficient for sending more messages to the network. 
 A large number of coding schemes, including Erasure Coding, Random Linear Coding, and Fountain Codes, are suggested in the literature [9-11]. 
 However, sharing linear combinations of messages requires organizing messages in intervals and devising techniques to identify all messages belonging to each interval.
 
-
 ## GOAL4: Handling Large Messages
 Many applications require transferring large messages for their successful operation. For instance, database/blockchain transactions [12]. 
 This introduces two challenges: 
+
 1) Redundant large message transmissions result in severe network congestion. 
 2) Message transmissions follow a store/forward process at all peers, which is inefficient in the case of large messages. 
 
 The above-mentioned challenges result in a noticeable increase in message dissemination latency and bandwidth wastage. 
-Most of the work done for handling large messages involves curtailing redundant transmissions using multicast delivery trees, reducing the number of fanout nodes, employing in-network message caching, pull-based operation, etc.
+Most of the work done for handling large messages involves curtailing redundant transmissions using multicast delivery trees,
+reducing the number of fanout nodes, employing in-network message caching, pull-based operation, etc.
+
 Approaches like network coding also prove helpful in minimizing bandwidth wastage.
 
 Our recent work on GossipSub improvements (still a work in progress) suggests the following solutions to deal with large message transmissions: 
 
-1. The use of choke (IDontWant) message proposal [13] to curtail redundant transmissions by letting other peers know we have already received the message. 
+1. The use of IDontWant message proposal [13] to curtail redundant transmissions by letting other peers know we have already received the message. 
+
 We also argue that simultaneously relaying a message to all peers hampers the effectiveness of the IDontWant message.
 Therefore, a staggered message relaying mechanism is suggested, relaying the message to a short subset of peers in each round. 
 This allows timely reception and processing of IDontWant messages.
@@ -157,12 +164,13 @@ This allows timely reception and processing of IDontWant messages.
 We can parallelize message transmission by partitioning large messages into smaller chunks, letting intermediate peers relay chunks as soon as they receive them.
 
 
-
 ## GOAL5: Scalability
 P2P networks are inherently scalable because every incoming node brings in bandwidth and compute resources. 
 Under such arrangements, it is desirable to achieve IP-like scalability, as seen in Bittorrent. 
 However, lack of structural overlay support and problems like peer churn, adversaries, heterogeneity, distributed operation, etc., significantly hamper the performance of the P2P networks. 
-Most efforts for bringing scalability to the P2P systems have focused on curtailing redundant transmissions and flat overlay adjustments. Hierarchical overlay designs, on the other hand, are less explored. 
+Most efforts for bringing scalability to the P2P systems have focused on curtailing redundant transmissions and flat overlay adjustments.
+Hierarchical overlay designs, on the other hand, are less explored. 
+
 Placing a logical structure in unstructured P2P systems can help scale the P2P networks. 
 
 We suggest using a hierarchical overlay inspired by the approaches [14-16]. An abstract operation of the suggested overlay design is provided below:
