@@ -21,11 +21,12 @@ Rate Limiting Nullifier (RLN) is a zero-knowledge gadget that allows users to pr
 1. They belong to a permissioned membership set
 2. Their rate of signaling abides by a fixed number that has been previously declared
 
-The first piece of information is proved with the use of a [Merkle Inclusion Proof](https://ethereum.org/en/developers/tutorials/merkle-proofs-for-offline-data-integrity/)
+The first piece of information is proved with the use of a [Merkle Inclusion Proof](https://ethereum.org/en/developers/tutorials/merkle-proofs-for-offline-data-integrity/).
 
-The second piece of information is proved with a simple range check, along with a mechanism that can be used to interpolate the secret of a user that offends this "rate limit"
+The second piece of information is proved with a simple range check,
+along with a mechanism that can be used to interpolate the secret of a user that offends this "rate limit".
 
-Note: This rlog describes rln-v1, which excludes the range check in favor of a global rate limit for all users, which is once per time window. This version is currently in use in waku-rln-relay.
+Note: This blog post describes rln-v1, which excludes the range check in favor of a global rate limit for all users, which is once per time window. This version is currently in use in waku-rln-relay.
 
 ## RLN Protocol parameters
 
@@ -54,7 +55,7 @@ epoch: the timestamp which this proof is being generated for
 Following are the outputs from the circuit -
 ```
 y: result of Shamir's secret sharing calculation
-root: root of the merkle tree obtained after applying the inclusion proof
+root: root of the Merkle tree obtained after applying the inclusion proof
 nullifier: uniquely identifies a message, derived from rlnIdentifier, epoch, and the user's secret
 ```
 
@@ -79,12 +80,14 @@ subsequently, we may use one pair of the shares, $x_1$ and $y_1$ to obtain the `
 
 $$identitySecret = y_1 - a_1 * x$$
 
-This enables RLN to be used for rate limiting with a *global* limit. For arbitrary limits, please refer to an article written by @curryrasul, [rln-v2](https://mirror.xyz/privacy-scaling-explorations.eth/iCLmH1JVb7fDqp6Mms2NR001m2_n5OOSHsLF2QrxDnQ).
+This enables RLN to be used for rate limiting with a *global* limit. For arbitrary limits,
+please refer to an article written by @curryrasul, [rln-v2](https://mirror.xyz/privacy-scaling-explorations.eth/iCLmH1JVb7fDqp6Mms2NR001m2_n5OOSHsLF2QrxDnQ).
 
 
 ## Waku's problem with DoS
 
-In a decentralized, privacy focused messaging system like [Waku](https://waku.org), Denial of Service (DoS) vulnerabilities are very common, and must be addressed to promote network scale and optimal bandwidth utilization.
+In a decentralized, privacy focused messaging system like [Waku](https://waku.org),
+Denial of Service (DoS) vulnerabilities are very common, and must be addressed to promote network scale and optimal bandwidth utilization.
 
 ### DoS prevention with user metadata
 
@@ -120,9 +123,11 @@ A spammer node publishes 3000 msg/epoch, which is detected by all connected node
 
 ## Security analysis
 
-- Barbulescu, R., & Duquesne, S. (2017). Updating key size estimations for pairings. Cryptology ePrint Archive, Paper 2017/334. https://doi.org/10.1007/s00145-018-9280-5 concludes that that the `bn254` curve has only 100 bits of security.
+- Barbulescu, R., & Duquesne, S. (2017). Updating key size estimations for pairings.
+Cryptology ePrint Archive, Paper 2017/334. https://doi.org/10.1007/s00145-018-9280-5 concludes that that the `bn254` curve has only 100 bits of security.
 
-- [An analysis](https://github.com/vacp2p/research/issues/155) on the number of rounds in the Poseidon hash function was done, which concluded that the hashing rounds should *not* be reduced
+- [An analysis](https://github.com/vacp2p/research/issues/155) on the number of rounds in the Poseidon hash function was done,
+which concluded that the hashing rounds should *not* be reduced
 
 - The [smart contracts](https://github.com/vacp2p/rln-contract) have *not* been audited, are are not recommended for real world deployments *yet*.
 
@@ -138,19 +143,23 @@ max\_tree\_size = 2^{20} * 32 = 33,554,432 \\
 ∴max\_tree\_size = 33.55\ megabytes
 $$
 
-34 megabytes of storage is trivial to obtain on most end-user hardware, with the exception of IoT/microcontrollers. Optimizations are planned where the user does not need to store the entire tree to be able to generate proofs.
+34 megabytes of storage is trivial to obtain on most end-user hardware, with the exception of IoT/microcontrollers.
+Optimizations are planned where the user does not need to store the entire tree to be able to generate proofs.
 
 ## The bare minimum requirements to run RLN
 
-With proof generation time in sub-second latency, along with low storage overhead for the tree, it is possible for end users to generate and verify RLN proofs on a modern smartphone.
+With proof generation time in sub-second latency, along with low storage overhead for the tree,
+it is possible for end users to generate and verify RLN proofs on a modern smartphone.
 
-Following is a demo provided by @rramos that demonstrates [waku-rln-relay used in react native](https://drive.google.com/file/d/1ITLYrDOQrHQX2_3Q6O5EqKPYJN8Ye2gF/view?usp=sharing).
+Following is a demo provided by @rramos that demonstrates
+[waku-rln-relay used in react native](https://drive.google.com/file/d/1ITLYrDOQrHQX2_3Q6O5EqKPYJN8Ye2gF/view?usp=sharing).
 
 > Warning: The react native sdk will be deprecated soon, and the above demo should serve as a PoC for RLN on mobiles
 
 ## RLN usage guide
 
-[Zerokit](https://github.com/vacp2p/zerokit) implements api's that allow users to handle operations to the tree, as well as generate/verify RLN proofs. It exports a rust api, as well as FFI api's to be used in other languages.
+[Zerokit](https://github.com/vacp2p/zerokit) implements api's that allow users to handle operations to the tree, as well as generate/verify RLN proofs.
+It exports a rust api, as well as FFI api's to be used in other languages.
 
 Following is a diagram that will help understand the dependency tree -
 
