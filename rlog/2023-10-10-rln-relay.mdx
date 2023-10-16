@@ -21,10 +21,32 @@ Rate Limiting Nullifier (RLN) is a zero-knowledge gadget that allows users to pr
 1. They belong to a permissioned membership set
 2. Their rate of signaling abides by a fixed number that has been previously declared
 
-The first piece of information is proved with the use of a [Merkle Inclusion Proof](https://ethereum.org/en/developers/tutorials/merkle-proofs-for-offline-data-integrity/).
+The "membership set" described above, is in the form of a sparse, indexed merkle tree.
+This membership set, can be on-chain, off-chain or hybrid depending on the network's storage costs.
+Waku makes use of a hybrid membership set, 
+where insertions are tracked in the smart contract.
+Each Waku node maintains a local copy of the tree, 
+which is updated upon each insertion.
 
-The second piece of information is proved with a simple range check,
-along with a mechanism that can be used to interpolate the secret of a user that offends this "rate limit".
+A User registers with a hash of a locally generated secret, 
+which is then inserted into the tree at the next available index.
+Upon which, Users can prove their knowledge of the pre-image of a leaf in the tree, 
+also called a commitment.
+They can do so by generating a [Merkle Inclusion Proof](https://ethereum.org/en/developers/tutorials/merkle-proofs-for-offline-data-integrity/).
+
+The circuit ensures that the User's secret does indeed hash to a leaf in the tree,
+and that the provided merkle proof is valid.
+
+After a User generates this zk-proof, 
+they can transmit it to other users, 
+who can verify the proof.
+Since the message's hash is included within the proof generation, 
+we also guarantee integrity of the message by this mechanism.
+
+When a User does behave maliciously, 
+they generate multiple proofs per epoch.
+When multiple proofs are generated per epoch, 
+this exposes the malicious User's secret, further described in [Malicious User secret interpolation mechanism](#malicious-user-secret-interpolation-mechanism)
 
 Note: This blog post describes rln-v1, which excludes the range check in favor of a global rate limit for all users, which is once per time window. This version is currently in use in waku-rln-relay.
 
@@ -35,8 +57,10 @@ Note: This blog post describes rln-v1, which excludes the range check in favor o
 3. Default Merkle Tree Height: `20`
 4. Hashing algorithm: `Poseidon`
 5. Merkle Tree: [`Sparse Indexed Merkle Tree`](https://github.com/rate-limiting-nullifier/pmtree)
+6. Messages per epoch: `1`
+7. Epoch duration: `10 seconds`
 
-## Interpolation mechanism
+## Malicious User secret interpolation mechanism
 
 Following are the private inputs to the circuit -
 ```
