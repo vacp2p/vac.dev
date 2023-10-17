@@ -109,19 +109,22 @@ Random peering connections in P2P overlays represent a stochastic process. It is
 Most of the research on P2P networks provides simulation results assuming nodes with similar capabilities. 
 The aspect of dissimilar capabilities and resource-constrained nodes is less explored.
 
-It is discussed in GOAL1 that overlay mesh results in better performance if $D_{avg} \approx \ln(N) + C$. 
+It is discussed in GOAL1 that overlay mesh results in better performance if  $D_{avg}$ does not exceed $\ln(N) + C$. 
 Enforcing all the nodes to have approximately $\ln(N) + C$ peers makes resource-rich nodes under-utilized, while resource-constrained nodes are overloaded. 
 At the same time, connecting high-bandwidth nodes through a low-bandwidth node undermines the network's performance.
 Ideally, the workload on any node should not exceed its available resources.
 A better solution involves a two-phased operation:
 
 
-1. Every node computes its available bandwidth and selects a node degree $D_i$ proportional to its available bandwidth [[4](https://inria.hal.science/tel-02375909/document)].
+1. Every node computes its available bandwidth and selects a node degree $D$ proportional to its available bandwidth [[4](https://inria.hal.science/tel-02375909/document)].
 
     Different bandwidth estimation approaches are suggested in literature [[5](https://ieeexplore.ieee.org/abstract/document/1224454),[6](https://ieeexplore.ieee.org/abstract/document/1248658)]. 
-
     Simple bandwidth estimation approaches like variable packet size probing [[6](https://ieeexplore.ieee.org/abstract/document/1248658)] yield similar results with less complexity.
- 
+
+    It is also worth mentioning that many nodes may want to allocate only a capped share of their bandwidth to the network. 
+    Lowering $D$ according to the available bandwidth can still prove helpful. 
+    Additionally, bandwidth preservation at the transport layer through approaches like µTP can be useful.
+
 
     To further conform to the suggested mesh-degree average $D_{avg}$, every node tries achieving this average within its neighborhood, resulting in an overall similar $D_{avg}$.
 
@@ -148,8 +151,12 @@ we know two trivial properties: $x1 \oplus x2 \oplus x2 = x1$ and $\vert x1 \ver
 This implies that instead of sending messages individually, we can encode and transmit composite message(s) to the network. 
 The receiver can reconstruct the original message from encoded segments. 
 As a result, fewer transmissions are sufficient for sending more messages to the network. 
+
 However, sharing linear combinations of messages requires organizing messages in intervals, 
 and devising techniques to identify all messages belonging to each interval.
+In addition, combining messages from different publishers requires more complex arrangements, 
+involving embedding publisher/message IDs, delayed forwarding (to accommodate more messages), and mechanisms to ensure the decoding of messages at all peers.
+Careful application-specific need analysis can help decide the benefits against the added complexity. 
 
 ## GOAL4: Handling Large Messages
 Many applications require transferring large messages for their successful operation. For instance, database/blockchain transactions [[12](https://eips.ethereum.org/EIPS/eip-4844)]. 
@@ -206,8 +213,8 @@ mitigating the problem of peer churn among super nodes.
 Overlay acts as a virtual backbone for a P2P network. A flat overlay is more straightforward and allows effortless readjustment to application needs. 
 On the other hand, a hierarchical overlay can bring scalability at the cost of increased complexity. 
 Regardless of the overlay design, a continuous readjustment to appropriate peering links is essential for superior performance. 
-At the same time, bandwidth preservation (through message encoding, caching at strategic locations, metadata sharing, pull-based operation, etc.) can help minimize latency.
-However, problems like peer churn and in-network adversaries can be best alleviated through balanced redundant coverage.
+At the same time, bandwidth preservation (through network codind, caching at strategic locations, metadata sharing, pull-based operation, etc.) can help minimize latency.
+However, problems like peer churn and in-network adversaries can be best alleviated through balanced redundant coverage, and frequent reshuffling of the peering links.
 
 # References
 [1] D. Vyzovitis, Y. Napora, D. McCormick, D. Dias, and Y. Psaras, “Gossipsub: Attack-resilient message propagation in the filecoin and eth2. 0 networks,” arXiv preprint arXiv:2007.02754, 2020. Retrieved from https://arxiv.org/pdf/2007.02754.pdf
