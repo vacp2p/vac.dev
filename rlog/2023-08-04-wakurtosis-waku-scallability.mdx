@@ -2,7 +2,7 @@
 layout: post
 name: 'Scaling the Waku Protocol: A Performance Analysis with Wakurtosis'  
 title: 'Scaling the Waku Protocol: A Performance Analysis with Wakurtosis'
-date: 2023-08-08 12:00:00
+date: 2023-10-19 12:00:00
 authors: Daimakaimura
 published: true
 slug: wakurtosis-waku-scallability-simulations
@@ -84,87 +84,68 @@ Nevertheless, Wakurtosis offers the flexibility to choose between this and a 1-t
 
 ### Simulation Setup
 
-To evaluate Waku under varied conditions, we conducted simulations across a range of network sizes, topologies, and message rates. Each simulation lasted 3 hours to reach a steady state.
+To evaluate Waku under varied conditions, we conducted simulations across a range of network sizes, topologies, and message rates: 
+- All the simulations run for 3 hours to reach a steady state.
+- The network sizes explored included 75, 150, 300, and 600 nodes. 
+- To stress test message throughput, we simulated message rates of 0.25, 0.5, 0.75, and 1 messages per second. 
+- We also included simulations batches with no load &mdash; i.e. 0 Msg/s. &mdash; to provide a clearer picture of Waku's baseline resource demands and inherent overhead costs stemming from core protocol operations.
+- We run simulations without discovery mechanism &mdash; Non-Discv5 &mdash; and with discovery &mdash; Discv5 &mdash;. For Non-Discv5 simulations, we used static topologies with average node degrees of K=50. In simulations with Discv5, we set the max_peers parameter to 50 to approximate similar average degrees.
 
-The network sizes explored included 75, 150, 300, and 600 nodes. 
-We run simulations with discovery &mdash; Discv5 &mdash; and without discovery mechanisms &mdash; static network &mdash;. 
-
-For Non-Discv5 simulations, we used static topologies with average node degrees of K=50. 
-In simulations with Discv5, we set the max_peers parameter to 50 to approximate similar average degrees.
-
-To stress test message throughput, we simulated message rates of 1, and 10 messages per second. 
-We initally run simulations up to a 100 msg/s but we found out the results were unreliable due to simulation hardware limitations and therefore decided not to include them in this analysis.
-
-We also included simulations batches with no load &mdash; i.e. 0 Msg/s. &mdash; to provide a clearer picture of Waku's baseline resource demands and inherent overhead costs stemming from core protocol operations.
 This combination of network sizes, topologies, message rates, and hardware configurations enabled us to comprehensively evaluate Waku's performance and scalability boundaries under diverse conditions.
 
 #### Clarification on Non-Discv5 Scenarios:  
 
-It's important to note that the Non-Discv5 scenarios presented in this study serve as a theoretical baseline for comparison and are not meant to represent real-world conditions.
-In a live environment, some form of peer discovery mechanism would be necessary for the functioning of the network.
-Mechanisms like ['rendezvous'](https://docs.libp2p.io/concepts/discovery-routing/rendezvous/) would also introduce additional bandwidth costs.
+It's important to note that the Non-Discv5 scenarios presented in this study serve as a theoretical baseline for comparison and are not meant to represent real-world conditions. In a live environment, some form of peer discovery mechanism would be necessary for the functioning of the network. Mechanisms like ['rendezvous'](https://docs.libp2p.io/concepts/discovery-routing/rendezvous/) would also introduce additional bandwidth costs.
 
 Therefore, the intention behind including Non-Discv5 simulations is not to compare their performance directly with Discv5 but rather to establish a fundamental baseline against which the added complexities and scaling costs of employing a discovery mechanism like Discv5 can be better understood.  
 
 ### Simulation Results
 
-We present the results of the simulations in two sets (without discovery and with discovery) of two separate plots showing total bandwidth usage and average peak memory usage across different network sizes. 
+We present the results in two sets &mdash; without and with discovery mechanism &mdash; using two plots each:
 
-The first plot depicts the total bandwidth usage with the x-axis representing the number of nodes with separate series for the different traffic loads.
+- The first plot depicts the total bandwidth usage (Tx and Rx). The x-axis represents the number of nodes with separate series for the different traffic loads.
+- The second plot shows the average peak memory usage with the same configuration.
 
-The second plot shows the average peak memory usage with the x-axis also indicating the number of nodes and different traffic loads.
+The goal is examining total bandwidth and peak memory usage across various network sizes, both with and without discovery.
 
-Despite numerous scalability and stability challenges, Wakurtosis has proved effective in simulating a Waku network up to 600 nodes on a single machine, however we encountered issues simulating higher message rates with those network sizes.
+#### Results without discovery mechanism (baseline)
 
-#### Without discovery mechanism (baseline)
+The transmission bandwidth (Tx) shows varied patterns across network sizes. Although it rises consistently with increasing message rates and sizes, some caveats exist.
 
-The analysis reveals interesting trends in bandwidth and memory usage across different network sizes and loads. 
+For the two highest rates, bandwidth noticeably decreases from the smallest to moderate-sized networks. This counterintuitive drop suggests potential efficiencies or optimizable dynamics in intermediate networks.
 
-Transmission bandwidth does not consistently increase with more nodes when messages are sent, while reception bandwidth exhibits even more variable behavior depending on scale and load. 
+However, in the larger 300- and 600-node configurations, the demands become more pronounced, especially from 300 to 600 nodes. While moderate networks may realize efficiencies, expansive networks exert greater transmission bandwidth demands.
 
-The reduced bandwidth at high message rates stems from simulation infrastructure limits rather than protocol inefficiencies. 
-The no-load measurements provide insights into baseline protocol overhead costs that grow with network size. 
+The reception bandwidth (Rx) also manifests distinct patterns based on network size and message rate. For smaller networks, an intriguing trend emerges: across most rates (except 0 msg/s), bandwidth decreases consistently from 75 to 150 nodes. This indicates possible efficiencies or dynamics benefiting moderate configurations.
 
-Transmission overhead appears to increase linearly, while reception overhead accelerates sharply beyond 300 nodes. 
+After this initial decrease, the bandwidth plateaus without significant growth even as rates rise. This contrasts sharply with the 600-node setup, where even without messaging, substantial bandwidth is consumed, comparable to active messaging in smaller networks.
 
-![Total average bandwidth usage without discovery mechanism](/static/img/wakurtosis_waku/Baseline_Bandwidth.png) 
-
-<figcaption>
-
-***Total average bandwidth usage without discovery mechanism (baseline).***
-
-</figcaption>
-
-In addition to bandwidth, we also examined average peak memory usage under the different network sizes and messaging loads. 
-
-![Average peak memory usage without discovery mechanism](/static/img/wakurtosis_waku/Baseline_Memory.png) 
+![Total mean bandwidth usage without discovery mechanism](/static/img/wakurtosis_waku/non_discv5_bandwidth.png) 
 
 <figcaption>
 
-***Average peak memory usage without discovery mechanism (baseline).***
+***Total mean bandwidth usage without discovery mechanism (baseline).***
 
 </figcaption>
 
-With no load, memory usage remained consistent around 20-21 MB across all network scales. 
-Under 1 message per second, average memory usage increased slightly to 21-22 MB. 
-The highest memory usage of 23-25 MB was seen with 10 messages per second, especially at 150 nodes. 
+In addition to bandwidth, we examined average peak memory usage across network sizes and message loads. Memory use is fairly consistent without messaging, fluctuating between 20.3-20.5 MB. With messaging, only a slight increase is seen. Remarkably, at 1 msg/s, memory use remains modest, with the largest average of 21.95 MB in the 150-node setup. The difference between an idle and highly active network is under 1.5 MB.
 
-This aligns with expectations that higher messaging loads require more memory for message processing and routing. 
-However, the differences are relatively small, with only around a 20% increase from no load to 10 msgs/s. 
-This suggests the protocol has a fairly fixed memory overhead cost, with incremental increases as more messages are handled. 
-Overall, the memory usage appears stable and scales reasonably well, without any dramatic growth as network size expands. 
-This consistency indicates efficient memory management and low overhead from a protocol perspective.
+![Mean peak memory usage without discovery mechanism](/static/img/wakurtosis_waku/non_discv5_memory.png) 
 
-The baseline simulations displayed efficient baseline overhead and scaling for memory, transmission, and reception as message rates grew or network size expanded.
+<figcaption>
 
-#### With discovery mechanism (Discv5)
+***Mean peak memory usage without discovery mechanism (baseline).***
 
-With the discovery mechanism, we again see interesting trends in resource usage across different network sizes and traffic loads. 
+</figcaption>
 
-Transmission bandwidth remainded fairly stable with more nodes.
-We again observe reduced bandwidth at the highest rates and node counts, stemming from simulation infrastructure constraints rather than inherent protocol limitations. 
 
-![Total average bandwidth usage with discovery mechanism](/static/img/wakurtosis_waku/Discv5_Bandwidth.png) 
+#### Results with discovery mechanism (Discv5)
+
+With the discovery mechanism discv5, distinct resource usage patterns emerge. Transmission bandwidth remains relatively stable despite an eight-fold node increase, evidencing the protocol's transmission efficiency under discovery. However, reception bandwidth shows a different trend. From 75 to 300 nodes, a significant increase occurs, especially at 0 msg/s (95.83 to 254.7 Mb/s). The 300 to 600 node change is even more dramatic, with bandwidth surging to 497.47 Mb/s without messaging.
+
+The observation of a similar anomaly in simulations without the discovery mechanism suggests that the issue might lie with the protocol implementation itself, rather than being merely a simulation artifact.
+
+![Total average bandwidth usage with discovery mechanism](/static/img/wakurtosis_waku/discv5_bandwidth.png) 
 
 <figcaption>
 
@@ -172,13 +153,7 @@ We again observe reduced bandwidth at the highest rates and node counts, stemmin
 
 </figcaption>
 
-Reception bandwidth grows much faster with number of nodes compared to the baseline, especially the large spike from 300 to 600 nodes with discovery enabled. 
-This reflects the substantial additional overhead of neighbor discovery and tracking. 
-
-Similarly, memory usage also increases rapidly with number of nodes when discovery is enabled, aligning with the higher memory costs for node tracking and maintenance of discovery data structures. 
-Even with no load, the reception bandwidth and memory overheads of discovery are evident. 
-
-![Average peak memory usage with discovery mechanism](/static/img/wakurtosis_waku/Discv5_Memory.png) 
+![Average peak memory usage with discovery mechanism](/static/img/wakurtosis_waku/discv5_memory.png) 
 
 <figcaption>
 
@@ -186,16 +161,14 @@ Even with no load, the reception bandwidth and memory overheads of discovery are
 
 </figcaption>
 
-Overall, the discovery mechanism adds significant reception bandwidth and memory overhead that both scale up more sharply with network size compared to the baseline. However, the transmission bandwidth impact appears relatively contained. 
+Memory usage also scales noticeably with node count, with a pronounced spike above 24 MB at 600 nodes, even without messaging. This indicates the overhead introduced by discovery for node tracking and data structure maintenance.
 
-## Conclusion  
+Overall, the discovery mechanism adds substantial reception bandwidth and memory overhead that scale more sharply with network size than the baseline. However, transmission bandwidth impact appears relatively contained.
 
-This study underscores the Waku protocol’s resilience and scalability across varied conditions but also highlights the challenges and limitations of Wakurtosis and the need for a more robust simulation infrastructure for demanding scenarios.
+## Conclusions
 
-The protocol’s robustness, evidenced by the absence of message loss, good stability across network sizes and traffic loads, is a notable takeaway.
-As expected, simulations with Discv5 generally lead to higher resource usage throughout the majority of scenarios, with reception bandwidth seeing the largest overhead and poorest scaling &mdash; nearly doubling baseline costs and growing substantially with larger network sizes.
-While the simulations were limited by infrastructure constraints at high node counts and rates, they strongly demonstrate Waku's capabilities within those bounds. Moving forward, enhancing the simulation infrastructure will enable more rigorous testing of extreme scenarios.
+This study highlights Waku's resilience and scalability but also reveals challenges and limitations for Wakurtosis and the need for more robust simulation infrastructure under demanding conditions. 
 
-Guided by these insights, our immediate priority is to continue studying Waku behaviour focussing in greater scalability and performance, particularly under larger network, high-traffic situations, and different protocol configurations.
+A key takeaway is Waku's robustness, evidenced by no message loss, stability across network sizes and loads. As expected, Discv5 typically leads to higher resource usage, with reception bandwidth seeing the largest overhead and poorest scaling, nearly doubling baseline costs and groing substantially with network size. Interestingly, we observed an anomaly in the no-load cases at high node counts that warrants further investigation and it is likely suggestive of an implementation issue in the protocol. While infrastructure constraints limited testing at high node counts and rates, Waku demonstrated strong capabilities within those bounds. Enhancing the simulation infrastructure will enable rigorous extreme scenario testing moving forward.
 
-Stay updated with our progress! 
+Guided by these insights, our priority is continuing to study Waku's scalability and performance, especially under large networks, high traffic, and different configurations. Stay tuned for our progress!
