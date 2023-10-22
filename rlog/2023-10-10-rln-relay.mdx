@@ -21,34 +21,36 @@ Rate Limiting Nullifier (RLN) is a zero-knowledge gadget that allows users to pr
 1. They belong to a permissioned membership set
 2. Their rate of signaling abides by a fixed number that has been previously declared
 
-The "membership set" described above, is in the form of a sparse, indexed merkle tree.
-This membership set, can be on-chain, off-chain or hybrid depending on the network's storage costs.
+The "membership set" introduced above, is in the form of a sparse, indexed merkle tree.
+This membership set can be maintained on-chain, off-chain or as a hybrid depending on the network's storage costs.
 Waku makes use of a hybrid membership set, 
-where insertions are tracked in the smart contract.
-Each Waku node maintains a local copy of the tree, 
+where insertions are tracked in a smart contract.
+In addition, each Waku node maintains a local copy of the tree, 
 which is updated upon each insertion.
 
-A User registers with a hash of a locally generated secret, 
+Users register themselves with a hash of a locally generated secret, 
 which is then inserted into the tree at the next available index.
-Upon which, Users can prove their knowledge of the pre-image of a leaf in the tree, 
-also called a commitment.
-They can do so by generating a [Merkle Inclusion Proof](https://ethereum.org/en/developers/tutorials/merkle-proofs-for-offline-data-integrity/).
+After having registered, users can prove their membership by proving their knowledge of the pre-image of the respective leaf in the tree.
+The leaf hashes are also referred to as commitments of the respecitve users.
+They actual proof is done by a [Merkle Inclusion Proof](https://ethereum.org/en/developers/tutorials/merkle-proofs-for-offline-data-integrity/), which is a type of ZK proof.
 
-The circuit ensures that the User's secret does indeed hash to a leaf in the tree,
-and that the provided merkle proof is valid.
+The circuit ensures that the user's secret does indeed hash to a leaf in the tree,
+and that the provided Merkle proof is valid.
 
-After a User generates this zk-proof, 
+After a User generates this Merkle proof, 
 they can transmit it to other users, 
 who can verify the proof.
-Since the message's hash is included within the proof generation, 
-we also guarantee integrity of the message by this mechanism.
+Including a message's hash within the proof generation, 
+additionally guarantees integrity of that message.
 
-When a User does behave maliciously, 
+A malicious user could generate multiple proofs per epoch.
 they generate multiple proofs per epoch.
-When multiple proofs are generated per epoch, 
-this exposes the malicious User's secret, further described in [Malicious User secret interpolation mechanism](#malicious-user-secret-interpolation-mechanism)
+However, when multiple proofs are generated per epoch, 
+the malicious user's secret is exposed, which strongly disincentivizes this attack.
+This mechanism is further described in [malicious User secret interpolation mechanism](#malicious-user-secret-interpolation-mechanism)
 
-Note: This blog post describes rln-v1, which excludes the range check in favor of a global rate limit for all users, which is once per time window. This version is currently in use in waku-rln-relay.
+Note: This blog post describes rln-v1, which excludes the range check in favor of a global rate limit for all users,
+which is once per time window. This version is currently in use in waku-rln-relay.
 
 ## RLN Protocol parameters
 
