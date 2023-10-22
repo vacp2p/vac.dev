@@ -54,10 +54,13 @@ which is once per time window. This version is currently in use in waku-rln-rela
 
 ## RLN Protocol parameters
 
+Given below is the set of cryptographic primitives, 
+and constants that are used in the RLN protocol. 
+
 1. Proving System: [`groth16`](https://eprint.iacr.org/2016/260.pdf)
 2. Elliptic Curve: [`bn254`](https://eprint.iacr.org/2013/879.pdf) (aka bn128) (not to be confused with the 254 bit Weierstrass curve)
 3. Default Merkle Tree Height: `20`
-4. Hashing algorithm: `Poseidon`
+4. Hashing algorithm: [`Poseidon`](https://eprint.iacr.org/2019/458.pdf)
 5. Merkle Tree: [`Sparse Indexed Merkle Tree`](https://github.com/rate-limiting-nullifier/pmtree)
 6. Messages per epoch: `1`
 7. Epoch duration: `10 seconds`
