@@ -59,13 +59,16 @@ and constants that are used in the RLN protocol.
 
 1. Proving System: [`groth16`](https://eprint.iacr.org/2016/260.pdf)
 2. Elliptic Curve: [`bn254`](https://eprint.iacr.org/2013/879.pdf) (aka bn128) (not to be confused with the 254 bit Weierstrass curve)
-3. Default Merkle Tree Height: `20`
-4. Hashing algorithm: [`Poseidon`](https://eprint.iacr.org/2019/458.pdf)
-5. Merkle Tree: [`Sparse Indexed Merkle Tree`](https://github.com/rate-limiting-nullifier/pmtree)
-6. Messages per epoch: `1`
-7. Epoch duration: `10 seconds`
+3. Finite Field: Prime-order subgroup of the group of points on the `bn254` curve
+4. Default Merkle Tree Height: `20`
+5. Hashing algorithm: [`Poseidon`](https://eprint.iacr.org/2019/458.pdf)
+6. Merkle Tree: [`Sparse Indexed Merkle Tree`](https://github.com/rate-limiting-nullifier/pmtree)
+7. Messages per epoch: `1`
+8. Epoch duration: `10 seconds`
 
 ## Malicious User secret interpolation mechanism
+
+> note: all the parameters mentioned below are elements in the finite field mentioned above.
 
 Following are the private inputs to the circuit -
 ```
