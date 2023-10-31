@@ -17,7 +17,7 @@ GossipSub Improvements: Evolution of Overlay Design and Message Dissemination in
 
 ## Motivitation
 We have been recently working on analyzing and improving the performance of the GossipSub protocol for large messages, 
-as in the case of Ethereum Improvement Proposal EIP-4844.
+as in the case of Ethereum Improvement Proposal [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844).
 This work led to a comprehensive study of unstructured P2P networks. 
 The intention was to identify the best practices that can serve as guidelines for performance improvement and scalability of P2P networks.
 
@@ -60,7 +60,7 @@ Grouping multiple super nodes to form virtual node(s) can solve this problem.
 Similarly, flat (single-tier) overlays cannot address the routing needs in large (geographically dispersed) networks.
 
 Hierarchical (Multi-tier) overlays with different intra/inter-overlay routing solutions can better address these needs.
-Moreover, using message encoding schemes for grouping multiple messages can save bandwidth and provide better resilience against adversaries/peer churn.
+Moreover, using message aggregation schemes for grouping multiple messages can save bandwidth and provide better resilience against adversaries/peer churn.
 
 
 This article's primary objective is to investigate the possible choices that can empower an unstructured P2P network to achieve superior performance for the broadest set of applications. 
@@ -98,7 +98,7 @@ The mesh degree $D_{Low} \leq D \leq D_{High}$ is crucial in deciding message di
 A smaller value for $D$ results in higher latency due to increased rounds, whereas a higher $D$ reduces latency on the cost of increased bandwidth. 
 At the same time, keeping $D$ independent of the growing network size ($N$) may increase network-wide message dissemination latency.
 Adjusting $D$ with $N$ maintains similar latency on the cost of increased workload for peers. 
-Authors in [[3](https://www.academia.edu/download/49675184/Epidemic_Information_Dissemination_in_Di20161017-472-19tykoc.pdf)] suggest only a logarithmic increase in $D$ to maintain a manageable workload for peers.
+Authors in [[3](https://infoscience.epfl.ch/record/83478/files/EugGueKerMas04IEEEComp.pdf)] suggest only a logarithmic increase in $D$ to maintain a manageable workload for peers.
 In [[4](https://inria.hal.science/tel-02375909/document)], it is reported that the average mesh degree should not exceed $D_{avg} = \ln(N) + C$ for an optimal operation, 
 where $C$ is a small constant.
 
@@ -129,7 +129,7 @@ A better solution involves a two-phased operation:
     To further conform to the suggested mesh-degree average $D_{avg}$, every node tries achieving this average within its neighborhood, resulting in an overall similar $D_{avg}$.
 
 2. From the available local view, every node tries connecting peers with the lowest latency until $D$ connections are made.
-    We suggest referring to the peering solution discussed in GOAL5 to avoid partitioning.
+    We suggest referring to the peering solution discussed in GOAL5 to avoid network partitioning.
 
 The current GossipSub design considers homogeneous peers, and every node tries maintaining $D_{Low} \leq D \leq D_{High}$ connections. 
 
@@ -143,7 +143,7 @@ Many efforts have been made to minimize the impact of redundant transmissions.
 These solutions include multicast delivery trees, metadata sharing to enable pull-based operation, in-network information caching, etc. [[7](https://dl.acm.org/doi/abs/10.1145/945445.945473),[8](https://link.springer.com/chapter/10.1007/11558989_12)]. 
 GossipSub employs a hybrid of eager push (message dissemination through the overlay) and lazy push (a pull-based operation by the nodes requiring information through IWANT messages). 
 
-A better alternative to simple redundant transmission is to use message encoding [[9](https://ieeexplore.ieee.org/abstract/document/8737576),[10](https://dl.acm.org/doi/abs/10.1145/1993636.1993676),[11](https://ieeexplore.ieee.org/abstract/document/4276446)] for the GossipSub protocol. 
+A better alternative to simple redundant transmission is to use message aggregation [[9](https://ieeexplore.ieee.org/abstract/document/8737576),[10](https://dl.acm.org/doi/abs/10.1145/1993636.1993676),[11](https://ieeexplore.ieee.org/abstract/document/4276446)] for the GossipSub protocol. 
 As a result, redundant message transmissions can serve as a critical advantage of the GossipSub protocol. 
 Suppose that we have three equal-length messages $x1, x2, x3$. Assuming an XOR coding function,
 we know two trivial properties: $x1 \oplus x2 \oplus x2 = x1$ and $\vert x1 \vert = \vert x1 \oplus x2 \oplus x2 \vert$. 
@@ -169,7 +169,7 @@ The above-mentioned challenges result in a noticeable increase in message dissem
 Most of the work done for handling large messages involves curtailing redundant transmissions using multicast delivery trees,
 reducing the number of fanout nodes, employing in-network message caching, pull-based operation, etc.
 
-Approaches like network coding also prove helpful in minimizing bandwidth wastage.
+Approaches like message aggregation also prove helpful in minimizing bandwidth wastage.
 
 Our recent work on GossipSub improvements (still a work in progress) suggests the following solutions to deal with large message transmissions: 
 
@@ -181,17 +181,21 @@ Our recent work on GossipSub improvements (still a work in progress) suggests th
     Therefore, using the IDontWant message with staggered sending can yield better results by allowing timely reception and processing of IDontWant messages.
 
 2. Message transmissions follow a store/forward process at all peers that is inefficient in the case of large messages.
-    We can parallelize message transmission by partitioning large messages into smaller chunks, letting intermediate peers relay chunks as soon as they receive them.
+    We can parallelize message transmission by partitioning large messages into smaller fragments, letting intermediate peers relay these fragments as soon as they receive them.
 
 
 ## GOAL5: Scalability
-P2P networks are inherently scalable because every incoming node brings in bandwidth and compute resources. 
-Under such arrangements, it is desirable to achieve IP-like scalability, as seen in Bittorrent. 
-However, lack of structural overlay support and problems like peer churn, adversaries, heterogeneity, distributed operation, etc., significantly hamper the performance of the P2P networks. 
-Most efforts for bringing scalability to the P2P systems have focused on curtailing redundant transmissions and flat overlay adjustments.
-Hierarchical overlay designs, on the other hand, are less explored. 
+P2P networks are inherently scalable because every incoming node brings in bandwidth and compute resources.
+In other words, we can keep adding nodes to the network as long as every incoming node brings at-least $R \times D$ bandwidth, 
+where $R$ is average data arrival rate. 
+It is worth mentioning that network-wide message dissemination requires at-least $\lceil \log_D (N) \rceil$ hops. 
+Therefore, increasing network size increases message dissemination latency, assuming D is independent of the network size.
 
-Placing a logical structure in unstructured P2P systems can help scale the P2P networks. 
+Additionally, problems like peer churn, adversaries, heterogeneity, distributed operation, etc., significantly hamper the network's performance.
+Most efforts for bringing scalability to the P2P systems have focused on curtailing redundant transmissions and flat overlay adjustments.
+Hierarchical overlay designs, on the other hand, are less explored.
+
+Placing a logical structure in unstructured P2P systems can help scale P2P networks. 
 
 One possible solution is to use a hierarchical overlay inspired by the approaches [[14](https://link.springer.com/article/10.1007/s12083-016-0460-5),[15](https://link.springer.com/chapter/10.1007/978-3-030-19223-5_16),[16](https://ieeexplore.ieee.org/abstract/document/9826458)]. 
 An abstract operation of such overlay design is provided below:
@@ -201,26 +205,25 @@ An abstract operation of such overlay design is provided below:
 
 2. A small subset of nodes having the highest bandwidth and compute resources is selected from each cluster. 
     These super nodes form a fully connected mesh and jointly act as a virtual node, 
-mitigating the problem of peer churn among super nodes.
+    mitigating the problem of peer churn among super nodes.
     
 3. Virtual nodes form a fully connected mesh to construct a hierarchical overlay. 
-    Each virtual node is essentially a collection of super nodes; a link to any of the constituent super nodes represents a link to the virtual node.
+    Each virtual node is essentially a collection of super nodes; 
+    a link to any of the constituent super nodes represents a link to the virtual node.
 
-4. One possible idea is to use GossipSub for intra-cluster message dissemination and FloodSub for inter-cluster message dissemination. 
-    Low intra-cluster latencies allow for reducing $D$, as more transmission rounds can be carried out within the same time.
+4. One possible idea is to use GossipSub for intra-cluster message dissemination and FloodSub for inter-cluster message dissemination.
 
 ## Summary
 Overlay acts as a virtual backbone for a P2P network. A flat overlay is more straightforward and allows effortless readjustment to application needs. 
 On the other hand, a hierarchical overlay can bring scalability at the cost of increased complexity. 
 Regardless of the overlay design, a continuous readjustment to appropriate peering links is essential for superior performance. 
-At the same time, bandwidth preservation (through network codind, caching at strategic locations, metadata sharing, pull-based operation, etc.) can help minimize latency.
+At the same time, bandwidth preservation (through message aggregation, caching at strategic locations, metadata sharing, pull-based operation, etc.) can help minimize latency.
 However, problems like peer churn and in-network adversaries can be best alleviated through balanced redundant coverage, and frequent reshuffling of the peering links.
 
 # References
 [1] D. Vyzovitis, Y. Napora, D. McCormick, D. Dias, and Y. Psaras, “Gossipsub: Attack-resilient message propagation in the filecoin and eth2. 0 networks,” arXiv preprint arXiv:2007.02754, 2020. Retrieved from https://arxiv.org/pdf/2007.02754.pdf
 [2] M. Matos, V. Schiavoni, P. Felber, R. Oliveira, and E. Riviere, “Brisa: Combining efficiency and reliability in epidemic data dissemination,” in 2012 IEEE 26th International Parallel and Distributed Processing Symposium. IEEE, 2012, pp. 983–994. Retrieved from https://ieeexplore.ieee.org/abstract/document/6267905
-[3] E. Patrick et al., “Epidemic information dissemination in distributed
-systems,” IEEE Computer, vol. 37, no. 5, 2004.  Retrieved from https://www.academia.edu/download/49675184/Epidemic_Information_Dissemination_in_Di20161017-472-19tykoc.pdf
+[3] P. T. Eugster, R. Guerraoui, A. M. Kermarrec, and L. Massouli, “Epidemic information dissemination in distributed systems,” IEEE Computer, vol. 37, no. 5, 2004.  Retrieved from https://infoscience.epfl.ch/record/83478/files/EugGueKerMas04IEEEComp.pdf
 [4] D. Frey, “Epidemic protocols: From large scale to big data,” Ph.D. dissertation, Universite De Rennes 1, 2019. Retrieved from https://inria.hal.science/tel-02375909/document
 [5] M. Jain and C. Dovrolis, “End-to-end available bandwidth: measurement methodology, dynamics, and relation with tcp throughput,” IEEE/ACM Transactions on networking, vol. 11, no. 4, pp. 537–549, 2003. Retrieved from https://ieeexplore.ieee.org/abstract/document/1224454
 [6] R. Prasad, C. Dovrolis, M. Murray, and K. Claffy, “Bandwidth estimation: metrics, measurement techniques, and tools,” IEEE network, vol. 17, no. 6, pp. 27–35, 2003. Retrieved from https://ieeexplore.ieee.org/abstract/document/1248658
