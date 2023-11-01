@@ -21,7 +21,7 @@ This blog post will discuss some of the most important issues we faced and their
 ### Introduction
 Wakurtosis sought to stress-test Waku implementations at large scales over 10K nodes. 
 While it achieved success with small-to-medium scale simulations, running intensive tests at larger scales revealed major bottlenecks,
-largely stemming from inherent restrictions imposed by Kurtosis – the testing and orchestration framework Wakurtosis is built on top of.
+largely stemming from inherent restrictions imposed by [Kurtosis](https://www.kurtosis.com/) – the testing and orchestration framework Wakurtosis is built on top of.
 
 Specifically, the most significant issues arose during middle-scale simulations of 600 nodes and high-traffic patterns exceeding 100 msg/s. 
 In these scenarios, most simulations either failed to complete reliably or broke down entirely before finishing. 
