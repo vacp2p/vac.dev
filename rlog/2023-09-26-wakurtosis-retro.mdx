@@ -90,7 +90,7 @@ To circumvent most of the limitations of our previous approach, we decided to ma
 The major advantage that Kubernetes brings to the table is its robust support for multi-cluster simulations, allowing us to effectively reach 10K-node simulations with high granularity. 
 Even though this transition demands a considerable architectural overhaul, we believe that the potential benefits of Kubernetes' flexibility and scalability are worth the effort.
 
-Alongside Kubernetes, we incorporated Shadow into our testing and simulation toolkit. 
+Alongside Kubernetes, we incorporated [https://shadow.github.io/](Shadow) into our testing and simulation toolkit. 
 Shadow's unique strength lies in its ability to run real application binaries on a simulated network, offering a high level of accuracy even at greater scales. 
 With Shadow, we're confident in pushing our simulations beyond the 50K-node mark. 
 Moreover, since Shadow employs an event-based approach, it not only allows us to achieve these scales but also opens up the potential for simulations that run faster than real-time scenarios. 
