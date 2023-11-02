@@ -27,7 +27,8 @@ Specifically, the most significant issues arose during middle-scale simulations 
 In these scenarios, most simulations either failed to complete reliably or broke down entirely before finishing. 
 Even when simulations managed to fully run, results were often skewed due to the inability of the infrastructure to inject the traffic.
 
-These challenges stemmed from the massive hardware requirements for simulations at such scales and traffic loads, which had to be run on a single machine under Kurtosis. 
+These challenges stemmed from the massive hardware requirements for simulations. 
+Despite Kurtosis being relatively lightweight, it requires that the simulation be run on a single machine, which presents considerable hardware challenges given the scale and traffic load of the simulations.
 This led to inadequate sampling rates, message loss, and other data inconsistencies. 
 The system struggled to provide the computational power, memory capacity, and I/O throughput needed for smooth operations under such loads.
 
