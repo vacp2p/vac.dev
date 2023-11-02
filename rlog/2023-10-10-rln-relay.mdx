@@ -190,24 +190,18 @@ Following is a demo provided by @rramos that demonstrates
 
 ## RLN usage guide
 
-[Zerokit](https://github.com/vacp2p/zerokit) implements api's that allow users to handle operations to the tree, as well as generate/verify RLN proofs.
-It exports a rust api, as well as FFI api's to be used in other languages.
+[Zerokit](https://github.com/vacp2p/zerokit) implements api's that allow users to handle operations to the tree, 
+as well as generate/verify RLN proofs.
+
+Our main implementation of RLN can be accessed via this Rust [crate](https://crates.io/crates/rln),
+which is documented [here](https://docs.rs/rln/0.4.1/rln/public/struct.RLN.html).
+It can used in other langugages via the FFI API, which is documented [here](https://docs.rs/rln/0.4.1/rln/ffi/index.html).
+The usage of RLN in Waku is detailed in our [RLN Implementers guide](https://hackmd.io/7cBCMU5hS5OYv8PTaW2wAQ?view),
+which provides step-by-step instructions on how to run Waku-RLN-Relay.
 
 Following is a diagram that will help understand the dependency tree -
 
 ![rln-dep-tree](https://hackmd.io/_uploads/B1DgIbCin.jpg)
-
-### Usage in Rust
-
-- The [crate](https://crates.io/crates/rln) is documented [here](https://docs.rs/rln/0.4.1/rln/public/struct.RLN.html). 
-
-### Usage in other languages
-
-- The FFI API is documented [here](https://docs.rs/rln/0.4.1/rln/ffi/index.html)
-
-### Waku RLN Relay usage guide
-
-- Please refer to the [RLN Implementers guide](https://hackmd.io/7cBCMU5hS5OYv8PTaW2wAQ?view) which shows how to run waku-rln-relay in a step-by-step process.
 
 ## Future work
 
