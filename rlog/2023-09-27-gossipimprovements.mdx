@@ -1,7 +1,7 @@
 ---
 title: 'GossipSub Improvements: Evolution of Overlay Design and Message Dissemination in Unstructured P2P Networks'
-date: 2023-09-25 12:00:00
-authors: Umar Farooq, Daniel Kaiser, Tanguy Cizain
+date: 2023-11-06 12:00:00
+authors: farooq
 published: true
 slug: GossipSub Improvements
 categories: research
@@ -36,10 +36,8 @@ Flooding-based solutions, on the other hand, result in maximum resilience agains
 Redundant transmissions help maintain the integrity and security of the network in the presence of adversaries and high node failure but significantly increase network-wide bandwidth utilization, cramming the bottleneck links. 
 
 An efficient alternative is to lower the number of redundant transmissions by D-regular broadcasting, where a peer will likely receive (or relay) a message from up to $D$ random peers.
-
 Publishing through a D-regular overlay triggers approximately $N \times D$ transmissions.
 Reducing $D$ reduces the redundant transmissions but compromises reachability and latency. 
-
 Sharing metadata through a K-regular overlay (where $K > D$) allows nodes to pull missing messages. 
 
 GossipSub [[1](https://arxiv.org/pdf/2007.02754.pdf)] benefits from full-message (D-regular) and metadata-only (k-regular) overlays.
@@ -117,15 +115,11 @@ A better solution involves a two-phased operation:
 
 
 1. Every node computes its available bandwidth and selects a node degree $D$ proportional to its available bandwidth [[4](https://inria.hal.science/tel-02375909/document)].
-
     Different bandwidth estimation approaches are suggested in literature [[5](https://ieeexplore.ieee.org/abstract/document/1224454),[6](https://ieeexplore.ieee.org/abstract/document/1248658)]. 
     Simple bandwidth estimation approaches like variable packet size probing [[6](https://ieeexplore.ieee.org/abstract/document/1248658)] yield similar results with less complexity.
-
     It is also worth mentioning that many nodes may want to allocate only a capped share of their bandwidth to the network. 
     Lowering $D$ according to the available bandwidth can still prove helpful. 
     Additionally, bandwidth preservation at the transport layer through approaches like µTP can be useful.
-
-
     To further conform to the suggested mesh-degree average $D_{avg}$, every node tries achieving this average within its neighborhood, resulting in an overall similar $D_{avg}$.
 
 2. From the available local view, every node tries connecting peers with the lowest latency until $D$ connections are made.
@@ -134,7 +128,7 @@ A better solution involves a two-phased operation:
 The current GossipSub design considers homogeneous peers, and every node tries maintaining $D_{Low} \leq D \leq D_{High}$ connections. 
 
 
-## GOAL3: Bandwidth Maximization
+## GOAL3: Bandwidth Optimization
 Redundant message transmissions are essential for handling adversaries/node failure. However, these transmissions result in traffic bursts, cramming many overlay links. 
 This not only adds to the network-wide message dissemination latency but a significant share of the network's bandwidth is wasted on (usually) unnecessary transmissions. 
 It is essential to explore solutions that can minimize the number of redundant transmissions while assuring resilience against node failures. 
@@ -221,19 +215,20 @@ At the same time, bandwidth preservation (through message aggregation, caching a
 However, problems like peer churn and in-network adversaries can be best alleviated through balanced redundant coverage, and frequent reshuffling of the peering links.
 
 # References
-[1] D. Vyzovitis, Y. Napora, D. McCormick, D. Dias, and Y. Psaras, “Gossipsub: Attack-resilient message propagation in the filecoin and eth2. 0 networks,” arXiv preprint arXiv:2007.02754, 2020. Retrieved from https://arxiv.org/pdf/2007.02754.pdf
-[2] M. Matos, V. Schiavoni, P. Felber, R. Oliveira, and E. Riviere, “Brisa: Combining efficiency and reliability in epidemic data dissemination,” in 2012 IEEE 26th International Parallel and Distributed Processing Symposium. IEEE, 2012, pp. 983–994. Retrieved from https://ieeexplore.ieee.org/abstract/document/6267905
-[3] P. T. Eugster, R. Guerraoui, A. M. Kermarrec, and L. Massouli, “Epidemic information dissemination in distributed systems,” IEEE Computer, vol. 37, no. 5, 2004.  Retrieved from https://infoscience.epfl.ch/record/83478/files/EugGueKerMas04IEEEComp.pdf
-[4] D. Frey, “Epidemic protocols: From large scale to big data,” Ph.D. dissertation, Universite De Rennes 1, 2019. Retrieved from https://inria.hal.science/tel-02375909/document
-[5] M. Jain and C. Dovrolis, “End-to-end available bandwidth: measurement methodology, dynamics, and relation with tcp throughput,” IEEE/ACM Transactions on networking, vol. 11, no. 4, pp. 537–549, 2003. Retrieved from https://ieeexplore.ieee.org/abstract/document/1224454
-[6] R. Prasad, C. Dovrolis, M. Murray, and K. Claffy, “Bandwidth estimation: metrics, measurement techniques, and tools,” IEEE network, vol. 17, no. 6, pp. 27–35, 2003. Retrieved from https://ieeexplore.ieee.org/abstract/document/1248658
-[7] D. Kostic, A. Rodriguez, J. Albrecht, and A. Vahdat, “Bullet: High bandwidth data dissemination using an overlay mesh,” in Proceedings of the nineteenth ACM symposium on Operating systems principles, 2003, pp. 282–297. Retrieved from https://dl.acm.org/doi/abs/10.1145/945445.945473
-[8] V. Pai, K. Kumar, K. Tamilmani, V. Sambamurthy, and A. E. Mohr, “Chainsaw: Eliminating trees from overlay multicast,” in Peer-to-Peer Systems IV: 4th International Workshop, IPTPS 2005, Ithaca, NY, USA, February 24-25, 2005. Revised Selected Papers 4. Springer, 2005, pp. 127–140. Retrieved from https://link.springer.com/chapter/10.1007/11558989_12
-[9] Y.-D. Bromberg, Q. Dufour, and D. Frey, “Multisource rumor spreading with network coding,” in IEEE INFOCOM 2019-IEEE Conference on Computer Communications. IEEE, 2019, pp. 2359–2367. Retrieved from https://ieeexplore.ieee.org/abstract/document/8737576
-[10] B. Haeupler, “Analyzing network coding gossip made easy,” in Proceedings of the forty-third annual ACM symposium on Theory of computing, 2011, pp. 293–302. Retrieved from https://dl.acm.org/doi/abs/10.1145/1993636.1993676
-[11] S. Yu and Z. Li, “Massive data delivery in unstructured peer-to-peer networks with network coding,” in 6th IEEE/ACIS International Conference on Computer and Information Science (ICIS 2007). IEEE, 2007, pp. 592–597. Retrieved from https://ieeexplore.ieee.org/abstract/document/4276446
-[12] V. Buterin, D. Feist, D. Loerakker, G. Kadianakis, M. Garnett, M. Taiwo, and A. Dietrichs, “Eip-4844: Shard blob transactions scale data-availability of ethereum in a simple, forwards-compatible manner,” 2022. Retrieved from https://eips.ethereum.org/EIPS/eip-4844
-[13] A. Manning, “Gossipsub extension for epidemic meshes (v1.2.0),” 2022. Retrieved from https://github.com/libp2p/specs/pull/413
-[14] Z. Duan, C. Tian, M. Zhou, X. Wang, N. Zhang, H. Du, and L. Wang, “Two-layer hybrid peer-to-peer networks,” Peer-to-Peer Networking and Applications, vol. 10, pp. 1304–1322, 2017. Retrieved from https://link.springer.com/article/10.1007/s12083-016-0460-5
-[15] W. Hao, J. Zeng, X. Dai, J. Xiao, Q. Hua, H. Chen, K.-C. Li, and H. Jin, “Blockp2p: Enabling fast blockchain broadcast with scalable peer-to-peer network topology,” in Green, Pervasive, and Cloud Computing: 14th International Conference, GPC 2019, Uberlandia, Brazil, May 26–28, 2019, Proceedings 14. Springer, 2019, pp. 223–237. Retrieved from https://link.springer.com/chapter/10.1007/978-3-030-19223-5_16
-[16] H. Qiu, T. Ji, S. Zhao, X. Chen, J. Qi, H. Cui, and S. Wang, “A geography-based p2p overlay network for fast and robust blockchain systems,” IEEE Transactions on Services Computing, 2022. Retrieved from https://ieeexplore.ieee.org/abstract/document/9826458
+
+* [1] D. Vyzovitis, Y. Napora, D. McCormick, D. Dias, and Y. Psaras, “Gossipsub: Attack-resilient message propagation in the filecoin and eth2. 0 networks,” arXiv preprint arXiv:2007.02754, 2020. Retrieved from https://arxiv.org/pdf/2007.02754.pdf
+* [2] M. Matos, V. Schiavoni, P. Felber, R. Oliveira, and E. Riviere, “Brisa: Combining efficiency and reliability in epidemic data dissemination,” in 2012 IEEE 26th International Parallel and Distributed Processing Symposium. IEEE, 2012, pp. 983–994. Retrieved from https://ieeexplore.ieee.org/abstract/document/6267905
+* [3] P. T. Eugster, R. Guerraoui, A. M. Kermarrec, and L. Massouli, “Epidemic information dissemination in distributed systems,” IEEE Computer, vol. 37, no. 5, 2004.  Retrieved from https://infoscience.epfl.ch/record/83478/files/EugGueKerMas04IEEEComp.pdf
+* [4] D. Frey, “Epidemic protocols: From large scale to big data,” Ph.D. dissertation, Universite De Rennes 1, 2019. Retrieved from https://inria.hal.science/tel-02375909/document
+* [5] M. Jain and C. Dovrolis, “End-to-end available bandwidth: measurement methodology, dynamics, and relation with tcp throughput,” IEEE/ACM Transactions on networking, vol. 11, no. 4, pp. 537–549, 2003. Retrieved from https://ieeexplore.ieee.org/abstract/document/1224454
+* [6] R. Prasad, C. Dovrolis, M. Murray, and K. Claffy, “Bandwidth estimation: metrics, measurement techniques, and tools,” IEEE network, vol. 17, no. 6, pp. 27–35, 2003. Retrieved from https://ieeexplore.ieee.org/abstract/document/1248658
+* [7] D. Kostic, A. Rodriguez, J. Albrecht, and A. Vahdat, “Bullet: High bandwidth data dissemination using an overlay mesh,” in Proceedings of the nineteenth ACM symposium on Operating systems principles, 2003, pp. 282–297. Retrieved from https://dl.acm.org/doi/abs/10.1145/945445.945473
+* [8] V. Pai, K. Kumar, K. Tamilmani, V. Sambamurthy, and A. E. Mohr, “Chainsaw: Eliminating trees from overlay multicast,” in Peer-to-Peer Systems IV: 4th International Workshop, IPTPS 2005, Ithaca, NY, USA, February 24-25, 2005. Revised Selected Papers 4. Springer, 2005, pp. 127–140. Retrieved from https://link.springer.com/chapter/10.1007/11558989_12
+* [9] Y.-D. Bromberg, Q. Dufour, and D. Frey, “Multisource rumor spreading with network coding,” in IEEE INFOCOM 2019-IEEE Conference on Computer Communications. IEEE, 2019, pp. 2359–2367. Retrieved from https://ieeexplore.ieee.org/abstract/document/8737576
+* [10] B. Haeupler, “Analyzing network coding gossip made easy,” in Proceedings of the forty-third annual ACM symposium on Theory of computing, 2011, pp. 293–302. Retrieved from https://dl.acm.org/doi/abs/10.1145/1993636.1993676
+* [11] S. Yu and Z. Li, “Massive data delivery in unstructured peer-to-peer networks with network coding,” in 6th IEEE/ACIS International Conference on Computer and Information Science (ICIS 2007). IEEE, 2007, pp. 592–597. Retrieved from https://ieeexplore.ieee.org/abstract/document/4276446
+* [12] V. Buterin, D. Feist, D. Loerakker, G. Kadianakis, M. Garnett, M. Taiwo, and A. Dietrichs, “Eip-4844: Shard blob transactions scale data-availability of ethereum in a simple, forwards-compatible manner,” 2022. Retrieved from https://eips.ethereum.org/EIPS/eip-4844
+* [13] A. Manning, “Gossipsub extension for epidemic meshes (v1.2.0),” 2022. Retrieved from https://github.com/libp2p/specs/pull/413
+* [14] Z. Duan, C. Tian, M. Zhou, X. Wang, N. Zhang, H. Du, and L. Wang, “Two-layer hybrid peer-to-peer networks,” Peer-to-Peer Networking and Applications, vol. 10, pp. 1304–1322, 2017. Retrieved from https://link.springer.com/article/10.1007/s12083-016-0460-5
+* [15] W. Hao, J. Zeng, X. Dai, J. Xiao, Q. Hua, H. Chen, K.-C. Li, and H. Jin, “Blockp2p: Enabling fast blockchain broadcast with scalable peer-to-peer network topology,” in Green, Pervasive, and Cloud Computing: 14th International Conference, GPC 2019, Uberlandia, Brazil, May 26–28, 2019, Proceedings 14. Springer, 2019, pp. 223–237. Retrieved from https://link.springer.com/chapter/10.1007/978-3-030-19223-5_16
+* [16] H. Qiu, T. Ji, S. Zhao, X. Chen, J. Qi, H. Cui, and S. Wang, “A geography-based p2p overlay network for fast and robust blockchain systems,” IEEE Transactions on Services Computing, 2022. Retrieved from https://ieeexplore.ieee.org/abstract/document/9826458
