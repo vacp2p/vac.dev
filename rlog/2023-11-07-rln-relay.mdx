@@ -1,0 +1,233 @@
+---
+title: 'Strengthening Anonymous DoS Prevention with Rate Limiting Nullifiers in Waku'
+date: 2023-11-07 12:00:00
+authors: p1ge0nh8er
+published: true
+slug: rln-anonymous-dos-prevention
+categories: research
+
+
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+Rate Limiting Nullifiers in practice, applied to an anonymous p2p network, like Waku.
+
+<!--truncate-->
+
+## Introduction
+
+Rate Limiting Nullifier (RLN) is a zero-knowledge gadget that allows users to prove 2 pieces of information,
+1. They belong to a permissioned membership set
+2. Their rate of signaling abides by a fixed number that has been previously declared
+
+The "membership set" introduced above, is in the form of a sparse, indexed merkle tree.
+This membership set can be maintained on-chain, off-chain or as a hybrid depending on the network's storage costs.
+Waku makes use of a hybrid membership set, 
+where insertions are tracked in a smart contract.
+In addition, each Waku node maintains a local copy of the tree, 
+which is updated upon each insertion.
+
+Users register themselves with a hash of a locally generated secret, 
+which is then inserted into the tree at the next available index.
+After having registered, users can prove their membership by proving their knowledge of the pre-image of the respective leaf in the tree.
+The leaf hashes are also referred to as commitments of the respective users.
+The actual proof is done by a [Merkle Inclusion Proof](https://ethereum.org/en/developers/tutorials/merkle-proofs-for-offline-data-integrity/), which is a type of ZK proof.
+
+The circuit ensures that the user's secret does indeed hash to a leaf in the tree,
+and that the provided Merkle proof is valid.
+
+After a User generates this Merkle proof, 
+they can transmit it to other users, 
+who can verify the proof.
+Including a message's hash within the proof generation, 
+additionally guarantees integrity of that message.
+
+A malicious user could generate multiple proofs per epoch.
+they generate multiple proofs per epoch.
+However, when multiple proofs are generated per epoch, 
+the malicious user's secret is exposed, which strongly disincentivizes this attack.
+This mechanism is further described in [malicious User secret interpolation mechanism](#malicious-user-secret-interpolation-mechanism)
+
+Note: This blog post describes rln-v1, which excludes the range check in favor of a global rate limit for all users,
+which is once per time window. This version is currently in use in waku-rln-relay.
+
+## RLN Protocol parameters
+
+Given below is the set of cryptographic primitives, 
+and constants that are used in the RLN protocol. 
+
+1. Proving System: [`groth16`](https://eprint.iacr.org/2016/260.pdf)
+2. Elliptic Curve: [`bn254`](https://eprint.iacr.org/2013/879.pdf) (aka bn128) (not to be confused with the 254 bit Weierstrass curve)
+3. Finite Field: Prime-order subgroup of the group of points on the `bn254` curve
+4. Default Merkle Tree Height: `20`
+5. Hashing algorithm: [`Poseidon`](https://eprint.iacr.org/2019/458.pdf)
+6. Merkle Tree: [`Sparse Indexed Merkle Tree`](https://github.com/rate-limiting-nullifier/pmtree)
+7. Messages per epoch: `1`
+8. Epoch duration: `10 seconds`
+
+## Malicious User secret interpolation mechanism
+
+> note: all the parameters mentioned below are elements in the finite field mentioned above.
+
+The private inputs to the circuit are as follows: -
+```
+identitySecret: the randomly generated secret of the user
+identityPathIndex: the index of the commitment derived from the secret
+pathElements: elements included in the path to the index of the commitment
+```
+
+Following are the public inputs to the circuit -
+```
+x: hash of the signal to the finite field
+rlnIdentifier: application-specific identifier which this proof is being generated for
+epoch: the timestamp which this proof is being generated for
+```
+
+The outputs of the circuit are as follows: -
+```
+y: result of Shamir's secret sharing calculation
+root: root of the Merkle tree obtained after applying the inclusion proof
+nullifier: uniquely identifies a message, derived from rlnIdentifier, epoch, and the user's secret
+```
+
+With the above data in mind, following is the circuit pseudocode -
+
+```
+identityCommitment = Poseidon([identitySecret])
+root = MerkleInclusionProof(identityCommitment, identityPathIndex, pathElements)
+externalNullifier = Poseidon([epoch, rlnIdentifier])
+a1 = Poseidon([identitySecret, externalNullifier])
+y = identitySecret + a1 * x
+nullifier = Poseidon([a1])
+```
+
+To interpolate the secret of a user who has sent multiple signals during the same epoch to the same rln-based application, we may make use of the following formula -
+
+$$a_1 = {(y_1 - y_2) \over (x_1 - x_2)}$$
+
+where $x_1$, $y_1$ and $x_2$, $y_2$ are shares from different messages
+
+subsequently, we may use one pair of the shares, $x_1$ and $y_1$ to obtain the `identitySecret`
+
+$$identitySecret = y_1 - a_1 * x$$
+
+This enables RLN to be used for rate limiting with a *global* limit. For arbitrary limits,
+please refer to an article written by @curryrasul, [rln-v2](https://mirror.xyz/privacy-scaling-explorations.eth/iCLmH1JVb7fDqp6Mms2NR001m2_n5OOSHsLF2QrxDnQ).
+
+
+## Waku's problem with DoS
+
+In a decentralized, privacy focused messaging system like [Waku](https://waku.org),
+Denial of Service (DoS) vulnerabilities are very common, and must be addressed to promote network scale and optimal bandwidth utilization.
+
+### DoS prevention with user metadata
+
+There are a couple of ways a user can be rate-limited, either -
+1. IP Logging
+2. KYC Logging
+
+Both IP and KYC logging prevent systems from being truly anonymous, and hence, cannot be used as a valid DoS prevention mechanism for Waku.
+
+RLN can be used as an alternative, which provides the best of both worlds, i.e a permissioned membership set, as well as anonymous signaling.
+However, we are bound by k-anonymity rules of the membership set.
+
+[Waku-RLN-Relay](https://rfc.vac.dev/spec/17/) is a [libp2p](https://libp2p.io) pubsub validator that verifies if a proof attached to a given message is valid.
+In case the proof is valid, the message is relayed.
+
+## Performance analysis
+
+> Test bench specs: AMD EPYC 7502P 32-Core, 4x32GB DDR4 Reg.ECC Memory 
+
+This simulation was conducted by @alrevuelta, and is described in more detail [here](https://github.com/waku-org/research/issues/23).
+
+The simulation included 100 waku nodes running in parallel.
+
+Proof generation times - 
+![img](https://user-images.githubusercontent.com/8811422/268019958-c2392954-ea42-4c0e-ae25-0d2b965dc9bf.png)
+
+Proof verification times -
+![img](https://user-images.githubusercontent.com/8811422/267959342-e4481f2d-1e21-41e3-a693-f277594d8073.png)
+
+A spammer node publishes 3000 msg/epoch, which is detected by all connected nodes, and subsequently disconnect to prevent further spam -
+![img](https://user-images.githubusercontent.com/8811422/268024411-2af9e330-1e80-49fa-892d-ebcf0ede9d9c.png)
+
+
+## Security analysis
+
+[Barbulescu and Duquesne](https://doi.org/10.1007/s00145-018-9280-5)
+conclude that that the `bn254` curve has only 100 bits of security.
+Since the bn254 curve has a small embedding degree,
+it is vulnerable to the [MOV attack](https://en.wikipedia.org/wiki/MOV_attack).
+However, the MOV attack is only applicable to pairings,
+and not to the elliptic curve itself.
+It is acceptable to use the bn254 curve for RLN,
+since the circuit does not make use of pairings.
+
+[An analysis](https://github.com/vacp2p/research/issues/155) on the number of rounds in the Poseidon hash function was done,
+which concluded that the hashing rounds should *not* be reduced, 
+
+The [smart contracts](https://github.com/vacp2p/rln-contract) have *not* been audited, and are not recommended for real world deployments *yet*.
+
+
+## Storage analysis
+
+$$
+commitment\_size = 32\ bytes \\
+tree\_height =20 \\
+total\_leaves = 2^{20} \\ 
+max\_tree\_size = total\_leaves * commitment\_size \\
+max\_tree\_size = 2^{20} * 32 = 33,554,432 \\
+∴max\_tree\_size = 33.55\ megabytes
+$$
+The storage overhead introduced by RLN is minimal.
+RLN only requires 34 megabytes of storage, which poses no problem on most end-user hardware, with the exception of IoT/microcontrollers.
+Still, we are working on further optimizations  allowing proof generation without having to store the full tree.
+
+## The bare minimum requirements to run RLN
+
+With proof generation time in sub-second latency, along with low storage overhead for the tree,
+it is possible for end users to generate and verify RLN proofs on a modern smartphone.
+
+Following is a demo provided by @rramos that demonstrates
+[waku-rln-relay used in react native](https://drive.google.com/file/d/1ITLYrDOQrHQX2_3Q6O5EqKPYJN8Ye2gF/view?usp=sharing).
+
+> Warning: The react native sdk will be deprecated soon, and the above demo should serve as a PoC for RLN on mobiles
+
+## RLN usage guide
+
+[Zerokit](https://github.com/vacp2p/zerokit) implements api's that allow users to handle operations to the tree, 
+as well as generate/verify RLN proofs.
+
+Our main implementation of RLN can be accessed via this Rust [crate](https://crates.io/crates/rln),
+which is documented [here](https://docs.rs/rln/0.4.1/rln/public/struct.RLN.html).
+It can used in other langugages via the FFI API, which is documented [here](https://docs.rs/rln/0.4.1/rln/ffi/index.html).
+The usage of RLN in Waku is detailed in our [RLN Implementers guide](https://hackmd.io/7cBCMU5hS5OYv8PTaW2wAQ?view),
+which provides step-by-step instructions on how to run Waku-RLN-Relay.
+
+Following is a diagram that will help understand the dependency tree -
+
+![rln-dep-tree](https://hackmd.io/_uploads/B1DgIbCin.jpg)
+
+## Future work
+
+- Optimizations to zerokit for proof generation time.
+- Incrementing tree depth from 20 to 32, to allow more memberships.
+- Optimizations to the smart contract.
+- An ability to signal validity of a message in different time windows.
+- Usage of proving systems other than Groth16.
+
+## References
+
+* [RLN Circuits](https://github.com/rate-limiting-nullifier/circom-rln)
+* [Zerokit](https://github.com/vacp2p/zerokit)
+* [RLN-V1 RFC](https://rfc.vac.dev/spec/32/)
+* [RLN-V2 RFC](https://rfc.vac.dev/spec/58/)
+* [RLN Implementers guide](https://hackmd.io/7cBCMU5hS5OYv8PTaW2wAQ?view),
+* [groth16](https://eprint.iacr.org/2016/260.pdf)
+* [bn254](https://eprint.iacr.org/2013/879.pdf)
+* [Poseidon Hash](https://eprint.iacr.org/2019/458.pdf)
+* [Sparse Indexed Merkle Tree](https://github.com/rate-limiting-nullifier/pmtree)
+* [Barbulescu, R., & Duquesne, S. (2017). Updating key size estimations for pairings. Cryptology ePrint Archive, Paper 2017/334.] (https://doi.org/10.1007/s00145-018-9280-5)
+
+
