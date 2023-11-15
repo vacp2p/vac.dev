@@ -44,6 +44,11 @@ const config = {
           rehypePlugins: [katex],
         },
         og: {},
+        generated: {
+          jobList: {
+            jobBoard: 'vac',
+          },
+        },
       }),
     ],
   ],
@@ -97,6 +102,11 @@ const config = {
             label: 'Research Blog',
             to: '/rlog',
             activeBasePath: 'rlog',
+          },
+          {
+            label: 'Join Us',
+            to: '/join-us',
+            activeBasePath: 'join-us',
           },
         ],
       },

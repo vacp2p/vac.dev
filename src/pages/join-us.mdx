@@ -1,0 +1,13 @@
+---
+title: Join Us
+hide_title: true
+hide_table_of_contents: true
+displayed_sidebar: main
+---
+
+import * as jobData from '../../static/generated/jobs.json'
+import { JobsPerDepartment } from '../components/mdx'
+
+<Box className="custom-page-container">
+    <JobsPerDepartment jobData={jobData} />
+</Box>

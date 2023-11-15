@@ -12,12 +12,12 @@ html {
   }
 }
 
-.community-container {
+.custom-page-container {
   max-width: 796px;
   margin: 16px auto 0 auto;
 }
 
-div:has(.community-container) > .container {
+div:has(.custom-page-container) > .container {
   padding-bottom: 0 !important;
   margin-bottom: 0 !important;
 }
