@@ -17,9 +17,11 @@ html {
   margin: 16px auto 0 auto;
 }
 
-div:has(.custom-page-container) > .container {
-  padding-bottom: 0 !important;
-  margin-bottom: 0 !important;
+main:has(.custom-page-container) {
+  .container {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
 }
 
 div[class^='blogHeader'] {
