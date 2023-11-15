@@ -24,3 +24,5 @@ yalc.lock
 .idea
 
 static/search-index.json
+
+static/generated/*

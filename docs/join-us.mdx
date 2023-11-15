@@ -1,0 +1,13 @@
+---
+title: Join Us
+hide_title: true
+pagination_prev: null
+pagination_next: null
+displayed_sidebar: null
+hide_table_of_contents: true
+---
+
+import * as jobData from '/static/generated/jobs.json'
+import { JobsPerDepartment } from '/src/components/mdx'
+
+<JobsPerDepartment jobData={jobData} />

@@ -1,0 +1,45 @@
+---
+title: Join the community
+hide_title: true
+pagination_prev: null
+pagination_next: null
+displayed_sidebar: null
+hide_table_of_contents: true
+---
+
+import { Grid, Box, SocialCard } from '/src/components/mdx'
+
+# Join the community
+
+<Box bottom={24}>
+  Join the Vac Community!
+  <br/>
+  <br/>
+  Keep up to date with our latest research by connecting with us on our communities channels.
+</Box>
+
+<Box top={32} bottom={56} style={{paddingBottom: 0}}>
+  <Grid xs={{ cols: 1, gap: '1rem' }} md={{ cols: 2 }}>
+    <Grid.Item xs={1}>
+      <SocialCard
+        href='https://twitter.com/vacp2p'
+        logoSrcDark="/icons/x.svg"
+        description='Follow us on X'
+      />
+    </Grid.Item>
+    <Grid.Item xs={1}>
+      <SocialCard
+        href='https://discord.com/invite/PQFdubGt6d'
+        logoSrcDark="/icons/discord-white.svg"
+        description='Join the community on Discord'
+      />
+    </Grid.Item>
+    <Grid.Item xs={1}>
+      <SocialCard
+        href="https://forum.vac.dev/"
+        logoSrcDark="/theme/image/logo.svg"
+        description="Share your thoughts on the latest research on the Vac research forum"
+      />
+    </Grid.Item>
+  </Grid>
+</Box>
