@@ -1,0 +1,51 @@
+&mdash;
+layout: post
+name: 'Mathematical models for Waku'  
+title: 'Mathematical models for Waku'
+date: 2023-12-07 12:00:00
+authors: 0xFugue 
+published: true
+slug: waku-models
+categories: waku, relay
+&mdash;
+
+
+
+Waku is a stack of four protocols implemented over libp2p, each of them are identified by their libp2p protocol identifiers.
+These four protocols in turn  are grouped under three network interaction domains: Gossip, Discovery and Request/Reply domains.
+Waku protocols use an underlying protocol buffer called Waku Message.
+These Waku Message have a content topic field that allows for fine-grained application level multiplexing.
+ We do not concern ourselves with the specifics of this protocol buffer as their cost is a constant factor away from our models.
+
+
+
+The Waku Messages are disseminated using a publish-subscribe based protocol called RELAY (11/WAKU2-RELAY).
+This is the protocol we will focus exclusively here. Each Waku Message is routed using the pub-sub topic it is published to: this uses libp2p GossipSub, where  messages 
+published to a topic are delivered to peers that subscribed to the 
+specified pub-sub topic using Gossip.
+We will discuss Gossip in more  detail when we attempt, as part of our Waku modelling, to explicitly  model the GossipSub protocol.
+Note that is not  atypical for a Waku network to use  only one pub-sub topic to maximise the sender/receiver anonymity.
+The RELAY protocol belongs to the Gossip domain. Note that RELAY is a fairly resource-intensive protocol as it requires each node to replicate almost all incoming messages to a chosen, but dynamic, subset of connected peers; RELAY also need to track gossips to and from its peers, and satisfy them as well if need be.
+All in all, running RELAY nodes need a very generous budget of bandwidth, memory and CPU.
+
+
+While RELAY helps us route the Waku Messages to peers, it says nothing about who these  peers are and how do we discover them.
+This task is relegated to Discovery domain which has a host of protocols that helps in peer discovery.
+These protocol encompass a variety of protocol that leverage existing protocols to bootstrap the Waku network.
+For instance, on one end, Waku can leverage EIP-1459, a DNS-based discovery mechanism that uses standard DNS to fetch a list of peers to an existing Waku network that a new node can use to connect to the said Waku network; this peer list is cryptographically authenticated and is updated as the network evolves.
+This, while clearly scalable and efficient, is centralised and is prone censorship.
+On the other end, we have Node Discovery v5 that is decentralised and uses DHT to enable a new peer to discover existing peers.
+This, while decentralised and censorship resistant, is resource intensive. We will not further discuss or model the Discovery domain protocols in this writeup.
+
+
+Now that nodes can discover and connect to Waku networks (via Discovery Domain) and exchange Waku Messages (vis Gossip Domain), we turn our attention to the third and final domain, the Request/Reply Domain.
+Waku is envisaged to be a universal messaging protocol, irrespective of the resource limitations of the peers.
+The Request/Reply domains cater to this requirement, by allowing us to construct lightnodes.
+Lightnodes are the ones where a peer acts only as a requester.
+Thus, they avoid the bandwidth/memory/CPU/Storage costs associated with RELAY, but still can participate in the Waku network.
+So, lightnodes can send and receive messages that they subscribed to, but they will not receive any general REALY-related traffic.
+Protocols under this domain are 13/WAKU2-STORE, 12/WAKU2-FILTER, and 19/WAKU2-LIGHTPUSH.
+Just like Discovery domain, we will not elaborate further on the Request/Reply domain as we do not model them, yet.
+
+TODO: Introduce sharding, elaborate on GossipSub
+
