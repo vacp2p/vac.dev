@@ -7,6 +7,8 @@ pagination_next: null
 
 # Terms of Use
 
+Last updated: 14 February 2024
+
 These website terms of use ('**Website Terms of Use**') are entered into by you and us, and they govern your access and use of this Website, including any content and functionality contained in the Website.
 
 It is your responsibility to read the Website Terms of Use carefully before your use of the Website and your use of the Website means you have agreed to be bound and comply with these Website Terms of Use.
@@ -51,7 +53,7 @@ While we aim to update our website regularly, all information, including the tim
 
 ### 4) Intellectual property rights
 
-The Website and its contents are made available under free and open source licences. This means that anyone can use, share, and modify such content, as long as they follow the terms of the applicable licence.
+The Website and its contents are made available under Creative Commons Attribution 4.0 International license (CC-BY 4.0). In essence this licence allows users to copy, modify and distribute the content in any format for any purpose, including commercial use, subject to certain requirements such as attributing us. For the full terms of this licence, please refer to the following website: https://creativecommons.org/licenses/by/4.0/.
 
 ### 5) Third-party website links
 
@@ -93,4 +95,6 @@ The captions and headings identifying sections and subsections of these Website 
 
 If any part of these Website Terms of Use is held invalid or unenforceable, that part will be severable from these Website Terms of Use, and the remaining portions will remain in full force and effect. If we fail to enforce any of these Website Terms of Use, that does not mean that we have waived our right to enforce them.
 
-If you have any specific questions about these Website Terms of Use, please contact us through the relevant channels.
+If you have any specific questions about these Website Terms of Use, please contact us at legal@free.technology.
+
+This document is licensed under CC-BY-SA.
