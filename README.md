@@ -4,7 +4,7 @@ This repository contains the source for vac.dev.
 
 ## Adding posts
 
-To publish in the blog, create a `.md` or `mdx` file within the `posts` directory.
+To publish in the blog, create a `.md` or `mdx` file within the `rlog` directory.
 Please follow [sembr](https://sembr.org/) in the `.md` or `.mdx` file.
 You can use [Frontmatter](https://docusaurus.io/docs/markdown-features#front-matter) to add metadata to your markdown file.
 
