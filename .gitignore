@@ -26,3 +26,4 @@ yalc.lock
 static/search-index.json
 
 static/generated/*
+.obsidian/workspace.json
