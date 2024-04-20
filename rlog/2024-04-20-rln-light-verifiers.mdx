@@ -1,0 +1,173 @@
+---
+title: 'Verifying RLN proofs in light clients'
+date: 2024-04-20 12:00:00
+authors: p1ge0nh8er
+published: true
+slug: rln-light-verifiers
+categories: research
+
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+How resource-restricted devices can verify RLN proofs fast and efficiently.
+
+<!--truncate-->
+
+## Introduction
+
+Recommended previous reading: [Strengthening Anonymous DoS Prevention with Rate Limiting Nullifiers in Waku](https://vac.dev/rlog/rln-anonymous-dos-prevention).
+
+This post expands upon ideas described in the previous post,
+focusing on how resource-restricted devices can verify RLN proofs fast and efficiently.
+
+Previously, it was required to fetch all the memberships from the smart contract,
+construct the merkle tree locally,
+and derive the merkle root,
+which is subsequently used to verify RLN proofs.
+
+This process is not feasible for resource-restricted devices,
+since it involves a lot of RPC calls, computation and fault tolerance.
+One cannot expect a mobile phone to fetch all the memberships from the smart contract and construct the merkle tree locally.
+
+## Constraints and requirements
+
+An alternative solution to the one proposed in this post is to construct the merkle tree on-chain,
+and have the root accessible with a single RPC call.
+However, this approach increases gas costs for inserting new memberships,
+and _may_ not be feasible until it is optimized further,
+with batching mechanisms, etc.
+
+The other methods have been explored in more depth [here](https://hackmd.io/@rymnc/rln-tree-storages).
+
+Following are the requirements and constraints for the solution proposed in this post:
+
+1. Cheap membership insertions.
+2. As few RPC calls as possible to reduce startup time.
+3. Merkle root of the tree is available on-chain.
+4. No centralized services to sequence membership insertions.
+5. Map inserted commitments to the block in which they were inserted.
+
+## Metrics on Sync Time for a tree with 2653 leaves
+
+The following metrics are based on the current implementation of RLN in the Waku gen0 network.
+
+### Test bench
+
+- Hardware: Macbook Air M2, 16GB RAM
+- Network: 120 Megabits/sec
+- Nwaku Commit: [e61e4ff](https://github.com/waku-org/nwaku/tree/e61e4ff90a235657a7dc4248f5be41b6e031e98c)
+- RLN Membership set contract: [0xF471d71E9b1455bBF4b85d475afb9BB0954A29c4](https://sepolia.etherscan.io/address/0xF471d71E9b1455bBF4b85d475afb9BB0954A29c4#code)
+- Deployed block number: 4,230,716
+- RLN Membership set depth: 20
+- Hash function: PoseidonT3 (which is a gas guzzler)
+- Max size of the membership set: 2^20 = 1,048,576 leaves
+
+### Metrics
+
+- Time to sync the whole tree: 4 minutes
+- RPC calls: 702
+- Number of leaves: 2653
+
+One can argue that the time to sync the tree at the current state is not _that_ bad.
+However, the number of RPC calls is a concern,
+which scales linearly with the number of blocks since the contract was deployed.
+This is because the implementation fetches all events from the contract,
+chunking 2000 blocks at a time.
+This is done to avoid hitting the block limit of 10,000 events per call,
+which is a limitation of popular RPC providers.
+
+## Proposed solution
+
+From a theoretical perspective,
+one could construct the merkle tree on-chain,
+in a view call, in-memory.
+However, this is not feasible due to the gas costs associated with it.
+
+To compute the root of a Merkle tree with $2^{20}$ leaves,
+it costs approximately 2 Billion Gas.
+With Infura and Alchemy capping the gas limit to 350M and 550M gas respectively,
+it is not possible to compute the root of the tree in a single call.
+
+Acknowledging that [Polygon Miden](https://polygon.technology/blog/polygon-miden-state-model) and [Penumbra](https://penumbra.zone/blog/tiered-commitment-tree/) both make use of a tiered commitment tree,
+we propose a similar approach for RLN.
+
+A tiered commitment tree is a tree which is sharded into multiple smaller subtrees,
+each of which is a tree in itself.
+This allows scaling in terms of the number of leaves,
+as well as reducing state bloat,
+by just storing the root of a subtree when it is full,
+instead of all its leaves.
+
+Here, the main question arises:
+What is the maximum number of leaves in a subtree, with which the root can be computed in a single call?
+
+To compute the root of a Merkle tree with $2^{10}$ leaves, it costs approximately 217M gas.
+
+This is a feasible number for a single call,
+and hence we propose a tiered commitment tree with a maximum of $2^{10}$ leaves in a subtree,
+and the number of subtrees is $2^{10}$.
+Therefore, the maximum number of leaves in the tree is $2^{20}$,
+the same as the current implementation.
+
+![img](/img/light-rln-verifiers.png)
+
+### Insertion
+
+When a commitment is inserted into the tree,
+it is first inserted into the first subtree.
+When the first subtree is full,
+the next insertions go into the second subtree,
+and so on.
+
+### Syncing
+
+When syncing the tree,
+one only needs to fetch the roots of the subtrees,
+and the root of the tree can be computed in-memory, or on-chain.
+
+Which allows us to derive the following relation:
+
+$$
+number\_of\_rpc\_calls = number\_of\_filled\_subtrees + 1
+$$
+
+This is a significant improvement over the current implementation,
+which requires fetching all the memberships from the smart contract.
+
+### Gas costs
+
+The gas costs for inserting a commitment into the tree are the same as the current implementation,
+except it consists of an extra SSTORE operation to store the `shardIndex` of the commitment.
+
+### Events
+
+The events emitted by the contract are the same as the current implementation,
+appending the `shardIndex` of the commitment.
+
+### Proof of concept
+
+A proof of concept implementation of the tiered commitment tree is available [here](https://github.com/vacp2p/rln-contract/pull/37),
+and is deployed on Sepolia at [0xE7987c70B54Ff32f0D5CBbAA8c8Fc1cAf632b9A5](https://sepolia.etherscan.io/address/0xE7987c70B54Ff32f0D5CBbAA8c8Fc1cAf632b9A5).
+
+It is compatible with the current implementation of the RLN verifier.
+
+## Future work
+
+1. Optimize the gas costs of the tiered commitment tree.
+2. Explore using different number of leaves under a given node in the tree, currently set to 2.
+
+## Conclusion
+
+The tiered commitment tree is a promising approach to reduce the number of RPC calls required to sync the tree,
+and to reduce the gas costs associated with computing the root of the tree.
+In this effort, also allows for a more scalable and efficient RLN verifier.
+
+## References
+
+- [RLN Circuits](https://github.com/rate-limiting-nullifier/circom-rln)
+- [Zerokit](https://github.com/vacp2p/zerokit)
+- [RLN-V1 RFC](https://rfc.vac.dev/spec/32/)
+- [RLN-V2 RFC](https://rfc.vac.dev/spec/58/)
+- [RLN Implementers guide](https://hackmd.io/7cBCMU5hS5OYv8PTaW2wAQ?view)
+- [Strengthening Anonymous DoS Prevention with Rate Limiting Nullifiers in Waku](https://vac.dev/rlog/rln-anonymous-dos-prevention)
