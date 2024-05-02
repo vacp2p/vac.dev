@@ -73,7 +73,7 @@ One can argue that the time to sync the tree at the current state is not _that_ 
 However, the number of RPC calls is a concern,
 which scales linearly with the number of blocks since the contract was deployed
 This is because the implementation fetches all events from the contract,
-chunking 2000 blocks at a time.
+chunking 2,000 blocks at a time.
 This is done to avoid hitting the block limit of 10,000 events per call,
 which is a limitation of popular RPC providers.
 
