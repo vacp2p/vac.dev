@@ -1,5 +1,5 @@
 ---
-title: 'RLN-V3: Towards a Flexible and Cost-efficient Implementation'
+title: 'RLN-v3: Towards a Flexible and Cost-Efficient Implementation'
 date: 2024-05-08 12:00:00
 authors: p1ge0nh8er
 published: true
@@ -10,7 +10,7 @@ toc_min_heading_level: 2
 toc_max_heading_level: 4
 ---
 
-Improving on the previous version of RLN, by allowing dynamic epoch sizes.
+Improving on the previous version of RLN by allowing dynamic epoch sizes.
 
 <!--truncate-->
 
@@ -18,91 +18,92 @@ Improving on the previous version of RLN, by allowing dynamic epoch sizes.
 
 Recommended previous reading: [Strengthening Anonymous DoS Prevention with Rate Limiting Nullifiers in Waku](https://vac.dev/rlog/rln-anonymous-dos-prevention).
 
-The premise of rln-v3 is to have variable message rate per variable epoch,
-which can be explained in the following way
+The premise of RLN-v3 is to have a variable message rate per variable epoch,
+which can be explained in the following way:
 
-**rln-v1:** “Alice can send 1 message per global epoch”
+- **RLN-v1:** “Alice can send 1 message per global epoch”
 
-- Practically, this is `1 msg/second`
+Practically, this is `1 msg/second`
 
-**rln-v2:** “Alice can send `x` messages per global epoch”
+- **RLN-v2:** “Alice can send `x` messages per global epoch”
 
-- Practically, this is `x msg/second`
+Practically, this is `x msg/second`
 
-**rln-v3:** “Alice can send `x` messages within a time interval `y` chosen by herself.
-The funds she has to pay are affected by both the number of messages and the chosen time-interval.
-Other participants can chose different time-intervals fitting their specific needs.
+- **RLN-v3:** “Alice can send `x` messages within a time interval `y` chosen by herself.
+The funds she has to pay are affected by both the number of messages and the chosen time interval.
+Other participants can choose different time intervals fitting their specific needs.
 
-- Practically, this is `x msg/y seconds`
+Practically, this is `x msg/y seconds`
 
-What rln-v3 allows is higher flexibility and ease of payment/stake for users who have more predictable usage patterns and therefore,
-more predictable bandwidth usage on a p2p network (Waku, etc),
-for example -
+RLN-v3 allows higher flexibility and ease of payment/stake for users who have more predictable usage patterns and therefore,
+more predictable bandwidth usage on a p2p network (Waku, etc.).
 
-- an AMM that broadcasts bids, asks and fills over Waku may require a lot of throughput in the smallest epoch possible, and hence may register an rln-v3 membership of `10000 msg/1 second`.
-  They could do this with rln-v2 too.
-- Alice, a casual user of a messaging app built on Waku, who messages maybe 3-4 people infrequently during the day may register an rln-v3 membership of `100 msg/hour`,
-  which would not be possible in rln-v2 considering the `global epoch` was set to `1 second`.
-  With rln-v2, Alice would have to register with a membership of `1 msg/sec`,
-  which would translate to `3600 msg/hour`,
-  which is much higher than the usage she would have, and hence,
-  she would have to overpay to stake into the membership set.
+For example:
+
+- An AMM that broadcasts bids, asks, and fills over Waku may require a lot of throughput in the smallest epoch possible and hence may register an RLN-v3 membership of `10000 msg/1 second`.
+  They could do this with RLN-v2, too.
+- Alice, a casual user of a messaging app built on Waku, who messages maybe 3-4 people infrequently during the day, may register an RLN-v3 membership of `100 msg/hour`,
+  which would not be possible in RLN-v2 considering the `global epoch` was set to `1 second`.
+  With RLN-v2, Alice would have to register with a membership of `1 msg/sec`,
+  which would translate to `3600 msg/hour`. This is much higher than her usage and would
+  result in her overpaying to stake into the membership set.
 - A sync service built over Waku,
   whose spec defines that it MUST broadcast a set of public keys every hour,
-  may register an rln-v3 membership of `1 msg/hour`,
+  may register an RLN-v3 membership of `1 msg/hour`,
   cutting down the costs to enter the membership set earlier.
 
 ## Theory
 
-### Modification to leaves set in the Membership Merkle Tree
+### Modification to leaves set in the membership Merkle tree
 
-To ensure that a user’s epoch size(`user_epoch_limit`) is included within their membership we must modify the user’s commitment/leaf in the tree to contain it.
+To ensure that a user’s epoch size (`user_epoch_limit`) is included within their membership we must modify the user’s commitment/leaf in the tree to contain it.
 A user’s commitment/leaf in the tree is referred to as a `rate_commitment`,
-which was previously derived from their public key (`identity_commitment`),
+which was previously derived from their public key (`identity_commitment`)
 and their variable message rate (`user_message_limit`).
 
-In **rln-v2:**
+In **RLN-v2:**
 
 $$
 rate\_commitment = poseidon([identity\_commitment, user\_message\_limit])
 $$
 
-In **rln-v3:**
+In **RLN-v3:**
 
 $$
 rate\_commitment = poseidon([identity\_commitment, user\_message\_limit, user\_epoch\_limit])
 $$
 
-### Modification to Circuit Inputs
+### Modification to circuit inputs
 
 To detect double signaling,
 we make use of a circuit output `nullifier`,
-which remains the same if a user generates a proof with the same `message_id`, and `external_nullifier`,
-where the `external_nullifier` and `nullifier` are defined as below -
+which remains the same if a user generates a proof with the same `message_id` and `external_nullifier`,
+where the `external_nullifier` and `nullifier` are defined as:
 
 $$
 external\_nullifier = poseidon([epoch, rln\_identifier]) \\
 nullifier = poseidon([identity\_secret, external\_nullifier, message\_id])
 $$
 
-Where
+Where:
 
-- `epoch` is defined as the unix epoch timestamp with seconds precision
-- `rln_identifier` uniquely identifies an application for which a user submits a proof
-- `identity_secret` is the private key of the user
-- `message_id` is the sequence number of the user’s message within `user_message_limit` in an epoch
+- `epoch` is defined as the Unix epoch timestamp with seconds precision.
+- `rln_identifier` uniquely identifies an application for which a user submits a proof.
+- `identity_secret` is the private key of the user.
+- `message_id` is the sequence number of the user’s message within `user_message_limit` in an epoch.
 
-In rln-v2 the global epoch was 1 second,
+In RLN-v2, the global epoch was 1 second,
 hence we did not need to perform any assertions to the epoch’s value inside the circuit,
-and the validation of the epoch was handled off-circuit (i.e, too old, too large, bad values etc).
+and the validation of the epoch was handled off-circuit (i.e., too old, too large, bad values, etc.).
 
-In rln-v3 we propose that the `epoch` that is passed into the circuit,
-must be a valid multiple of `user_epoch_limit`,
-since the user may pass in values of the `epoch` which do not directly correlate with the `user_epoch_limit`,
-for example -
+In RLN-v3, we propose that the `epoch` that is passed into the circuit
+must be a valid multiple of `user_epoch_limit`
+since the user may pass in values of the `epoch` which do not directly correlate with the `user_epoch_limit`.
 
-- A user with `user_epoch_limit` of 120,
-  passes in an epoch of `237`,
+For example:
+
+- A user with `user_epoch_limit` of 120
+  passes in an epoch of `237`
   generates `user_message_limit` proofs with it,
   can increment the epoch by `1`,
   and generate `user_message_limit` proofs with it,
@@ -114,17 +115,18 @@ Since `user_epoch_limit` is kept private,
 the verifier does not have access to that value and cannot perform validation on it.
 
 If we ensure that the `epoch` is a multiple of `user_epoch_limit`,
-we have the following scenarios -
+we have the following scenarios:
 
-- A user with `user_epoch_limit` of 120,
-  passes in an epoch of `237`,
-  proof generation fails since epoch is not a multiple of `user_epoch_limit`
-- A user with `user_epoch_limit` of 120,
-  passes in an epoch of `240`,
-  can generate `user_message_limit` proofs without being slashed
+- A user with `user_epoch_limit` of 120
+  passes in an epoch of `237`.
+  Proof generation fails since the epoch is not a multiple of `user_epoch_limit`.
+- A user with `user_epoch_limit` of 120
+  passes in an epoch of `240` and
+  can generate `user_message_limit` proofs without being slashed.
 
-Since we perform operations on the `epoch` we must include it as a circuit input which was previously removed from the circuit inputs to rln-v2.
-Therefore, the new circuit inputs are as follows -
+Since we perform operations on the `epoch`, we must include it as a circuit input (previously, it was removed from the circuit inputs to RLN-v2).
+
+Therefore, the new circuit inputs are as follows:
 
 ```c
 // unchanged
@@ -144,18 +146,18 @@ public rln_identifier
 
 The circuit outputs remain the same.
 
-### Additional Circuit Constraints
+### Additional circuit constraints
 
-1. Since we accept the `epoch`, `user_epoch_quotient` and `user_epoch_limit`,
-   we must ensure that the relation between these 3 values is preserved, i.e
+1. Since we accept the `epoch`, `user_epoch_quotient`, and `user_epoch_limit`,
+   we must ensure that the relation between these 3 values is preserved. I.e.:
 
    $$
    epoch == user\_epoch\_limit * user\_epoch\_quotient
    $$
 
 2. To ensure no overflows/underflows occur in the above multiplication,
-   we must constrain the inputs of `epoch`, `user_epoch_quotient` and `user_epoch_limit`.
-   We have assumed `3600` to be the maximum valid size of the `user_epoch_quotient`
+   we must constrain the inputs of `epoch`, `user_epoch_quotient`, and `user_epoch_limit`.
+   We have assumed `3600` to be the maximum valid size of the `user_epoch_quotient`.
 
 $$
 size(epoch) \leq 64\ bits \\
@@ -165,58 +167,58 @@ user\_epoch\_limit \leq epoch \\
 user\_epoch\_quotient < user\_epoch\_limit
 $$
 
-### Modifications to external epoch validation (waku, etc)
+### Modifications to external epoch validation (Waku, etc.)
 
-For receivers of an rln-v3 proof,
-to detect if a message is too old we must use the higher bound of the `user_epoch_limit` which has been set to `3600`.
+For receivers of an RLN-v3 proof
+to detect if a message is too old, we must use the higher bound of the `user_epoch_limit`, which has been set to `3600`.
 The **trade-off** here is that we allow hour-old messages to propagate within the network.
 
-### Modifications to double signaling detection scheme (waku, etc)
+### Modifications to double signaling detection scheme (Waku, etc.)
 
-For verifiers of rln-v1/v2 proofs,
+For verifiers of RLN-v1/v2 proofs,
 a log of nullifiers seen in the last epoch is maintained,
 and if there is a match with a pre-existing nullifier,
 double signaling has been detected and the verifier MAY proceed to slash the spamming user.
 
-With the rln-v3 scheme,
+With the RLN-v3 scheme,
 we need to increase the size of the nullifier log used,
-which previously cleared itself every second to the higher bound of the `user_epoch_limit` which is `3600`.
+which previously cleared itself every second to the higher bound of the `user_epoch_limit`, which is `3600`.
 Now, the RLN proof verifier must clear the nullifier log every `3600` seconds to satisfactorily detect double signaling.
 
-## The Implementation
+## The implementation
 
-An implementation of the rln-v3 scheme in [gnark](https://docs.gnark.consensys.io/) can be found [here](https://github.com/vacp2p/gnark-rln/blob/9b05eddc89901a06d8f41b093ce8ce12fd0bb4e0/rln/rln.go)
+An implementation of the RLN-v3 scheme in [gnark](https://docs.gnark.consensys.io/) can be found [here](https://github.com/vacp2p/gnark-rln/blob/9b05eddc89901a06d8f41b093ce8ce12fd0bb4e0/rln/rln.go).
 
-## Comments on Performance
+## Comments on performance
 
 - Hardware: Macbook Air M2, 16GB RAM
-- Circuit: [rln-v3](https://github.com/vacp2p/gnark-rln/blob/9b05eddc89901a06d8f41b093ce8ce12fd0bb4e0/rln/rln.go)
-- Proving System: [`Groth16`](https://eprint.iacr.org/2016/260.pdf)
+- Circuit: [RLN-v3](https://github.com/vacp2p/gnark-rln/blob/9b05eddc89901a06d8f41b093ce8ce12fd0bb4e0/rln/rln.go)
+- Proving system: [`Groth16`](https://eprint.iacr.org/2016/260.pdf)
 - Framework: [`gnark`](https://docs.gnark.consensys.io/)
-- Elliptic Curve: [`bn254`](https://eprint.iacr.org/2013/879.pdf) (aka bn128) (not to be confused with the 254 bit Weierstrass curve)
-- Finite Field: Prime-order subgroup of the group of points on the `bn254` curve
-- Default Merkle Tree Height: `20`
+- Elliptic curve: [`bn254`](https://eprint.iacr.org/2013/879.pdf) (aka bn128) (not to be confused with the 254-bit Weierstrass curve)
+- Finite field: Prime-order subgroup of the group of points on the `bn254` curve
+- Default Merkle tree height: `20`
 - Hashing algorithm: [`Poseidon`](https://eprint.iacr.org/2019/458.pdf)
-- Merkle Tree: [`Sparse Indexed Merkle Tree`](https://github.com/rate-limiting-nullifier/pmtree)
+- Merkle tree: [`Sparse Indexed Merkle Tree`](https://github.com/rate-limiting-nullifier/pmtree)
 
 ### Proving
 
-The proving time for the rln-v3 circuit is `90ms` for a single proof.
+The proving time for the RLN-v3 circuit is `90ms` for a single proof.
 
 ### Verification
 
-The verification time for the rln-v3 circuit is `1.7ms` for a single proof.
+The verification time for the RLN-v3 circuit is `1.7ms` for a single proof.
 
 ## Conclusion
 
-The rln-v3 scheme introduces a new epoch-based message rate limiting scheme to the RLN protocol.
+The RLN-v3 scheme introduces a new epoch-based message rate-limiting scheme to the RLN protocol.
 It enhances the user's flexibility in setting their message limits and cost-optimizes their stake.
 
 ## Future work
 
-- Implementing the rln-v3 scheme in [zerokit](https://github.com/vacp2p/zerokit)
-- Implementing the rln-v3 scheme in [waku](https://github.com/waku-org/nwaku)
-- Formal security analysis of the rln-v3 scheme
+- Implementing the RLN-v3 scheme in [Zerokit](https://github.com/vacp2p/zerokit)
+- Implementing the RLN-v3 scheme in [Waku](https://github.com/waku-org/nwaku)
+- Formal security analysis of the RLN-v3 scheme
 
 ## References
 
@@ -226,6 +228,6 @@ It enhances the user's flexibility in setting their message limits and cost-opti
 - [Gnark](https://docs.gnark.consensys.io/)
 - [Poseidon Hash](https://eprint.iacr.org/2019/458.pdf)
 - [Zerokit](https://github.com/vacp2p/zerokit)
-- [RLN-V1 RFC](https://rfc.vac.dev/spec/32/)
-- [RLN-V2 RFC](https://rfc.vac.dev/spec/58/)
+- [RLN-v1 RFC](https://rfc.vac.dev/spec/32/)
+- [RLN-v2 RFC](https://rfc.vac.dev/spec/58/)
 - [Waku](https://waku.org)
