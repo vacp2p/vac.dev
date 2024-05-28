@@ -1,0 +1,143 @@
+---
+title: 'Membership with Bloom Filters'
+date: 2024-06-13 12:00:00
+authors: marvin
+published: true
+slug: dr
+categories: research
+
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+Improving on the previous version of RLN by allowing dynamic epoch sizes.
+
+<!--truncate-->
+
+## Membership with Bloom Filters
+
+The ability to efficiently query the membership of an element in a given data set is crucial.
+In certain applications, it is more important to output a result quickly rather than have a 'perfect' result.
+In particular, false-positives may be an acceptable tradeoff for speed.
+In this blog, we examine Bloom filters.
+Bloom filters are a data structure that can be used for membership proofs.
+
+
+## Introduction
+Everyone is familiar with the process of creating a new account.
+Consider when you enter your desired username.
+Many sites provide real-time feedback, as you type, on the availability of a given string.
+In this scenario, it is necessary that the result is seemingly instant, regardless of the number of existing accounts.
+However, it is not important for the usernames that are flagged as unavailable are, in fact, in use.
+That is, it is sufficient to have a probabilistic check for membership.
+
+**Bloom filters** is a data structure that can be used to accumulate an arbitrary amount of data with a fixed amount of space.
+Specifically, the associated Bloom filter $B$ for a digest of data $D$ can be queried to determine whether an element is (possibly) a member of $D$:
+
+- **0:** The queried element is definitely not a member of digest $D$.
+- **1:** The entry is possibly a member of the digest $D$.
+
+The algorithms associated to Bloom filters, that we will discuss shortly, are deterministic.
+The possibility of false-positives arises from the query algorithm.
+
+### Setup and Algorithms
+A Bloom filter consists of a binary string ${\bf{v}} \in \{0,1\}^n$ and $k$ hash functions $\{h_i: \{0,1\}^* \rightarrow \{0,\dots,n-1\}\}_{i=0}^{k-1}$.
+We note that each hash function $h_i$ is used to determine an index of our binary string ${\bf{v}}$ to flip the associated bit to 1.
+The binary string ${\bf{v}}$ is initialized with every entry as 0.
+The hash functions do not need to be cryptographic hash functions.
+
+
+- **Append:** Suppose that we wish to add the element $x$ to the Bloom filter.
+    - Define the vector ${\bf{b}} \in \{0,\dots,n-1\}^k$ so that ${\bf{b}}[i] := h_i(x)$ for each $i \in \{0,\dots,k-1\}$.
+    - Update the binary string ${\bf{v}}[{\bf{b}}[i]] \leftarrow 1$ for each $i \in \{0,\dots,k-1\}$.
+   
+- **Query:** Suppose that we wish to query the Bloom filter for element $y$.
+    - Return 1 provided ${\bf{v}}[h_i(y)] = 1$ for every $i \in \{0,\dots,k-1\}$. Otherwise, return 0.
+    
+The algorithm **Query** will output 1 for every element $y$ that has been added to the Bloom filter.
+This is a consequence of the **Append** algorithm.
+However, due to potential collisions over a set of hash functions, it is possible for false-positives to occur.
+Moreover, the possibility of collisions make it impossible to remove elements from the Bloom filter.
+
+### Complexity
+The storage of a Bloom filter requires constant space.
+Specifically, the Bloom filter uses $n$ bits regardless of the size of the digest.
+So, regardless of the number of elements that we append, the Bloom filter will use $n$ bits.
+Further, if we assume that each of the $k$ hash functions run in constant time then we can append/query an entry in $O(k)$.
+
+### Example
+Suppose that $k = 3$ and $n = 10$. 
+Our Bloom filter is initialized as $\bf{v} = \begin{pmatrix}0&0&0&0&0&0&0&0&0&0\end{pmatrix}.$
+Now, we will append the words $add$, $sum$ and $equal$.
+Suppose that
+\begin{array}{lll}
+h_0(add) = 1 & h_1(add) = 4 & h_2(add) = 7\\
+h_0(sum) = 9 & h_1(sum) = 2 & h_2(sum) = 1\\
+h_0(equal) = 5 & h_1(equal) = 8 & h_2(equal) = 0.
+\end{array}
+
+After appending these words, the Bloom filter is $\bf{v} = \begin{pmatrix}1&1&1&0&1&1&0&1&1&1\end{pmatrix}.$
+
+Now, suppose that we query the words $subtract$ and $multiple$ so that
+\begin{array}{lll} h_0(subtract) = 3 & h_1(subtract) = 5 & h_2(subtract) = 1\\ h_0(multiple) = 7 & h_1(multiple) = 1 & h_2(multiple) = 4\\
+\end{array}
+The query for $subtract$ returns 0 since ${\bf{v}}[3]=0$.
+On the other hand, the query for $multiple$ returns 1 since ${\bf{v}}[1]=1, {\bf{v}}[4] = 1$, and ${\bf{v}}[7]=1$.
+Even though $multiple$ was not used to generate the Bloom filter ${\bf{v}}$, our query returns the false-positive.
+
+
+### Probability of False-Positive
+For our analysis, we will assume that the probabilities arise in our analysis are independent. 
+However, this assumption can be removed to gain the same approximation.
+
+We note that for a single hash function, the probability that a specific bit is flipped to 1 is $1/n$.
+So, the probability that the specific bit is not flipped by the hash function is $1-1/n$.
+Applying our assumption that the $k$ hash functions are 'independent,'
+the probability that the specific bit is not flipped by any of the hash functions is
+$(1-1/n)^k$.
+
+Recall the Calculus fact $\lim_{\infty} (1-1/n)^n = e^{-1}$.
+That is, as we increase the number of bits that our Bloom filter uses, the approximate probability that a given bit is not flipped by any of the $k$ hash functions is $e^{-k/n}$.
+
+Suppose that $\ell$ entries have been added to the Bloom filter.
+The probability that a specific bit is still 0, after the $\ell$ entries have been added, is approximately $e^{-\ell k/n}$.
+The probability that a queried element is erranously claimed as a member of the digest is approximately
+$(1-e^{-\ell k/n})^k$.
+
+The following table provides a concrete values for these approximations.
+
+
+
+| $n$ | $k$ | $\ell$ | $(1-e^{-\ell k/n})^k$|
+| -------- | -------- | -------- | --- |
+| 32     |   3   |  3    | 0.01474 |
+| 32     |   3   |  7    | 0.11143 |
+| 32     |   3   |  12    |0.30802 |
+| 32     |   3   |  17    |0.50595 |
+| 32     |   3   |  28    |0.79804 |
+
+Notice that the probability of false-positives increases as the number of elements ($\ell$) have been added to the digest increases.
+
+### Sliding-Window Bloom Filter
+Our toy example and table illustrated an issue concerning Bloom filters.
+The number of entries that can be added to a Bloom filter is restricted by our choice of $k$ and $n$.
+Not only is does the probability that false-positives will occur increase,
+but it is possible that our vector ${\bf{v}}$ can a string of all 1's.
+[Szepieniec and Værge](https://eprint.iacr.org/2023/1208.pdf) proposed a modification to Bloom filters to handle this.
+
+Instead of having a fixed number of bits for our Bloom filter, we dynamically allot memory based on the number of entries that have been added to the filter.
+Given a predetermined threshold ($b$) for the number of entries, we shift our 'window' of flipping bits by $s$ bits.
+Note that this means that it is necessary to keep track of when a given entry is added to the digest.
+This means that querying the sliding-window Bloom filter will yield different results when different timestamps are used.
+
+**ADD IMAGE**
+
+This can be done with $k$ hash functions as we used earlier.
+Alternatively, Szepieniec and Værge proposed using the same hash function but to produce $k$ entries in the current window.
+Specifically, we obtain the bits we wish to flip to 1's for entry $x$ by computing $h(x || i)$ for each $i \in \{0,\dots, k-1\}$.
+
+By incorporating a shifting window, we maintain the efficient query and appending at the cost of constant space.
+However, by losing constant space, we gain 'infinity' scalability.
+
+### References
+TODO
