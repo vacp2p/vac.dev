@@ -23,9 +23,9 @@ We are interested in both research and code contributions.
 
 For code contributions, see our "good first issue" lists for various Vac related code bases:
 
-* [nim-libp2p](https://github.com/status-im/nim-libp2p)
+* [nim-libp2p](https://github.com/vacp2p/nim-libp2p)
 * [zerokit](https://github.com/vacp2p/zerokit/labels/good%20first%20issue)
-* [wakurtosis](https://github.com/logos-co/wakurtosis)
+* [stealth-address-kit](https://github.com/vacp2p/stealth-address-kit)
 
 <!---
 
