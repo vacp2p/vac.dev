@@ -48,7 +48,7 @@ Through meticulous testing and quality assurance processes, the QA Service Unit 
 
 ## Smart Contracts (SC)
 
-The IFT Smart Contracts Service Unit specialises in the development, maintenance, and auditing of smart contracts for IFT projects.
+Vac's Smart Contracts Service Unit specialises in the development, maintenance, and auditing of smart contracts for IFT projects.
 The SC unit ensures that all smart contracts are robust, secure, and aligned with project requirements.
 SC designs and develops smart contracts tailored to the specific needs of IFT projects,
 ensuring they function as intended and are up-to-date with any project changes or requirements.
@@ -79,7 +79,7 @@ ACZ develops [zerokit](https://github.com/vacp2p/zerokit) and [stealth-address-k
 The Vac RFC unit serves as a vital cornerstone in the IFT,
 taking on the responsibility of shepherding and editing [specifications](https://rfc.vac.dev/) for IFT projects.
 By meticulously crafting and overseeing these specifications,
-the Vac RFC unit acts as a linchpin for ensuring standardised and interoperable protocols within the Logos ecosystem
+the Vac RFC unit acts as a linchpin for ensuring standardised and interoperable protocols within the IFT ecosystem
 The RFC unit's expertise and attention to detail contribute to a cohesive and collaborative environment,
 facilitating seamless integration and advancement of decentralised technologies
 throughout the IFT and beyond.
