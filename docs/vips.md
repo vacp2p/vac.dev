@@ -11,7 +11,7 @@ The incubator projects operate within Vac, leveraging the expertise and collabor
 
 ## Nescience
 
-[Nescience](https://vac.dev/rlog/Nescience-A-zkVM-leveraging-hiding-properties) focuses on developing a privacy preserving general-purpose zero-knowledge virtual machine.
-It enables privacy-preserving computing, which holds significant importance for IFT programs, espcially [Logos](https://logos.co/).
+[Nescience](https://vac.dev/rlog/Nescience-A-zkVM-leveraging-hiding-properties) focuses on developing a privacy-preserving general-purpose zero-knowledge virtual machine.
+It enables privacy-preserving computing, which holds significant importance for IFT programs, especially [Logos](https://logos.co/).
 
 
