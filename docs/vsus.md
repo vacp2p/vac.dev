@@ -13,19 +13,19 @@ they also develop software artefacts, such as [nim-libp2p](https://github.com/st
 
 The P2P R&D Service Unit is a vital part of Vac, specialising in peer-to-peer (P2P) technologies.
 The P2P unit develops [nim-libp2p](https://github.com/status-im/nim-libp2p),
-work on improving the [libp2p gossipsub](https://docs.libp2p.io/concepts/pubsub/overview/) protocol,
-and assist projects with the integration of P2P network layers.
+works on improving the [libp2p gossipsub](https://docs.libp2p.io/concepts/pubsub/overview/) protocol,
+and assists projects with the integration of P2P network layers.
 The P2P unit collaborates closely with [Vac Deep Research](/deepresearch) to conduct research aimed at enhancing libp2p gossipsub.
 By focusing on advancing P2P technologies, the P2P unit contributes to the overall improvement and efficiency of decentralised networks,
-enabling seamless decentralised communication for IFT Projects and beyond.
+enabling seamless decentralised communication within IFT projects and beyond.
 
 ## Token Economics (TKE)
 
 The Vac Token Economics Unit is dedicated to assisting IFT projects in designing their token economies, incentives, and markets.
-TKE's collaboration with IFT project teams is intensive and on a day-to-day basis,
-where TKE not only responds to their needs but also proactively drive the conversation forward by suggesting new ideas and strategies
+TKE's collaboration with IFT project teams is intensive and occurs on a day-to-day basis,
+where TKE not only responds to their needs but also proactively drives the conversation forward by suggesting new ideas and strategies
 based on TKE's research.
-The team brings together a broad spectrum of skills and knowledge, ranging from the modeling of dynamic systems to theoretical modeling,
+The team brings together a broad spectrum of skills and knowledge, ranging from the modelling of dynamic systems to theoretical modelling
 and general cryptoeconomics.
 
 ## Distributed Systems Testing (DST)
@@ -43,12 +43,12 @@ Primary responsibilities include implementing unit tests and interoperability te
 
 The QA unit plays a crucial role in the verification of project implementations.
 By rigorously testing project implementations against defined specifications, QA ensures that all functionalities align with the project's requirements.
-QA's proactive approach in identifying and reporting bugs ensures that any issues are addressed promptly, enhancing the overall quality and reliability of the software.
+QA's proactive approach to identifying and reporting bugs ensures that any issues are addressed promptly, enhancing the overall quality and reliability of the software.
 Through meticulous testing and quality assurance processes, the QA Service Unit ensures that IFT projects deliver robust and high-performing software solutions.
 
 ## Smart Contracts (SC)
 
-The IFT Smart Contracts Service Unit specializes in the development, maintenance, and auditing of smart contracts for IFT projects.
+Vac's Smart Contracts Service Unit specialises in the development, maintenance, and auditing of smart contracts for IFT projects.
 The SC unit ensures that all smart contracts are robust, secure, and aligned with project requirements.
 SC designs and develops smart contracts tailored to the specific needs of IFT projects,
 ensuring they function as intended and are up-to-date with any project changes or requirements.
@@ -57,7 +57,7 @@ ensuring the highest standards of security and reliability.
 
 ## Nim
 
-With IFT's extensive use of the [Nim](https://nim-lang.org/) ecosystem,
+With the IFT's extensive use of the [Nim](https://nim-lang.org/) ecosystem,
 the Nim Service Unit focuses on the development and maintenance of Nim tooling and core libraries essential for IFT projects.
 The Nim unit works on critical tools in the Nim ecosystem, including the Nim compiler, Nimble (package manager),
 and nim-suggest, ensuring they are efficient, reliable, and up-to-date.
@@ -79,7 +79,7 @@ ACZ develops [zerokit](https://github.com/vacp2p/zerokit) and [stealth-address-k
 The Vac RFC unit serves as a vital cornerstone in the IFT,
 taking on the responsibility of shepherding and editing [specifications](https://rfc.vac.dev/) for IFT projects.
 By meticulously crafting and overseeing these specifications,
-the Vac RFC unit acts as a linchpin for ensuring standardised and interoperable protocols within the Logos ecosystem
+the Vac RFC unit acts as a linchpin for ensuring standardised and interoperable protocols within the IFT ecosystem
 The RFC unit's expertise and attention to detail contribute to a cohesive and collaborative environment,
 facilitating seamless integration and advancement of decentralised technologies
 throughout the IFT and beyond.
