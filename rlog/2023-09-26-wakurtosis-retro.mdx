@@ -1,0 +1,126 @@
+---
+title: 'Wakurtosis: Lessons Learned for Large-Scale Protocol Simulation'
+date: 2023-09-26 12:00:00
+authors: daimakaimura
+published: true
+slug: Wakurtosis-Retrospective
+categories: wakurtosis, waku, dst
+
+toc_min_heading_level: 2
+toc_max_heading_level: 5
+---
+
+## Wakurtosis: Lessons Learned for Large-Scale Protocol Simulation
+
+<!--truncate-->
+
+The Wakurtosis framework aimed to simulate and test the behaviour of the Waku protocol at large scales
+but faced a plethora of challenges that ultimately led us to pivot to a hybrid approach that relies on Shadow and Kubernetes for greater reliability, flexibility, and scaling. 
+This blog post will discuss some of the most important issues we faced and their potential solutions in a new hybrid framework.
+
+### Introduction
+Wakurtosis sought to stress-test Waku implementations at large scales over 10K nodes. 
+While it achieved success with small-to-medium scale simulations, running intensive tests at larger scales revealed major bottlenecks,
+largely stemming from inherent restrictions imposed by [Kurtosis](https://www.kurtosis.com/) – the testing and orchestration framework Wakurtosis is built on top of.
+
+Specifically, the most significant issues arose during middle-scale simulations of 600 nodes and high-traffic patterns exceeding 100 msg/s. 
+In these scenarios, most simulations either failed to complete reliably or broke down entirely before finishing. 
+Even when simulations managed to fully run, results were often skewed due to the inability of the infrastructure to inject the traffic.
+
+These challenges stemmed from the massive hardware requirements for simulations. 
+Despite Kurtosis being relatively lightweight, it requires that the simulation be run on a single machine, which presents considerable hardware challenges given the scale and traffic load of the simulations.
+This led to inadequate sampling rates, message loss, and other data inconsistencies. 
+The system struggled to provide the computational power, memory capacity, and I/O throughput needed for smooth operations under such loads.
+
+In summary, while Wakurtosis successfully handled small-to-medium scales, simulations in the range of 600 nodes and 10 msg/s and beyond exposed restrictive bottlenecks tied to the limitations of the underlying Kurtosis platform and constraints around single-machine deployment.
+
+### Key Challenges with the Initial Kurtosis Approach
+
+Wakurtosis faced two fundamental challenges in achieving its goal of large-scale Waku protocol testing under the initial Kurtosis framework:
+
+#### Hardware Limitations
+Kurtosis' constraint of running all simulations on a single machine led to severe resource bottlenecks approaching 1000+ nodes. 
+Specific limitations included:
+
+##### CPU
+To run the required parallel containers, our simulations demanded a minimum of 16 cores. For many scenarios we scaled up to 32 cores (64 threads). 
+The essence of Wakurtosis simulations involved running multiple containers in parallel to mimic a network and its topology, with each container functioning as a separate node. 
+Operating the containers concurrently—as opposed to a sequential, one-at-a-time approach—allowed us to simulate network behavior with greater fidelity, closely mirroring the simultaneous node interactions that naturally occur within real-world network infrastructures.
+In this scenario, the CPU acts as the workhorse, needing to process the activities of every node simultaneously. 
+Our computations indicated a need for at least 16 cores to ensure seamless simulations without lag or delays from overloading. 
+However, even higher core counts could not robustly reach our target scale due to inherent single-machine limitations. 
+Commercial constraints also exist regarding the maximum CPU cores available in a single machine. 
+Ultimately, the single-machine approach proved insufficient for the parallelism required to smoothly simulate the intended network sizes.
+
+##### Memory
+Memory serves as the temporary storage during simulations, holding data that's currently in use. 
+Each container in our simulation had a baseline memory requirement of approximately 20MB RAM to operate efficiently. 
+While this is minimal on a per-container basis, the aggregate demand could scale up significantly when operating over 10k nodes. 
+Still, even at full scale, memory consumption never exceeded 128GB, and remained manageable for the Wakurtosis simulations. 
+So although combined memory requirements could escalate for massive simulations, it was never a major limiting factor for Wakurtosis itself or our hardware infrastructure. 
+
+##### Disk I/O throttling 
+Disk Input/Output (I/O) refers to the reading (input) and writing (output) of data in the system. 
+In our scenario, the simulations created a heavy load on the I/O operations due to continuous data flow and logging activities for each container. 
+As the number of containers (nodes) increased, the simultaneous read/write operations caused throttling, akin to a traffic jam, leading to slower data access and potential data loss.
+
+##### ARP table exhaustion
+Another important issue we encounteres is the exhaustion of the ARP table. 
+The Address Resolution Protocol (ARP) is pivotal for delivering Ethernet frames, translating IP addresses to MAC addresses so data packets can be correctly delivered within a local network. 
+However, ARP tables have a size limit. With the vast number of containers running, we quickly ran into situations where the ARP tables were filled to capacity, leading to routing failures.
+
+
+#### Kurtosis
+The Kurtosis framework, though initially appearing to be a promising solution, presented multiple limitations when applied to large-scale testing. 
+One of its major constraints was the lack of multi-cluster support, which restricted simulations to the resources of a single machine. 
+This limitation became even more pronounced when the platform strategically deprioritized large-scale simulations, a decision seemingly influenced by specific partnerships. 
+This decision effectively nullified any anticipated multi-cluster capabilities.
+
+Further complicating the situation was Kurtosis's decision to discontinue certain advanced networking features that were previously critical for modeling flexible network topologies. 
+Additionally, the platform lacked an intuitive mechanism to represent key Quality of Service (QoS) parameters, such as delay, loss, and bandwidth configurations. 
+These constraints were exacerbated by limitations in the orchestration language used by Kurtosis, which added complexity to dynamic topology modeling.
+
+The array of hardware and software limitations imposed by Kurtosis had significant ramifications on our testing capabilities. 
+The constraints primarily manifested in the inability to realistically simulate diverse network configurations and conditions. 
+This inflexibility in network topologies was a significant setback. 
+Moreover, when it came to protocol implementation, Kurtosis' approach was rather rudimentary. 
+Relying on a basic gossip model, the platform missed capturing the nuances that are critical for deriving meaningful insights from the simulations.
+
+### The Pivot to Kubernetes and Shadow
+
+To circumvent most of the limitations of our previous approach, we decided to make a strategic transition to Kubernetes, primarily drawn to its inherent capabilities for cluster orchestration and scaling. 
+The major advantage that Kubernetes brings to the table is its robust support for multi-cluster simulations, allowing us to effectively reach 10K-node simulations with high granularity. 
+Even though this transition demands a considerable architectural overhaul, we believe that the potential benefits of Kubernetes' flexibility and scalability are worth the effort.
+
+Alongside Kubernetes, we incorporated [https://shadow.github.io/](Shadow) into our testing and simulation toolkit. 
+Shadow's unique strength lies in its ability to run real application binaries on a simulated network, offering a high level of accuracy even at greater scales. However, this approach also has limitations, as it does not accurately simulate CPU times and resource contention, which can lead to less realistic performance modeling in scenarios where these factors are significant.
+With Shadow, we are hopefull in pushing our simulations beyond the 50K-node mark. 
+Moreover, since Shadow employs an event-based approach, it not only allows us to achieve these scales but also opens up the potential for simulations that run faster than real-time scenarios. 
+Additionally, Shadow provides out-of-the-box support for simulating different QoS parameters like delay, loss, and bandwidth configurations on the virtual network.
+
+By combining both Kubernetes and Shadow, we aim to substantially enhance our testing framework. 
+Kubernetes, with its multi-cluster simulation capabilities, will offer a wider array of practical insights during large-scale simulations. 
+On the other hand, Shadow's theoretical modeling strengths allow us to develop a deeper comprehension of potential behaviors in even larger network environments.
+
+#### Conclusion
+The journey to develop Wakurtosis has underscored the inherent challenges in large-scale protocol simulation. 
+While the Kurtosis platform initially showed promise, it quickly struggled to handle the scale and features we were aiming to. 
+Still, Wakurtosis proved a useful tool for analysing the protocol at moderate scales and loads.
+
+These limitations forced a pivot to a hybrid Kubernetes and Shadow approach, promising enhanced scalability, flexibility, and accuracy for large-scale simulations. 
+This experience emphasized the importance of anticipating potential bottlenecks when scaling up complexity. 
+It also highlighted the value of blending practical testing and theoretical modeling to gain meaningful insights.
+
+Integrating Kubernetes and Shadow represents a renewed commitment to pushing the boundaries of what is possible in large-scale protocol simulation. 
+This aims not just to rigorously stress test Waku and other P2P network nodes, but to set a precedent for how to approach, design, and execute such simulations overall going forward. 
+Through continuous learning, adaptation, and innovation, we remain dedicated to achieving the most accurate, reliable, and extensive simulations possible.
+
+#### References
+
+- [Kurtosis Framework](https://www.kurtosis.com/)
+- [The Shadow Network Simulator](https://shadow.github.io/)
+- [Kubernetes](https://kubernetes.io/docs/)
+- [Waku Protocol](https://rfc.vac.dev/spec/10/)
+- [Wakurtosis](https://github.com/vacp2p/wakurtosis)
+- [Address Resolution Protocol (ARP)](https://datatracker.ietf.org/doc/html/rfc826)
+
