@@ -16,18 +16,18 @@ Large Message Handling in GossipSub: Potential Improvements
 <!--truncate-->
 
 ## Motivation:
-The challenge of large message transmissions in gossipsub leads to longer than expected network-wide message dissemination times (and relatively higher fluctuations). 
-It is particularly relevant for applications like Waku and Ethereum [], 
+The challenge of large message transmissions in GossipSub leads to longer than expected network-wide message dissemination times (and relatively higher fluctuations). 
+It is particularly relevant for applications such as Waku and Ethereum [], 
 that require on-time network-wide dissemination of large messages. 
 
 This matter has been extensively discussed in the libp2p community [], 
-and numerous improvements have been suggested (or even incorporated) to the gossipsub protocol to enable efficient large-message propagation.
+and numerous improvements have been suggested (or even incorporated) to the GossipSub protocol to enable efficient large-message propagation.
 
 ## Problem Realization:
 
 Sending a message to N peers involves approximately $\lceil \log_D(N) \rceil$ transmission rounds, 
 with around $(D-1)^{X-1} \times D$ transmissions in each round, 
-where $X, D, N$ represent the round number, mesh size, and network size. 
+where $X, D$ represent the round number, and mesh size. 
 
 Transmitting to a higher number of peers (floodpublish) can theoretically reduce latency by increasing the transmissions in each round to $(D-1)^{X-1} \times (F+D)$, 
 where $F$ represents the number of peers included in floodpublish. 
@@ -42,12 +42,12 @@ Several aspects contribute to this behavior:
 where $L, R, P$ represent message size, data rate, and link latency. 
 Therefore, the time required for sending a message on a 100Mbps link with 100ms latency 
 jumps from $\tau_1^{10KB} = 100.8ms$ for a 10KB message to $\tau_1^{1MB} = 180ms$ for a 1MB message. 
-For $D$ peers, the transmission time multiplies to $\tau_D^{1MB} = (80 \times D) + 100ms$, 
+For $D$ peers, the transmission time increases to $\tau_D^{1MB} = (80 \times D) + 100ms$, 
 triggering additional queuing delays (proportional to the transmission queue size) during each transmission round.  
 
 2. In practice, $\tau_1^{1MB}$ sometimes rises to several hundred milliseconds, 
 further exaggerating the abovementioned queuing delays.
-This rise is because TCP congestion avoidance limits the maximum in-flight bytes to approximately ${C_{wnd} \times MSS}$ in a single RTT, 
+This rise is because TCP congestion avoidance limits the maximum in-flight bytes to approximately ${C_{wnd} \times MSS}$ in a single round trip time (RTT), 
 with $C_{wnd}$ increasing with the data transfer for each flow. 
 Consequently, sending the same message through a newly established (cold) connection takes longer. 
 The message transfer time lowers as the $C_{wnd}$ grows. 
@@ -120,18 +120,18 @@ For instance, in a network with dissimilar peer capabilities,
 placing a slow peer (also in cases where many senders simultaneously select a fast peer) 
 at the head of the transmission queue may result in head-of-line blocking for the message queue. 
 
-At the same time, early receivers get many IWant requests, increasing their workload.
+At the same time, early receivers get many IWANT requests, increasing their workload.
 
 #### c. Message Prioritization for Slow Senders
 A slow peer often struggles with a backlog of messages in the outgoing message queue(s) for mesh members. 
 Any new message transmission at this stage (especially the locally published messages) gets delayed. 
 
 Adaptive message-forwarding can help such peers prioritize traffic to minimize latency for essential message transfers. 
-For instance, any gossipsub peer will likely receive every message from multiple senders, 
+For instance, any GossipSub peer will likely receive every message from multiple senders, 
 leading to redundant transmissions. 
 
 Implementing efficient strategies (only for slow senders) like lazy sending 
-and prioritizing locally published messages/IWant replies over already queued messages 
+and prioritizing locally published messages/IWANT replies over already queued messages 
 can help minimize outgoing message queue sizes and optimize bandwidth for essential message transfers. 
 
 A peer can identify itself as a slow peer by using any bandwidth estimation approach [] 
@@ -148,14 +148,14 @@ Rapid adaptation of $C_{wnd}$ to the available network conditions can help lower
 
 Therefore, selecting a more suitable TCP variant like BBR, 
 which is known for its ability to dynamically adjust the congestion window based on network conditions, 
-can significantly enhance gossipsub's performance. 
+can significantly enhance GossipSub's performance. 
 
 At the same time, parameters like receive window scaling and initial $C_{wnd}$ also impact message transfer time, 
 but these are usually OS-specific system-wide choices.
 
 One possible solution is to raise $C_{wnd}$ by exchanging data over the newly established connection.
 This data may involve useful details like peer exchange information and gossip to build initial trust, 
-or gossipsub can use some dummy data to raise $C_{wnd}$ to a reasonable level.
+or GossipSub can use some dummy data to raise $C_{wnd}$ to a reasonable level.
 
 It's important to understand that some TCP variants reset $C_{wnd}$ after specific periods of inactivity. 
 It can lead to a decline in TCP's performance for applications 
@@ -163,15 +163,15 @@ that generate traffic after long enough intervals to trigger the resetting of th
 
 To address this, implementing straightforward measures like transport-level ping-pong messages can effectively mitigate this problem. 
  
-The limitations faced with $C_{wnd}$ scaling also impact some performance optimizations in gossipsub. 
+The limitations faced with $C_{wnd}$ scaling also impact some performance optimizations in GossipSub. 
 For instance, floodpublishing is an optimization relying on additional transmissions by the publisher to minimize message dissemination latency. 
 
 However, new (cold) TCP connections established with floodpublish peers take longer than expected 
 (usually, these peers also receive the same message from other sources during this time), wasting the publisher's bandwidth. 
 
-The same is the case with IWant replies. 
+The same is the case with IWANT replies. 
 
-Maintaining a bigger mesh (with warm TCP connections) and relaying to $D$ peers can be an alternative to optimizing gossipsub performance for large messages. 
+Maintaining a bigger mesh (with warm TCP connections) and relaying to $D$ peers can be an alternative to optimizing GossipSub performance for large messages. 
 
 ### 3. Eliminating Redundant Transmissions
 For every received packet, a peer makes roughly $D$ transmissions to contribute its fair share to the spread of messages. 
@@ -181,14 +181,14 @@ makes this message propagation inefficient.
 
 Although the $D$-spread is attributed to quicker dissemination and resilience against non-conforming peers, 
 many potential solutions can still minimize redundant transmissions, 
-while preserving the gossipsub resilience. 
+while preserving the GossipSub resilience. 
 
 These solutions, ranging from probabilistic to more knowledgeful elimination of messages from the outgoing message queue, 
 not only address the issue of redundancy but also provide an opportunity for bandwidth optimization,
 especially for resource-constrained peers.
 
 #### a. IDONTWANT Message
-An IDONTWANT message, a key component of gossipsub (v1.2), can significantly reduce redundant transmissions. 
+An IDONTWANT message, a key component of GossipSub (v1.2), can significantly reduce redundant transmissions. 
 
 It allows any node to notify its mesh members that it has already received a message, 
 thereby preventing them from resending the same message. 
@@ -199,10 +199,10 @@ In such cases, the node promptly informs its mesh peers about the successful rec
 It's important to note that an IDONTWANT message is essentially an IHAVE message, but with a crucial difference. 
 Unlike IHAVE, the IDONTWANT is transmitted immediately after receiving a large message. 
 
-This prompt notification helps curtail redundant large message transmissions without compromising the gossipsub resilience.  
+This prompt notification helps curtail redundant large message transmissions without compromising the GossipSub resilience.  
 
 However, the use of IDONTWANT messages alone has an inherent limitation. 
-For instance, a peer can only send an IDontWant after receiving the complete message. 
+For instance, a peer can only send an IDONTWANT after receiving the complete message. 
 
 A large message transmission consumes significant time.
 For example, transmitting a 1MB message at 100 Mbps bandwidth may consume 80 to several hundred milliseconds (depending upon $C_{wnd}$ and latency). 
@@ -303,7 +303,7 @@ However, a minimized workload enables early message dissemination to the remaini
 These early transmissions and randomized $K$ set selection can help achieve an overall better peer score. 
 
 ### 4. Message Prioritization
-Despite the standardized specifications of the gossipsub protocol, 
+Despite the standardized specifications of the GossipSub protocol, 
 the message forwarding mechanisms can significantly impact network-wide message dissemination latency and bandwidth utilization. 
 
 It is worth mentioning that every node is responsible for transmitting different types of packets, 
@@ -329,13 +329,53 @@ For example, staggering between peers and messages can be better managed by usin
 However, it's important to note that message prioritization also introduces additional complexity to the system, 
 necessitating sophisticated algorithms for better message handling.   
 
-### 5. Peer Prioritization
+### 5. Better Benefits from IWANT/FloodPublish
+During heartbeat intervals, GossipSub nodes transmit IHAVE messages (carrying IDs of seen messages) to the peers not included in the full-message mesh. 
+These peers can use IWANT messages to request any missing messages. 
+A budget counter ensures these messages never exceed a specified threshold during each heartbeat interval.
 
+The IHAVE/IWANT messages are a crucial tool in maintaining network connectivity. 
+They bridge the information gap between nearby and far-off peers, 
+ensuring that information can be disseminated to peers outside the mesh. 
+This function is essential in protecting against network partitions and indirectly aids in safeguarding against Sybil and Eclipse attacks. 
 
-### 6. Better Benifits from IWANT/FloodPublish
+However, it is essential to understand that high transmission times for large messages 
+require careful due diligence when using IWANT messages for the reasons not limited to:
+1) A large message reception may take several hundred milliseconds to complete. 
+During this time, an IHAVE message announcing the same message ID will trigger an IWANT request.
+2) A peer can send IWANT requests for the same message to multiple nodes, 
+leading to simultaneous transmissions for the same message.
+3) Replying to (potentially many) IWANT requests can delay the transmission of the same message to mesh peers, 
+resulting in lower peer scores.  
 
+A few possible solutions to mitigating this problem may include:
+
+1) Allocating a volume-based budget to service IWANT requests during each heartbeat interval
+2) Deferring IWANT requests for messages that are currently being received. 
+3) Deferring IWANT requests if at least $K$ IDONTWANTs are received for the same message.
+4) A large message transmission can yield high $C_{wnd}$; preferring such peers during graft can be helpful.
 
 ## Summary
+This study investigates the pressing issue of considerable fluctuations and rise in network-wide dissemination times for large messages. 
+
+We delve into multiple factors, 
+such as increased message transmit times, store and forward delays, congestion avoidance mechanisms, and prioritization between messages, 
+to establish a comprehensive understanding of the problem. 
+
+The study also explores the performance of optimization efforts 
+like floodpublishing, IHAVE/IWANT messages, and message forwarding strategies in the wake of large message transmissions.
+
+A key finding is that most congestion avoidance algorithms lack optimization for peer-to-peer networks. 
+Coupling this constraint with increased message transmission times 
+results in notable store-and-forward delays accumulating at each hop. 
+
+Furthermore, the probabilistic message-forwarding nature of GossipSub further exacerbates the situation, 
+by utilizing a considerable share of available bandwidth on redundant transmissions. 
+
+Therefore, approaches focused on eliminating redundant transmissions 
+(IDONTWANT, IMReceiving, lazy sending, etc.) can prove helpful. 
+At the same time, strategies aimed at reducing store-and-forward delays 
+(fragmentation, staggering, prioritization, etc.) can prove beneficial. 
 
 ## References
 
