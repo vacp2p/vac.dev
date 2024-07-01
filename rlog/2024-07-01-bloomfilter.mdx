@@ -130,8 +130,6 @@ Given a predetermined threshold ($b$) for the number of entries, we shift our 'w
 Note that this means that it is necessary to keep track of when a given entry is added to the digest.
 This means that querying the sliding-window Bloom filter will yield different results when different timestamps are used.
 
-**ADD IMAGE**
-
 This can be done with $k$ hash functions as we used earlier.
 Alternatively, Szepieniec and Værge proposed using the same hash function but to produce $k$ entries in the current window.
 Specifically, we obtain the bits we wish to flip to 1's for entry $x$ by computing $h(x || i)$ for each $i \in \{0,\dots, k-1\}$.
