@@ -1,0 +1,112 @@
+---
+title: 'Fiat-Shamir'
+date: 2024-07-01 12:00:00
+authors: marvin
+published: true
+slug: Fiat-Shaimr
+categories: research
+
+
+toc_min_heading_level: 2
+toc_max_heading_level: 5
+---
+# Blog - Fiat-Shamir Heuristics
+
+In the literature, zero-knowledge proofs (ZKPs) are often presented in an interactive form.
+That is, the arguments assume that the Prover and the Verifier are in active communication with each other.
+However, this is not a practical requirement for ZKPs in many applications. 
+
+## Cryptographic (?) Hash Functions
+We begin by reviewing the properties of cryptographic hash functions.
+A cryptographic hash function $H$ is a special function that takes in an arbitrary binary string and outputs a bit string of a constant length.
+Specifically,
+$H : \{0,1\}^* \rightarrow \{0,1\}^n$.
+
+Informally, the hash function $H$ satisfies the following properties:
+- The hash $H({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
+- Let ${\bf{y}}$ be a binary string of length $n$. It should be 'impossible' to find some binary string ${\bf{x}}$ so that ${\bf{y}} = H({\bf{x}})$. 
+- It should be 'impossible' to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $H({\bf{x}_1}) = H({\bf{x}_2}).$
+
+TODO: is cryptographic necessary???
+
+### Examples of Hash Functions
+TODO: algebraic vs regular???
+
+## Fiat-Shamir Heuristics
+
+Elaborate on the importance of using hashes
+
+Strong vs Weak?
+
+## Improper Use of Fiat-Shamir?
+
+A subtle issue with the application of Fiat-Shamir has been a point of discussion in recent years.
+Auditors such as [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have released blogs (TODO-CITATIONS) and papers (TODO-CITATIONS) describing specific vunerabilities in zero-knowledge papers and repositories associated to improper application of the Fiat-Shamir heuristics.
+In a theoretical sense, a system is vunerable to a malicious Prover when the Verifier's challenges are simulated using weak Fiat-Shamir.
+In a much more understandable sense, the challenges are generated without fixing all of the values (especially the public parameters).
+
+Trail of Bits coined this vunerability as **FROZEN Heart**.
+Frozen comes from the phrase "FoRging Of ZEro kNoledge proofs",
+and Fiat-Shamir is the "heart" of transforming an interactive protocol to non-interactive procotol.
+
+### Example 1 - The Schnorr Protocol
+The Schnorr protocol is the simplest interactive protocol the vunerability of applying weak Fiat-Shamir.
+
+TODO-add motivation for Schnorr protocol
+
+|Prover| | Verifier|
+|----|----|----|
+|$t \in_R \mathbb{Z}_p$,<br> $T := g^t$|    |    |
+|    | $T \rightarrow$| |
+|  |  | $c \in_R \mathbb{Z}_p$|
+|  | $\leftarrow c$ |
+| $z := t + xc$ | | |
+| | $z \rightarrow$ | |
+| | | output 1 provided <br> $g^z == T X^c$|
+
+TODO - more explanation
+
+When the strong Fiat-Shamir heuristics is applied,
+the challenge $c = Hash(g|X|T)$.
+This choice of $c$ provides security since it should be 'impossible' to find collisions for the outputs of $Hash$.
+Thus, $c$ fixes the group elements $g$, $X$ and $T$.
+
+Note that the elements that would be neglected in applying weak Fiat-Shamir are $g$ and $X$.
+Now, we examine a couple variations of applying weak Fiat-Shamir.
+
+#### Example 1 - Approach 1
+In this first approach, we will omit the generator $g \in \mathbb{G}$ from the computation for the challenge $c$.
+That is, $c = Hash(X,T)$.
+
+A malicious Prover completes the transcript for the Schnorr protocol by selecting any $z \in_R \mathbb{Z}_p$.
+At this point, the generator $g$ has not been selected.
+But, the malicious Prover needs the transcript $(T,c,z)$ to satisfy $g^z == TX^c$.
+Hence, the malicious Prover takes $g = (TX^c)^{z^{-1}}.$
+
+#### Example 1 - Approach 2
+In our second approach, we omit the public address $X \in \mathbb{G}$ from the computation for the challenge $c$.
+That is, $c = Hash(g,T)$.
+
+As with the previous example, the malicious Prover takes a Schnorr transcript $(T,c,z)$ where $z \in_R \mathbb{Z}_p$.
+It is necessary for the malicious Prover to find a value $X$ so that $g^z == TX^c$.
+This can be acheived by taking $X = (g^z T^{-1})^{c^{-1}}$.
+
+### Example 2 - 
+TODO
+
+The transformation of 
+
+Sigmabus mentions incorrect usage
+What about one of the other 
+Last challenge attack from Open-Zip
+
+## References
+[1] - [Frozen Heart - Part 1](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/)
+[2] - [Frozen Heart - Part 2](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/)
+[3] - [Frozen Heart - Part 3](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/)
+[4] - [Frozen Heart - Part 4](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/)
+[5] - [The Last Challenge Attack Blog](https://blog.openzeppelin.com/the-last-challenge-attack)
+[6] - [The Last Challenge Attack](https://eprint.iacr.org/2024/398)
+[7] - Schnorr
+[8] - Other example?
+[9] - Weak Fiat Shamir?
