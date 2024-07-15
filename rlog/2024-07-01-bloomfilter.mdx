@@ -1,29 +1,28 @@
 ---
-title: 'Membership with Bloom Filters'
-date: 2024-06-13 12:00:00
+title: 'Membership with Bloom Filters and Cuckoo Filters'
+date: 2024-07-15 12:00:00
 authors: marvin
 published: false
-slug: dr
+slug: membership-with-bloom-filters-and-cuckoo-filters
 categories: research
 
 toc_min_heading_level: 2
 toc_max_heading_level: 4
 ---
 
-Improving on the previous version of RLN by allowing dynamic epoch sizes.
+We examine two data structures: bloom filters and cuckoo filters.
+Additionally, examine their use in RLN.
 
 <!--truncate-->
 
-## Membership with Bloom Filters
+## Membership with Bloom Filters and Cuckoo Filters
 
 The ability to efficiently query the membership of an element in a given data set is crucial.
 In certain applications, it is more important to output a result quickly rather than have a 'perfect' result.
 In particular, false-positives may be an acceptable tradeoff for speed.
-In this blog, we examine Bloom filters.
-Bloom filters are a data structure that can be used for membership proofs.
+In this blog, we examine data Bloom filters and Cuckoo filters.
+Both of these filters are data structure that can be used for membership proofs.
 
-
-## Introduction
 Everyone is familiar with the process of creating a new account for a variety of websites whether it is an e-mail account or social media account.
 Consider when you enter your desired username.
 Many sites provide real-time feedback, as you type, on the availability of a given string.
@@ -31,17 +30,20 @@ In this scenario, it is necessary that the result is seemingly instant, regardle
 However, it is not important for the usernames that are flagged as unavailable are, in fact, in use.
 That is, it is sufficient to have a probabilistic check for membership.
 
-**Bloom filters** is a data structure that can be used to accumulate an arbitrary amount of data with a fixed amount of space.
-Specifically, the associated Bloom filter $B$ for a digest of data $D$ can be queried to determine whether an element is (possibly) a member of $D$:
+**Bloom filters** and *Cuckoo filters** are data structures can be used to accumulate data with a fixed amount of space.
+The associated filter $F$ for a digest of data $D$ can be queried to determine whether an element is (possibly) a member of $D$:
 
 - **0:** The queried element is definitely not a member of digest $D$.
 - **1:** The entry is possibly a member of the digest $D$.
 
-The algorithms associated to Bloom filters, that we will discuss shortly, are deterministic.
+The algorithms associated to Bloom filters and Cuckoo filters, that we will discuss shortly, are deterministic.
 The possibility of false-positives arises from the query algorithm.
 
-### Setup and Algorithms
-A Bloom filter consists of a binary string ${\bf{v}} \in \{0,1\}^n$ and $k$ hash functions $\{h_i: \{0,1\}^* \rightarrow \{0,\dots,n-1\}\}_{i=0}^{k-1}$.
+
+## Bloom Filters
+**Bloom filter** is a data structure that can be used to accumulate an arbitrary amount of data with a fixed amount of space.
+Bloom filters have been a popular data structure for proof of non-membership due to their small storage size.
+Specifically, a Bloom filter consists of a binary string ${\bf{v}} \in \{0,1\}^n$ and $k$ hash functions $\{h_i: \{0,1\}^* \rightarrow \{0,\dots,n-1\}\}_{i=0}^{k-1}$.
 We note that each hash function $h_i$ is used to determine an index of our binary string ${\bf{v}}$ to flip the associated bit to 1.
 The binary string ${\bf{v}}$ is initialized with every entry as 0.
 The hash functions do not need to be cryptographic hash functions.
@@ -106,8 +108,6 @@ $(1-e^{-\ell k/n})^k$.
 
 The following table provides a concrete values for these approximations.
 
-
-
 | $n$ | $k$ | $\ell$ | $(1-e^{-\ell k/n})^k$|
 | -------- | -------- | -------- | --- |
 | 32     |   3   |  3    | 0.01474 |
@@ -140,7 +140,32 @@ However, by losing constant space, we gain 'infinity' scalability.
 ## Cuckoo Filters
 A Cuckoo Filter is a data structure for probabilistic membership proofs based on Cuckoo hash tables.
 The specific design goal for Cuckoo filters is to address the inability to remove elements from a Bloom Filter.
+This is done by replacing a list of bits with a list of 'fingerprints.'
+A fingerprints can be thought of as the hash value for an entry in the digest.
+A Cuckoo filter is a fixed length list of 'fingerprints.'
+If the maximum number of entries that a Cuckoo filter can hold is $n$ and a fingerprint occupies $f$ bits,
+then the Cuckoo filter occupies $nf$ bits.
 
+Now, we describe the algorithms associated to the Cuckoo filter $C$ with hash function $hash(X)$ and fingerprint function $fingerprint(X)$.
+
+- **Append:** Suppose that we wish to add the element $x$ to the Cuckoo filter.
+    - If either position $i_x := hash(x)$ or $j_x := i \otimes hash(fingerprint(x))$ of $C$ is empty,
+then $fingerprint(x)$ is inserted into an empty position.
+    - If both $i_x$ and $j_x$ are occupied with a fingerprint that is distinct from $fingerprint(x)$,
+then we select either $i_x$ or $j_x$ to insert $fingerprint(x)$.
+The fingerprint that had previously occupied this position cannot be discarried.
+Instead, we insert this fingerprint to its alternate location.
+This reshuffling process either ends with fingerprints all having their own bucket, or one that cannot be inserted.
+In the case that we have a fingerprint that cannot be inserted, then the Cuckoo filter is overfilled.
+
+- **Query:** Suppose that we wish to query the Cuckoo filter for element $y$.
+    - Return 1 provided $fingerprint(y)$ is either in position $i_y$ or $j_y$.
+
+- **Delete:** Suppose that we wish to delete the element $y$ from the Cuckoo filter.
+    - If $y$ has been added to the Cuckoo filter, then fingerprint(y)$ is either in position $i_y$ or $j_y$.
+We remove $fingerprint(y)$ from the appropriate position.
+
+We note that false-positives in Cuckoo filters only occur when an element shares a fingerprint and hash with a value that has already been added to the Cuckoo filter.
 
 ### Example
 In this example, we will append the words $add$, $sum$, and $equal$ to a Cuckoo filter with 8 slots.
@@ -186,6 +211,7 @@ Cuckoo filters require significantly more space for $n$ items than Bloom filters
 The worst case append in Cuckoo filter is slower than append in Bloom filter.
 However, an append that does not require any shuffling in a Cuckoo filter can be quicker than appends in Bloom filters.
 Cuckoo filters make up for these disadvantages with quicker query time and the ability to delete entries.
+Further, the probability of false-positives for Cuckoo filters is lower than the probability of false-positives in Bloom filters.
 
 
 ## Filters with RLN
