@@ -11,7 +11,6 @@ toc_max_heading_level: 4
 ---
 
 We examine two data structures: bloom filters and cuckoo filters.
-Additionally, examine their use in RLN.
 
 <!--truncate-->
 
@@ -212,9 +211,6 @@ The worst case append in Cuckoo filter is slower than append in Bloom filter.
 However, an append that does not require any shuffling in a Cuckoo filter can be quicker than appends in Bloom filters.
 Cuckoo filters make up for these disadvantages with quicker query time and the ability to delete entries.
 Further, the probability of false-positives for Cuckoo filters is lower than the probability of false-positives in Bloom filters.
-
-
-## Filters with RLN
 
 ### References
 - [David Wagner's Lecture Notes on Bloom filters](https://people.eecs.berkeley.edu/~daw/teaching/cs170-s03/Notes/lecture10.pdf)
