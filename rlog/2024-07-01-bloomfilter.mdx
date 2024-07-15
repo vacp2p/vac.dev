@@ -131,10 +131,21 @@ This means that querying the sliding-window Bloom filter will yield different re
 
 This can be done with $k$ hash functions as we used earlier.
 Alternatively, Szepieniec and Værge proposed using the same hash function but to produce $k$ entries in the current window.
-Specifically, we obtain the bits we wish to flip to 1's for entry $x$ by computing $h(x || i)$ for each $i \in \{0,\dots, k-1\}$.
+Specifically, we obtain the bits we wish to flip to 1's by computing $h(X || i)$ for each $i \in \{0,\dots, k-1\}$ and $X$ as we will define next.
+For Sliding-Window Bloom filters, $X$ is more than just the element we wish to append to the filter.
+Instead, $X$ consists of the message $x$ and a timestamp $t$. 
+The timestamp $t$ is used to locate the correct window for bits as we see below:
+
+- **Append:** Suppose that we wish to add the element $x$ with timestamp $t$ to the Sliding-Window Bloom filter.
+    - Define the vector ${\bf{b}} \in \{0,\dots,n-1\}^k$ so that ${\bf{b}}[i] := h(x||t||i)$ for each $i \in \{0,\dots,k-1\}$.
+    - Update the binary string ${\bf{v}}[{\bf{b}}[i]+\lfloor t/b \rfloor s] \leftarrow 1$ for each $i \in \{0,\dots,k-1\}$.
+   
+- **Query:** Suppose that we wish to query the Bloom filter for element $y$ with timestamp $t$.
+    - Return 1 provided ${\bf{v}}[h(y||t||i) + \lfloor t/b \rfloor s]] = 1$ for every $i \in \{0,\dots,k-1\}$. Otherwise, return 0.
+    
 
 By incorporating a shifting window, we maintain the efficient query and appending at the cost of constant space.
-However, by losing constant space, we gain 'infinity' scalability.
+However, by losing constant space, we gain 'infinite' scalability.
 
 ## Cuckoo Filters
 A Cuckoo Filter is a data structure for probabilistic membership proofs based on Cuckoo hash tables.
