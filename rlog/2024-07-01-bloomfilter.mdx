@@ -141,6 +141,7 @@ However, by losing constant space, we gain 'infinity' scalability.
 A Cuckoo Filter is a data structure for probabilistic membership proofs based on Cuckoo hash tables.
 The specific design goal for Cuckoo filters is to address the inability to remove elements from a Bloom Filter.
 
+
 ### Example
 In this example, we will append the words $add$, $sum$, and $equal$ to a Cuckoo filter with 8 slots.
 
@@ -172,7 +173,24 @@ This leaves us with the Cuckoo filter:
 |---|---|---|---|---|---|---|---|
 | |$add$|$equal$|||$sum$|| |
 
+### Complexity
+Notice that deletions and queries to Cuckoo filters are done in constant time.
+Specifically, only two locations need to be checked for any data $x$.
+Appends may require shuffling previously added elements to their alternate locations.
+As such, append does not run in constant-time.
+
+## Bloom Filters vs Cuckoo Filters
+The design of Bloom filters is focused on space-efficiency and a quick query time.
+Even though Cuckoo filters occupy constant space,
+Cuckoo filters require significantly more space for $n$ items than Bloom filters.
+The worst case append in Cuckoo filter is slower than append in Bloom filter.
+However, an append that does not require any shuffling in a Cuckoo filter can be quicker than appends in Bloom filters.
+Cuckoo filters make up for these disadvantages with quicker query time and the ability to delete entries.
+
+
+## Filters with RLN
 
 ### References
 - [David Wagner's Lecture Notes on Bloom filters](https://people.eecs.berkeley.edu/~daw/teaching/cs170-s03/Notes/lecture10.pdf)
 - [Mutator Sets and their Application to Scalable Privacy](https://eprint.iacr.org/2023/1208)
+- [Cuckoo Filter: Practically Better than Bloom](https://www.cs.cmu.edu/~dga/papers/cuckoo-conext2014.pdf)
