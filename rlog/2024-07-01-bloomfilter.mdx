@@ -133,7 +133,7 @@ This can be done with $k$ hash functions as we used earlier.
 Alternatively, Szepieniec and Værge proposed using the same hash function but to produce $k$ entries in the current window.
 Specifically, we obtain the bits we wish to flip to 1's by computing $h(X || i)$ for each $i \in \{0,\dots, k-1\}$ and $X$ as we will define next.
 For Sliding-Window Bloom filters, $X$ is more than just the element we wish to append to the filter.
-Instead, $X$ consists of the message $x$ and a timestamp $t$. 
+Instead, $X$ consists of the element $x$ and a timestamp $t$. 
 The timestamp $t$ is used to locate the correct window for bits as we see below:
 
 - **Append:** Suppose that we wish to add the element $x$ with timestamp $t$ to the Sliding-Window Bloom filter.
