@@ -1,6 +1,6 @@
 ---
 title: 'Membership with Bloom Filters and Cuckoo Filters'
-date: 2024-07-17 12:00:00
+date: 2024-07-18 12:00:00
 authors: marvin
 published: false
 slug: membership-with-bloom-filters-and-cuckoo-filters
@@ -71,17 +71,20 @@ Suppose that $k = 3$ and $n = 10$.
 Our Bloom filter is initialized as $\bf{v} = \begin{pmatrix}0&0&0&0&0&0&0&0&0&0\end{pmatrix}.$
 Now, we will append the words $add$, $sum$, and $equal$.
 Suppose that
-\begin{array}{lll}
+
+$\begin{matrix}
 h_0(add) = 1 & h_1(add) = 4 & h_2(add) = 7\\
 h_0(sum) = 9 & h_1(sum) = 2 & h_2(sum) = 1\\
 h_0(equal) = 5 & h_1(equal) = 8 & h_2(equal) = 0.
-\end{array}
+\end{matrix}$
 
 After appending these words, the Bloom filter is $\bf{v} = \begin{pmatrix}1&1&1&0&1&1&0&1&1&1\end{pmatrix}.$
 
 Now, suppose that we query the words $subtract$ and $multiple$ so that
-\begin{array}{lll} h_0(subtract) = 3 & h_1(subtract) = 5 & h_2(subtract) = 1\\ h_0(multiple) = 7 & h_1(multiple) = 1 & h_2(multiple) = 4\\
-\end{array}
+
+$\begin{matrix} h_0(subtract) = 3 & h_1(subtract) = 5 & h_2(subtract) = 1\\ h_0(multiple) = 7 & h_1(multiple) = 1 & h_2(multiple) = 4\\
+\end{matrix}$.
+
 The query for $subtract$ returns 0 since ${\bf{v}}[3]=0$.
 On the other hand, the query for $multiple$ returns 1 since ${\bf{v}}[1]=1, {\bf{v}}[4] = 1$, and ${\bf{v}}[7]=1$.
 Even though $multiple$ was not used to generate the Bloom filter ${\bf{v}}$, our query returns the false positive.
@@ -141,7 +144,7 @@ The timestamp $t$ is used to locate the correct window for bits, as we see below
     - Update the binary string ${\bf{v}}[{\bf{b}}[i]+\lfloor t/b \rfloor s] \leftarrow 1$ for each $i \in \{0,\dots,k-1\}$.
    
 - **Query:** Suppose that we wish to query the Bloom filter for element $y$ with timestamp $t$.
-    - Return 1 provided ${\bf{v}}[h(y||t||i) + \lfloor t/b \rfloor s]] = 1$ for every $i \in \{0,\dots,k-1\}$. Otherwise, return 0.
+    - Return 1 provided ${\bf{v}}[h(y||t||i) + \lfloor t/b \rfloor s] = 1$ for every $i \in \{0,\dots,k-1\}$. Otherwise, return 0.
     
 
 By incorporating a shifting window, we maintain efficient querying and appending at the cost of constant space.
@@ -160,20 +163,20 @@ Now, we describe the algorithms associated with the Cuckoo filter $C$ with hash 
 
 - **Append:** Suppose that we wish to add the element $x$ to the Cuckoo filter.
     - If either position $i_x := hash(x)$ or $j_x := i \otimes hash(fingerprint(x))$ of $C$ is empty,
-then $fingerprint(x)$ is inserted into an empty position.
+    then $fingerprint(x)$ is inserted into an empty position.
     - If both $i_x$ and $j_x$ are occupied with a fingerprint that is distinct from $fingerprint(x)$,
-then we select either $i_x$ or $j_x$ to insert $fingerprint(x)$.
-The fingerprint that had previously occupied this position cannot be discarried.
-Instead, we insert this fingerprint into its alternate location.
-This reshuffling process either ends with fingerprints all having their own bucket or one that cannot be inserted.
-In the case that we have a fingerprint that cannot be inserted, then the Cuckoo filter is overfilled.
+    then we select either $i_x$ or $j_x$ to insert $fingerprint(x)$.
+    The fingerprint that had previously occupied this position cannot be discarried.
+    Instead, we insert this fingerprint into its alternate location.
+    This reshuffling process either ends with fingerprints all having their own bucket or one that cannot be inserted.
+    In the case that we have a fingerprint that cannot be inserted, then the Cuckoo filter is overfilled.
 
 - **Query:** Suppose that we wish to query the Cuckoo filter for element $y$.
     - Return 1 provided $fingerprint(y)$ is either in position $i_y$ or $j_y$.
 
 - **Delete:** Suppose that we wish to delete the element $y$ from the Cuckoo filter.
-    - If $y$ has been added to the Cuckoo filter, then fingerprint(y)$ is either in position $i_y$ or $j_y$.
-We remove $fingerprint(y)$ from the appropriate position.
+    - If $y$ has been added to the Cuckoo filter, then $fingerprint(y)$ is either in position $i_y$ or $j_y$.
+      We remove $fingerprint(y)$ from the appropriate position.
 
 We note that false positives in Cuckoo filters only occur when an element shares a fingerprint and hash with a value that has already been added to the Cuckoo filter.
 
@@ -181,11 +184,10 @@ We note that false positives in Cuckoo filters only occur when an element shares
 In this example, we will append the words $add$, $sum$, and $equal$ to a Cuckoo filter with 8 slots.
 
 For each word $x$, we compute two indices:
-$$
-i_x := hash(x) \text{ and } j_x := hash(x) \otimes hash(fingerprint(x)). 
-$$
+$i_x := hash(x) \text{ and } j_x := hash(x) \otimes hash(fingerprint(x)).$
 Suppose that we have the following values for
 our words:
+
 | word | $i_x$ | $j_x$|
 |---|---|---|
 |$add$| $(0,1,0)$ | $(1,0,0)$ |
@@ -196,8 +198,8 @@ For clarity of the example, we append the words directly to the buckets instead 
 
 | |0 | 1 | 2 | 3 | 4| 5| 6| 7|
 |---|---|---|---|---|---|---|---|---|
-|append <br> $add$| ||$add$||||| |
-|append <br> $sum$| ||$add$|||$sum$|| |
+|append $add$| ||$add$||||| |
+|append $sum$| ||$add$|||$sum$|| |
 
 Notice that both of the buckets (2 and 5) that $equal$ can map to are occupied.
 So, we select one of these buckets (say 2) to insert $equal$ into.
