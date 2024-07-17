@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <filter id="grayscale">
+        <feColorMatrix type="saturate" values="0.10"/>
+    </filter>
+    <path fill="#000" d="M256 411.12L0 202.667 256 0z"/>
+    <path fill="#000" d="M256 411.12l256-208.453L256 0z"/>
+    <circle fill="#000" cx="256" cy="362.667" r="149.333"/>
+</svg>
