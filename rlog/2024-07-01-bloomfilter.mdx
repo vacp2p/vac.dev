@@ -1,6 +1,6 @@
 ---
 title: 'Membership with Bloom Filters and Cuckoo Filters'
-date: 2024-07-15 12:00:00
+date: 2024-07-17 12:00:00
 authors: marvin
 published: false
 slug: membership-with-bloom-filters-and-cuckoo-filters
@@ -19,7 +19,7 @@ We examine two data structures: Bloom filters and Cuckoo filters.
 The ability to efficiently query the membership of an element in a given data set is crucial.
 In certain applications, it is more important to output a result quickly than to have a 'perfect' result.
 In particular, false positives may be an acceptable tradeoff for speed.
-In this blog, we examine Bloom and Cuckoo data filters.
+In this blog, we examine [Bloom](https://dl.acm.org/doi/10.1145/362686.362692) and [Cuckoo](https://www.cs.cmu.edu/~dga/papers/cuckoo-conext2014.pdf) data filters.
 Both of these filters are data structures that can be used for membership proofs.
 
 Everyone is familiar with the process of creating a new account for various websites, whether it is an e-mail account or a social media account.
@@ -224,6 +224,7 @@ Cuckoo filters make up for these disadvantages with quicker query time and the a
 Further, the probability of false positives in Cuckoo filters is lower than the probability of false positives in Bloom filters.
 
 ### References
+- [Space/Time Trade-offs in Hash Coding with Allowable Errors](https://dl.acm.org/doi/10.1145/362686.362692)
 - [David Wagner's Lecture Notes on Bloom filters](https://people.eecs.berkeley.edu/~daw/teaching/cs170-s03/Notes/lecture10.pdf)
 - [Mutator Sets and their Application to Scalable Privacy](https://eprint.iacr.org/2023/1208)
 - [Cuckoo Filter: Practically Better than Bloom](https://www.cs.cmu.edu/~dga/papers/cuckoo-conext2014.pdf)
