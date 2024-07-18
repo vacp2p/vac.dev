@@ -227,33 +227,30 @@ Further, the probability of false positives in Cuckoo filters is lower than the 
 
 
 ## Combining Filters with RLN
-In previous a series of posts ([1](https://vac.dev/rlog/rln-anonymous-dos-prevention),[2](https://vac.dev/rlog/rln-v3/),[3](https://vac.dev/rlog/rln-light-verifiers)), various versons of rate limiting nullifiers (RLN) that are used in Waku.
-RLN uses sparse Merkle trees for the to compile the membership set.
-This results in issues for light clients to verify membership proofs.
-In [Verifying RLN Proofs in Light Clients with Subtrees](https://vac.dev/rlog/rln-light-verifiers), it is proposed to shift move the membership Merkle tree on-chain so that a light client does not need to construct the entire tree locally.
-This cannot be done with the naive approach as the gas limit for a single call in various chains is too restrictive for an appropriately sized tree.
+In a series of posts ([1](https://vac.dev/rlog/rln-anonymous-dos-prevention),[2](https://vac.dev/rlog/rln-v3/),[3](https://vac.dev/rlog/rln-light-verifiers)), various versons of rate limiting nullifiers (RLN) that are used by Waku has been discussed.
+RLN uses a sparse Merkle tree for the membership set.
+The computational power required to construct Merkle tree prevent light clients from participating in verifying membership proofs.
+In [Verifying RLN Proofs in Light Clients with Subtrees](https://vac.dev/rlog/rln-light-verifiers), it was proposed to move the membership set on-chain so that it would not be necessary for a light client to construct the entire Merkle tree locally.
+Unfortunately, the naive approach is not practical as the gas limit for a single call is too restrictive for an appropriately sized tree.
 Instead, it was proposed to make utilize of subtrees.
-
-In this section, we provide a discussion of using either Bloom or Cuckoo filters for RLN.
+In this section, we provide a discussion of an alternate solution for light clients by using filters for the membership set.
 The two [parts of RLN](https://rate-limiting-nullifier.github.io/rln-docs/rln_in_details.html) that we will focus on are user registration and deletion.
 
-Both filters support user registration as this is an append.
-The fixed size of Bloom and Cuckoo filters would restrict the growth of the number of users that can register.
-This can be migitated by using Sliding-Window Bloom filter as this can continue to scale.
-In this case, a user would maintain the epoch for when they registered.
-The techniques employed for Sliding-Window Bloom filter could be modified for Cuckoo filters as well.
-Registration of new users to Bloom filters can be done in constant time which is an improvement is a significant improve over appending to subtrees.
-Unfortunately, registration to Cuckoo filters cannot be as easily computed.
+Both Bloom and Cuckoo filters support user registration as this is can be done as an append.
+The fixed size of these filters would restrict the total number of users that can register.
+This can be migitated by using Sliding-Window Bloom filter as this supports system growth.
+The Sliding-Window can be adapted to Cuckoo filters as well.
+In the case of a Sliding-Window filter, an user would maintain the epoch of when they registered.
+The registration of new users to Bloom filters can be done in constant time which is a significant improvement over appending to subtrees.
+Unfortunately, the complexity of registration to Cuckoo filters cannot be as easily computed.
 
+An user could be slashed from the RLN by sending too many messages in a given epoch.
+Unfortunately, Bloom filters do not support the deletion of members.
+Luckily, Cuckoo filters allow for deletions that can performed in constant time.
 
-An user could be slashed by sending too many messages in a given epoch.
-Unfortunately, Bloom filters do not support deletions.
-Cuckoo filters allow for deletions, and such could be used for light clients.
-Deletions from a Cuckoo filter can be done in constant time.
-
-Cuckoo filters can be used to produce proofs of membership that a light client can used to verify.
-These proofs are not a substitute to proofs that a heavy client can verify.
-However, with the allowance of false positives, a light client can participate in verifying RLN proofs.
+Cuckoo filter that uses Sliding-Window could be used so that light clients are able to verify proofs of membership in the RLN.
+These proofs are not a substitute to the usual proofs that a heavy client can verify due to the allowance of false positives.
+However, with the allowance of false positives, a light client can participate in verification RLN proofs in an efficient manner.
 
 
 ### References
