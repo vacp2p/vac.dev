@@ -229,7 +229,7 @@ Further, the probability of false positives in Cuckoo filters is lower than the 
 ## Combining Filters with RLN
 In a series of posts ([1](https://vac.dev/rlog/rln-anonymous-dos-prevention),[2](https://vac.dev/rlog/rln-v3/),[3](https://vac.dev/rlog/rln-light-verifiers)), various versons of rate limiting nullifiers (RLN) that are used by Waku has been discussed.
 RLN uses a sparse Merkle tree for the membership set.
-The computational power required to construct Merkle tree prevent light clients from participating in verifying membership proofs.
+The computational power required to construct the Merkle tree prevent light clients from participating in verifying membership proofs.
 In [Verifying RLN Proofs in Light Clients with Subtrees](https://vac.dev/rlog/rln-light-verifiers), it was proposed to move the membership set on-chain so that it would not be necessary for a light client to construct the entire Merkle tree locally.
 Unfortunately, the naive approach is not practical as the gas limit for a single call is too restrictive for an appropriately sized tree.
 Instead, it was proposed to make utilize of subtrees.
