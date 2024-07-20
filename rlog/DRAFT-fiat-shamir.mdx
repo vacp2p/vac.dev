@@ -10,13 +10,17 @@ categories: research
 toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
-# Blog - Fiat-Shamir Heuristics
+
+Abstract 
+<!--truncate-->
+
+## Blog - Fiat-Shamir Heuristics
 
 In the literature, zero-knowledge proofs (ZKPs) are often presented in an interactive form.
 That is, the arguments assume that the Prover and the Verifier are in active communication with each other.
 However, this is not a practical requirement for ZKPs in many applications. 
 
-## Cryptographic (?) Hash Functions
+### Cryptographic (?) Hash Functions
 We begin by reviewing the properties of cryptographic hash functions.
 A cryptographic hash function $H$ is a special function that takes in an arbitrary binary string and outputs a bit string of a constant length.
 Specifically,
@@ -29,16 +33,16 @@ Informally, the hash function $H$ satisfies the following properties:
 
 TODO: is cryptographic necessary???
 
-### Examples of Hash Functions
+#### Examples of Hash Functions
 TODO: algebraic vs regular???
 
-## Fiat-Shamir Heuristics
+### Fiat-Shamir Heuristics
 
 Elaborate on the importance of using hashes
 
 Strong vs Weak?
 
-## Improper Use of Fiat-Shamir?
+### Improper Use of Fiat-Shamir?
 
 A subtle issue with the application of Fiat-Shamir has been a point of discussion in recent years.
 Auditors such as [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have released blogs (TODO-CITATIONS) and papers (TODO-CITATIONS) describing specific vunerabilities in zero-knowledge papers and repositories associated to improper application of the Fiat-Shamir heuristics.
@@ -49,7 +53,7 @@ Trail of Bits coined this vunerability as **FROZEN Heart**.
 Frozen comes from the phrase "FoRging Of ZEro kNoledge proofs",
 and Fiat-Shamir is the "heart" of transforming an interactive protocol to non-interactive procotol.
 
-### Example 1 - The Schnorr Protocol
+#### Example 1 - The Schnorr Protocol
 The Schnorr protocol is the simplest interactive protocol the vunerability of applying weak Fiat-Shamir.
 
 TODO-add motivation for Schnorr protocol
@@ -91,7 +95,7 @@ As with the previous example, the malicious Prover takes a Schnorr transcript $(
 It is necessary for the malicious Prover to find a value $X$ so that $g^z == TX^c$.
 This can be acheived by taking $X = (g^z T^{-1})^{c^{-1}}$.
 
-### Example 2 - 
+#### Example 2 - 
 TODO
 
 The transformation of 
@@ -100,7 +104,7 @@ Sigmabus mentions incorrect usage
 What about one of the other 
 Last challenge attack from Open-Zip
 
-## References
+### References
 - [How to Prove Yourself: Practical Solutions to Identification and Signature Problems](https://dl.acm.org/doi/10.5555/36664.36676)
 - [Frozen Heart - Part 1](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/)
 - [Frozen Heart - Part 2](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/)
