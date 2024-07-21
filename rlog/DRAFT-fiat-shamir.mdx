@@ -16,15 +16,23 @@ Discussion on the conversion of interactive protocols to noninteractive protocol
 
 ## Blog - Fiat-Shamir Heuristics
 
-Zero-knowledge proofs (ZKPs) are often presented as interactive protocols.
+Interactive protocols is a class of protocols that consist of two parties: the Prover and the Verifier.
+The Prover tries to convince the Verifier of a given claim.
+For example, the Prover may need to convince the Verifier that she owns a specific UTXO.
+In many instances, there is information that the Prover does not wish to reveal to the Verifier.
+For our example, it is critical that the Prover does not provide the Verifier with the private key associated to the UTXO.
+In addition to the Prover's claim and secret data, there is additional data called public parameters that the claimed data is given in terms of.
+The public parameters can be thought of as the basis for all similar claims.
+
 In interactive protocols, the Prover and the Verifier are in active communication.
-However, this is not practical for many applications.
-For decentralized systems, it is necessary for the Prover to produce a proof on their own that any party can verify.
-To achieve this, it is necessary for the Prover to produce the Verifier's messages in such a way that the Prover cannot manipulate these messages.
+Specifically, the Prover and the Verifier exchange messages so that the Verifier can validate the Prover's claim.
+This communication is not practical for many applications.
+In decentralized systems, it is necessary that the Prover produces proofs on their own that any party can verify.
+To achieve this, it is necessary for the Prover to generate the Verifier's messages in such a way that the Prover cannot manipulate the Verifier's messages for her benefit.
 The [Fiat-Shamir heuristic](https://dl.acm.org/doi/10.5555/36664.36676) is used for this purpose.
 In this document, we provide a discussion on the Fiat-Shamir heuristic, and known pitfalls of its application.
 
-### Cryptographic (?) Hash Functions
+### Hash Functions
 We begin by reviewing the properties of cryptographic hash functions.
 A hash function $H$ is a special function that takes in an arbitrary binary string and outputs a bit string of a constant length.
 Specifically,
@@ -38,11 +46,26 @@ Informally, a cryptographic hash function $H$ satisfies the following properties
 
 Commonly used hash functions include SHA256, Keccak, and Poseidon.
 
-### Fiat-Shamir Heuristics
+### Fiat-Shamir heuristic (TODO: RETURN HERE)
+Fiat-Shamir heuristic is a technique used to convert an interactive protocol to a noninteractive protocol.
+This is done by replacing the Verifier's messages in the interactive protocol with hash values.
 
-Elaborate on the importance of using hashes
+Specifically, given a hash function $H$.
+The Fiat-Shamir heuristic for the interactive protocol $\Pi$ by $H$ consists of the following algorithms:
+- $\tr \leftarrow \prove(\pp,x;w)$:
+    The Prover generates her commitments and responses as she would have in $\Pi$.
+    Additionally, she simulates any of the Verifier's challenges by evaluating $H$ on the concatenation of all of the public values  (including public parameters $\pp$) up to the current challenges.
+- $b \in \{\acc,\rej\} \leftarrow \verify(\pp,x,\tr)$: 
+    If the transcript $\tr$ is an accepting transcript for the protocol $\Pi$ and each challenge is generated appropriately by the hash $H$, then the algorithm outputs $\acc$.
+    Otherwise, the algorithm outputs $\rej$.
 
-Strong vs Weak?
+
+TODO: Elaborate on the importance of using hashes
+
+In the case of $\Sigma$-protocols,
+Bernhard et al. \cite{pitfalls_FS} refer to
+Definition \ref{defn:fs} as the strong Fiat-Shamir transformation. The weak version does not include the public parameters and the statement in the hash evaluation. Bernhard et al. provide a discussion of the insecurities that arise from use of the weak Fiat-Shamir transformation. 
+The following example illustrates the necessity of the inclusion of the public parameters and statement.
 
 ### Improper Use of Fiat-Shamir?
 
