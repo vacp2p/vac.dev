@@ -11,30 +11,32 @@ toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
 
-Abstract 
+Discussion on the conversion of interactive protocols to noninteractive protocols.
 <!--truncate-->
 
 ## Blog - Fiat-Shamir Heuristics
 
-In the literature, zero-knowledge proofs (ZKPs) are often presented in an interactive form.
-That is, the arguments assume that the Prover and the Verifier are in active communication with each other.
-However, this is not a practical requirement for ZKPs in many applications. 
+Zero-knowledge proofs (ZKPs) are often presented as interactive protocols.
+In interactive protocols, the Prover and the Verifier are in active communication.
+However, this is not practical for many applications.
+For decentralized systems, it is necessary for the Prover to produce a proof on their own that any party can verify.
+To achieve this, it is necessary for the Prover to produce the Verifier's messages in such a way that the Prover cannot manipulate these messages.
+The [Fiat-Shamir heuristic](https://dl.acm.org/doi/10.5555/36664.36676) is used for this purpose.
+In this document, we provide a discussion on the Fiat-Shamir heuristic, and known pitfalls of its application.
 
 ### Cryptographic (?) Hash Functions
 We begin by reviewing the properties of cryptographic hash functions.
-A cryptographic hash function $H$ is a special function that takes in an arbitrary binary string and outputs a bit string of a constant length.
+A hash function $H$ is a special function that takes in an arbitrary binary string and outputs a bit string of a constant length.
 Specifically,
 $H : \{0,1\}^* \rightarrow \{0,1\}^n$.
 
-Informally, the hash function $H$ satisfies the following properties:
-- The hash $H({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
-- Let ${\bf{y}}$ be a binary string of length $n$. It should be 'impossible' to find some binary string ${\bf{x}}$ so that ${\bf{y}} = H({\bf{x}})$. 
-- It should be 'impossible' to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $H({\bf{x}_1}) = H({\bf{x}_2}).$
+Informally, a cryptographic hash function $H$ satisfies the following properties:
+- **Succinct**: The hash $H({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
+- **Preimage Resistance**: Let ${\bf{y}}$ be a binary string of length $n$.
+    It should be 'impossible' to find some binary string ${\bf{x}}$ so that ${\bf{y}} = H({\bf{x}})$. 
+- **Collision Resistance**: It should be 'impossible' to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $H({\bf{x}_1}) = H({\bf{x}_2}).$
 
-TODO: is cryptographic necessary???
-
-#### Examples of Hash Functions
-TODO: algebraic vs regular???
+Commonly used hash functions include SHA256, Keccak, and Poseidon.
 
 ### Fiat-Shamir Heuristics
 
@@ -44,8 +46,8 @@ Strong vs Weak?
 
 ### Improper Use of Fiat-Shamir?
 
-A subtle issue with the application of Fiat-Shamir has been a point of discussion in recent years.
-Auditors such as [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have released blogs (TODO-CITATIONS) and papers (TODO-CITATIONS) describing specific vunerabilities in zero-knowledge papers and repositories associated to improper application of the Fiat-Shamir heuristics.
+A subtle but serious issue that can occur in the application of the Fiat-Shamir heuristic has been a point of discussion for the past few years.
+Auditors from [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have released blogs (TODO-CITATIONS) and papers (TODO-CITATIONS) describing specific vunerabilities in zero-knowledge papers and repositories associated to improper application of the Fiat-Shamir heuristics.
 In a theoretical sense, a system is vunerable to a malicious Prover when the Verifier's challenges are simulated using weak Fiat-Shamir.
 In a much more understandable sense, the challenges are generated without fixing all of the values (especially the public parameters).
 
