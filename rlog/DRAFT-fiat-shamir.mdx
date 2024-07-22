@@ -14,7 +14,7 @@ toc_max_heading_level: 5
 Discussion on the conversion of interactive protocols to noninteractive protocols.
 <!--truncate-->
 
-## Blog - Fiat-Shamir Heuristics
+## Introduction
 
 Interactive protocols is a class of protocols that consist of two parties: the Prover and the Verifier.
 The Prover tries to convince the Verifier of a given claim.
@@ -46,33 +46,41 @@ Informally, a cryptographic hash function $H$ satisfies the following properties
 
 Commonly used hash functions include SHA256, Keccak, and Poseidon.
 
-### Fiat-Shamir heuristic (TODO: RETURN HERE)
-Fiat-Shamir heuristic is a technique used to convert an interactive protocol to a noninteractive protocol.
-This is done by replacing the Verifier's messages in the interactive protocol with hash values.
+### The Fiat-Shamir heuristic
+The Fiat-Shamir heuristic is the technique used to convert an interactive protocol to a noninteractive protocol.
+This is done by replacing the Verifier's messages with hash values.
+Specifically, the Prover generates the Verifier's message evaluating a hash function $H$ on the concatenation of all values exchanged thus far in the protocol.
+If $m_0, \dots, m_t$ denote the public values in the protocol thus far,
+then the Verifier's message is computed as $m_{t+1} := H(m_0|| \cdots || m_t)$.
 
-Specifically, given a hash function $H$.
-The Fiat-Shamir heuristic for the interactive protocol $\Pi$ by $H$ consists of the following algorithms:
-- $\tr \leftarrow \prove(\pp,x;w)$:
-    The Prover generates her commitments and responses as she would have in $\Pi$.
-    Additionally, she simulates any of the Verifier's challenges by evaluating $H$ on the concatenation of all of the public values  (including public parameters $\pp$) up to the current challenges.
-- $b \in \{\acc,\rej\} \leftarrow \verify(\pp,x,\tr)$: 
-    If the transcript $\tr$ is an accepting transcript for the protocol $\Pi$ and each challenge is generated appropriately by the hash $H$, then the algorithm outputs $\acc$.
-    Otherwise, the algorithm outputs $\rej$.
+Since $H$ can be efficiently computed, and the messages $m_0, \dots, m_t$ are public, then any verifying party can compute $m_{t+1}$.
+Critically, since $H$ is preimage resistant and collision resistant,
+the Prover cannot manipulate her choices of messages $m_0,\dots, m_t$ to 'predict' $m_{t+1}$.
+Hence, verifying parties can trust that $m_{t+1}$ is sufficiently random with respect to the preceding messages.
 
+### Improper Use of Fiat-Shamir?
 
-TODO: Elaborate on the importance of using hashes
+The Fiat-Shamir heuristic appears to be a fairly straight-forward technique to implement.
+However, a subtle but serious issue that can occur in the application of the Fiat-Shamir heuristic has been a point of discussion for the past few years.
+The issue concerns what messages are included in the hash.
+In particular, are the public parameters used to compute the hash value?
+
+TODO - include WEAK FS here.
+
+Auditors from [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have 
+released blogs ([2](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/),
+ [3](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/),
+ [4](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/), [5](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/), [OZ](https://blog.openzeppelin.com/the-last-challenge-attack))
+ and papers ([6](https://eprint.iacr.org/2023/691), [8](https://eprint.iacr.org/2024/398)) 
+ describing specific vunerabilities in zero-knowledge papers and repositories associated to improper application of the Fiat-Shamir heuristics.
+In a theoretical sense, a system is vunerable to a malicious Prover when the Verifier's messaged are produced using weak Fiat-Shamir.
+In a much more understandable sense, the Verifier's messages are generated without fixing all of the values (especially the public parameters).
 
 In the case of $\Sigma$-protocols,
 Bernhard et al. \cite{pitfalls_FS} refer to
 Definition \ref{defn:fs} as the strong Fiat-Shamir transformation. The weak version does not include the public parameters and the statement in the hash evaluation. Bernhard et al. provide a discussion of the insecurities that arise from use of the weak Fiat-Shamir transformation. 
 The following example illustrates the necessity of the inclusion of the public parameters and statement.
 
-### Improper Use of Fiat-Shamir?
-
-A subtle but serious issue that can occur in the application of the Fiat-Shamir heuristic has been a point of discussion for the past few years.
-Auditors from [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have released blogs (TODO-CITATIONS) and papers (TODO-CITATIONS) describing specific vunerabilities in zero-knowledge papers and repositories associated to improper application of the Fiat-Shamir heuristics.
-In a theoretical sense, a system is vunerable to a malicious Prover when the Verifier's challenges are simulated using weak Fiat-Shamir.
-In a much more understandable sense, the challenges are generated without fixing all of the values (especially the public parameters).
 
 Trail of Bits coined this vunerability as **FROZEN Heart**.
 Frozen comes from the phrase "FoRging Of ZEro kNoledge proofs",
@@ -130,14 +138,14 @@ What about one of the other
 Last challenge attack from Open-Zip
 
 ### References
-- [How to Prove Yourself: Practical Solutions to Identification and Signature Problems](https://dl.acm.org/doi/10.5555/36664.36676)
-- [Frozen Heart - Part 1](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/)
-- [Frozen Heart - Part 2](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/)
-- [Frozen Heart - Part 3](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/)
-- [Frozen Heart - Part 4](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/)
-- [Weak Fiat-Shamir Attacks on Modern Proof Systems](https://eprint.iacr.org/2023/691)
-- [The Last Challenge Attack Blog](https://blog.openzeppelin.com/the-last-challenge-attack)
-- [The Last Challenge Attack](https://eprint.iacr.org/2024/398)
-- [Efficient Identification and Signatures for Smart Cards](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)
-- [Wallet Databases with Observers](https://link.springer.com/content/pdf/10.1007/3-540-48071-4_7.pdf)
-- [How not to Prove Yourself: Pitfalls of the Fiat-Shamir Heuristic and Applications to Helios](https://eprint.iacr.org/2016/771.pdf)
+- 1. [How to Prove Yourself: Practical Solutions to Identification and Signature Problems](https://dl.acm.org/doi/10.5555/36664.36676)
+- 2. [Frozen Heart - Part 1](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/)
+- 3. [Frozen Heart - Part 2](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/)
+- 4. [Frozen Heart - Part 3](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/)
+- 5. [Frozen Heart - Part 4](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/)
+- 6. [Weak Fiat-Shamir Attacks on Modern Proof Systems](https://eprint.iacr.org/2023/691)
+- 7. [The Last Challenge Attack Blog](https://blog.openzeppelin.com/the-last-challenge-attack)
+- 8. [The Last Challenge Attack](https://eprint.iacr.org/2024/398)
+- 9. [Efficient Identification and Signatures for Smart Cards](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)
+- 10. [Wallet Databases with Observers](https://link.springer.com/content/pdf/10.1007/3-540-48071-4_7.pdf)
+- 11. [How not to Prove Yourself: Pitfalls of the Fiat-Shamir Heuristic and Applications to Helios](https://eprint.iacr.org/2016/771.pdf)
