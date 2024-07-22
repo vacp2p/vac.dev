@@ -58,31 +58,28 @@ Critically, since $H$ is preimage resistant and collision resistant,
 the Prover cannot manipulate her choices of messages $m_0,\dots, m_t$ to 'predict' $m_{t+1}$.
 Hence, verifying parties can trust that $m_{t+1}$ is sufficiently random with respect to the preceding messages.
 
-### Improper Use of Fiat-Shamir?
+### Improper use of the Fiat-Shamir heuristic
 
 The Fiat-Shamir heuristic appears to be a fairly straight-forward technique to implement.
 However, a subtle but serious issue that can occur in the application of the Fiat-Shamir heuristic has been a point of discussion for the past few years.
 The issue concerns what messages are included in the hash.
 In particular, are the public parameters used to compute the hash value?
 
-TODO - include WEAK FS here.
+Bernhard et al. [11](https://eprint.iacr.org/2016/771.pdf) provide a discussion of Fiat-Shamir heuristic resticted to $\Sigma$-protocols.
+Bernhard et al. define two variants of the Fiat-Shamir heuristic: weak and strong.
+The strong Fiat-Shamir heuristic requires that the public parameters are included in the calculations of the Verifier's messages while the weak version does not.
+The values included in the evaluation of the hash fixes them throughout the protocol.
+This means that the Prover cannot retroactively change them.
 
-Auditors from [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have 
+The issue of weak vs strong Fiat-Shamir heuristic has persisted since Bernhard et al.'s paper. 
+In recent years, auditors from [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have 
 released blogs ([2](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/),
  [3](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/),
  [4](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/), [5](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/), [OZ](https://blog.openzeppelin.com/the-last-challenge-attack))
  and papers ([6](https://eprint.iacr.org/2023/691), [8](https://eprint.iacr.org/2024/398)) 
- describing specific vunerabilities in zero-knowledge papers and repositories associated to improper application of the Fiat-Shamir heuristics.
-In a theoretical sense, a system is vunerable to a malicious Prover when the Verifier's messaged are produced using weak Fiat-Shamir.
-In a much more understandable sense, the Verifier's messages are generated without fixing all of the values (especially the public parameters).
+ describing specific vunerabilities in zero-knowledge papers and repositories associated to the use of the weak Fiat-Shamir heuristic.
 
-In the case of $\Sigma$-protocols,
-Bernhard et al. \cite{pitfalls_FS} refer to
-Definition \ref{defn:fs} as the strong Fiat-Shamir transformation. The weak version does not include the public parameters and the statement in the hash evaluation. Bernhard et al. provide a discussion of the insecurities that arise from use of the weak Fiat-Shamir transformation. 
-The following example illustrates the necessity of the inclusion of the public parameters and statement.
-
-
-Trail of Bits coined this vunerability as **FROZEN Heart**.
+Trail of Bits coined the term **FROZEN Heart** to describe the use of weak Fiat-Shamir heuristic.
 Frozen comes from the phrase "FoRging Of ZEro kNoledge proofs",
 and Fiat-Shamir is the "heart" of transforming an interactive protocol to non-interactive procotol.
 
