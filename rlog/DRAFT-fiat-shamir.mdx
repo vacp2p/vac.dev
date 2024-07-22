@@ -105,25 +105,25 @@ When the strong Fiat-Shamir heuristic is applied, the message $c = Hash(g||X||T)
 This choice of $c$ provides security since it should be 'impossible' to find collisions for the outputs of $Hash$.
 Thus, $c$ fixes the group elements $g$, $X$ and $T$.
 
-Note that the elements that would be omitted in the hash by applying weak Fiat-Shamir are $g$ and $X$.
-Next, we examine a couple variations of applying weak Fiat-Shamir.
+Note that the elements that would be omitted in the hash by applying weak Fiat-Shamir heuristic are $g$ and $X$.
+Next, we examine a couple variations of applying weak Fiat-Shamir heuristic.
 
 ##### Example 1 - Approach 1
-In this first approach, we will omit the generator $g \in \mathbb{G}$ from the computation for the challenge $c$.
-That is, $c = Hash(X,T)$.
+In the first approach, we will omit the generator $g \in \mathbb{G}$ from the computation for the message $c$.
+That is, $c = Hash(X||T)$.
 
 A malicious Prover completes the transcript for the Schnorr protocol by selecting any $z \in_R \mathbb{Z}_p$.
 At this point, the generator $g$ has not been selected.
 But, the malicious Prover needs the transcript $(T,c,z)$ to satisfy $g^z == TX^c$.
-Hence, the malicious Prover takes $g = (TX^c)^{z^{-1}}.$
+Hence, the malicious Prover can compute the generator $g = (TX^c)^{z^{-1}}.$
 
 ##### Example 1 - Approach 2
-In our second approach, we omit the public address $X \in \mathbb{G}$ from the computation for the challenge $c$.
+In our second approach, we omit the group element $X \in \mathbb{G}$ from the computation for the challenge $c$.
 That is, $c = Hash(g,T)$.
 
 As with the previous example, the malicious Prover takes a Schnorr transcript $(T,c,z)$ where $z \in_R \mathbb{Z}_p$.
 It is necessary for the malicious Prover to find a value $X$ so that $g^z == TX^c$.
-This can be acheived by taking $X = (g^z T^{-1})^{c^{-1}}$.
+This can be acheived by computing $X = (g^z T^{-1})^{c^{-1}}$.
 
 #### Example 2 - 
 TODO
@@ -131,7 +131,6 @@ TODO
 The transformation of 
 
 Sigmabus mentions incorrect usage
-What about one of the other 
 Last challenge attack from Open-Zip
 
 ### References
