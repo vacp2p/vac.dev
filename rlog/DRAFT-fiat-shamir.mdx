@@ -125,11 +125,43 @@ As with the previous example, the malicious Prover takes a Schnorr transcript $(
 It is necessary for the malicious Prover to find a value $X$ so that $g^z == TX^c$.
 This can be acheived by computing $X = (g^z T^{-1})^{c^{-1}}$.
 
-#### Example 2 - 
-TODO
+#### Example 2 - Chaum-Pedersen protocol
+TODO - motivation
+We say that $(u,v,w)$ is a DH-triple if and only if there exists some $x \in \mathbb{Z}_p$ so that $V = g^x$ and $W = U^x$.
+The Chaum-Pedersen protocol provides a framework that enables a Prover to convince a Verifier that she possesses such a $x$ for a claimed DH-triple $(U,V,W)$.
+The Chaum-Pedersen protocol proceeds as follows:
 
-The transformation of 
+|Prover| | Verifier|
+|----|----|----|
+|$t \in_R \mathbb{Z}_p$, $T := g^t$, $S := U^t$|    |    |
+|    | $T,S \rightarrow$| |
+|  |  | $c \in_R \mathbb{Z}_p$|
+|  | $\leftarrow c$ |
+| $z := t + xc$ | | |
+| | $z \rightarrow$ | |
+| | | output 1 provided $g^z == T V^c$, $U^z = SW^c$|
 
+The message $c = Hash(g||U||V||W||T||S)$ when the Prover applies the strong Fiat-Shamir heuristic.
+The properties of $Hash$ fixes the generator $g$ and the Prover's statement $(U,V,W)$.
+
+Now, we will examine the application of weak Fiat-Shamir heuristic.
+
+##### Example 2 - weak Fiat-Shamir heuristic
+The Verifier's message $c = Hash(T,S)$ when weak Fiat-Shamir heuristic is applied.
+The Prover's triple $(U,V,W)$ and the generator $g$ are not fixed by $c$.
+As such, a malicious Prover can generate values for $U,V,W$, and $g$ that satisfy the Verifier's identity checks.
+In the case of a malicious Prover, $T$ and $S$ are randomly group elements instead of being computed using a value $t$ that the Prover selected.
+This means a malicious Prover must randomly select the value $z$ as well.
+
+Given the values that have been fixed so far, each of the Verifier's identities consist of two unknowns.
+Hence, it is necessary to select one of these unknowns from each identity so that a malicious Prover can compute the last value.
+For instances, suppose that the malicious Prover randomly selects $V$ and $W$.
+The malicious Prover can compute $g = (T V^c)^{1/z}$ and $V = (SW^c)^{1/z}$.
+Thus, the malicious Prover has a claimed statement $(U,V,W)$ for generator $g$ that passes the Verifier's identities using weak Fiat-Shamir heuristic.
+
+The omission of any of the values $U,V,W,$ and $g$ in the computation of $c$ allows a malicious Prover to forge a proof.
+
+TODO:
 Sigmabus mentions incorrect usage
 Last challenge attack from Open-Zip
 
