@@ -1,0 +1,179 @@
+---
+title: 'Transforming an Interactive Protocol to a Noninteractive Protocol'
+date: 2024-07-01 12:00:00
+authors: marvin
+published: true
+slug: Fiat-Shaimr
+categories: research
+
+
+toc_min_heading_level: 2
+toc_max_heading_level: 5
+---
+
+Discussion on the conversion of interactive protocols to noninteractive protocols.
+<!--truncate-->
+
+## Introduction
+
+Interactive protocols is a class of protocols that consist of two parties: the Prover and the Verifier.
+The Prover tries to convince the Verifier of a given claim.
+For example, the Prover may need to convince the Verifier that she owns a specific UTXO.
+In many instances, there is information that the Prover does not wish to reveal to the Verifier.
+For our example, it is critical that the Prover does not provide the Verifier with the private key associated to the UTXO.
+In addition to the Prover's claim and secret data, there is additional data called public parameters that the claimed data is given in terms of.
+The public parameters can be thought of as the basis for all similar claims.
+
+In interactive protocols, the Prover and the Verifier are in active communication.
+Specifically, the Prover and the Verifier exchange messages so that the Verifier can validate the Prover's claim.
+This communication is not practical for many applications.
+In decentralized systems, it is necessary that the Prover produces proofs on their own that any party can verify.
+To achieve this, it is necessary for the Prover to generate the Verifier's messages in such a way that the Prover cannot manipulate the Verifier's messages for her benefit.
+The [Fiat-Shamir heuristic](https://dl.acm.org/doi/10.5555/36664.36676) is used for this purpose.
+In this document, we provide a discussion on the Fiat-Shamir heuristic, and known pitfalls of its application.
+
+### Hash Functions
+We begin by reviewing the properties of cryptographic hash functions.
+A hash function $Hash$ is a special function that takes in an arbitrary binary string and outputs a bit string of a constant length.
+Specifically,
+$Hash : \{0,1\}^* \rightarrow \{0,1\}^n$.
+
+Informally, a cryptographic hash function $Hash$ satisfies the following properties:
+- **Succinct**: The hash $Hash({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
+- **Preimage Resistance**: Let ${\bf{y}}$ be a binary string of length $n$.
+    It should be 'impossible' to find some binary string ${\bf{x}}$ so that ${\bf{y}} = Hash({\bf{x}})$. 
+- **Collision Resistance**: It should be 'impossible' to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $Hash({\bf{x}_1}) = Hash({\bf{x}_2}).$
+
+Commonly used hash functions include SHA256, Keccak, and Poseidon.
+
+### The Fiat-Shamir heuristic
+The Fiat-Shamir heuristic is the technique used to convert an interactive protocol to a noninteractive protocol.
+This is done by replacing the Verifier's messages with hash values.
+Specifically, the Prover generates the Verifier's message evaluating a hash function $Hash$ on the concatenation of all values exchanged thus far in the protocol.
+If $m_0, \dots, m_t$ denote the public values in the protocol thus far,
+then the Verifier's message is computed as $m_{t+1} := Hash(m_0|| \cdots || m_t)$.
+
+Since $Hash$ can be efficiently computed, and the messages $m_0, \dots, m_t$ are public, then any verifying party can compute $m_{t+1}$.
+Critically, since $Hash$ is preimage resistant and collision resistant,
+the Prover cannot manipulate her choices of messages $m_0,\dots, m_t$ to 'predict' $m_{t+1}$.
+Hence, verifying parties can trust that $m_{t+1}$ is sufficiently random with respect to the preceding messages.
+
+### Improper use of the Fiat-Shamir heuristic
+
+The Fiat-Shamir heuristic appears to be a fairly straight-forward technique to implement.
+However, a subtle but serious issue that can occur in the application of the Fiat-Shamir heuristic has been a point of discussion for the past few years.
+The issue concerns what messages are included in the hash.
+In particular, are the public parameters used to compute the hash value?
+
+Bernhard et al. ([11](https://eprint.iacr.org/2016/771.pdf)) provide a discussion of Fiat-Shamir heuristic resticted to $\Sigma$-protocols.
+Bernhard et al. define two variants of the Fiat-Shamir heuristic: weak and strong.
+The strong Fiat-Shamir heuristic requires that the public parameters are included in the calculations of the Verifier's messages while the weak version does not.
+The values included in the evaluation of the hash fixes them throughout the protocol.
+This means that the Prover cannot retroactively change them.
+
+The issue of weak vs strong Fiat-Shamir heuristic has persisted since Bernhard et al.'s paper. 
+In recent years, auditors from [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have 
+released blogs ([2](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/),
+ [3](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/),
+ [4](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/), [5](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/), [7](https://blog.openzeppelin.com/the-last-challenge-attack))
+ and papers ([6](https://eprint.iacr.org/2023/691), [8](https://eprint.iacr.org/2024/398)) 
+ describing specific vunerabilities in zero-knowledge papers and repositories associated to the use of the weak Fiat-Shamir heuristic.
+
+Trail of Bits coined the term **FROZEN Heart** to describe the use of weak Fiat-Shamir heuristic.
+Frozen comes from the phrase "FoRging Of ZEro kNoledge proofs",
+and Fiat-Shamir is the "heart" of transforming an interactive protocol to noninteractive procotol.
+
+#### Example 1 - The Schnorr Protocol
+The Schnorr protocol ([9](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)) is the first example of a $\Sigma$-protocol that one studies.
+Let $\mathbb{G}$ be a multiplicative group of prime order $p$.
+The Schnorr protocol provides a framework that enables the Prover to convince the Verifier that: for a given $g, X \in \mathbb{G}$, the Prover possesses $x \in \mathbb{Z}_p$ so that $X = g^x$.
+The Schnorr protocol proceeds as follows:
+
+|Prover| | Verifier|
+|----|----|----|
+|$t \in_R \mathbb{Z}_p$, $T := g^t$|    |    |
+|    | $T \rightarrow$| |
+|  |  | $c \in_R \mathbb{Z}_p$|
+|  | $\leftarrow c$ |
+| $z := t + xc$ | | |
+| | $z \rightarrow$ | |
+| | | output 1 provided $g^z == T X^c$|
+
+The Schnorr protocol can be used to convince the Verifier provided that the discrete logarithm is hard in $\mathbb{G}$.
+
+When the strong Fiat-Shamir heuristic is applied, the message $c = Hash(g||X||T)$.
+This choice of $c$ provides security since it should be 'impossible' to find collisions for the outputs of $Hash$.
+Thus, $c$ fixes the group elements $g$, $X$ and $T$.
+
+Note that the elements that would be omitted in the hash by applying weak Fiat-Shamir heuristic are $g$ and $X$.
+Next, we examine a couple variations of applying weak Fiat-Shamir heuristic.
+
+##### Example 1 - Approach 1
+In the first approach, we will omit the generator $g \in \mathbb{G}$ from the computation for the message $c$.
+That is, $c = Hash(X||T)$.
+
+A malicious Prover completes the transcript for the Schnorr protocol by selecting any $z \in_R \mathbb{Z}_p$.
+At this point, the generator $g$ has not been selected.
+But, the malicious Prover needs the transcript $(T,c,z)$ to satisfy $g^z == TX^c$.
+Hence, the malicious Prover can compute the generator $g = (TX^c)^{z^{-1}}.$
+
+##### Example 1 - Approach 2
+In our second approach, we omit the group element $X \in \mathbb{G}$ from the computation for the challenge $c$.
+That is, $c = Hash(g,T)$.
+
+As with the previous example, the malicious Prover takes a Schnorr transcript $(T,c,z)$ where $z \in_R \mathbb{Z}_p$.
+It is necessary for the malicious Prover to find a value $X$ so that $g^z == TX^c$.
+This can be acheived by computing $X = (g^z T^{-1})^{c^{-1}}$.
+
+#### Example 2 - Chaum-Pedersen protocol
+TODO - motivation
+We say that $(u,v,w)$ is a DH-triple if and only if there exists some $x \in \mathbb{Z}_p$ so that $V = g^x$ and $W = U^x$.
+The Chaum-Pedersen protocol provides a framework that enables a Prover to convince a Verifier that she possesses such a $x$ for a claimed DH-triple $(U,V,W)$.
+The Chaum-Pedersen protocol proceeds as follows:
+
+|Prover| | Verifier|
+|----|----|----|
+|$t \in_R \mathbb{Z}_p$, $T := g^t$, $S := U^t$|    |    |
+|    | $T,S \rightarrow$| |
+|  |  | $c \in_R \mathbb{Z}_p$|
+|  | $\leftarrow c$ |
+| $z := t + xc$ | | |
+| | $z \rightarrow$ | |
+| | | output 1 provided $g^z == T V^c$, $U^z = SW^c$|
+
+The message $c = Hash(g||U||V||W||T||S)$ when the Prover applies the strong Fiat-Shamir heuristic.
+The properties of $Hash$ fixes the generator $g$ and the Prover's statement $(U,V,W)$.
+
+Now, we will examine the application of weak Fiat-Shamir heuristic.
+
+##### Example 2 - weak Fiat-Shamir heuristic
+The Verifier's message $c = Hash(T,S)$ when weak Fiat-Shamir heuristic is applied.
+The Prover's triple $(U,V,W)$ and the generator $g$ are not fixed by $c$.
+As such, a malicious Prover can generate values for $U,V,W$, and $g$ that satisfy the Verifier's identity checks.
+In the case of a malicious Prover, $T$ and $S$ are randomly group elements instead of being computed using a value $t$ that the Prover selected.
+This means a malicious Prover must randomly select the value $z$ as well.
+
+Given the values that have been fixed so far, each of the Verifier's identities consist of two unknowns.
+Hence, it is necessary to select one of these unknowns from each identity so that a malicious Prover can compute the last value.
+For instances, suppose that the malicious Prover randomly selects $V$ and $W$.
+The malicious Prover can compute $g = (T V^c)^{1/z}$ and $V = (SW^c)^{1/z}$.
+Thus, the malicious Prover has a claimed statement $(U,V,W)$ for generator $g$ that passes the Verifier's identities using weak Fiat-Shamir heuristic.
+
+The omission of any of the values $U,V,W,$ and $g$ in the computation of $c$ allows a malicious Prover to forge a proof.
+
+TODO:
+Sigmabus mentions incorrect usage
+Last challenge attack from Open-Zip
+
+### References
+- 1. [How to Prove Yourself: Practical Solutions to Identification and Signature Problems](https://dl.acm.org/doi/10.5555/36664.36676)
+- 2. [Frozen Heart - Part 1](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/)
+- 3. [Frozen Heart - Part 2](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/)
+- 4. [Frozen Heart - Part 3](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/)
+- 5. [Frozen Heart - Part 4](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/)
+- 6. [Weak Fiat-Shamir Attacks on Modern Proof Systems](https://eprint.iacr.org/2023/691)
+- 7. [The Last Challenge Attack Blog](https://blog.openzeppelin.com/the-last-challenge-attack)
+- 8. [The Last Challenge Attack](https://eprint.iacr.org/2024/398)
+- 9. [Efficient Identification and Signatures for Smart Cards](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)
+- 10. [Wallet Databases with Observers](https://link.springer.com/content/pdf/10.1007/3-540-48071-4_7.pdf)
+- 11. [How not to Prove Yourself: Pitfalls of the Fiat-Shamir Heuristic and Applications to Helios](https://eprint.iacr.org/2016/771.pdf)
