@@ -305,27 +305,30 @@ However, carefully calibrating the deferring interval (based on message size) an
 #### c. IDONTWANT Message with Reduced Forwarding
 It is common for slow peers to pile up outgoing message queues, 
 especially for large message transfers.
-
 This results in a significant queuing delay for outgoing messages. 
 Reduced message forwarding can help decrease the workload of slower peers. 
 
 On receiving a message longer than the specified threshold, 
-a slow peer can relay it to only $K \in D$ peers and sends an IDONTWANT message to all the peers in $D$.
-This approach helps save peer bandwidth by minimizing redundant transmissions. 
+a slow peer can relay it to only $K \in D$ peers and send an IDONTWANT message to all the peers in $D$.
 
-At the same time, The IDONTWANT message can play a crucial role in enabling the remaining peers to fetch missing messages using IWANT requests. 
+In this arrangement, the IDONTWANT message serves an additional purpose: 
+to promptly announce data availability, reinforcing redundancy in the presence of adversaries. 
 
-This method is particularly effective in minimizing network-wide message dissemination latency, 
-allowing the remaining peers to retrieve the message almost immediately 
-(approximately in $RTT + \tau$ time) without waiting for the heartbeat (gossip) interval. 
-
+When a peer receives an IDONTWANT for an unseen message, 
+it learns about the new message and can request it by sending an IWANT request without waiting for the heartbeat (gossip) interval. 
 As a result, a significantly smaller number of transmissions is sufficient for propagating the message to the entire network. 
-The issuance of IDONTWANTs also serves as a timely announcement of data availability, 
-reinforcing redundancy in the presence of adversaries.
 
-It is worth mentioning that such behavior may negatively impact peer scoring. 
+This approach conserves peer bandwidth by minimizing redundant transmissions 
+while ensuring Gossipsub resilience at the cost of one RTT (for missing peers). 
+Interestingly, Curtailing queuing delays can also help lower network-wide message dissemination latency (for huge messages).
+
+However, finding an appropriate value for $K$ is crucial for optimal performance. 
+A smaller $K$ saves peer bandwidth, while a larger $K$ achieves quicker spread until outgoing message queues pile up. 
+Setting $K = D_{low}$ can be one option. 
+
+It is worth mentioning that such behavior may negatively impact peer scoring (by missing message delivery rewards from $D-K$ peers). 
 However, a minimized workload enables early message dissemination to the remaining peers. 
-These early transmissions and randomized $K$ set selection can help achieve an overall better peer score. 
+These early transmissions and randomized $K$ set selection can help achieve an overall better peer score.
 
 ### 4. Message Prioritization
 Despite the standardized specifications of the GossipSub protocol, 
