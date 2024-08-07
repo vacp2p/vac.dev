@@ -1,14 +1,11 @@
 module.exports = {
   main: [
     'index',
-    'principles',
-    'deepresearch',
-    'rfcprocess',
     'vsus',
+    'deepresearch',
     'vips',
-    'publications',
+    'principles',
     'contribute',
-    'media',
     {
       type: 'category',
       label: 'Resources',

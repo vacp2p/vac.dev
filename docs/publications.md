@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 # Publications
 
 ## Papers
@@ -11,4 +15,4 @@
 
 ## Write-ups
 
-See [write-ups](/research).
+See [write-ups](/rlog).

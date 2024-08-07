@@ -7,8 +7,8 @@ const katex = require('rehype-katex')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Logos',
-  url: 'https://logos.co/',
+  title: 'VacResearch',
+  url: 'https://vac.dev/',
   baseUrl: '/',
 
   markdown: {
@@ -37,12 +37,18 @@ const config = {
         },
         docs: {
           id: 'Docs',
+          breadcrumbs: false,
           routeBasePath: '/',
           sidebarPath: 'docs/sidebars.js',
           remarkPlugins: [math],
           rehypePlugins: [katex],
         },
         og: {},
+        generated: {
+          jobList: {
+            jobBoard: 'vac',
+          },
+        },
       }),
     ],
   ],
@@ -54,7 +60,7 @@ const config = {
         id: 'blog',
         routeBasePath: '/rlog',
         path: 'rlog',
-        blogTitle: 'Research Log',
+        blogTitle: 'Research Blog',
         blogSidebarCount: 0,
         authorsMapPath: 'authors.yml',
         remarkPlugins: [math],
@@ -77,18 +83,34 @@ const config = {
   themeConfig:
     /** @type {import('@acid-info/logos-docusaurus-preset').ThemeConfig} */
     ({
+      colorMode: {
+        disableSwitch: false,
+        respectPrefersColorScheme: true,
+      },
       navbar: {
         items: [
           {
             type: 'search',
           },
           {
-            label: 'About',
+            label: 'About Vac',
             to: '/',
+            activeBaseRegex: '^/$',
           },
           {
-            label: 'Research Log',
+            label: 'Community',
+            to: '/community',
+            activeBasePath: 'community',
+          },
+          {
+            label: 'Research Blog',
             to: '/rlog',
+            activeBasePath: 'rlog',
+          },
+          {
+            label: 'Join Us',
+            to: '/join-us',
+            activeBasePath: 'join-us',
           },
         ],
       },
@@ -119,6 +141,14 @@ const config = {
               {
                 label: 'Terms & Conditions',
                 to: '/terms',
+              },
+              {
+                href: '/privacy-policy',
+                label: 'Privacy Policy',
+              },
+              {
+                href: '/security',
+                label: 'Security',
               },
             ],
           },

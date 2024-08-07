@@ -1,3 +1,7 @@
+---
+hide_table_of_contents: true
+---
+
 # Contribute
 
 ## How to Contribute
@@ -7,7 +11,7 @@ Get in touch with us by
 [opening a thread in our forum](https://forum.vac.dev/),
 or [opening issues / PRs on GitHub](https://github.com/vacp2p).
 
-Also, see our [Current Job Openings](https://jobs.status.im/?search=Vac).
+Also, see our [current job openings](https://jobs.status.im/?search=Vac).
 
 ## What to Contribute
 
@@ -17,11 +21,11 @@ We are interested in both research and code contributions.
 <!-- see our [open research problems page](https://vac.dev/open-problems), -->
 <!-- or browse our [research areas](https://vac.dev/research-areas). -->
 
-For code contributions, see our "good first issue" lists for various Vac related code bases:
+For code contributions, see our "good first issue" lists for various Vac-related code bases:
 
-* [nim-libp2p](https://github.com/status-im/nim-libp2p)
+* [nim-libp2p](https://github.com/vacp2p/nim-libp2p)
 * [zerokit](https://github.com/vacp2p/zerokit/labels/good%20first%20issue)
-* [wakurtosis](https://github.com/logos-co/wakurtosis)
+* [stealth-address-kit](https://github.com/vacp2p/stealth-address-kit)
 
 <!---
 

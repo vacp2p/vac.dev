@@ -11,3 +11,9 @@ html {
     margin-left: 0 !important;
   }
 }
+
+div[class^='blogHeader'] {
+  span {
+    display: none;
+  }
+}
