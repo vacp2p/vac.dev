@@ -129,7 +129,7 @@ Here, $r$ represents message transmission round $r = \frac{\tau_D}{D} \text{ onl
 
 It is worth noting that a realistic network imposes certain constraints on staggering for peers. 
 For instance, in a network with dissimilar peer capabilities, 
-placing a slow peer (also in cases where many senders simultaneously select a fast peer) at the head of the transmission queue 
+placing a slow peer (also in cases where many senders simultaneously select the same peer) at the head of the transmission queue 
 may result in head-of-line blocking for the message queue. 
 
 At the same time, early receivers get many IWANT requests, increasing their workload.
@@ -151,6 +151,9 @@ or simply setting an outgoing message queue threshold for all mesh members.
 
 Eliminating/deprioritizing some messages can lower a peer's score, 
 but it also earns the peer an overall better score by achieving some early message transfers.  
+For instance, sending many near-first messages can only save a peer from a deficit penalty. 
+On the other hand, sending only one message (assuming MeshMessageDeliveriesThreshold defaults to 1) 
+as the first delivered message can add to the accumulative peer score. 
 
 ### 2. Mitigating Transport Issues
 Congestion avoidance algorithms used in various TCP versions directly influence achievable throughput and message transfer time, 
@@ -384,7 +387,7 @@ A few possible solutions to mitigating this problem may include:
 
 3) Deferring IWANT requests if at least $K$ IDONTWANTs are received for the same message.
 
-4) A large message transmission can yield high $C_{wnd}$; preferring such peers during graft can be helpful.
+4) A large message transmission can yield high $C_{wnd}$; preferring such peers during mesh maintenance can be helpful.
 
 ## Summary
 This study investigates the pressing issue of considerable fluctuations and rise in network-wide dissemination times for large messages. 
