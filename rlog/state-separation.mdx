@@ -1,13 +1,13 @@
 ---
 title: 'Nescience - A user-centric state separation architecture'
 date: 2024-08-07 12:00:00
-authors: Nesceince Team
+authors: moudy
 published: false
 slug: Nescience-A-state-separation-architecture
 categories: research
 
 
-toc_min_heading_level: 1
+toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
 
@@ -40,8 +40,102 @@ through various solutions such as ZKPs, which ensure transaction validity withou
 public verification. By allowing users to customize their privacy settings, NSSA enhances user experience and promotes wider adoption of private execution platforms. As we move towards 
 a future where user-empowered privacy control is crucial, NSSA provides a flexible and user-centric solution that meets the diverse needs of blockchain users.
 
+### Why NSSA is different than other execution hybrid platforms
+
+In many existing hybrid execution platforms, privacy settings are predefined by developers, often applying a one-size-fits-all approach that does not accommodate the 
+diverse privacy needs of users. These platforms blend public and private states, but the control over privacy remains with the application developers. 
+While this approach is straightforward for developers, who bear the responsibility for any potential privacy leaks, it leaves users with no control over their own privacy settings. 
+This rigidity becomes problematic as user needs evolve over time, or as new regulations necessitate changes to privacy configurations. In such cases, 
+updates to decentralized applications are required to adjust privacy settings, which can disrupt the user experience and create friction.
+
+Nescience State Separation architecture addresses these limitations by introducing a groundbreaking concept: **selective privacy**. Unlike traditional platforms where privacy 
+is static and determined by developers, selective privacy empowers users to dynamically choose their own privacy levels based on their unique needs and sensitivity. 
+This flexibility is critical in a decentralized ecosystem where the diversity of users and use cases demands a more adaptable privacy solution.
+
+In the NSSA model, users have the autonomy to select how they interact with decentralized applications (Dapps) by choosing from four types of transaction executions: **public, 
+private, shielded, and deshielded**. This model allows users to tailor their privacy settings on a per-transaction basis, selecting the most appropriate execution type for each 
+specific interaction. For instance, a user concerned about data confidentiality might opt for a fully private transaction, while another user, wary of privacy but seeking transparency, 
+might choose a public execution.
+
+While selective privacy may appear complex, especially for users who are not technically inclined, Nescience mitigates this by allowing the community or developers to 
+establish best practices and recommended approaches. These guidelines provide users with an informed starting point, and over time, users can adjust their privacy 
+settings as their preferences and trust in the platform evolve. Importantly, selective privacy gives users the right to alter their privacy level at any point in the future, 
+ensuring that their privacy settings remain aligned with their needs as they change.
+
+This approach not only empowers users but also facilitates greater adoption of Dapps. Users who are skeptical about privacy concerns can initially engage with transparent 
+transactions and gradually shift towards more private executions as they gain confidence in the system, and vice versa for users who start with privacy but later find transparency 
+beneficial for certain transactions. In this way, selective privacy bridges the gap between privacy and transparency, allowing for an optimal balance to emerge from the community’s 
+collective preferences.
+
+To liken this to open-source projects: in traditional systems, developers fix privacy rules much like immutable code—users must comply with these fixed settings. 
+In contrast, with selective privacy, the rules are malleable and shaped by the users’ preferences, enabling the community to find the ideal balance between privacy and efficiency over time.
+
+NSSA is distinct from traditional zero-knowledge (ZK) roll-ups in several key ways. One of the unique features of NSS is its **public execution type**, which does not 
+require Zero-Knowledge Proofs or a zkVM. This provides a significant advantage in terms of scalability and efficiency, as users can choose public executions for 
+transactions that do not require enhanced privacy, avoiding the overhead associated with ZKP generation and verification.
+
+Moreover, NSSA introduces two additional execution types—**shielded and deshielded**—which further distinguish it from traditional privacy-preserving roll-ups. 
+These execution types allow for more nuanced control over privacy, giving users the ability to shield certain aspects of a transaction while deshielding others. 
+This flexibility sets NSSA apart as a more adaptable and user-centric platform, catering to a wide range of privacy needs without imposing a one-size-fits-all solution.
+
+By combining selective privacy with a flexible execution model, Nescience State Separation architecture offers a more robust and adaptable framework for decentralized applications, 
+ensuring that users maintain control over their privacy while benefiting from the security and efficiency of blockchain technology.
+
+### How Nescience State Separation Architecture (NSSA) Can Be Used
+
+The **Nescience State Separation Architecture offers a flexible, privacy-preserving add-on that can be applied to existing decentralized applications (Dapps). 
+One of the emerging trends in the blockchain space is that each Dapp is expected to have its own rollup for efficiency, and it is estimated that Ethereum could see 
+the deployment of millions of rollups in the near future. A key question arises: how many of these rollups will incorporate privacy? For Dapp developers who want to offer flexible, 
+user-centric privacy features, NSSA provides a solution through selective privacy.
+
+**Use Case: Adding Privacy to Existing Dapps**
+
+Consider a Dapp running on a transparent network that offers no inherent privacy to its users. Converting this Dapp to a privacy-preserving architecture from scratch would 
+require significant effort, restructuring, and a deep understanding of cryptographic frameworks. However, with NSSA, the Dapp does not need to undergo extensive changes. 
+Instead, the **Nescience state-separation model** can be deployed as an **add-on**, offering selective privacy as an option for the Dapp’s users.
+
+This allows the Dapp to retain its existing functionality while providing users with a choice between the traditional, transparent version and a new version with selective privacy features. 
+With NSSA, the privacy settings are flexible, meaning users can tailor their level of privacy according to their individual needs, all while the Dapp operates on its current infrastructure. 
+This contrasts sharply with the typical approach, where Dapps are either entirely transparent or fully private, with no flexibility for users to select their own privacy preferences.
+
+**Example Application: Selective Privacy for Dapps**
+
+Let’s take an example of a Dapp operating on a fully transparent blockchain. Users of this Dapp currently have no control over their transaction privacy; everything is public. 
+If the Dapp developers want to offer a privacy option using NSSA, they can deploy a version of the Dapp with the **Nescience state-separation model** integrated into it. 
+This version would allow users to choose selective privacy, deciding whether they want their transactions to be public, private, shielded, or deshielded. 
+
+For example, users engaging in sensitive financial transactions might opt for full privacy, while users making routine, low-stakes transactions might prefer to keep them public 
+for simplicity and efficiency. NSSA enables this flexibility, even though the Dapp itself originally did not support privacy features.
+
+**Key Advantage: Decoupling from the Host Chain**
+
+A key feature of NSSA is that it operates independently of the privacy characteristics of the host blockchain. Whether the host chain is fully transparent or fully private, 
+the Nescience state-separation architecture can be deployed on top of it, offering users the ability to choose their own privacy settings. 
+This decoupling from the host chain’s inherent privacy model is critical, as it allows users to benefit from selective privacy even in environments that were not originally designed to offer it.
+
+In **fully private chains**, NSSA allows users to selectively reveal transaction details when compliance with regulations or other requirements is necessary. 
+In **fully transparent chains**, NSSA allows users to maintain privacy for specific transactions, offering flexibility that would not otherwise be possible.
+
+**Conclusion**
+
+NSSA provides a powerful tool for Dapp developers who want to offer **selective privacy** to their users without the need for a complete overhaul of their existing systems. 
+By deploying the Nescience state-separation architecture as an add-on, Dapps can give users the ability to choose their own privacy settings, whether they are operating on 
+transparent or private blockchains. This flexibility makes NSSA a valuable option for any Dapp looking to provide enhanced privacy options while maintaining efficiency and ease of use.
+
 # B. Design
-Fill in the different sections structure once they are complete
+In this section, we will delve into the core design components of the Nescience State Separation Architecture, covering its key structural elements and the mechanisms 
+that drive its functionality. We will explore the following topics:
+
+1. **Architecture's Components**: An in-depth look at the foundational building blocks of NSSA, including the public and private states, UTXO structures, zkVM, and smart contracts. 
+These components work together to facilitate secure, flexible, and scalable transactions within the architecture.
+
+2. **General Execution Overview**: We will outline the overall flow of transaction execution within NSSA, describing how users interact with the system and how the architecture 
+supports various types of executions—public, private, shielded, and deshielded—while preserving privacy and efficiency.
+
+3. **Execution Processes and UTXO Management**: This section will focus on the lifecycle of UTXOs within the architecture, from their generation to consumption. 
+We will also cover the processes involved in managing UTXOs, including proof generation, state transitions, and ensuring transaction validity.
+
+These topics will provide a comprehensive understanding of how NSSA enables flexible and secure interactions within decentralized applications.
 
 ## 1. Architecture's components
 ---
@@ -270,6 +364,7 @@ to their specific requirements, whether it be full transparency or complete conf
 
 ![general](/img/general.png)
 
+
 #### User Actions:
 
 **Step 1**: **Smart Contract Selection and Input Creation**
@@ -337,7 +432,7 @@ In what follows, the execution process of the four different execution types wit
 
 ![shielded](/img/se.png)
 
-- **Deschielded execution**:
+- **Deshielded execution**:
 
 ![deshielded](/img/de.png)
 
@@ -1074,7 +1169,45 @@ this feature is under development and review for potential inclusion.
 
 
 
+# D. Future Plans for Nescience
 
+Nescience is committed to continuously evolving its architecture to ensure scalability, privacy, and security in a growing blockchain landscape. 
+One of the primary goals is to integrate the **zk-zkVM** and the **Nescience state-separation architecture** into a fully functioning node, 
+enabling efficient private transactions while maintaining network integrity.
+
+- **Addressing Scalability Challenges**: A key challenge facing Nescience is the increasing size of nullifier and hashed UTXO trees, which could impact 
+network performance and scalability over time. To mitigate this, Nescience plans to adopt state-of-the-art scalable privacy techniques such as:
+  - **Mutator Sets:** Dynamically adjusting data structures to manage the growth of the nullifier set efficiently.
+  - **SNARK-Based Accumulators:** Compressing data in a verifiable way to ensure that only relevant information is stored while maintaining cryptographic security.
+  - **Pruning Techniques:** Periodically trimming unnecessary data from trees to maintain optimal size and performance, ensuring that the network scales logarithmically 
+  rather than exponentially as more transactions occur.
+
+By implementing these approaches, Nescience aims to keep the size of its data structures manageable, ensuring that scalability does not come at the cost of performance or privacy.
+
+- **Enhanced Key Management**: Another critical focus for Nescience is improving key management to streamline operations and enhance security. 
+The plan is to integrate the different keys used for signatures, addresses, UTXO encryption, and SNARK verification into a unified system. 
+This integration will simplify key management for users while reducing the risk of security breaches caused by complex, disparate key systems. 
+Nescience also plans to implement **Hierarchical Deterministic (HD) keys**, which allow users to derive multiple keys from a single seed, 
+enhancing both security and usability. This approach reduces the complexity of managing multiple keys across various functions and provides an additional 
+layer of protection for private transactions. Additionally, **multi-signature schemes** will be introduced, requiring multiple parties to authorize transactions. 
+This feature increases security by reducing the likelihood of unauthorized access, ensuring that a single compromised key cannot lead to malicious transactions.
+
+- **Integrating Advanced Cryptographic Techniques**: Nescience will integrate advanced cryptographic techniques, enhancing both privacy and scalability. Among these are:
+  - **Homomorphic Encryption:** Allowing computations to be performed on encrypted data without the need to decrypt it, preserving privacy while enabling secure, complex data processing.
+  - **Zero-Knowledge Rollups:** Bundling multiple transactions into a single proof to reduce the amount of data processed and stored on the blockchain, 
+  significantly improving scalability without sacrificing security.
+
+These cryptographic enhancements will ensure that Nescience can support a growing network while continuing to protect user privacy and maintaining high transaction throughput.
+
+- **Long-Term Vision**
+
+The ultimate goal for Nescience is to deploy a fully operational **node powered by zk-zkVM** and the **Nescience state-separation architecture**. 
+This node will handle complex, private transactions at scale while integrating all of the advanced cryptographic techniques outlined in the roadmap. 
+Nescience aims to provide users with an infrastructure that balances privacy, security, and efficiency, ensuring the network remains resilient and capable of handling future demands.
+
+By pursuing these future plans, Nescience is poised to not only address current challenges around scalability and key management but also lead the way in 
+applying advanced cryptography to decentralized systems. This vision will help secure the long-term integrity and performance of the Nescience state-separation 
+model as the blockchain grows and evolves.
 
 
 
@@ -1099,21 +1232,24 @@ this feature is under development and review for potential inclusion.
 
 [3] Morgan, D. (2020). HD Wallets Explained: From High Level to Nuts and Bolts. Retrieved from https://medium.com/mycrypto/the-journey-from-mnemonic-phrase-to-address-6c5e86e11e14
 
-[4] Wuille, P. (012). Bitcoin Improvement Proposal (BIP) 44. Retrieved from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
+[4] Wuille, P. (2012). Bitcoin Improvement Proposal (BIP) 44. Retrieved from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
 
-[5] Jedusor, T. (2020). Introduction to Mimblewimble and Grin. Retrieved from https://github.com/mimblewimble/grin/blob/master/doc/intro.md
+[5] Design Principles of Private Transactions in Aleo & Zcash. Retrieved from https://hackmd.io/@sin7y/rkxFXLkgs
 
-[6]  Bitcoin's official wiki overview of the CoinJoin method. Retrieved from https://en.bitcoin.it/wiki/CoinJoin
+[6] Sin7y Tech Review (33): Principles of private transactions and regulatory compliance issues. Retrieved from https://hackmd.io/@sin7y/S16RyFzZn
 
-[7] TornadoCash official Github page. Retrieved from https://github.com/tornadocash/tornado-classic-ui
+[7] zcash tech specs. Retrieved from https://zips.z.cash/protocol/protocol.pdf
 
-[8] Kothapalli, A., Setty, S., Tzialla, I. (2021). Nova: Recursive Zero-Knowledge Arguments from Folding Schemes. Retrieved from https://eprint.iacr.org/2021/370
+[8] Anatomy of a zcash transaction. Retrieved from https://electriccoin.co/blog/anatomy-of-zcash
 
-[9] ZKvm Github page. Retrieved from https://github.com/vacp2p/zk-explorations
+[9] The Penumbra Protocol - Notes, Nullifiers, and Trees. Retrieved from https://protocol.penumbra.zone/main/concepts/notes_nullifiers_trees.html
 
-[10] Electric Coin Company (2020). Explaining Halo 2. Retrieved from https://electriccoin.co/blog/explaining-halo-2/
+[10] Zero-knowledge Virtual Machine. Retrieved from https://medium.com/@abhilashkrish/zero-knowledge-virtual-machine-zkvm-95adc2082cfd
 
-[11] Polygon Labs (2022). Introducing Plonky2. Retrieved from https://polygon.technology/blog/introducing-plonky2
+[11] What's a Sparse Merkle tree?. Retrieved from https://medium.com/@kelvinfichter/whats-a-sparse-merkle-tree-acda70aeb837
 
-[12] StarkWare (2021). ethSTARK Documentation. Retrieved from https://eprint.iacr.org/2021/582
+[12] Lecture 10: Accounts Model and Merkle Trees. Retrieved from https://web.stanford.edu/class/ee374/lec_notes/lec10.pdf
 
+[13] The UTXO vs Account Model. Retrieved from  https://www.horizen.io/academy/utxo-vs-account-model/
+
+[14]  Addresses and Value Pools in Zcash. Retrieved from https://zcash.readthedocs.io/en/latest/rtd_pages/addresses.html
