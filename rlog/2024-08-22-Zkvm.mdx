@@ -57,7 +57,7 @@ Our criteria focus on the key capabilities of zkVMs—proof generation, privacy,
 # ZkVM Project Analysis:
 
 ## 1. [SP1]
-- Overview: SP1 is a developer-friendly zkVM designed to enable ZKP execution for LLVM-based languages like C, C++, Rust, and others. It supports a RISC-V-like instruction set architecture (ISA), 
+- Overview: SP1 [[1](https://blog.succinct.xyz/introducing-sp1/)] is a developer-friendly zkVM designed to enable ZKP execution for LLVM-based languages like C, C++, Rust, and others. It supports a RISC-V-like instruction set architecture (ISA), 
 which makes it compatible with various programming languages compiled through LLVM.
 - Main focus: The main focus of SP1 is scalability, open-source contributions, and accessibility for developers. It prioritizes performance over privacy, 
 making it a good fit for environments where privacy isn't the primary concern.
@@ -68,7 +68,7 @@ making it a good fit for environments where privacy isn't the primary concern.
 
 
 ## 2. [Nexus]
-- Overview: Nexus is a highly modular zkVM designed to process up to a trillion CPU cycles per second. It relies on RISC-V instructions for computation, making it extensible and scalable. 
+- Overview: Nexus [[2](https://docs.nexus.xyz/)] is a highly modular zkVM designed to process up to a trillion CPU cycles per second. It relies on RISC-V instructions for computation, making it extensible and scalable. 
 However, it currently lacks full ZKP capabilities due to its use of Spartan proofs.
 - Main focus: Nexus focuses on high performance and scalability, aiming to create an efficient execution environment for computationally intensive tasks.
 - Privacy: Although zero-knowledge privacy isn't the primary feature of Nexus, the project hints at potential privacy enhancements in the future.
@@ -77,7 +77,7 @@ However, it currently lacks full ZKP capabilities due to its use of Spartan proo
 - Conclusion: Yes, Nexus qualifies as a zkVM in terms of scalability and proof generation, but it does not yet achieve full zero-knowledge privacy.
 
 ## 3. [RISC0]
-- Overview: Risc0 is a general-purpose zkVM with strong developer support. It allows for the execution of Rust and C code on a RISC-V virtual machine 
+- Overview: Risc0 [[3]( https://www.risczero.com/zkvm)] is a general-purpose zkVM with strong developer support. It allows for the execution of Rust and C code on a RISC-V virtual machine 
 and generates zk-SNARK and zk-STARK proofs for these computations.
 - Main focus: Risc0 is focused on ease of use for developers by abstracting away the complexities of circuit generation, making it accessible for a wide range of use cases.
 - Privacy:  Full zero-knowledge privacy is supported via zk-SNARK and zk-STARK proofs, with Groth16 used for constant-size proof generation.
@@ -86,7 +86,7 @@ and generates zk-SNARK and zk-STARK proofs for these computations.
 - Conclusion: Yes, Risc0 qualifies as a zkVM, offering a balance of developer usability, scalability, and privacy.
 
 ## 4. [Powdr]
-- Overview: Powdr is a toolkit for creating custom zkVMs. It allows developers to select from various front-end and back-end components to create zkVMs tailored to specific needs.
+- Overview: Powdr [[4](https://docs.powdr.org/)] is a toolkit for creating custom zkVMs. It allows developers to select from various front-end and back-end components to create zkVMs tailored to specific needs.
 - Main focus: Powdr is focused on providing a modular architecture for zkVM creation. It enables flexibility by allowing the combination of different ZK-proof backends like Halo2 or Valida.
 - Privacy: Powdr itself does not generate ZKPs, but it facilitates the creation of zkVMs that do.
 - Performance: The performance depends on the components chosen by the developer, as Powdr itself is more of a framework.
@@ -94,13 +94,13 @@ and generates zk-SNARK and zk-STARK proofs for these computations.
 - Conclusion: No, Powdr is not a zkVM itself, but it is a powerful tool for building customized zkVMs with different privacy and performance needs.
 
 ## 5. [ZkMIPS]
-- Overview: ZkMIPS uses zk-STARKs to ensure privacy during computation, ensuring that private inputs are preserved while still proving correctness.
+- Overview: ZkMIPS [[5](https://docs.zkm.io/zkm-architecture)] uses zk-STARKs to ensure privacy during computation, ensuring that private inputs are preserved while still proving correctness.
 - Performance: ZkMIPS is built for scalability, though explicit benchmarks are not widely published.
 - Integration: ZkMIPS can be integrated into systems that rely on MIPS architecture, making it versatile for legacy codebases that require privacy.
 - Conclusion: Yes, zkMIPS is a zkVM focused on scalability and privacy for MIPS-based architectures.
 
 ## 6. [Valida]
-- Overview: Valida is a performance-oriented zkVM that generates proofs for programs using a custom ISA designed to optimize zkVM implementation. 
+- Overview: Valida [[6]( https://delendum.xyz/writings/2023-05-10-zkvm-design.html)] is a performance-oriented zkVM that generates proofs for programs using a custom ISA designed to optimize zkVM implementation. 
 It uses Plonky3 for its proof system.
 - Main focus: Valida is centered around optimizing prover performance and extensibility, making it a valuable tool for generating proofs efficiently.
 - Privacy: While Valida is focused on performance, it does not prioritize zero-knowledge privacy as much as other zkVMs.
@@ -109,7 +109,7 @@ It uses Plonky3 for its proof system.
 - Conclusion: Yes, Valida qualifies as a zkVM based on proof generation, but its lack of focus on privacy makes it less suitable for privacy-first use cases.
 
 ## 7. [Jolt]
-- Overview: Jolt is a zkVM built to optimize prover performance using a modified Hyrax polynomial commitment system. It relies on RISC-V instructions for computation 
+- Overview: Jolt [[7](https://a16zcrypto.com/posts/article/building-jolt/)] is a zkVM built to optimize prover performance using a modified Hyrax polynomial commitment system. It relies on RISC-V instructions for computation 
 but falls short of full zero-knowledge capabilities.
 - Main focus: Jolt's main goal is to optimize the speed of proving program execution, making it suitable for high-performance applications where privacy isn't the primary concern.
 - Privacy: Jolt does not fully achieve zero-knowledge privacy due to the choice of polynomial commitment schemes.
@@ -118,7 +118,7 @@ but falls short of full zero-knowledge capabilities.
 - Conclusion: Yes, Jolt qualifies as a zkVM based on proof generation, though it does not provide full zero-knowledge privacy.
 
 ## 8. [ZkWASM]
-- Overview: ZkWASM is a zkVM designed to execute WebAssembly (WASM) code in a privacy-preserving and scalable manner. It uses zk-SNARKs to prove the correctness of WASM 
+- Overview: ZkWASM [[8](https://delphinuslab.com/zk-wasm/)] is a zkVM designed to execute WebAssembly (WASM) code in a privacy-preserving and scalable manner. It uses zk-SNARKs to prove the correctness of WASM 
 program execution while ensuring privacy.
 - Main focus: ZkWASM focuses on scalability and privacy for WebAssembly, making it ideal for dapps that require verifiable computation without compromising privacy.
 - Privacy: Full zero-knowledge privacy is provided through zk-SNARKs, ensuring that the execution of WASM programs remains confidential.
@@ -127,7 +127,7 @@ program execution while ensuring privacy.
 - Conclusion: Yes, zkWASM qualifies as a zkVM, providing strong privacy, scalability, and verifiable execution for WebAssembly code.
 
 ## 9. [Aleo]
-- Overview: Aleo's snarkVM converts code into Aleo instructions, which are then compiled into bytecode executable on its zkVM. Aleo emphasizes building private, scalable dapps.
+- Overview: Aleo's [[9](https://aleo.org/blog/)] snarkVM converts code into Aleo instructions, which are then compiled into bytecode executable on its zkVM. Aleo emphasizes building private, scalable dapps.
 - Main focus: Aleo prioritizes privacy and scalability for dapps, providing a robust framework for developers building private dapps.
 - Privacy: Aleo offers full privacy through zk-SNARK proofs, making it suitable for building fully private applications.
 - Performance: Aleo focuses on scalability through efficient proof systems, though detailed performance benchmarks are not widely available.
@@ -135,7 +135,7 @@ program execution while ensuring privacy.
 - Conclusion: Yes, Aleo qualifies as a zkVM, offering a comprehensive solution for private and scalable dapps.
 
 ## 10. [Ola]
-- Overview: Ola is a ZK-friendly, high-performance layer-2 (L2) rollup platform that is still under development. It is designed to execute computations offchain while generating 
+- Overview: Ola [[10](https://github.com/Sin7Y/olavm-whitepaper-v2/tree/master)] is a ZK-friendly, high-performance layer-2 (L2) rollup platform that is still under development. It is designed to execute computations offchain while generating 
 validity proofs for these computations, ensuring that they are correctly executed without compromising security. 
 - Privacy: Ola does not specifically prioritize privacy in the same way that zkVMs do. While it leverages ZKPs for scalability, its focus is on proving the correctness of 
 transactions and computations rather than ensuring that the data remains private.
@@ -147,7 +147,7 @@ rather than privacy or verifiable execution of arbitrary programs. Ola is more a
 layer-1 blockchains. 
 
 ## 11. [Miden]
-- Overview: Miden zkVM is a zk-STARK-based virtual machine that converts code into Miden VM instructions and proves the execution of these instructions with zero-knowledge privacy.
+- Overview: Miden zkVM [[11](https://0xpolygonmiden.github.io/miden-vm/intro/main.html)] is a zk-STARK-based virtual machine that converts code into Miden VM instructions and proves the execution of these instructions with zero-knowledge privacy.
 - Main focus: Miden focuses on scalability and privacy for ZK-rollups, offering efficient proof generation for dapps.
 - Privacy: Miden ensures privacy for transactions and programs via zk-STARK proofs, making it suitable for private dapps.
 - Performance: Miden is optimized for scalability, with benchmarks showing its ability to handle up to 1,000 transactions per second (TPS).
@@ -155,7 +155,7 @@ layer-1 blockchains.
 - Conclusion: Yes, Miden qualifies as a zkVM, providing strong privacy and scalability for dapps and ZK-rollups.
 
 ## 12. [ZkOS]
-- Overview: ZkOS is a verifiable operating system focused on running zkApps in a decentralized manner. It is built on the RISC-V architecture and aims to create 
+- Overview: ZkOS [[12](https://osblog.stephenmarz.com/index.html)] is a verifiable operating system focused on running zkApps in a decentralized manner. It is built on the RISC-V architecture and aims to create 
 a world computer where all untrusted executions can be verified.
 - Main focus: ZkOS is primarily designed to offer a proof-of-concept operating system where all executions can be verified in a trustless manner. 
 However, its focus is more on the infrastructure for verifiable applications rather than being a traditional zkVM.
@@ -165,7 +165,7 @@ However, its focus is more on the infrastructure for verifiable applications rat
 - Conclusion: No, zkOS is not a zkVM. It is a verifiable operating system focused on the infrastructure to support zkApps but does not directly generate ZKPs or focus on privacy preservation.
 
 ## 13. [Triton]
-- Overview: Triton is a domain-specific language (DSL) and compiler designed primarily for high-performance GPU kernels, particularly those used in deep learning applications. 
+- Overview: Triton [[13](https://triton-vm.org/spec/)] is a domain-specific language (DSL) and compiler designed primarily for high-performance GPU kernels, particularly those used in deep learning applications. 
 - Main focus: The primary goal of Triton is to optimize computation for machine learning and GPU workloads. It is focused on enhancing performance and efficiency in processing data 
 rather than on ZKPs or verifiable computation.
 - Privacy: Triton does not provide ZKPs or privacy features typically associated with zkVMs. Its focus is on high-performance computation rather than cryptographic verifiability.
@@ -175,7 +175,7 @@ than being a general-purpose virtual machine.
 - Conclusion: No, Triton is not a zkVM. It is a specialized tool for optimizing GPU workloads, focusing on performance rather than privacy or ZKPs.
 
 ## 14. [Cairo]
-- Overview: Cairo zkVM uses a custom language that compiles to an optimized STARK-based proof system, ensuring verifiable computation. It is primarily used in systems like Starknet.
+- Overview: Cairo zkVM [[14](https://github.com/lambdaclass/cairo-vm/blob/main/docs/python_vm/README.md)] uses a custom language that compiles to an optimized STARK-based proof system, ensuring verifiable computation. It is primarily used in systems like Starknet.
 - Main focus: Cairo focuses on scalability and performance, using zk-STARK proofs to ensure the verifiable and secure execution of programs.
 - Privacy: Cairo provides privacy through zk-STARKs, but it focuses more on scalability and performance than privacy-first use cases.
 - Performance: Cairo is highly optimized for performance, making it well-suited for scalable applications on Starknet.
@@ -183,7 +183,7 @@ than being a general-purpose virtual machine.
 - Conclusion: Yes, Cairo qualifies as a zkVM, focusing on performance and verifiable execution while being ZK-friendly.
 
 ## 15. [SnarkOS]
-- Overview: SnarkOS is a decentralized operating system designed to power Aleo's network, enabling secure and private dapps. 
+- Overview: SnarkOS [[15](https://aleo.org/post/aleo-completes-security-audits-of-snarkos-and-snarkvm/)] is a decentralized operating system designed to power Aleo's network, enabling secure and private dapps. 
 It manages transactions and consensus, making it a critical infrastructure component for Aleo's zkVM-based ecosystem.
 - Main focus: SnarkOS primarily focuses on securing Aleo's network through consensus mechanisms and privacy-preserving transactions rather than acting as a 
 zkVM that directly proves program execution.
@@ -194,7 +194,7 @@ and consensus than on proof generation.
 - Conclusion: No, SnarkOS is not a zkVM. It serves as an operating system for Aleo's decentralized network, focusing on privacy and consensus rather than on generating ZKPs for computations.
 
 ## 16. [Lurk]
-- Overview: Lurk is a Turing-complete programming language designed for recursive zk-SNARKs. It focuses on enabling developers to build complex, 
+- Overview: Lurk [[16](https://github.com/lurk-lab)] is a Turing-complete programming language designed for recursive zk-SNARKs. It focuses on enabling developers to build complex, 
 recursive ZKPs efficiently through a custom language tailored for verifiable computation.
 - Main focus: Lurk is centered around recursive proof generation rather than serving as a traditional virtual machine. Its purpose is to facilitate the creation of complex zk-SNARK-based proofs, 
 making it a specialized tool for cryptographic proofs rather than general-purpose computation.
@@ -204,7 +204,7 @@ making it a specialized tool for cryptographic proofs rather than general-purpos
 - Conclusion: No, Lurk is not a zkVM. It is a programming language designed for recursive zk-SNARKs and focuses on proof generation rather than program execution in a virtual machine environment.
 
 ## 17. [Piecrust]
-- Overview: Piecrust is a WASM-based zkVM designed to run on the Dusk Network. It supports concurrent execution and focuses on providing privacy and scalability for smart contracts.
+- Overview: Piecrust [[17](https://docs.rs/piecrust/latest/piecrust/)] is a WASM-based zkVM designed to run on the Dusk Network. It supports concurrent execution and focuses on providing privacy and scalability for smart contracts.
 - Main focus: Piecrust is designed to provide private and efficient execution of smart contracts through the use of ZKPs.
 - Privacy: Piecrust supports ZK-friendly computations and enhances privacy through cryptographic primitives such as Merkle trees.
 - Performance: Piecrust is designed to be scalable and concurrent, allowing multiple sessions to run simultaneously, which improves overall performance.
@@ -212,7 +212,7 @@ making it a specialized tool for cryptographic proofs rather than general-purpos
 - Conclusion: Yes, Piecrust qualifies as a zkVM, offering scalability, privacy, and support for succinct proof generation.
 
 ## 18. [Ceno]
-- Overview: Ceno is a zkVM that provides a theoretical framework for reducing proving time by grouping common portions of code together. It uses recursive proofs to enhance prover efficiency.
+- Overview: Ceno [[18](https://eprint.iacr.org/2024/387)] is a zkVM that provides a theoretical framework for reducing proving time by grouping common portions of code together. It uses recursive proofs to enhance prover efficiency.
 - Main focus: Ceno aims to optimize prover performance through recursive proofs, making it a powerful tool for handling complex computations efficiently.
 - Privacy: Ceno supports zero-knowledge privacy through recursive proofs and is designed to handle large-scale computations securely.
 - Performance: Ceno's recursive proof framework ensures that it can efficiently prove the execution of programs, reducing the time required for proof generation.
@@ -220,7 +220,7 @@ making it a specialized tool for cryptographic proofs rather than general-purpos
 - Conclusion: Yes, Ceno qualifies as a zkVM, providing efficient and private computation through the use of recursive proofs.
 
 ## 19. [Stellar]
-- Overview: Stellar is a decentralized protocol designed to facilitate cross-border transactions between digital and fiat currencies.
+- Overview: Stellar [[19](https://stellar.org/blog/developers/zkvm-a-new-design-for-fast-confidential-smart-contracts)] is a decentralized protocol designed to facilitate cross-border transactions between digital and fiat currencies.
 - Main focus: Stellar's primary goal is to improve financial transactions by enabling decentralized, low-cost currency transfers. It does not aim to provide ZKPs or run verifiable computations 
 like a zkVM.
 - Privacy: Stellar focuses on confidentiality and security for financial transactions, but it does not employ ZKPs in the way zkVMs do for verifying computation without revealing data.
@@ -230,7 +230,7 @@ However, this performance focus is specific to transactions rather than general-
 - Conclusion: No, Stellar is not a zkVM. It is a decentralized financial protocol focused on facilitating cross-border payments rather than verifiable or privacy-preserving computation.
 
 ## 20. [NovaNet]
-- Overview: NovaNet is an open peer-to-peer network that aims to build upon concepts of non-uniform incremental verifiable computation. 
+- Overview: NovaNet [[20](https://www.novanet.xyz/blog)] is an open peer-to-peer network that aims to build upon concepts of non-uniform incremental verifiable computation. 
 - Main focus: NovaNet's focus is on peer-to-peer networking and decentralized computing rather than on proving the execution of programs in a zero-knowledge manner.
 - Privacy: NovaNet does not provide ZKPs or privacy features typically associated with zkVMs. Its focus is on decentralized networking and computation.
 - Performance: NovaNet prioritizes efficient decentralized computation but does not focus on privacy or performance benchmarks related to ZKPs.
@@ -239,7 +239,7 @@ However, this performance focus is specific to transactions rather than general-
 
 
 ## 21. [ZkLLVM]
-- Overview: ZkLLVM is a compiler that transforms C++ or Rust code into circuits for use in zk-SNARK or zk-STARK systems. Its primary purpose is to bridge high-level programming 
+- Overview: ZkLLVM [[21](https://github.com/NilFoundation/zkLLVM)] is a compiler that transforms C++ or Rust code into circuits for use in zk-SNARK or zk-STARK systems. Its primary purpose is to bridge high-level programming 
 languages with ZKP systems by compiling code into arithmetic circuits that can be used to generate and verify proofs.
 - Main focus: ZkLLVM focuses on making ZKPs accessible to developers by enabling them to write code in familiar languages (C++, Rust) and then compile that code into ZK circuits.
 - Privacy: ZkLLVM enables the generation of ZKPs by compiling high-level code into ZK-compatible circuits. It plays a crucial role in privacy-preserving applications but does not act 
@@ -252,7 +252,7 @@ for general-purpose computation.
 
 
 ## 22. [ZkMove]
-- Overview: ZkMove is a zkVM designed to execute smart contracts written in the Move language. It utilizes ZKPs to ensure that the execution of these contracts remains verifiable and secure.
+- Overview: ZkMove [[22](https://www.zkmove.net/2023-06-20-zkMove-0.2.0-Achieving-Full-Bytecode-Compatibility-with-Move/)] is a zkVM designed to execute smart contracts written in the Move language. It utilizes ZKPs to ensure that the execution of these contracts remains verifiable and secure.
 - Main focus: ZkMove focuses on privacy and verifiable execution for Move-based smart contracts, providing a framework for ZK-friendly computation.
 - Privacy: ZkMove ensures that smart contract execution remains private through ZKPs, making it suitable for privacy-preserving applications.
 - Performance: ZkMove is optimized for verifiable execution, ensuring that contracts can be proven correct while preserving privacy.
@@ -260,7 +260,7 @@ for general-purpose computation.
 - Conclusion: Yes, zkMove qualifies as a zkVM, offering ZK-friendly execution and privacy for smart contracts written in the Move language.
 
 ## 23. [O1VM]
-- Overview: O1VM is a general-purpose zkVM developed by o1Labs. It is designed to prove the execution of MIPS programs efficiently through a combination of zk-SNARKs 
+- Overview: O1VM [[23](https://github.com/o1-labs/proof-systems/tree/master/o1vm)] is a general-purpose zkVM developed by o1Labs. It is designed to prove the execution of MIPS programs efficiently through a combination of zk-SNARKs 
 and specialized techniques like folding schemes and RAMLookups.
 - Main focus: O1VM focuses on scalability and verifiable computation for MIPS-based programs, making it a strong contender for executing and proving complex programs efficiently.
 - Privacy: O1VM ensures privacy through zk-SNARK proofs, keeping the details of the computation private while proving its correctness.
@@ -310,4 +310,31 @@ This ongoing development will likely broaden the application of zkVMs across the
 and decentralized applications.
 
 What are your thoughts on our zkVM analysis? Do you agree with our findings, or do you know of other zkVM projects that should be on our radar? We would love to hear your insights, questions, 
-or suggestions!
+or suggestions! Contact us on our [Discord channel](https://discord.gg/Evnhu8Ws).
+
+
+# References
+
+[1] Introducing SP1: A performant, 100% open-source, contributor-friendly zkVM. Retrieved from https://blog.succinct.xyz/introducing-sp1/
+[2] The Nexus 2.0 zkVM. Retrieved from https://docs.nexus.xyz/
+[3] The first general purpose zkVM. Retrieved from https://www.risczero.com/zkvm
+[4] Powdr. Retrieved from https://docs.powdr.org/
+[5] ZKM Architecture. Retrieved from https://docs.zkm.io/zkm-architecture
+[6] Valida zkVM Design. Retrieved from https://delendum.xyz/writings/2023-05-10-zkvm-design.html
+[7] Building Jolt: A fast, easy-to-use zkVM. Retrieved from https://a16zcrypto.com/posts/article/building-jolt/
+[8] ZK-WASM. Retrieved from https://delphinuslab.com/zk-wasm/
+[9] Aleo. Retrieved from https://aleo.org/blog/
+[10] OlaVM Whitepaper V2. Retrieved from https://github.com/Sin7Y/olavm-whitepaper-v2/tree/master
+[11] Polygon Miden VM. Retrieved from https://0xpolygonmiden.github.io/miden-vm/intro/main.html
+[12] The Adventures of OS: Making a RISC-V Operating System using Rust. Retrieved from https://osblog.stephenmarz.com/index.html
+[13] Triton VM. Retrieved from https://triton-vm.org/spec/
+[14] How does the original Cairo VM work?. Retrieved from https://github.com/lambdaclass/cairo-vm/blob/main/docs/python_vm/README.md
+[15] Aleo completes security audits of snarkOS & snarkVM. Retrieved from https://aleo.org/post/aleo-completes-security-audits-of-snarkos-and-snarkvm/
+[16] Lurk zkVM. Retrieved from https://github.com/lurk-lab
+[17] Piecrust VM. Retrieved from https://docs.rs/piecrust/latest/piecrust/
+[18] Ceno: Non-uniform, Segment and Parallel Zero-knowledge Virtual Machine. Retrieved from https://eprint.iacr.org/2024/387
+[19] ZkVM: a new design for fast, confidential smart contracts. Retrieved from https://stellar.org/blog/developers/zkvm-a-new-design-for-fast-confidential-smart-contracts
+[20] Novanet. Retrieved from https://www.novanet.xyz/blog
+[21] ZKLLVM. Retrieved from https://github.com/NilFoundation/zkLLVM
+[22] zkMove 0.2.0 - Achieving Full Bytecode Compatibility with Move. Retrieved from https://www.zkmove.net/2023-06-20-zkMove-0.2.0-Achieving-Full-Bytecode-Compatibility-with-Move/
+[23] O1VM. Retrieved from https://github.com/o1-labs/proof-systems/tree/master/o1vm
