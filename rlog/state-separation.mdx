@@ -312,9 +312,9 @@ ensuring sensitive transactions remain confidential while non-sensitive ones are
 provides a robust framework for a wide range of blockchain applications, enhancing both utility and trust within the network.
 
 
-### f) Smart contracts in Nescience
+### f) Smart contracts in NSSA
 ---
-Smart contracts are a core feature of the Nescience architecture, providing a way to automate and execute predefined actions based on coded rules. 
+Smart contracts are a core feature of NSSA, providing a way to automate and execute predefined actions based on coded rules. 
 Once deployed on the blockchain, these contracts become immutable, meaning their behavior cannot be altered. This ensures that they perform exactly as 
 intended without the risk of tampering. Because the state and data of the contract are stored permanently on the blockchain, all interactions are fully 
 transparent and auditable, creating a reliable and trustworthy environment.
@@ -342,12 +342,12 @@ This not only reduces costs but also increases efficiency by automating repetiti
 transparency—where every action is recorded and visible on the blockchain—makes them a powerful tool for ensuring accountability and trust in decentralized systems. 
 They can be ideal for managing decentralized autonomous organizations (DAOs), where governance decisions are automated through coded rules.
 
-By integrating smart contracts, the Nescience architecture offers a highly versatile, secure, and transparent framework that can support a wide range of applications 
+By integrating smart contracts, NSSA offers a highly versatile, secure, and transparent framework that can support a wide range of applications 
 across various industries, from finance to governance, supply chains, and more.
 
 ## 2. General Execution Overview
 ---
-This section explains the execution process within the Nescience architecture, providing an overview of how it works from start to finish. 
+This section explains the execution process within NSSA, providing an overview of how it works from start to finish. 
 It outlines the steps involved in each execution type, guiding the reader through the entire process from user interaction to completion.
 
 The process begins when a user initiates a transaction by invoking a smart contract. This invocation involves selecting at least one of 
@@ -411,7 +411,7 @@ If verification fails, the process is aborted, and the transaction is rejected.
 
 This comprehensive process ensures that transactions are executed securely, with the appropriate level of privacy and state updates synchronized across the network.
 
-Below, we outline the execution process of the four different execution types within the Nescience architecture:
+Below, we outline the execution process of the four different execution types within NSSA:
 - **Public execution**:
 
 ![public](/img/public.png)
@@ -431,8 +431,8 @@ Below, we outline the execution process of the four different execution types wi
 
 ## 3. Execution processes and UTXO management
 ---
-In Nescience state separation, UTXOs are key components for managing private data and assets. They serve as private entities that hold both storage and assets, 
-facilitating secure and confidential transactions. UTXOs are utilized in three of the four execution types within the Nescience architecture: private, shielded, 
+In Nescience state separation architecture, UTXOs are key components for managing private data and assets. They serve as private entities that hold both storage and assets, 
+facilitating secure and confidential transactions. UTXOs are utilized in three of the four execution types within NSSA: private, shielded, 
 and deshielded executions. This section explores the lifecycle of UTXOs, detailing their generation, transfer, encryption, and eventual consumption within the private execution framework.
 
 ### a) Components of a Nescience UTXO
@@ -462,7 +462,7 @@ Non-fungibles within the UTXO represent unique assets, such as NFTs (Non-Fungibl
 ensuring its distinctiveness and traceability. For example, if Alice owns a digital artwork represented as an NFT, the non-fungible component of the UTXO will store the unique identifier 
 for this NFT, preventing duplication or forgery of the digital asset.
 
-* Random commitment key (RCK)
+* Random commitment key
 The random commitment key (RCK) is a randomly generated number used to create a cryptographic commitment to the contents of the UTXO. This commitment ensures the integrity of the data 
 without revealing any private information. By generating a random key for the commitment, the system ensures that even if someone observes the commitment, they cannot infer any details 
 about the underlying UTXO. For example, RCK helps maintain confidentiality in the system while still allowing the verification of transactions.
@@ -475,14 +475,14 @@ maintaining the security and integrity of the system, as it ensures that no UTXO
 
 ### b) UTXO lifecycle: from generation to consumption
 ---
-UTXOs in the Nescience architecture are created when a transaction outputs a specific value, asset, or data intended for future use. Once generated, these UTXOs become private entities 
+UTXOs in NSSA are created when a transaction outputs a specific value, asset, or data intended for future use. Once generated, these UTXOs become private entities 
 owned by specific users, containing sensitive information such as balances, private data, or unique assets like NFTs.
 
 To maintain the required level of confidentiality, UTXOs are encrypted and transferred anonymously across the network. This encryption process ensures that the data within each UTXO 
-remains hidden from network participants, including the sequencer, while still allowing for verification and validation through zero-knowledge proofs. These proofs enable the network 
+remains hidden from network participants, including the sequencer, while still allowing for verification and validation through ZKPs. These proofs enable the network 
 to ensure that UTXOs are valid, prevent double spending, and maintain security, all without revealing any sensitive information.
 
-When a user wishes to spend or transfer a UTXO, the lifecycle progresses towards its consumption. The user must prove ownership and validity of the UTXO through a zero-knowledge proof, 
+When a user wishes to spend or transfer a UTXO, the lifecycle progresses towards its consumption. The user must prove ownership and validity of the UTXO through a ZKP, 
 which is then verified by the sequencer. This process occurs in private, shielded, and deshielded executions, where confidentiality is a priority. Once the proof is validated, 
 the UTXO is consumed, meaning it is marked as spent and cannot be reused, ensuring the integrity of the transaction and preventing double spending. 
 
@@ -505,13 +505,13 @@ using their spending key and the UTXO's nullifier, reinforcing the security of t
 than one UTXO—otherwise, even if both UTXOs are valid, only one could be spent. This would undermine the integrity of the system. To spend a UTXO, a proof must be provided showing that 
 the nullifier does not already exist in the Nullifier Tree. Once the transaction is confirmed and included in the blockchain, the nullifier is added to the Nullifier Tree, preventing any 
 future reuse of the same UTXO. A UTXO's nullifier is generated by combining the receiver's nullifier key with the transaction note's commitment, further ensuring its distinctiveness 
-and security. (more details in [nullifier tree section](#nul))
+and security. (More details in [nullifier tree section](#nul).)
 
 ####  <a id="pe"></a> I) UTXOs in private executions
 ---
-In private executions within the Nescience architecture, transactions are handled ensuring maximum privacy by concealing all transaction details from the public state. 
+In private executions within NSSA, transactions are handled ensuring maximum privacy by concealing all transaction details from the public state. 
 This approach is particularly useful for confidential payments, where the identities of the sender and receiver, as well as the transaction amounts, must remain hidden. 
-The process is powered by zero-knowledge proofs, ensuring that only the involved parties have access to the transaction details while maintaining the integrity of the network.
+The process is powered by ZKPs, ensuring that only the involved parties have access to the transaction details while maintaining the integrity of the network.
 
 * Stages of private execution: Private executions operate in two key stages: UTXO consumption and UTXO creation. In the first stage, UTXOs from the private state are used 
 as inputs for the transaction. In the second stage, new UTXOs are generated as outputs and stored back in the private state. Throughout this process, the details of the 
@@ -522,7 +522,7 @@ output UTXOs to be created. This involves specifying the amounts to be transferr
 address from the network). The nullifier key and random number for commitments (RCK) are also generated at this stage to define how these UTXOs can be spent or nullified in the 
 future by the receiver.
 
-* Proof generation and verification: Next, the zkVM generates a zero-knowledge proof to validate the transaction. This proof includes both a membership proof for the input UTXOs, 
+* Proof generation and verification: Next, the zkVM generates a ZKP to validate the transaction. This proof includes both a membership proof for the input UTXOs, 
 confirming their presence in the hashed UTXO tree, and a non-membership proof to ensure that the input UTXOs have not already been spent (i.e., they are not in the nullifier tree). 
 The proof also confirms that the total input value matches the total output value, ensuring no discrepancies. The user then submits the proof, along with the necessary metadata, to the sequencer.
 
@@ -538,7 +538,7 @@ If the receiver successfully decrypts a UTXO, it confirms ownership of that UTXO
 UTXO tree and its absence from the nullifier tree, ensuring it has not been spent. Finally, the new UTXO is added to the receiver’s locally stored UTXO tree for future transactions.
 
 Throughout the private execution process, the identities of both the sender and receiver, as well as all transaction details, remain hidden from the public. 
-The use of zero-knowledge proofs ensures that the integrity of the transaction is verified without revealing any sensitive information. At the end of the process, 
+The use of ZKPs ensures that the integrity of the transaction is verified without revealing any sensitive information. At the end of the process, 
 the network guarantees that no participant, aside from the sender and receiver, can deduce any details about the transaction or the involved parties.
 
 #### II) UTXOs in shielded executions
@@ -551,7 +551,7 @@ but subsequent transactions remain private.
 #### a) How shielded executions work
 Shielded executions operate in two distinct stages: first, there is a modification of the public state, and then new UTXOs are created and stored in the private state. 
 Importantly, shielded executions do not consume UTXOs but instead mint them, as new UTXOs are created to reflect the changes in the private state. This structure demands 
-zero-knowledge proofs to ensure that the newly minted UTXOs are consistent with the modifications in the public state. Here’s a step-by-step breakdown of how the shielded 
+ZKPs to ensure that the newly minted UTXOs are consistent with the modifications in the public state. Here’s a step-by-step breakdown of how the shielded 
 execution process unfolds:
 
 1. Transaction initiation: The user initiates a transaction that modifies the public state, such as converting a public token to a private token.
@@ -589,9 +589,9 @@ transactions requiring initial public visibility, such as asset conversions, whi
 
 #### III) UTXOs in deshielded executions
 ---
-In Nescience architecture, deshielded executions offer a unique way to move data and assets from the private state to the public state, revealing previously private 
+In NSSA, deshielded executions offer a unique way to move data and assets from the private state to the public state, revealing previously private 
 information in a controlled and verifiable manner. This type of execution allows for selective disclosure, ensuring transparency when needed while still maintaining 
-the security and privacy of critical details through cryptographic techniques like zero-knowledge proofs. Deshielded executions are particularly valuable for use cases 
+the security and privacy of critical details through cryptographic techniques like  ZKPs. Deshielded executions are particularly valuable for use cases 
 such as regulatory compliance reporting, where specific transaction details must be revealed to meet legal requirements, while other sensitive transactions remain private.
 
 #### a) Stages of deshielded executions
@@ -607,7 +607,7 @@ This model ensures that private data can be selectively revealed when needed, of
 auditing or compliance reporting, where specific details must be made publicly verifiable without exposing the entire history or contents of private transactions.
 
 #### b) How deshielded executions work
-The deshielded execution process starts when a user initiates a transaction using private UTXOs. The Nescience zkVM is called to generate a zero-knowledge proof, 
+The deshielded execution process starts when a user initiates a transaction using private UTXOs. The Nescience zkVM is called to generate a ZKP, 
 which validates the transaction without revealing sensitive details such as the sender's identity or the specifics of the Nescience application being executed.
 
 During the transaction, the UTXOs from the private state are consumed, meaning they are used up as inputs and will no longer be available for future transactions. 
@@ -625,7 +625,7 @@ necessary for the Nescience applications and token transfers involved.
 4. Call zkVM with deshielded circuits: The sender invokes the zkVM with deshielded kernel circuits, which generates the proof. The proof ensures that all input UTXOs 
 are valid by verifying their membership in the UTXO tree and their non-membership in the nullifier tree, ensuring they haven’t been spent.
 
-5. Generate and submit proof: The zkVM generates a zero-knowledge proof that verifies the correctness of the transaction without revealing private details. 
+5. Generate and submit proof: The zkVM generates a ZKP that verifies the correctness of the transaction without revealing private details. 
 The proof includes the nullifiers and the planned modifications to the public state.
 
 6. Send proof to sequencer: The sender then sends the proof and any relevant public information to the sequencer. The sequencer is responsible for verifying the proof, 
@@ -635,12 +635,12 @@ Once the proof and public information have been broadcast to the network, the re
 The sequencer manages the public state updates and ensures that the transaction is properly executed. By the end of the deshielded execution, 
 specific transaction details become publicly visible, such as the identity of the receiver and the outcome of the transaction. 
 This allows participants in the public state to extract information about the transaction, including the receiver's identity and some details about the execution. 
-While the receiver's identity is revealed, the sender's identity and sensitive transaction details remain hidden, thanks to the use of zero-knowledge proofs. 
+While the receiver's identity is revealed, the sender's identity and sensitive transaction details remain hidden, thanks to the use of ZKPs. 
 This makes deshielded executions ideal for cases where transparency is needed, but complete privacy is still a priority for certain elements of the transaction.
 
-### **Summary of UTXOs consumption in the Nescience architecture**
+### **Summary of UTXOs consumption in NSSA**
 
-In the Nescience architecture, consuming UTXOs is a critical step in maintaining the security and integrity of the blockchain by preventing double spending. 
+In NSSA, consuming UTXOs is a critical step in maintaining the security and integrity of the blockchain by preventing double spending. 
 When a UTXO is consumed, it is used as an input in a transaction, effectively marking it as spent. This ensures that the UTXO cannot be reused, preserving the integrity of the blockchain.
 
 1. The Process of consuming UTXOs: The process of consuming a UTXO begins when a user selects a UTXO from their private state. The user verifies the UTXO’s existence and 
@@ -651,10 +651,10 @@ ownership using their viewing key, ensuring that they are the legitimate owner o
 To mark the UTXO as spent, a **nullifier** is generated. This nullifier is a unique cryptographic hash derived from the UTXO, which is then added to the nullifier tree in the public state. 
 Adding the nullifier to the tree prevents the UTXO from being reused in future transactions, thus preventing double spending.
 
-After generating the membership and non-membership proofs, the user compiles the transaction using the zkVM. The zkVM is responsible for generating the necessary zero-knowledge proofs,
+After generating the membership and non-membership proofs, the user compiles the transaction using the zkVM. The zkVM is responsible for generating the necessary ZKPs,
  which validate the transaction without revealing sensitive details. The compiled transaction, along with the proofs, is then submitted to the sequencer for verification.
 
-2. The Role of the sequencer: Once the transaction is submitted, the sequencer verifies the zero-knowledge proofs to confirm that the transaction is valid. If the proofs are verified 
+2. The Role of the sequencer: Once the transaction is submitted, the sequencer verifies the ZKPs to confirm that the transaction is valid. If the proofs are verified 
 successfully, the sequencer updates both the private and public states to reflect the transaction. This includes updating the nullifier tree with the newly generated nullifier, 
 ensuring that the UTXO is marked as spent and cannot be reused.
 
@@ -669,19 +669,19 @@ This ensures that Alice’s UTXO is marked as spent and cannot be used again, wh
 
 #### The importance of nullifiers
 
-Nullifiers are a key mechanism in preventing double spending. By marking consumed UTXOs as spent and tracking them in the nullifier tree, the Nescience architecture ensures that 
+Nullifiers are a key mechanism in preventing double spending. By marking consumed UTXOs as spent and tracking them in the nullifier tree, NSSA ensures that 
 once a UTXO is used in a transaction, it cannot be reused in any future transactions. This process is fundamental to maintaining the integrity and security of the blockchain, 
 as it guarantees that assets are only spent once and prevents potential attacks on the system.
 
-In conclusion, the process of consuming UTXOs in the Nescience architecture combines cryptographic proofs, nullifiers, and zero-knowledge proofs to ensure that transactions 
+In conclusion, the process of consuming UTXOs in NSSA combines cryptographic proofs, nullifiers, and ZKPs to ensure that transactions 
 are secure, confidential, and free from the risks of double spending.
 
 
-# C. Cryptographic Primitives in Nescience
+# C. Cryptographic Primitives in NSSA
 
-In the Nescience architecture, cryptographic primitives are the foundational elements that ensure the security, privacy, and efficiency of the state separation model.
+In the NSSA, cryptographic primitives are the foundational elements that ensure the security, privacy, and efficiency of the state separation model.
  These cryptographic tools enable private transactions, secure data management, and robust verification processes across both public and private states. 
- The architecture leverages a wide range of cryptographic mechanisms, including advanced hash functions, key management systems, tree structures, and zero-knowledge proofs, 
+ The architecture leverages a wide range of cryptographic mechanisms, including advanced hash functions, key management systems, tree structures, and ZKPs, 
  to safeguard user data and maintain the integrity of transactions.
 
 Cryptographic hash functions play a pivotal role in concealing UTXO details, generating nullifiers, and constructing sparse Merkle trees, which organize and verify 
@@ -713,9 +713,9 @@ Hash functions are also vital in the construction of **sparse Merkle trees**, wh
 Sparse Merkle trees enable quick and reliable proofs of membership and non-membership, making them essential for verifying both UTXOs and nullifiers. By using hash functions 
 to build these trees, Nescience can ensure the integrity of the data, as any tampering with the data would result in a change in the hash, making the manipulation detectable.
 
-Another critical consideration in Nescience is the compatibility of hash functions with **zero-knowledge proofs**. ZK-friendly hash functions are optimized for efficient 
+Another critical consideration in Nescience is the compatibility of hash functions with **ZKPs**. ZK-friendly hash functions are optimized for efficient 
 computation within the constraints of ZK circuits, ensuring that they do not become a bottleneck in the proof generation or verification process. These hash functions 
-maintain strong cryptographic security properties while enabling efficient computations in zero-knowledge proof systems, which is essential for maintaining privacy and 
+maintain strong cryptographic security properties while enabling efficient computations in ZKP systems, which is essential for maintaining privacy and 
 integrity within the ZK framework.
 
 The primary advantage of using hash functions in Nescience is their ability to ensure that transaction details remain private while still allowing for verification 
@@ -748,29 +748,29 @@ The Schnorr protocol allows users to prove, without revealing the actual values,
 **Limitations of standard cryptographic hashes**
 Standard cryptographic hash functions, such as SHA-256, are not suitable for this purpose because they lack the algebraic structure needed for homomorphic properties. 
 In particular, while SHA-256 provides strong security for general hashing purposes, it does not allow the additive properties that are required to perform the type of 
-zero-knowledge proofs used in Nescience for UTXO commitments. This is why the Pedersen hash is preferred, as it enables the secure and private execution of transactions
+ZKPs used in Nescience for UTXO commitments. This is why the Pedersen hash is preferred, as it enables the secure and private execution of transactions
 while allowing for balance verification and other critical proofs.
 
 **Conclusion**
-By using homomorphic commitments like the Pedersen hash, the Nescience architecture ensures that UTXOs can be securely committed and validated without exposing sensitive information. 
-The random component (RCK) adds an additional layer of security, and the additive properties of the Pedersen commitment enable powerful zero-knowledge proofs that maintain the 
+By using homomorphic commitments like the Pedersen hash, NSSA ensures that UTXOs can be securely committed and validated without exposing sensitive information. 
+The random component (RCK) adds an additional layer of security, and the additive properties of the Pedersen commitment enable powerful ZKPs that maintain the 
 integrity of the system.
 
 
 ## <a id="key"></a> b) Key management and addresses in Nescience
 
-The Nescience architecture utilizes difirrent cryptographic schemes, such as public key encryption and digital signatures, to ensure secure private executions through 
+NSSA utilizes difirrent cryptographic schemes, such as public key encryption and digital signatures, to ensure secure private executions through 
 the exchange of UTXOs. These schemes rely on a structured set of cryptographic keys, each serving a specific purpose in maintaining privacy, security, and control over assets. 
 Here's a breakdown of the keys used in Nescience:
 
 #### I. Spending key
-The spending key is the fundamental secret key in the Nescience architecture, acting as the primary control mechanism for a user’s UTXOs and other digital assets. 
+The spending key is the fundamental secret key in NSSA, acting as the primary control mechanism for a user’s UTXOs and other digital assets. 
 It plays a critical role in the cryptographic security of the system, ensuring that only the rightful owner can authorize and spend their assets.
 
 - **Role of the spending key**: The spending key is responsible for generating the user’s private keys, which are used in various cryptographic operations such as 
 signing transactions and creating commitments. This hierarchical relationship means that the spending key sits at the root of a user’s key structure, safeguarding 
 access to all associated private keys and, consequently, to the user’s assets. In Nescience’s privacy-focused model, the spending key is never exposed or shared outside 
-the user’s control. Unlike other keys, it does not interact with the public state, kernel circuits, or even the zero-knowledge proof system. This isolation ensures that 
+the user’s control. Unlike other keys, it does not interact with the public state, kernel circuits, or even the ZKP system. This isolation ensures that 
 the spending key remains completely private and inaccessible to external entities. By keeping the spending key separate from the operational aspects of the network, 
 Nescience minimizes the risk of key leakage or compromise.
 
@@ -792,7 +792,7 @@ of the cryptographic infrastructure are compromised, the spending key remains pr
 
 In summary, the spending key in Nescience is a powerful and carefully guarded element of the cryptographic system. It is the root key from which other private keys
 are derived, allowing users to spend their UTXOs securely and privately. Its isolation from the public state and its random generation from a secure scalar field ensures 
-that the spending key remains protected, making it a cornerstone of security in the Nescience architecture.
+that the spending key remains protected, making it a cornerstone of security in NSSA.
 
 #### II. Private keys
 In Nescience, the private key is an essential cryptographic element responsible for facilitating various secure operations, such as generating commitments and signing 
@@ -827,7 +827,7 @@ or spending assets they do not control. Even if an attacker gains access to the 
 the security of Alice's future transactions.
 
 **Robustness of private keys in Nescience**
-Despite the critical role of the private key in the operation of the Nescience architecture, the system is designed to maintain security even in the event that the 
+Despite the critical role of the private key in the operation of NSSA, the system is designed to maintain security even in the event that the 
 private key is compromised. This resilience is achieved through the integrity of the spending key, which is never exposed in the process of signing or committing. 
 The spending key acts as the ultimate safeguard, ensuring that even if a private key component is compromised, the attacker cannot access or spend the user's assets 
 without control over the spending key.
@@ -881,12 +881,11 @@ role in this process is to maintain consistency in these outputs while preventin
 Public keys in Nescience are essential for secure interactions within the network. "${public}_{key}.sig$" allows others to verify that transactions were signed by the legitimate owner, 
 ensuring the authenticity of every operation. "${public}_{key}.rcm$" enables secure and private commitment schemes, allowing participants to commit to transaction details without 
 revealing sensitive information. Finally, "${public}_{key}.sk(prf)$" powers deterministic outputs through a pseudorandom function, ensuring that user-specific data remains consistent 
-and secure throughout various transactions. Together, these public key components facilitate privacy, security, and trust within the Nescience architecture, enabling seamless 
-interactions while safeguarding user data.
+and secure throughout various transactions. Together, these public key components facilitate privacy, security, and trust within NSSA, enabling seamless interactions while safeguarding user data.
 
 #### IV. Viewing key
 
-The **viewing key** in the Nescience architecture is a specialized cryptographic key that allows a user to decrypt both incoming and outgoing transactions associated with their account. 
+The **viewing key** in NSSA is a specialized cryptographic key that allows a user to decrypt both incoming and outgoing transactions associated with their account. 
 This key is designed to offer a degree of transparency to the user, enabling them to view the details of their transactions without compromising the security of their assets or granting 
 control over those assets.
 
@@ -904,7 +903,7 @@ breaking the unlinkability of private transactions. For example, an attacker wit
 between different parties and transaction flows. To mitigate this risk, Nescience recommends that users treat their viewing key with the same level of protection as their private keys. 
 It should be stored securely in encrypted hardware wallets or other secure storage solutions to prevent unauthorized access. 
 
-- **Balancing privacy and transparency**: The viewing key provides an essential balance between privacy and transparency in the Nescience architecture. While it ensures that users 
+- **Balancing privacy and transparency**: The viewing key provides an essential balance between privacy and transparency in NSSA. While it ensures that users 
 can monitor their transaction history and verify the details of their private transactions, it does so without compromising the control of their funds. This allows users to maintain 
 a transparent view of their interactions while keeping their assets secure. For example, if Alice is using shielded execution to transfer assets, her viewing key enables her to 
 audit the transaction without allowing anyone else, including Bob or external observers, to see the specific details unless they also have access to the viewing key. Moreover, 
@@ -957,7 +956,7 @@ This ensures that only the intended recipient (or anyone with their viewing key)
 **Key components and protocol**
 
 The formal protocol for generating ephemeral keys closely follows this informal description but involves additional intermediate steps for converting values to 
-binary sequences to fit implementation requirements. These steps are essential for ensuring compatibility with cryptographic algorithms used in the Nescience architecture. 
+binary sequences to fit implementation requirements. These steps are essential for ensuring compatibility with cryptographic algorithms used in NSSA. 
 The protocol uses the following key components:
 - **Nullifier ($\rho$):** Ensures that the ephemeral key is tied to the specific UTXO being consumed, preventing reuse of the key in future transactions.
 - **Receiver’s public key (${public}_{key}.sk(prf)$:** Establishes the receiver's identity in the key generation process, ensuring that the shared secret can 
@@ -1020,14 +1019,14 @@ invisible onchain and are used for confidential transactions, enhancing privacy 
 By allowing users to generate multiple private addresses, Nescience gives individuals control over the visibility of their transactions. Combined with the viewing 
 key’s ability to decrypt transactions involving private addresses, the system ensures that users can maintain transparency over their private transactions without 
 exposing sensitive information to the public state. This dual-address approach enables users to seamlessly switch between public and private interactions depending on their needs, 
-providing a robust framework for both privacy and transparency in the Nescience architecture.
+providing a robust framework for both privacy and transparency in NSSA.
 
 #### VII. Conclusion
-Key management in the Nescience architecture is a carefully designed system that strikes an optimal balance between security, privacy, and flexibility.
- The architecture’s hierarchical structure, with distinct roles for the spending key, private keys, and public keys, ensures that users retain full control 
- over their assets while maintaining the integrity of their transactions. The spending key, as the root of security, provides unassailable control over the 
- user's UTXOs and assets, ensuring that only the rightful owner can authorize spending. Private keys, derived from the spending key, enable users to engage 
- in cryptographic operations such as signing transactions and generating commitments without exposing sensitive information to the network.
+Key management in NSSA is a carefully designed system that strikes an optimal balance between security, privacy, and flexibility. 
+The architecture’s hierarchical structure, with distinct roles for the spending key, private keys, and public keys, ensures that users retain full control 
+over their assets while maintaining the integrity of their transactions. The spending key, as the root of security, provides unassailable control over the 
+user's UTXOs and assets, ensuring that only the rightful owner can authorize spending. Private keys, derived from the spending key, enable users to engage 
+in cryptographic operations such as signing transactions and generating commitments without exposing sensitive information to the network.
 
 The viewing key adds another layer of transparency, allowing users to decrypt and review their transactions without compromising their authority over their assets. 
 While it provides a window into transaction history, the viewing key does not grant spending power, preserving the critical separation between visibility and control.
@@ -1043,8 +1042,8 @@ compromising their privacy or control. The architecture supports the nuanced nee
 interactions and the security of private transactions, all while maintaining the integrity and confidentiality of their assets.
 
 
-## c) Trees in Nescience architecture
-Trees in the Nescience architecture serve as verifiable databases, essential for maintaining privacy and security. Different types of trees are used for various purposes:
+## c) Trees in NSSA
+Trees in NSSA serve as verifiable databases, essential for maintaining privacy and security. Different types of trees are used for various purposes:
 
 1. Global state tree: The global state tree is a single, public tree that holds all public assets and storage information. It acts as a central repository for all 
 publicly accessible data on the blockchain. By organizing this data in a Merkle tree structure, the Global State Tree allows for efficient and secure verification of public information.
@@ -1065,7 +1064,7 @@ of both public and private states.
 
 ##<a id="nul"></a>  d) Nullifier tree in Nescience
 
-The **nullifier tree** is a fundamental component of the Nescience architecture, designed to prevent double spending by securely tracking all consumed UTXOs. 
+The **nullifier tree** is a fundamental component of NSSA, designed to prevent double spending by securely tracking all consumed UTXOs. 
 This tree acts as a public ledger of spent UTXOs, ensuring that once a UTXO is consumed in a transaction, it cannot be reused in future transactions. 
 
 The primary function of the nullifier Tree is to store the **nullifiers** of all consumed UTXOs. By recording the nullifiers in a public tree, 
@@ -1075,7 +1074,7 @@ the system ensures that each UTXO is spent only once, thereby safeguarding the i
 Before a user can consume a UTXO in a transaction, they must provide a **non-membership proof**. This proof demonstrates that the UTXO’s nullifier 
 does not already exist in the Nullifier Tree, proving that the UTXO has not been spent before. If the UTXO’s nullifier is found in the tree, 
 the system will reject the transaction, preventing double spending. The non-membership proof ensures that users cannot attempt to spend the 
-same UTXO in multiple transactions. This mechanism is critical for maintaining the security and reliability of the Nescience architecture. 
+same UTXO in multiple transactions. This mechanism is critical for maintaining the security and reliability of NSSA. 
 The tree structure, which is typically built using a cryptographic tree like a Merkle tree, allows for efficient verification of nullifiers. 
 Verifiers can quickly check whether a nullifier is present or absent in the tree, ensuring that each UTXO is only spent once.
 
@@ -1092,11 +1091,11 @@ the nullifier is added to the tree, ensuring that the UTXO cannot be used again.
 **Conclusion**
 The Nullifier Tree is a crucial element of Nescience's security. By recording all consumed UTXOs and ensuring that nullifiers are unique, the tree prevents double spending 
 and maintains the integrity of the blockchain. The non-membership proof mechanism guarantees that every transaction is validated against the tree. This structure supports 
-the scalability and security of the Nescience architecture, providing a reliable method for verifying the validity of transactions while preventing malicious behavior.
+the scalability and security of NSSA, providing a reliable method for verifying the validity of transactions while preventing malicious behavior.
 
 ## e) Recursive-friendly privacy-preserving zk-zkVM
 The development of the zk-zkVM in Nescience is a work in progress, as the architecture continues to evolve to support privacy-preserving transactions 
-and efficient zero-knowledge proof generation. The goal of the zk-zkVM is to seamlessly integrate with the Nescience state-separation architecture, 
+and efficient ZKP generation. The goal of the zk-zkVM is to seamlessly integrate with the Nescience state-separation architecture, 
 ensuring that private transactions remain confidential while allowing the network to verify their validity without compromising privacy.
 
 Currently, we are exploring and testing several existing zkVMs to identify the most suitable platform for our needs. Our focus is on finding a zkVM 
@@ -1114,7 +1113,7 @@ which allows users to reveal only specific details of a transaction as needed. F
 of the participants. The zk-zkVM employs advanced encryption techniques to protect this sensitive data. All transaction data is encrypted before being stored on the blockchain, 
 so even if the data is intercepted, it cannot be deciphered without the appropriate decryption keys. Another of the crucial privacy-preserving features is the support 
 for **confidential transactions**. Only the parties involved in the transaction can access the encrypted data. Furthermore, the zk-zkVM supports **verifiable encryption**, 
-a powerful capability that allows encrypted data to be included in zero-knowledge proofs without needing to decrypt it. This ensures that transaction details remain private 
+a powerful capability that allows encrypted data to be included in ZKPs without needing to decrypt it. This ensures that transaction details remain private 
 while their correctness can still be proven.
 
 
@@ -1127,7 +1126,7 @@ Fast proof generation is particularly important for ensuring that the system rem
 - **Recursive-friendly operations**: One of the most advanced features of the zk-zkVM will be its support for **recursive operations**. Recursion enables the aggregation 
 of multiple proofs into a single proof, improving efficiency on both the client and sequencer sides of the network.
 
-- **Client-side recursion (batch processing):** When a single transaction involves multiple executions, each requiring its own zero-knowledge proof, these individual 
+- **Client-side recursion (batch processing):** When a single transaction involves multiple executions, each requiring its own ZKP, these individual 
 proofs can be recursively aggregated before being sent to the sequencer. This reduces the overall data transmitted, enhancing the efficiency of the transaction process 
 by compressing multiple proofs into a single package.
   
@@ -1142,7 +1141,7 @@ innovation and helps expand the range of privacy-preserving applications that ca
 
 **Conclusion**
 
-The zk-zkVM in Nescience is a powerful and versatile virtual machine that embodies the principles of privacy, efficiency, and scalability. By supporting zero-knowledge proofs 
+The zk-zkVM in Nescience is a powerful and versatile virtual machine that embodies the principles of privacy, efficiency, and scalability. By supporting ZKPs 
 and integrating with advanced privacy technologies like homomorphic encryption. Its lightweight design allows it to run efficiently on standard hardware, promoting decentralization, 
 and its recursive operations further enhance the system's scalability. With its developer-friendly language and fast proving times, the zk-zkVM is positioned as a key component in 
 fostering the growth and adoption of privacy-preserving blockchain applications.
@@ -1153,7 +1152,7 @@ Nescience is developing an **MPC-based** synchronization mechanism to balance pr
 This mechanism extracts common information from encrypted UTXOs without revealing private details, ensuring privacy and preventing UTXO linkage to users or specific transactions. 
 It guarantees that public and private executions remain equitable, with the total input equaling the public output.
 
-The mechanism employs **MPC protocols** to perform computations privately, **zero-knowledge proofs** to verify correctness, and **cryptographic protocols** 
+The mechanism employs **MPC protocols** to perform computations privately, **ZKPs** to verify correctness, and **cryptographic protocols** 
 to secure data during synchronization. This ensures a consistent and fair environment for all users, regardless of their chosen privacy level. Currently, 
 this feature is under development and review for potential inclusion depending on the research output and compability.
 
