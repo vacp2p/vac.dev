@@ -1,21 +1,13 @@
 ---
 title: 'Nescience - A zkVM leveraging hiding properties'
 date: 2023-08-28 12:00:00
-<<<<<<< HEAD
-authors: Moudy
-=======
 authors: moudy
->>>>>>> origin/develop
 published: true
 slug: Nescience-A-zkVM-leveraging-hiding-properties
 categories: research
 
 
-<<<<<<< HEAD
-toc_min_heading_level: 1
-=======
 toc_min_heading_level: 2
->>>>>>> origin/develop
 toc_max_heading_level: 5
 ---
 
@@ -23,11 +15,7 @@ Nescience, a privacy-first blockchain zkVM.
 
 <!--truncate-->
 
-<<<<<<< HEAD
-# Introduction
-=======
 ## Introduction
->>>>>>> origin/develop
 
 Nescience is a privacy-first blockchain project that aims to enable private transactions and provide a general-purpose execution environment for classical applications. 
 The goals include creating a state separation architecture for public/private computation, 
@@ -54,11 +42,7 @@ Should Nova showcase superior performance metrics, we stand ready to integrate i
 we not only reinforce the foundation of our project but also ensure its scalability and robustness in the ever-evolving landscape of blockchain technology.
 
 
-<<<<<<< HEAD
-# Goal 1: Create a State Separation Architecture
-=======
 ## Goal 1: Create a State Separation Architecture
->>>>>>> origin/develop
 
 The initial goal revolves around crafting a distinctive architecture that segregates public and private computations, 
 employing an account-based framework for the public state and a UTXO-based structure for the private state. 
@@ -211,19 +195,6 @@ By addressing these challenges head-on with a detailed and systematic approach, 
 combining the strengths of both UTXO and account-based models without their standalone limitations.
 
 
-<<<<<<< HEAD
-| Aspect                 	| Details                                                                                                                                                                                                                                                                                                                                                                                                        	|   	|
-|------------------------	|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|---	|
-| **Harmony**            	| - **Advanced VM Development:** Design tailored for private smart contracts. - **Leverage Established Architectures:** Use WASM or RISC-V to harness their versatile and encompassing nature suitable for zero-knowledge applications. - **Support for UTXO & Account-Based Models:** Enhance adaptability across various blockchain structures.                                                                	|   	|
-| **Challenges**         	| - **Adaptation Concerns:** WASM and RISC-V weren't designed with zero-knowledge proofs as a primary focus, posing integration challenges. - **Complexities with Newer Systems:** Systems like (Super)Nova, STARKs, and Sangria are relatively nascent, adding another layer of intricacy to the integration. - **Optimization Concerns:** Ensuring that these systems are optimized for zero-knowledge proofs. 	|   	|
-| **Proposed Solutions** 	| - **Integration of Nova:** Consider Nova's proof system for its potential alignment with project goals. - **Comprehensive Testing:** Rigorously test and benchmark against alternatives like Halo2, Plonky, and Starky to validate choices. - **Poseidon Recursion Technique:** To conduct exhaustive performance tests, providing insights into each system's efficiency and scalability.                     	|   	|
-
-
-
-
-
-# Goal 2: Virtual Machine Creation
-=======
 | Aspect                 	| Details                                                                                                                                                                                                                                                                                                                                                                                                        	|
 |------------------------	|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | **Harmony**            	| - **Advanced VM Development:** Design tailored for private smart contracts. - **Leverage Established Architectures:** Use WASM or RISC-V to harness their versatile and encompassing nature suitable for zero-knowledge applications. - **Support for UTXO & Account-Based Models:** Enhance adaptability across various blockchain structures.                                                                	|
@@ -232,7 +203,6 @@ combining the strengths of both UTXO and account-based models without their stan
 
 
 ## Goal 2: Virtual Machine Creation
->>>>>>> origin/develop
 
 The second goal entails the creation of an advanced virtual machine by leveraging established mainstream instruction sets like WASM or RISC-V. 
 Alternatively, the objective involves pioneering a new, specialized instruction set meticulously optimized for Zero-Knowledge applications.
@@ -335,12 +305,7 @@ Start with a basic integration of WASM or RISC-V for general tasks and gradually
 * _External Audits & Research_: Regular checks from cryptographic experts and collaboration with academic researchers can help in staying updated and ensuring secure implementations.
 
 
-<<<<<<< HEAD
-
-# Goal 3: Proofs Creation and Verification
-=======
 ## Goal 3: Proofs Creation and Verification
->>>>>>> origin/develop
 
 The process of generating proofs for private state updates is vested in the hands of the user, aligning with our commitment to minimizing trust assumptions and enhancing privacy. 
 Concurrently, the responsibility of verifying these proofs and executing public functions within the virtual machine can be effectively delegated to an external prover, 
@@ -439,15 +404,6 @@ and conducive to the objectives of user-initiated proof creation, incentivized v
 
 <center>
 
-<<<<<<< HEAD
-| Aspect                        	| Details                                                                                                                                                                                                                      	|   	|
-|-------------------------------	|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|---	|
-| **Design Principle**          	| - **User Responsibility:** Generating proofs for private state updates. - **External Prover:** Delegated the task of verifying proofs and executing public VM functions.                                                     	|   	|
-| **Trust & Privacy**           	| - **Minimized Trust Assumptions:** Place proof generation in users' hands. - **Enhanced Privacy:** Ensure confidentiality of private transactions and prevent information leakage.                                           	|   	|
-| **Incentivization Framework** 	| - **Rewards:** Compensate honest behavior. - **Penalties:** Deter and penalize dishonest behavior.                                                                                                                           	|   	|
-| **Economic Considerations**   	| - **Verification vs. Execution:** Make verification more cost-effective than execution to prevent spurious proofs flooding. - **Cost Balance:** Strengthen resilience against fraudulent activities and maintain efficiency. 	|   	|
-| **Outcome**                   	| An ecosystem where: - Users' privacy is paramount. - Incentives are appropriately aligned. - The system is robust against adversarial actions.                                                                               	|   	|
-=======
 | Aspect                        	| Details                                                                                                                                                                                                                      	|
 |-------------------------------	|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | **Design Principle**          	| - **User Responsibility:** Generating proofs for private state updates. - **External Prover:** Delegated the task of verifying proofs and executing public VM functions.                                                     	|
@@ -455,7 +411,6 @@ and conducive to the objectives of user-initiated proof creation, incentivized v
 | **Incentivization Framework** 	| - **Rewards:** Compensate honest behavior. - **Penalties:** Deter and penalize dishonest behavior.                                                                                                                           	|
 | **Economic Considerations**   	| - **Verification vs. Execution:** Make verification more cost-effective than execution to prevent spurious proofs flooding. - **Cost Balance:** Strengthen resilience against fraudulent activities and maintain efficiency. 	|
 | **Outcome**                   	| An ecosystem where: - Users' privacy is paramount. - Incentives are appropriately aligned. - The system is robust against adversarial actions.                                                                               	|
->>>>>>> origin/develop
 
 </center>
 
@@ -470,14 +425,7 @@ and conducive to the objectives of user-initiated proof creation, incentivized v
     aligning incentives with the blockchain’s broader consensus mechanism.
 
 
-<<<<<<< HEAD
-
-
-
-# Goal 4: Kernel-based Architecture Implementation
-=======
 ## Goal 4: Kernel-based Architecture Implementation
->>>>>>> origin/develop
 
 This goal centers on the establishment of a kernel-based architecture, akin to the model observed in ZEXE, to facilitate the attestation of accurate private function executions. 
 This innovative approach employs recursion to construct a call stack, which is then validated through iterative recursive computations. 
@@ -558,11 +506,7 @@ While the approach promises robust outcomes, it's pivotal to maneuver through it
 By striking this balance, the architecture can realize its full potential in ensuring trustworthy and efficient private function executions.
 
 
-<<<<<<< HEAD
-# Goal 5: Seamless Interaction Design
-=======
 ## Goal 5: Seamless Interaction Design
->>>>>>> origin/develop
 
 Goal 5 revolves around the meticulous design of a seamless interaction between public and private states within the blockchain ecosystem. 
 This objective envisions achieving not only composability between contracts but also the harmonious integration of private and public functions.
@@ -585,24 +529,6 @@ In the table below, a comprehensive list of solutions that address these objecti
 
 <center>
 
-<<<<<<< HEAD
-|           **Solution Category**           	|                                                                                     **Description**                                                                                    	|   	|
-|:-----------------------------------------:	|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:	|---	|
-| **Layer 2 Solutions**                     	| Employ zk-Rollups, Optimistic Rollups, and state channels to handle private interactions off-chain and settle them on-chain periodically. Boost scalability and cut transaction costs. 	|   	|
-| **Intermediary Smart Contracts**          	|                            Craft smart contracts as intermediaries for secure public-private interactions. Use these to manage data exchange confidentially.                           	|   	|
-| **Decentralized Identity & Pseudonymity** 	|                                  Implement decentralized identity systems for pseudonymous interactions. Validate identity using cryptographic proofs.                                 	|   	|
-| **Confidential Sidechains & Cross-Chain** 	|                                 Set up confidential sidechains and employ cross-chain protocols to ensure private and composability across blockchains.                                	|   	|
-| **Temporal Data Structures**              	|                               Create chronological data structures for secure interactions. Utilize cryptographic methods for data integrity and privacy.                              	|   	|
-| **Homomorphic Encryption & MPC**          	|                                     Apply homomorphic encryption and MPC for computations on encrypted data and interactions between state layers.                                     	|   	|
-| **Commit-Reveal Schemes**                 	|                                     Introduce commit-reveal mechanisms for private transactions, revealing data only post necessary public actions.                                    	|   	|
-| **Auditability & Verifiability**          	|                                Use on-chain tools for auditing and verifying interactions. Utilize cryptographic commitments for third-party validation.                               	|   	|
-| **Data Fragmentation & Sharding**         	|                               Fragment data across shards for private interactions and curtailed data exposure. Bridge shards securely with cryptography.                              	|   	|
-| **Ring Signatures & CoinJoin**            	|                                  Incorporate ring signatures and CoinJoin protocols to mask transaction details and mix transactions collaboratively.                                  	|   	|
-
-</center>
-
-# Goal 6: Integration of DeFi Protocols with a Privacy-Preserving Framework
-=======
 |           **Solution Category**           	|                                                                                     **Description**                                                                                    	|
 |:-----------------------------------------:	|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:	|
 | **Layer 2 Solutions**                     	| Employ zk-Rollups, Optimistic Rollups, and state channels to handle private interactions off-chain and settle them on-chain periodically. Boost scalability and cut transaction costs. 	|
@@ -619,7 +545,6 @@ In the table below, a comprehensive list of solutions that address these objecti
 </center>
 
 ## Goal 6: Integration of DeFi Protocols with a Privacy-Preserving Framework
->>>>>>> origin/develop
 
 The primary aim of Goal 6 is to weave key DeFi protocols, such as AMMs and staking, into a user-centric environment that accentuates privacy. 
 This endeavor comes with inherent challenges, especially considering the heterogeneity of existing DeFi protocols, predominantly built on Ethereum. 
@@ -658,11 +583,7 @@ Through the integration of these approaches, we aim to achieve Goal 6, providing
 all while effectively overcoming the obstacles related to interoperability and liquidity concerns.
 
 
-<<<<<<< HEAD
-# Summary of the Architecture
-=======
 ## Summary of the Architecture
->>>>>>> origin/develop
 
 In our quest to optimize privacy, we're proposing a Zero-Knowledge Virtual Machine (Zkvm) that harnesses the power of Zero-Knowledge Proofs (ZKPs).
 These proofs ensure that while private state data remains undisclosed, public state transitions can still be carried out and subsequently verified by third parties. 
@@ -693,12 +614,7 @@ Fully Homomorphic Encryption (FHE) offers another pathway, enabling function exe
 Yet, integrating ZKPs with either FHE or MPC presents a challenge. Combining cryptographic functions like SHA-3 and BLAKE2 can also bolster security and uniqueness. 
 It's imperative to entertain these alternatives, especially when hashing might not serve large input/output functions effectively or might fall short in guaranteeing uniqueness.
 
-<<<<<<< HEAD
-
-# Current State
-=======
 ## Current State
->>>>>>> origin/develop
 
 Our aim is to revolutionize the privacy and security paradigms through Nescience.
 As we strive to set milestones and achieve groundbreaking advancements, 
@@ -732,10 +648,6 @@ Our commitment is further cemented by our efforts to introduce a dynamic reward 
 This intricate balance, while challenging, aims to fortify our system against potential adversarial actions, aligning incentives, and preserving the overall integrity of the project.
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/develop
 # References
 
 [1] Nakamoto, S. (2008). Bitcoin: A Peer-to-Peer Electronic Cash System. Retrieved from https://bitcoin.org/bitcoin.pdf
