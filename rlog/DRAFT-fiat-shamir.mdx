@@ -60,6 +60,35 @@ Critically, since $\mathsf{Hash}$ is preimage resistant and collision resistant,
 the Prover cannot manipulate her choices of the messages $m_0,\dots, m_t$ to influence the message $m_{t+1}$.
 Hence, verifying parties can trust that $m_{t+1}$ is sufficiently random with respect to the preceding messages.
 
+### The Schnorr Protocol
+The Schnorr protocol ([9](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)) is usually the first $\Sigma$-protocol that one studies.
+Additionally, the Schnorr protocol can be used as an efficient signature scheme.
+The Schnorr protocol provides a framework that enables the Prover to convince the Verifier that: for group elements $g$ and $X$, the Prover knows the power to raise $g$ to obtain $X$.
+Specifically, the Prover possesses some integer $x$ so that $X = g^x$.
+We assume that our group is of prime order $p$, and is sufficiently large to satisfy the discrete logarithm assumption.
+
+The Schnorr protocol proceeds as follows:
+
+|Prover| | Verifier|
+|----|----|----|
+|$t \in_R \mathbb{Z}_p$, $T := g^t$|    |    |
+|    | $T \rightarrow$| |
+|  |  | $c \in_R \mathbb{Z}_p$|
+|  | $\leftarrow c$ |
+| $z := t + xc$ | | |
+| | $z \rightarrow$ | |
+| | | output 1 provided $g^z == T X^c$|
+
+The Schnorr protocol can be used to convince the Verifier provided that the discrete logarithm is hard in $\mathbb{G}$.
+
+When the strong Fiat-Shamir heuristic is applied, the message $c = Hash(g||X||T)$.
+This choice of $c$ provides security since it should be 'impossible' to find collisions for the outputs of $\mathsf{Hash}$.
+Thus, $c$ fixes the group elements $g$, $X$ and $T$.
+
+Note that the elements that would be omitted in the hash by applying weak Fiat-Shamir heuristic are $g$ and $X$.
+
+
+
 ### Improper use of the Fiat-Shamir heuristic
 
 The Fiat-Shamir heuristic appears to be a fairly straight-forward technique to implement.
@@ -85,29 +114,8 @@ Trail of Bits coined the term **FROZEN Heart** to describe the use of weak Fiat-
 Frozen comes from the phrase "FoRging Of ZEro kNoledge proofs",
 and Fiat-Shamir is the "heart" of transforming an interactive protocol to noninteractive procotol.
 
-#### Example 1 - The Schnorr Protocol
-The Schnorr protocol ([9](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)) is the first example of a $\Sigma$-protocol that one studies.
-Let $\mathbb{G}$ be a multiplicative group of prime order $p$.
-The Schnorr protocol provides a framework that enables the Prover to convince the Verifier that: for a given $g, X \in \mathbb{G}$, the Prover possesses $x \in \mathbb{Z}_p$ so that $X = g^x$.
-The Schnorr protocol proceeds as follows:
 
-|Prover| | Verifier|
-|----|----|----|
-|$t \in_R \mathbb{Z}_p$, $T := g^t$|    |    |
-|    | $T \rightarrow$| |
-|  |  | $c \in_R \mathbb{Z}_p$|
-|  | $\leftarrow c$ |
-| $z := t + xc$ | | |
-| | $z \rightarrow$ | |
-| | | output 1 provided $g^z == T X^c$|
 
-The Schnorr protocol can be used to convince the Verifier provided that the discrete logarithm is hard in $\mathbb{G}$.
-
-When the strong Fiat-Shamir heuristic is applied, the message $c = Hash(g||X||T)$.
-This choice of $c$ provides security since it should be 'impossible' to find collisions for the outputs of $\mathsf{Hash}$.
-Thus, $c$ fixes the group elements $g$, $X$ and $T$.
-
-Note that the elements that would be omitted in the hash by applying weak Fiat-Shamir heuristic are $g$ and $X$.
 Next, we examine a couple variations of applying weak Fiat-Shamir heuristic.
 
 ##### Example 1 - Approach 1
