@@ -36,12 +36,12 @@ The [Fiat-Shamir heuristic](https://dl.acm.org/doi/10.5555/36664.36676) is used 
 
 ## Hash Functions
 We begin by reviewing the properties of cryptographic hash functions.
-A hash function $Hash$ is a special function that takes in an arbitrary binary string and outputs a bit string of a constant length.
+A hash function $\mathsf{Hash}$ is a special function that takes in an arbitrary binary string and outputs a bit string of a constant length.
 Specifically,
-$Hash : \{0,1\}^* \rightarrow \{0,1\}^n$.
+$\mathsf{Hash} : \{0,1\}^* \rightarrow \{0,1\}^n$.
 
-Informally, a cryptographic hash function $Hash$ satisfies the following properties:
-- **Succinct**: The hash $Hash({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
+Informally, a cryptographic hash function $\mathsf{Hash}$ satisfies the following properties:
+- **Succinct**: The hash $\mathsf{Hash}({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
 - **Preimage Resistance**: Let ${\bf{y}}$ be a binary string of length $n$.
     It should be 'impossible' to find some binary string ${\bf{x}}$ so that ${\bf{y}} = Hash({\bf{x}})$. 
 - **Collision Resistance**: It should be 'impossible' to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $Hash({\bf{x}_1}) = Hash({\bf{x}_2}).$
