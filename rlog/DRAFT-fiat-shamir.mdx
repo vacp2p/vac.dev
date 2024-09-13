@@ -60,6 +60,11 @@ Critically, since $\mathsf{Hash}$ is preimage resistant and collision resistant,
 the Prover cannot manipulate her choices of the messages $m_0,\dots, m_t$ to influence the message $m_{t+1}$.
 Hence, verifying parties can trust that $m_{t+1}$ is sufficiently random with respect to the preceding messages.
 
+There are two variants of the Fiat-Shamir heuristic: weak and strong.
+The weak variant uses all of the publicly traded messages in computing the Verifier's messages but does not include the public parameters.
+However, in the strong variant all of the publicly traded messages and public parameters are used to compute the Verifier's messages.
+We will provide a discussion on issues that can arise from using the weak Fiat-Shamir heuristic.
+
 ### The Schnorr Protocol
 The Schnorr protocol ([9](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)) is usually the first $\Sigma$-protocol that one studies.
 Additionally, the Schnorr protocol can be used as an efficient signature scheme.
@@ -76,17 +81,30 @@ The Schnorr protocol proceeds as follows:
 | $z := t + xc$ | $\stackrel{z}{\longrightarrow}$ | |
 | | | output 1 provided $g^z \stackrel{?}{=} T X^c$|
 
-The Schnorr protocol can be used to convince the Verifier provided that the discrete logarithm is hard in $\mathbb{G}$.
-
 When the strong Fiat-Shamir heuristic is applied, the message $c = Hash(g||X||T)$.
 This choice of $c$ provides security since it should be 'impossible' to find collisions for the outputs of $\mathsf{Hash}$.
 Thus, $c$ fixes the group elements $g$, $X$ and $T$.
 
-Note that the elements that would be omitted in the hash by applying weak Fiat-Shamir heuristic are $g$ and $X$.
+We note that the elements that would be omitted in the hash by applying weak Fiat-Shamir heuristic are $g$ and $X$.
 
+### Chaum-Pedersen protocol
+A tuple of group elements $(U,V,W)$ is a DH-triple if and only if there exists some $x \in \mathbb{Z}_p$ so that $V = g^x$ and $W = U^x$.
+The Chaum-Pedersen protocol provides a framework that enables a Prover to convince a Verifier that she possesses such a $x$ for a claimed DH-triple $(U,V,W)$.
+The Chaum-Pedersen protocol proceeds as follows:
 
+|Prover| | Verifier|
+|----|----|----|
+|$t \in_R \mathbb{Z}_p$, $T := g^t$, $S := U^t$| $\stackrel{T,S}{\longrightarrow}$| |
+|  | $\stackrel{c}{\longleftarrow}$ | $c \in_R \mathbb{Z}_p$|
+| $z := t + xc$ | $\stackrel{z}{\longrightarrow}$ | |
+| | | output 1 provided $g^z \stackrel{?}{=} T V^c$ and $U^z \stackrel{?}{=} SW^c$|
 
-### Improper use of the Fiat-Shamir heuristic
+The message $c = Hash(g||U||V||W||T||S)$ when the Prover applies the strong Fiat-Shamir heuristic.
+The properties of $\mathsf{Hash}$ fixes the generator $g$ and the Prover's statement $(U,V,W)$.
+
+Now, we will examine the application of weak Fiat-Shamir heuristic.
+
+## Improper use of the Fiat-Shamir heuristic
 
 The Fiat-Shamir heuristic appears to be a fairly straight-forward technique to implement.
 However, a subtle but serious issue that can occur in the application of the Fiat-Shamir heuristic has been a point of discussion for the past few years.
@@ -94,12 +112,12 @@ The issue concerns what messages are included in the hash.
 In particular, are the public parameters used to compute the hash value?
 
 Bernhard et al. ([11](https://eprint.iacr.org/2016/771.pdf)) provide a discussion of Fiat-Shamir heuristic resticted to $\Sigma$-protocols.
-Bernhard et al. define two variants of the Fiat-Shamir heuristic: weak and strong.
-The strong Fiat-Shamir heuristic requires that the public parameters are included in the calculations of the Verifier's messages while the weak version does not.
-The values included in the evaluation of the hash fixes them throughout the protocol.
+In particular, Bernhard et al. discuss the pitfalls of the weak Fiat-Shamir heuristic.
+Recall that the strong Fiat-Shamir heuristic requires that the public parameters are included in the calculations of the Verifier's messages while the weak version does not.
+The inclusion of the public parameters in the hash evaluations fix these public values for the entire protocol.
 This means that the Prover cannot retroactively change them.
 
-The issue of weak vs strong Fiat-Shamir heuristic has persisted since Bernhard et al.'s paper. 
+The issues with the differences in the variants of the Fiat-Shamir heuristics has persisted since Bernhard et al.'s paper. 
 In recent years, auditors from [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have 
 released blogs ([2](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/),
  [3](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/),
@@ -108,10 +126,8 @@ released blogs ([2](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-d
  describing specific vunerabilities in zero-knowledge papers and repositories associated to the use of the weak Fiat-Shamir heuristic.
 
 Trail of Bits coined the term **FROZEN Heart** to describe the use of weak Fiat-Shamir heuristic.
-Frozen comes from the phrase "FoRging Of ZEro kNoledge proofs",
+Frozen comes from the phrase "FoRging Of ZEro kNowledge proofs",
 and Fiat-Shamir is the "heart" of transforming an interactive protocol to noninteractive procotol.
-
-
 
 Next, we examine a couple variations of applying weak Fiat-Shamir heuristic.
 
@@ -132,26 +148,7 @@ As with the previous example, the malicious Prover takes a Schnorr transcript $(
 It is necessary for the malicious Prover to find a value $X$ so that $g^z == TX^c$.
 This can be acheived by computing $X = (g^z T^{-1})^{c^{-1}}$.
 
-#### Example 2 - Chaum-Pedersen protocol
-TODO - motivation
-We say that $(u,v,w)$ is a DH-triple if and only if there exists some $x \in \mathbb{Z}_p$ so that $V = g^x$ and $W = U^x$.
-The Chaum-Pedersen protocol provides a framework that enables a Prover to convince a Verifier that she possesses such a $x$ for a claimed DH-triple $(U,V,W)$.
-The Chaum-Pedersen protocol proceeds as follows:
 
-|Prover| | Verifier|
-|----|----|----|
-|$t \in_R \mathbb{Z}_p$, $T := g^t$, $S := U^t$|    |    |
-|    | $T,S \rightarrow$| |
-|  |  | $c \in_R \mathbb{Z}_p$|
-|  | $\leftarrow c$ |
-| $z := t + xc$ | | |
-| | $z \rightarrow$ | |
-| | | output 1 provided $g^z == T V^c$, $U^z = SW^c$|
-
-The message $c = Hash(g||U||V||W||T||S)$ when the Prover applies the strong Fiat-Shamir heuristic.
-The properties of $\mathsf{Hash}$ fixes the generator $g$ and the Prover's statement $(U,V,W)$.
-
-Now, we will examine the application of weak Fiat-Shamir heuristic.
 
 ##### Example 2 - weak Fiat-Shamir heuristic
 The Verifier's message $c = Hash(T,S)$ when weak Fiat-Shamir heuristic is applied.
@@ -168,9 +165,6 @@ Thus, the malicious Prover has a claimed statement $(U,V,W)$ for generator $g$ t
 
 The omission of any of the values $U,V,W,$ and $g$ in the computation of $c$ allows a malicious Prover to forge a proof.
 
-TODO:
-Sigmabus mentions incorrect usage
-Last challenge attack from Open-Zip
 
 ### References
 - 1. [How to Prove Yourself: Practical Solutions to Identification and Signature Problems](https://dl.acm.org/doi/10.5555/36664.36676)
