@@ -50,14 +50,14 @@ Commonly used hash functions include SHA256, Keccak, and Poseidon.
 
 ## The Fiat-Shamir heuristic
 The Fiat-Shamir heuristic is the technique used to convert an interactive protocol to a noninteractive protocol.
-This is done by replacing the Verifier's messages with hash values.
-Specifically, the Prover generates the Verifier's message evaluating a hash function $\mathsf{Hash}$ on the concatenation of all values exchanged thus far in the protocol.
+This is done by replacing each of the Verifier's messages with a hashed value.
+Specifically, the Prover generates the Verifier's message by evaluating the hash function $\mathsf{Hash}$ with the concatenation of all public values that appear in the protocol thus far.
 If $m_0, \dots, m_t$ denote the public values in the protocol thus far,
 then the Verifier's message is computed as $m_{t+1} := \mathsf{Hash}(m_0|| \cdots || m_t)$.
 
 Since $\mathsf{Hash}$ can be efficiently computed, and the messages $m_0, \dots, m_t$ are public, then any verifying party can compute $m_{t+1}$.
 Critically, since $\mathsf{Hash}$ is preimage resistant and collision resistant,
-the Prover cannot manipulate her choices of messages $m_0,\dots, m_t$ to 'predict' $m_{t+1}$.
+the Prover cannot manipulate her choices of the messages $m_0,\dots, m_t$ to influence the message $m_{t+1}$.
 Hence, verifying parties can trust that $m_{t+1}$ is sufficiently random with respect to the preceding messages.
 
 ### Improper use of the Fiat-Shamir heuristic
