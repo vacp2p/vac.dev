@@ -1,5 +1,5 @@
 ---
-title: 'Transforming an Interactive Protocol to a Noninteractive Protocol'
+title: 'Vac 101: Transforming an Interactive Protocol to a Noninteractive Argument'
 date: 2024-07-01 12:00:00
 authors: marvin
 published: true
@@ -11,32 +11,34 @@ toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
 
-Discussion on the conversion of interactive protocols to noninteractive protocols.
+In this post, provide a discussion on a common technique used to convert interactive protocols to their noninteractive variant.
 <!--truncate-->
 
 ## Introduction
 
-Interactive protocols is a class of protocols that consist of two parties: the Prover and the Verifier.
+The set of interactive protocols form a class of protocols that consist of communication between two parties: the Prover and the Verifier.
 The Prover tries to convince the Verifier of a given claim.
-For example, the Prover may need to convince the Verifier that she owns a specific UTXO.
+For example, the Prover may want to convince the Verifier that she owns a specific UTXO;
+that is, the Prover possesses the ability to spend the UTXO.
 In many instances, there is information that the Prover does not wish to reveal to the Verifier.
-For our example, it is critical that the Prover does not provide the Verifier with the private key associated to the UTXO.
-In addition to the Prover's claim and secret data, there is additional data called public parameters that the claimed data is given in terms of.
+In our example, it is critical that the Prover does not provide the Verifier with the spending key associated to her UTXO.
+In addition to the Prover's claim and secret data, there is additional data, public parameters, that the claimed statement is expressed in terms of.
 The public parameters can be thought of as the basis for all similar claims.
 
-In interactive protocols, the Prover and the Verifier are in active communication.
+In an interactive protocol, the Prover and the Verifier are in active communication.
 Specifically, the Prover and the Verifier exchange messages so that the Verifier can validate the Prover's claim.
-This communication is not practical for many applications.
-In decentralized systems, it is necessary that the Prover produces proofs on their own that any party can verify.
+However, this communication is not practical for many applications.
+It is necessary that any party can verify the Prover's claim in decentralized systems.
+It is impractical for the Prover to be in active communication with a large number of verifying parties.
+Instead, it is desirable for the Prover to generate a proof on their own that can convince any party.
 To achieve this, it is necessary for the Prover to generate the Verifier's messages in such a way that the Prover cannot manipulate the Verifier's messages for her benefit.
 The [Fiat-Shamir heuristic](https://dl.acm.org/doi/10.5555/36664.36676) is used for this purpose.
-In this document, we provide a discussion on the Fiat-Shamir heuristic, and known pitfalls of its application.
 
-### Hash Functions
+## Hash Functions
 We begin by reviewing the properties of cryptographic hash functions.
-A hash function $Hash$ is a special function that takes in an arbitrary binary string and outputs a bit string of a constant length.
+A hash function $\mathsf{Hash}$ is a special function that takes in an arbitrary binary string and outputs a bit string of a constant length.
 Specifically,
-$Hash : \{0,1\}^* \rightarrow \{0,1\}^n$.
+$\mathsf{Hash} : \{0,1\}^* \rightarrow \{0,1\}^n$.
 
 Informally, a cryptographic hash function $Hash$ satisfies the following properties:
 - **Succinct**: The hash $Hash({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
