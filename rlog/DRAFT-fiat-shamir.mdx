@@ -35,28 +35,28 @@ To achieve this, it is necessary for the Prover to generate the Verifier's messa
 The [Fiat-Shamir heuristic](https://dl.acm.org/doi/10.5555/36664.36676) is used for this purpose.
 
 ## Hash Functions
-We begin by reviewing the properties of cryptographic hash functions.
-A hash function $\mathsf{Hash}$ is a special function that takes in an arbitrary binary string and outputs a bit string of a constant length.
+Cryptographic hash functions serve as the backbone to the Fiat-Shamir heuristic.
+A hash function, $\mathsf{Hash}$, is a special function that takes in an arbitrary binary string and outputs a binary string of a predetermined fixed length.
 Specifically,
 $\mathsf{Hash} : \{0,1\}^* \rightarrow \{0,1\}^n$.
 
-Informally, a cryptographic hash function $\mathsf{Hash}$ satisfies the following properties:
-- **Succinct**: The hash $\mathsf{Hash}({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
-- **Preimage Resistance**: Let ${\bf{y}}$ be a binary string of length $n$.
-    It should be 'impossible' to find some binary string ${\bf{x}}$ so that ${\bf{y}} = Hash({\bf{x}})$. 
-- **Collision Resistance**: It should be 'impossible' to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $Hash({\bf{x}_1}) = Hash({\bf{x}_2}).$
+A cryptographic hash function satisfies the following properties:
+- **Succinct**: The hash function should be easy to compute; the hash $\mathsf{Hash}({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
+- **Preimage Resistance**: It should be impossible to work backwards given the output of a hash function. Let ${\bf{y}}$ be a binary string of length $n$.
+    It should be 'impossible' to find some binary string ${\bf{x}}$ so that ${\bf{y}} = \mathsf{Hash}({\bf{x}})$. 
+- **Collision Resistance**: It should be difficult to find two strings that hash to the same value. It should be 'impossible' to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $\mathsf{Hash}({\bf{x}_1}) = \mathsf{Hash}({\bf{x}_2}).$
 
 Commonly used hash functions include SHA256, Keccak, and Poseidon.
 
-### The Fiat-Shamir heuristic
+## The Fiat-Shamir heuristic
 The Fiat-Shamir heuristic is the technique used to convert an interactive protocol to a noninteractive protocol.
 This is done by replacing the Verifier's messages with hash values.
-Specifically, the Prover generates the Verifier's message evaluating a hash function $Hash$ on the concatenation of all values exchanged thus far in the protocol.
+Specifically, the Prover generates the Verifier's message evaluating a hash function $\mathsf{Hash}$ on the concatenation of all values exchanged thus far in the protocol.
 If $m_0, \dots, m_t$ denote the public values in the protocol thus far,
-then the Verifier's message is computed as $m_{t+1} := Hash(m_0|| \cdots || m_t)$.
+then the Verifier's message is computed as $m_{t+1} := \mathsf{Hash}(m_0|| \cdots || m_t)$.
 
-Since $Hash$ can be efficiently computed, and the messages $m_0, \dots, m_t$ are public, then any verifying party can compute $m_{t+1}$.
-Critically, since $Hash$ is preimage resistant and collision resistant,
+Since $\mathsf{Hash}$ can be efficiently computed, and the messages $m_0, \dots, m_t$ are public, then any verifying party can compute $m_{t+1}$.
+Critically, since $\mathsf{Hash}$ is preimage resistant and collision resistant,
 the Prover cannot manipulate her choices of messages $m_0,\dots, m_t$ to 'predict' $m_{t+1}$.
 Hence, verifying parties can trust that $m_{t+1}$ is sufficiently random with respect to the preceding messages.
 
@@ -104,7 +104,7 @@ The Schnorr protocol proceeds as follows:
 The Schnorr protocol can be used to convince the Verifier provided that the discrete logarithm is hard in $\mathbb{G}$.
 
 When the strong Fiat-Shamir heuristic is applied, the message $c = Hash(g||X||T)$.
-This choice of $c$ provides security since it should be 'impossible' to find collisions for the outputs of $Hash$.
+This choice of $c$ provides security since it should be 'impossible' to find collisions for the outputs of $\mathsf{Hash}$.
 Thus, $c$ fixes the group elements $g$, $X$ and $T$.
 
 Note that the elements that would be omitted in the hash by applying weak Fiat-Shamir heuristic are $g$ and $X$.
@@ -144,7 +144,7 @@ The Chaum-Pedersen protocol proceeds as follows:
 | | | output 1 provided $g^z == T V^c$, $U^z = SW^c$|
 
 The message $c = Hash(g||U||V||W||T||S)$ when the Prover applies the strong Fiat-Shamir heuristic.
-The properties of $Hash$ fixes the generator $g$ and the Prover's statement $(U,V,W)$.
+The properties of $\mathsf{Hash}$ fixes the generator $g$ and the Prover's statement $(U,V,W)$.
 
 Now, we will examine the application of weak Fiat-Shamir heuristic.
 
