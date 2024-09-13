@@ -81,7 +81,7 @@ The Schnorr protocol proceeds as follows:
 | $z := t + xc$ | $\stackrel{z}{\longrightarrow}$ | |
 | | | output 1 provided $g^z \stackrel{?}{=} T X^c$|
 
-When the strong Fiat-Shamir heuristic is applied, the message $c = Hash(g||X||T)$.
+When the strong Fiat-Shamir heuristic is applied, the message $c = \mathsf{Hash}(g||X||T)$.
 This choice of $c$ provides security since it should be 'impossible' to find collisions for the outputs of $\mathsf{Hash}$.
 Thus, $c$ fixes the group elements $g$, $X$ and $T$.
 
@@ -102,7 +102,6 @@ The Chaum-Pedersen protocol proceeds as follows:
 The message $c = Hash(g||U||V||W||T||S)$ when the Prover applies the strong Fiat-Shamir heuristic.
 The properties of $\mathsf{Hash}$ fixes the generator $g$ and the Prover's statement $(U,V,W)$.
 
-Now, we will examine the application of weak Fiat-Shamir heuristic.
 
 ## Improper use of the Fiat-Shamir heuristic
 
@@ -129,28 +128,29 @@ Trail of Bits coined the term **FROZEN Heart** to describe the use of weak Fiat-
 Frozen comes from the phrase "FoRging Of ZEro kNowledge proofs",
 and Fiat-Shamir is the "heart" of transforming an interactive protocol to noninteractive procotol.
 
-Next, we examine a couple variations of applying weak Fiat-Shamir heuristic.
+Now, we examine how weak Fiat-Shamir affects the Schnorr protocol and Chaum-Pedersen protocol.
 
-##### Example 1 - Approach 1
-In the first approach, we will omit the generator $g \in \mathbb{G}$ from the computation for the message $c$.
-That is, $c = Hash(X||T)$.
+### Schnorr protocol with the weak Fiat-Shamir heuristic
+For Schnorr, we will examine two variants:
+the first where we only include the Prover's claim $X$ but not the public parameter $g$, and
+the second where we include the public parameter $g$ but not the Prover's claim $X$.
 
-A malicious Prover completes the transcript for the Schnorr protocol by selecting any $z \in_R \mathbb{Z}_p$.
-At this point, the generator $g$ has not been selected.
-But, the malicious Prover needs the transcript $(T,c,z)$ to satisfy $g^z == TX^c$.
+Since we omit the generator $g \in \mathbb{G}$ from the computation for the message $c$ in our first approach,
+then $c = \mathsf{Hash}(X||T)$.
+
+Now, a malicious Prover can completes the transcript for the Schnorr protocol by selecting any $z \in_R \mathbb{Z}_p$.
+Since, $g$ is not fixed as it was not included in the computation of $c$.
+But, the malicious Prover needs the transcript $(T,c,z)$ to satisfy $g^z = TX^c$.
 Hence, the malicious Prover can compute the generator $g = (TX^c)^{z^{-1}}.$
 
-##### Example 1 - Approach 2
 In our second approach, we omit the group element $X \in \mathbb{G}$ from the computation for the challenge $c$.
-That is, $c = Hash(g,T)$.
+That is, $c = \mathsf{Hash}(g||T)$.
 
 As with the previous example, the malicious Prover takes a Schnorr transcript $(T,c,z)$ where $z \in_R \mathbb{Z}_p$.
-It is necessary for the malicious Prover to find a value $X$ so that $g^z == TX^c$.
+It is necessary for the malicious Prover to find a value $X$ so that $g^z = TX^c$.
 This can be acheived by computing $X = (g^z T^{-1})^{c^{-1}}$.
 
-
-
-##### Example 2 - weak Fiat-Shamir heuristic
+### Chaum-Pedersen protocol with the Fiat-Shamir heuristic
 The Verifier's message $c = Hash(T,S)$ when weak Fiat-Shamir heuristic is applied.
 The Prover's triple $(U,V,W)$ and the generator $g$ are not fixed by $c$.
 As such, a malicious Prover can generate values for $U,V,W$, and $g$ that satisfy the Verifier's identity checks.
@@ -165,6 +165,9 @@ Thus, the malicious Prover has a claimed statement $(U,V,W)$ for generator $g$ t
 
 The omission of any of the values $U,V,W,$ and $g$ in the computation of $c$ allows a malicious Prover to forge a proof.
 
+## Conclusion
+The Fiat-Shamir heuristic is an essential technique to convert an interactive protocol to a variant that does not require communication.
+Additionally, careful application of this technique is necessary to maintain the integrity of the system. 
 
 ### References
 - 1. [How to Prove Yourself: Practical Solutions to Identification and Signature Problems](https://dl.acm.org/doi/10.5555/36664.36676)
