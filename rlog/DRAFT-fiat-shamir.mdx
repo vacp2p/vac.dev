@@ -3,7 +3,7 @@ title: 'Vac 101: Transforming an Interactive Protocol to a Noninteractive Argume
 date: 2024-07-01 12:00:00
 authors: marvin
 published: true
-slug: Fiat-Shaimr
+slug: Vac-101-Fiat-Shaimr
 categories: research
 
 
@@ -71,12 +71,9 @@ The Schnorr protocol proceeds as follows:
 
 |Prover| | Verifier|
 |----|----|----|
-|$t \in_R \mathbb{Z}_p$, $T := g^t$|    |    |
-|    | $T \rightarrow$| |
-|  |  | $c \in_R \mathbb{Z}_p$|
-|  | $\leftarrow c$ |
-| $z := t + xc$ | | |
-| | $z \rightarrow$ | |
+|$t \in_R \mathbb{Z}_p$, $T := g^t$| $\stackrel{T}{\longrightarrow}$| |
+|  | $\stackrel{c}{\longleftarrow}$ |$c \in_R \mathbb{Z}_p$|
+| $z := t + xc$ | $\stackrel{z}{\longrightarrow}$ | |
 | | | output 1 provided $g^z \stackrel{?}{=} T X^c$|
 
 The Schnorr protocol can be used to convince the Verifier provided that the discrete logarithm is hard in $\mathbb{G}$.
