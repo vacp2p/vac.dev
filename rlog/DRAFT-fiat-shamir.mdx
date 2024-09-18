@@ -34,6 +34,56 @@ Instead, it is desirable for the Prover to generate a proof on their own that ca
 To achieve this, it is necessary for the Prover to generate the Verifier's messages in such a way that the Prover cannot manipulate the Verifier's messages for her benefit.
 The [Fiat-Shamir heuristic](https://dl.acm.org/doi/10.5555/36664.36676) is used for this purpose.
 
+## Sigma Protocols
+
+A $\Sigma$-protocol is a family of interactive protocols that consists of three publicly transmitted messages between the Prover and the Verifier.
+In particular, the protocol has the following framework:
+
+|Prover| | Verifier|
+|----|----|----|
+| | $\stackrel{\mathsf{commitment}}{\longrightarrow}$| |
+| | $\stackrel{\mathsf{challenge}}{\longleftarrow}$| |
+| | $\stackrel{\mathsf{response}}{\longrightarrow}$| |
+
+These three messages form the protocol's transcript: $(\mathsf{commitment}, \mathsf{challenge}, \mathsf{response})$.
+The Verifier uses all three of these messages to validate the Prover's original claim.
+The Verifier's challenge should be selected uniform random from all possible challenges.
+Based on this selection, a dishonest Prover can only convince the the Verifier with a negligible probability.
+
+
+### The Schnorr Protocol
+The Schnorr protocol ([9](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)) is usually the first $\Sigma$-protocol that one studies.
+Additionally, the Schnorr protocol can be used as an efficient signature scheme.
+The Schnorr protocol provides a framework that enables the Prover to convince the Verifier that: for group elements $g$ and $X$, the Prover knows the power to raise $g$ to obtain $X$.
+Specifically, the Prover possesses some integer $x$ so that $X = g^x$.
+Cryptographic resources may use either multiplicative or additive notation for groups;
+we will use multiplicative notation.
+Briefly, the element $g$ being combined with itself in multiplicative notation is $g \cdot g = g^2$,
+while in additive notation it is $g + g = 2g$.
+We assume that our group is of prime order $p$, and is sufficiently large to satisfy the discrete logarithm assumption.
+
+The Schnorr protocol proceeds as follows:
+
+|Prover| | Verifier|
+|----|----|----|
+|$t \in_R \mathbb{Z}_p$, $T := g^t$| $\stackrel{T}{\longrightarrow}$| |
+|  | $\stackrel{c}{\longleftarrow}$ |$c \in_R \mathbb{Z}_p$|
+| $z := t + xc$ | $\stackrel{z}{\longrightarrow}$ | |
+| | | output 1 provided $g^z \stackrel{?}{=} T X^c$|
+
+
+### Chaum-Pedersen protocol
+A tuple of group elements $(U,V,W)$ is a DH-triple if and only if there exists some $x \in \mathbb{Z}_p$ so that $V = g^x$ and $W = U^x$.
+The Chaum-Pedersen protocol provides a framework that enables a Prover to convince a Verifier that she possesses such a $x$ for a claimed DH-triple $(U,V,W)$.
+The Chaum-Pedersen protocol proceeds as follows:
+
+|Prover| | Verifier|
+|----|----|----|
+|$t \in_R \mathbb{Z}_p$, $T := g^t$, $S := U^t$| $\stackrel{T,S}{\longrightarrow}$| |
+|  | $\stackrel{c}{\longleftarrow}$ | $c \in_R \mathbb{Z}_p$|
+| $z := t + xc$ | $\stackrel{z}{\longrightarrow}$ | |
+| | | output 1 provided $g^z \stackrel{?}{=} T V^c$ and $U^z \stackrel{?}{=} SW^c$|
+
 ## Hash Functions
 Cryptographic hash functions serve as the backbone to the Fiat-Shamir heuristic.
 A hash function, $\mathsf{Hash}$, is a special function that takes in an arbitrary binary string and outputs a binary string of a predetermined fixed length.
@@ -65,47 +115,18 @@ The weak variant uses all of the publicly traded messages in computing the Verif
 However, in the strong variant all of the publicly traded messages and public parameters are used to compute the Verifier's messages.
 We will provide a discussion on issues that can arise from using the weak Fiat-Shamir heuristic.
 
-### The Schnorr Protocol
-The Schnorr protocol ([9](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)) is usually the first $\Sigma$-protocol that one studies.
-Additionally, the Schnorr protocol can be used as an efficient signature scheme.
-The Schnorr protocol provides a framework that enables the Prover to convince the Verifier that: for group elements $g$ and $X$, the Prover knows the power to raise $g$ to obtain $X$.
-Specifically, the Prover possesses some integer $x$ so that $X = g^x$.
-Cryptographic resources may use either multiplicative or additive notation for groups;
-we will use multiplicative notation.
-Briefly, the element $g$ being combined with itself in multiplicative notation is $g \cdot g = g^2$,
-while in additive notation it is $g + g = 2g$.
-We assume that our group is of prime order $p$, and is sufficiently large to satisfy the discrete logarithm assumption.
+### Schnorr Protocol with the strong Fiat-Shamir
 
-The Schnorr protocol proceeds as follows:
-
-|Prover| | Verifier|
-|----|----|----|
-|$t \in_R \mathbb{Z}_p$, $T := g^t$| $\stackrel{T}{\longrightarrow}$| |
-|  | $\stackrel{c}{\longleftarrow}$ |$c \in_R \mathbb{Z}_p$|
-| $z := t + xc$ | $\stackrel{z}{\longrightarrow}$ | |
-| | | output 1 provided $g^z \stackrel{?}{=} T X^c$|
-
-When the strong Fiat-Shamir heuristic is applied, the message $c = \mathsf{Hash}(g||X||T)$.
-This choice of $c$ provides security since it should be 'impossible' to find collisions for the outputs of $\mathsf{Hash}$.
+When the strong Fiat-Shamir heuristic is applied to the Schnorr protocol, the message $c = \mathsf{Hash}(g||X||T)$.
+This choice of $c$ provides security since it should be computationally infeasible to find collisions for the outputs of $\mathsf{Hash}$.
 Thus, $c$ fixes the group elements $g$, $X$ and $T$.
 
-We note that the elements that would be omitted in the hash by applying weak Fiat-Shamir heuristic are $g$ and $X$.
+The elements that would be omitted in the hash by applying weak Fiat-Shamir heuristic are $g$ and $X$.
 
-### Chaum-Pedersen protocol
-A tuple of group elements $(U,V,W)$ is a DH-triple if and only if there exists some $x \in \mathbb{Z}_p$ so that $V = g^x$ and $W = U^x$.
-The Chaum-Pedersen protocol provides a framework that enables a Prover to convince a Verifier that she possesses such a $x$ for a claimed DH-triple $(U,V,W)$.
-The Chaum-Pedersen protocol proceeds as follows:
+### Chaum-Pedersen Protocol with the strong Fiat-Shamir
 
-|Prover| | Verifier|
-|----|----|----|
-|$t \in_R \mathbb{Z}_p$, $T := g^t$, $S := U^t$| $\stackrel{T,S}{\longrightarrow}$| |
-|  | $\stackrel{c}{\longleftarrow}$ | $c \in_R \mathbb{Z}_p$|
-| $z := t + xc$ | $\stackrel{z}{\longrightarrow}$ | |
-| | | output 1 provided $g^z \stackrel{?}{=} T V^c$ and $U^z \stackrel{?}{=} SW^c$|
-
-The message $c = Hash(g||U||V||W||T||S)$ when the Prover applies the strong Fiat-Shamir heuristic.
+The message $c = Hash(g||U||V||W||T||S)$ when the Prover applies the strong Fiat-Shamir heuristic to the Chaum-Pedersen protocol.
 The properties of $\mathsf{Hash}$ fixes the generator $g$ and the Prover's statement $(U,V,W)$.
-
 
 ## Improper use of the Fiat-Shamir heuristic
 
