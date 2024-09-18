@@ -44,7 +44,7 @@ A cryptographic hash function satisfies the following properties:
 - **Succinct**: The hash function should be easy to compute; the hash $\mathsf{Hash}({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
 - **Preimage Resistance**: It should be impossible to work backwards given the output of a hash function. Let ${\bf{y}}$ be a binary string of length $n$.
     It should be 'impossible' to find some binary string ${\bf{x}}$ so that ${\bf{y}} = \mathsf{Hash}({\bf{x}})$. 
-- **Collision Resistance**: It should be difficult to find two strings that hash to the same value. It should be 'impossible' to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $\mathsf{Hash}({\bf{x}_1}) = \mathsf{Hash}({\bf{x}_2}).$
+- **Collision Resistance**: It should be difficult to find two strings that hash to the same value. It should be computationally infeasible to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $\mathsf{Hash}({\bf{x}_1}) = \mathsf{Hash}({\bf{x}_2}).$
 
 Commonly used hash functions include SHA256, Keccak, and Poseidon.
 
