@@ -1,6 +1,6 @@
 ---
 title: 'Vac 101: Transforming an Interactive Protocol to a Noninteractive Argument'
-date: 2024-07-01 12:00:00
+date: 2024-09-24 12:00:00
 authors: marvin
 published: true
 slug: Vac-101-Fiat-Shaimr
@@ -18,7 +18,7 @@ In this post, we introduce a common technique used to convert interactive protoc
 
 The set of interactive protocols form a class of protocols that consist of communication between two parties: the Prover and the Verifier.
 The Prover tries to convince the Verifier of a given claim.
-For example, the Prover may want to convince the Verifier that she owns a specific UTXO;
+For example, the Prover may want to convince the Verifier that she owns a specific Unspent Transaction Output (UTXO);
 that is, the Prover possesses the ability to spend the UTXO.
 In many instances, there is information that the Prover does not wish to reveal to the Verifier.
 In our example, it is critical that the Prover does not provide the Verifier with the spending key associated to her UTXO.
@@ -46,7 +46,7 @@ A cryptographic hash function satisfies the following properties:
     It should be 'impossible' to find some binary string ${\bf{x}}$ so that ${\bf{y}} = \mathsf{Hash}({\bf{x}})$. 
 - **Collision Resistance**: It should be difficult to find two strings that hash to the same value. It should be computationally infeasible to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $\mathsf{Hash}({\bf{x}_1}) = \mathsf{Hash}({\bf{x}_2}).$
 
-Commonly used hash functions include SHA256, Keccak, and Poseidon.
+Commonly used hash functions include SHA256, Keccak, and [Poseidon](https://eprint.iacr.org/2019/458).
 
 ## The Fiat-Shamir heuristic
 The Fiat-Shamir heuristic is the technique used to convert an interactive protocol to a noninteractive protocol.
@@ -70,6 +70,10 @@ The Schnorr protocol ([9](https://link.springer.com/chapter/10.1007/0-387-34805-
 Additionally, the Schnorr protocol can be used as an efficient signature scheme.
 The Schnorr protocol provides a framework that enables the Prover to convince the Verifier that: for group elements $g$ and $X$, the Prover knows the power to raise $g$ to obtain $X$.
 Specifically, the Prover possesses some integer $x$ so that $X = g^x$.
+Cryptographic resources may use either multiplicative or additive notation for groups;
+we will use multiplicative notation.
+Briefly, the element $g$ being combined with itself in multiplicative notation is $g \cdot g = g^2$,
+while in additive notation it is $g + g = 2g$.
 We assume that our group is of prime order $p$, and is sufficiently large to satisfy the discrete logarithm assumption.
 
 The Schnorr protocol proceeds as follows:
@@ -181,3 +185,6 @@ Additionally, careful application of this technique is necessary to maintain the
 - 9. [Efficient Identification and Signatures for Smart Cards](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)
 - 10. [Wallet Databases with Observers](https://link.springer.com/content/pdf/10.1007/3-540-48071-4_7.pdf)
 - 11. [How not to Prove Yourself: Pitfalls of the Fiat-Shamir Heuristic and Applications to Helios](https://eprint.iacr.org/2016/771.pdf)
+- 12. Sha256 (TODO)
+- 13. Keccak (TODO)
+- 14. [Poseidon: A New Hash Function for Zero-Knowledge Proof Systems](https://eprint.iacr.org/2019/458)
