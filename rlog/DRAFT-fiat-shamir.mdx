@@ -33,6 +33,10 @@ It is impractical for the Prover to be in active communication with a large numb
 Instead, it is desirable for the Prover to generate a proof on their own that can convince any party.
 To achieve this, it is necessary for the Prover to generate the Verifier's messages in such a way that the Prover cannot manipulate the Verifier's messages for her benefit.
 The [Fiat-Shamir heuristic](https://dl.acm.org/doi/10.5555/36664.36676) is used for this purpose.
+Even though much of our discussion will focus on $\Sigma$-protocols,
+the Fiat-Shamir heuristic is not limited to restricted to $\Sigma$-protocol.
+The Fiat-Shamir heuristic has been applied to zk-SNARKs, but the security in this setting has been the subject of discussion and research in recent years.
+Block et al. [15](https://eprint.iacr.org/2023/1071) provide the first formal analysis of Fiat-Shamir heuristic in zk-SNARKs.
 
 ## Sigma Protocols
 
@@ -90,12 +94,20 @@ A hash function, $\mathsf{Hash}$, is a special function that takes in an arbitra
 Specifically,
 $\mathsf{Hash} : \{0,1\}^* \rightarrow \{0,1\}^n$.
 
+The security of cryptographic hash functions will rely on certain tasks being computationally infeasible.
+A task is computationally infeasible provided that there is no deterministic algorithm that can conclude the task in polynomial-time.
+
 A cryptographic hash function satisfies the following properties:
 - **Succinct**: The hash function should be easy to compute; the hash $\mathsf{Hash}({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
 - **Preimage Resistance**: It should be computationally infeasible to work backwards given the output of a hash function. Let ${\bf{y}}$ be a binary string of length $n$.
     It should be 'impossible' to find some binary string ${\bf{x}}$ so that ${\bf{y}} = \mathsf{Hash}({\bf{x}})$. 
 - **Collision Resistance**: It should be difficult to find two strings that hash to the same value. It should be computationally infeasible to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $\mathsf{Hash}({\bf{x}_1}) = \mathsf{Hash}({\bf{x}_2}).$
 
+A related class of functions is one-way functions.
+A one-way function satisfies the first two conditions of a cryptographic hash function (succinct and preimage resistance).
+All cryptographic hash functions are a one-way functions.
+However, one-way functions do not necessarily satisfy collision-resistance.
+We will simply refer to cryptographic hash functions as hash functions for the rest of this blog.
 Commonly used hash functions include [SHA-256](https://www.cs.princeton.edu/~appel/papers/verif-sha.pdf), [Keccak](https://keccak.team/keccak_specs_summary.html), and [Poseidon](https://eprint.iacr.org/2019/458).
 
 ## The Fiat-Shamir heuristic
@@ -209,3 +221,4 @@ Additionally, careful application of this technique is necessary to maintain the
 - 12. [Verification of a Cryptographic Primitive: SHA-256](https://www.cs.princeton.edu/~appel/papers/verif-sha.pdf)
 - 13. [Keccak specifications summary](https://keccak.team/keccak_specs_summary.html)
 - 14. [Poseidon: A New Hash Function for Zero-Knowledge Proof Systems](https://eprint.iacr.org/2019/458)
+- 15. [Fiat-Shamir Security of FRI and Related SNARKs](https://eprint.iacr.org/2023/1071)
