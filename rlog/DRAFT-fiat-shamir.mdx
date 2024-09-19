@@ -32,11 +32,11 @@ It is necessary that any party can verify the Prover's claim in decentralized sy
 It is impractical for the Prover to be in active communication with a large number of verifying parties.
 Instead, it is desirable for the Prover to generate a proof on their own that can convince any party.
 To achieve this, it is necessary for the Prover to generate the Verifier's messages in such a way that the Prover cannot manipulate the Verifier's messages for her benefit.
-The [Fiat-Shamir heuristic](https://dl.acm.org/doi/10.5555/36664.36676) is used for this purpose.
+The Fiat-Shamir heuristic [1](https://dl.acm.org/doi/10.5555/36664.36676) is used for this purpose.
 Even though much of our discussion will focus on $\Sigma$-protocols,
 the Fiat-Shamir heuristic is not limited to restricted to $\Sigma$-protocol.
 The Fiat-Shamir heuristic has been applied to zk-SNARKs, but the security in this setting has been the subject of discussion and research in recent years.
-Block et al. [15](https://eprint.iacr.org/2023/1071) provide the first formal analysis of Fiat-Shamir heuristic in zk-SNARKs.
+Block et al. [2](https://eprint.iacr.org/2023/1071) provide the first formal analysis of Fiat-Shamir heuristic in zk-SNARKs.
 
 ## Sigma Protocols
 
@@ -56,7 +56,7 @@ Based on this selection, a dishonest Prover can only convince the the Verifier w
 
 
 ### The Schnorr Protocol
-The Schnorr protocol ([9](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)) is usually the first $\Sigma$-protocol that one studies.
+The Schnorr protocol [3](https://link.springer.com/chapter/10.1007/0-387-34805-0_22) is usually the first $\Sigma$-protocol that one studies.
 Additionally, the Schnorr protocol can be used as an efficient signature scheme.
 The Schnorr protocol provides a framework that enables the Prover to convince the Verifier that: for group elements $g$ and $X$, the Prover knows the power to raise $g$ to obtain $X$.
 Specifically, the Prover possesses some integer $x$ so that $X = g^x$.
@@ -108,7 +108,7 @@ A one-way function satisfies the first two conditions of a cryptographic hash fu
 All cryptographic hash functions are a one-way functions.
 However, one-way functions do not necessarily satisfy collision-resistance.
 We will simply refer to cryptographic hash functions as hash functions for the rest of this blog.
-Commonly used hash functions include [SHA-256](https://www.cs.princeton.edu/~appel/papers/verif-sha.pdf), [Keccak](https://keccak.team/keccak_specs_summary.html), and [Poseidon](https://eprint.iacr.org/2019/458).
+Commonly used hash functions include SHA-256 [5](https://www.cs.princeton.edu/~appel/papers/verif-sha.pdf), Keccak [6](https://keccak.team/keccak_specs_summary.html), and Poseidon [7](https://eprint.iacr.org/2019/458).
 
 ## The Fiat-Shamir heuristic
 The Fiat-Shamir heuristic is the technique used to convert an interactive protocol to a noninteractive protocol.
@@ -147,7 +147,7 @@ However, a subtle but serious issue that can occur in the application of the Fia
 The issue concerns what messages are included in the hash.
 In particular, are the public parameters used to compute the hash value?
 
-Bernhard et al. ([11](https://eprint.iacr.org/2016/771.pdf)) provide a discussion of Fiat-Shamir heuristic resticted to $\Sigma$-protocols.
+Bernhard et al. [8](https://eprint.iacr.org/2016/771.pdf) provide a discussion of Fiat-Shamir heuristic resticted to $\Sigma$-protocols.
 In particular, Bernhard et al. discuss the pitfalls of the weak Fiat-Shamir heuristic.
 Recall that the strong Fiat-Shamir heuristic requires that the public parameters are included in the calculations of the Verifier's messages while the weak version does not.
 The inclusion of the public parameters in the hash evaluations fix these public values for the entire protocol.
@@ -155,10 +155,10 @@ This means that the Prover cannot retroactively change them.
 
 The issues with the differences in the variants of the Fiat-Shamir heuristics has persisted since Bernhard et al.'s paper. 
 In recent years, auditors from [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have 
-released blogs ([2](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/),
- [3](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/),
- [4](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/), [5](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/), [7](https://blog.openzeppelin.com/the-last-challenge-attack))
- and papers ([6](https://eprint.iacr.org/2023/691), [8](https://eprint.iacr.org/2024/398)) 
+released blogs ([9](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/),
+ [10](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/),
+ [11](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/), [12](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/), [13](https://blog.openzeppelin.com/the-last-challenge-attack))
+ and papers ([14](https://eprint.iacr.org/2023/691), [15](https://eprint.iacr.org/2024/398)) 
  describing specific vunerabilities in zero-knowledge papers and repositories associated to the use of the weak Fiat-Shamir heuristic.
 
 Trail of Bits coined the term **FROZEN Heart** to describe the use of weak Fiat-Shamir heuristic.
@@ -208,17 +208,18 @@ Additionally, careful application of this technique is necessary to maintain the
 
 ### References
 - 1. [How to Prove Yourself: Practical Solutions to Identification and Signature Problems](https://dl.acm.org/doi/10.5555/36664.36676)
-- 2. [Frozen Heart - Part 1](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/)
-- 3. [Frozen Heart - Part 2](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/)
-- 4. [Frozen Heart - Part 3](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/)
-- 5. [Frozen Heart - Part 4](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/)
-- 6. [Weak Fiat-Shamir Attacks on Modern Proof Systems](https://eprint.iacr.org/2023/691)
-- 7. [The Last Challenge Attack Blog](https://blog.openzeppelin.com/the-last-challenge-attack)
-- 8. [The Last Challenge Attack](https://eprint.iacr.org/2024/398)
-- 9. [Efficient Identification and Signatures for Smart Cards](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)
-- 10. [Wallet Databases with Observers](https://link.springer.com/content/pdf/10.1007/3-540-48071-4_7.pdf)
-- 11. [How not to Prove Yourself: Pitfalls of the Fiat-Shamir Heuristic and Applications to Helios](https://eprint.iacr.org/2016/771.pdf)
-- 12. [Verification of a Cryptographic Primitive: SHA-256](https://www.cs.princeton.edu/~appel/papers/verif-sha.pdf)
-- 13. [Keccak specifications summary](https://keccak.team/keccak_specs_summary.html)
-- 14. [Poseidon: A New Hash Function for Zero-Knowledge Proof Systems](https://eprint.iacr.org/2019/458)
-- 15. [Fiat-Shamir Security of FRI and Related SNARKs](https://eprint.iacr.org/2023/1071)
+- 2. [Fiat-Shamir Security of FRI and Related SNARKs](https://eprint.iacr.org/2023/1071)
+- 3. [Efficient Identification and Signatures for Smart Cards](https://link.springer.com/chapter/10.1007/0-387-34805-0_22)
+- 4. [Wallet Databases with Observers](https://link.springer.com/content/pdf/10.1007/3-540-48071-4_7.pdf)
+- 5. [Verification of a Cryptographic Primitive: SHA-256](https://www.cs.princeton.edu/~appel/papers/verif-sha.pdf)
+- 6. [Keccak specifications summary](https://keccak.team/keccak_specs_summary.html)
+- 7. [Poseidon: A New Hash Function for Zero-Knowledge Proof Systems](https://eprint.iacr.org/2019/458)
+- 8. [How not to Prove Yourself: Pitfalls of the Fiat-Shamir Heuristic and Applications to Helios](https://eprint.iacr.org/2016/771.pdf)
+- 9. [Frozen Heart - Part 1](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/)
+- 10. [Frozen Heart - Part 2](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/)
+- 11. [Frozen Heart - Part 3](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/)
+- 12. [Frozen Heart - Part 4](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/)
+- 13. [The Last Challenge Attack Blog](https://blog.openzeppelin.com/the-last-challenge-attack)
+- 14. [Weak Fiat-Shamir Attacks on Modern Proof Systems](https://eprint.iacr.org/2023/691)
+- 15. [The Last Challenge Attack](https://eprint.iacr.org/2024/398)
+
