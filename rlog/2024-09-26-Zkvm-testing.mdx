@@ -118,14 +118,15 @@ allocations were primarily in 9-16 B, 33-64 B, and 65-128 B ranges. For memory a
 - Stage 1: Hept 100 Test
     - Proof size: 3.108 MB
     - Proof time: 16.95 seconds
-    
+
 | ![Image 1](/img/zkvmtest/general11.png) | ![Image 2](/img/zkvmtest/alloc11.png) | ![Image 3](/img/zkvmtest/tempalloc11.png) | ![Image 4](/img/zkvmtest/consumed11.png) | ![Image 5](/img/zkvmtest/sizes11.png) |
 |------------------------|------------------------|------------------------|------------------------|------------------------|
 - Stage 2: Vec 10000 Test
     - Proof size: 3.17 MB
     - Proof time: 20.85 seconds
 
-
+| ![Image 1](/img/zkvmtest/general12.png) | ![Image 2](/img/zkvmtest/alloc12.png) | ![Image 3](/img/zkvmtest/tempalloc12.png) | ![Image 4](/img/zkvmtest/consumed12.png) | ![Image 5](/img/zkvmtest/sizes12.png) |
+|------------------------|------------------------|------------------------|------------------------|------------------------|
 
 ---
 ### 2. RISC0
@@ -137,9 +138,15 @@ and controlled RAM consumption staying below 2.2 GB. RISC0's memory allocations 
     - Proof size: 217.4 KB
     - Proof time: 9.73 seconds
 
+| ![Image 1](/img/zkvmtest/general21.png) | ![Image 2](/img/zkvmtest/alloc21.png) | ![Image 3](/img/zkvmtest/tempalloc21.png) | ![Image 4](/img/zkvmtest/consumed21.png) | ![Image 5](/img/zkvmtest/sizes21.png) |
+|------------------------|------------------------|------------------------|------------------------|------------------------|
+
 - Stage 2: Vec 10000 Test
      - Proof size: 217.4 KB
     - Proof time: 16.63 seconds
+
+| ![Image 1](/img/zkvmtest/general22.png) | ![Image 2](/img/zkvmtest/alloc22.png) | ![Image 3](/img/zkvmtest/tempalloc22.png) | ![Image 4](/img/zkvmtest/consumed22.png) | ![Image 5](/img/zkvmtest/sizes22.png) |
+|------------------------|------------------------|------------------------|------------------------|------------------------|
 
 A solid candidate for Nescience.
 
@@ -157,9 +164,16 @@ workloads (up to 1.2 GB), Nexus performed poorly during memory allocation tests,
      - Proof size: 46 MB
      - Proof time: 12.06 seconds
 
+| ![Image 1](/img/zkvmtest/general31.png) | ![Image 2](/img/zkvmtest/alloc31.png) | ![Image 3](/img/zkvmtest/tempalloc31.png) | ![Image 4](/img/zkvmtest/consumed31.png) | ![Image 5](/img/zkvmtest/sizes31.png) |
+|------------------------|------------------------|------------------------|------------------------|------------------------|
+
 - Stage 2: Vec 10000 Test
      - Proof size: 46 MB
      - Proof time: 56 minutes
+     
+| ![Image 1](/img/zkvmtest/general32.png) | ![Image 2](/img/zkvmtest/alloc32.png) | ![Image 3](/img/zkvmtest/tempalloc32.png) | ![Image 4](/img/zkvmtest/consumed32.png) | ![Image 5](/img/zkvmtest/sizes32.png) |
+|------------------------|------------------------|------------------------|------------------------|------------------------|
+
 ---
 ### 4. zkMIPS
 zkMIPS presents an intriguing case. While it shows good results in terms of proof size and generation time during the basic test, 
@@ -171,9 +185,15 @@ Allocation sizes are spread across several ranges, with notable concentrations i
      - Proof size: 4.3 MB
     - Proof time: 9.32 seconds
 
+| ![Image 1](/img/zkvmtest/general41.png) | ![Image 2](/img/zkvmtest/alloc41.png) | ![Image 3](/img/zkvmtest/tempalloc41.png) | ![Image 4](/img/zkvmtest/consumed41.png) | ![Image 5](/img/zkvmtest/sizes41.png) |
+|------------------------|------------------------|------------------------|------------------------|------------------------|
+
 - Stage 2: Vec 10000 Test
      - Proof size: 4.898 MB
      - Proof time: 42.57 seconds
+
+| ![Image 1](/img/zkvmtest/general42.png) | ![Image 2](/img/zkvmtest/alloc42.png) | ![Image 3](/img/zkvmtest/tempalloc42.png) | ![Image 4](/img/zkvmtest/consumed42.png) | ![Image 5](/img/zkvmtest/sizes42.png) |
+|------------------------|------------------------|------------------------|------------------------|------------------------|
 
 This zkVM provides mixed results with strong proof generation but concerning memory management issues.
 
@@ -188,9 +208,16 @@ with neighboring slots contributing small but notable amounts.
      - Proof size: 18 KB
      - Proof time: 42.7 seconds
 
+| ![Image 1](/img/zkvmtest/general51.png) | ![Image 2](/img/zkvmtest/alloc51.png) | ![Image 3](/img/zkvmtest/tempalloc51.png) | ![Image 4](/img/zkvmtest/consumed51.png) | ![Image 5](/img/zkvmtest/sizes51.png) |
+|------------------------|------------------------|------------------------|------------------------|------------------------|
+
 - Stage 2: Vec 10000 Test
      - Proof size: 334 KB
      - Proof time: 323 seconds
+
+| ![Image 1](/img/zkvmtest/general52.png) | ![Image 2](/img/zkvmtest/alloc52.png) | ![Image 3](/img/zkvmtest/tempalloc52.png) | ![Image 4](/img/zkvmtest/consumed52.png) | ![Image 5](/img/zkvmtest/sizes52.png) |
+|------------------------|------------------------|------------------------|------------------------|------------------------|    
+
 ---
 ### 6. Valida
 Valida delivered impressive results in proof generation speed and size, with a proof size of 280 KB and a proof time of < 1 second. 
