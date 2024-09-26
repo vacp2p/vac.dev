@@ -5,7 +5,7 @@ authors: moudy
 published: true
 slug: zkVM-testing
 categories: research
-
+discuss: https://forum.vac.dev/t/zkvm-testing-report-evaluating-zero-knowledge-virtual-machines-for-nescience/
 
 toc_min_heading_level: 2
 toc_max_heading_level: 5
@@ -42,25 +42,25 @@ We need a zkVM that supports these to enable robust project development.
 
 # Preliminary information on the candidates
 
-- SP1 is a performant, open-source zkVM that verifies the execution of arbitrary Rust (or any LLVM-compiled language) programs. 
+1. SP1 is a performant, open-source zkVM that verifies the execution of arbitrary Rust (or any LLVM-compiled language) programs. 
 SP1 utilizes Plonky3, enabling recursive proofs and supporting a wide range of cryptographic algorithms, including ECC-based ones like Groth16. 
 While it supports aggregation, it appears not to support zero-knowledge in a conventional manner.
 
-- RISC0 zkVM allows you to prove the correct execution of arbitrary Rust code. Built on a RISC-V architecture, it is inherently adaptable 
+2. RISC0 zkVM allows you to prove the correct execution of arbitrary Rust code. Built on a RISC-V architecture, it is inherently adaptable 
 for implementing standard cryptographic hash functions such as SHA-256 and ECDSA. RISC0 employs STARKs, providing a security level of 98 bits. 
 It supports multiple programming languages, including C and Rust, thanks to its compatibility with LLVM and WASM.
 
-- Nexus is a modular, extensible, open-source, highly-parallelized, prover-optimized, and contributor-friendly zkVM written in Rust. 
+3. Nexus is a modular, extensible, open-source, highly-parallelized, prover-optimized, and contributor-friendly zkVM written in Rust. 
 It focuses on performance and security, using the Nova folding scheme, which is particularly effective for recursive proofs. 
 Nexus also supports precompiles and targeted compilation, and besides Rust, it offers C++ support.
 
-- zkMIPS is a general verifiable computing infrastructure based on Plonky2 and the MIPS microarchitecture, aiming to empower Ethereum 
+4. zkMIPS is a general verifiable computing infrastructure based on Plonky2 and the MIPS microarchitecture, aiming to empower Ethereum 
 as the Global Settlement Layer. It can run arbitrary Rust code as well. Notably, zkMIPS is the only zkVM in this list that utilizes the MIPS opcode set.
 
-- zkWASM adheres to and supports the unmodified standard WASM bytecode specification. Since Rust code can be compiled to WASM bytecode, 
+5. zkWASM adheres to and supports the unmodified standard WASM bytecode specification. Since Rust code can be compiled to WASM bytecode, 
 one could theoretically run any Rust code on a zkWASM machine, providing flexibility and broad language support.
 
-- Valida is a STARK-based virtual machine aiming to improve upon the state of the art in several categories:
+6. Valida is a STARK-based virtual machine aiming to improve upon the state of the art in several categories:
     - Code Reuse: The VM has a RISC-inspired instruction set, simplifying the targeting of conventional programming languages. 
     A backend compiler is being developed to compile LLVM IR to the Valida ISA, enabling the proving of programs written in Rust, 
     Go, C++, and others with minimal to no changes in source code.
@@ -109,86 +109,121 @@ The tests were conducted on the following hardware configuration:
 
 # Results
 
-- SP1 does not provide zero-knowledge capability in its proofs but delivers respectable performance, though slightly behind its main competitor. 
+### 1. SP1
+
+SP1 does not provide zero-knowledge capability in its proofs but delivers respectable performance, though slightly behind its main competitor. 
 Memory leaks were minimal, staying below the 700 KB threshold. Interestingly, SP1 consumed more RAM during the basic arithmetic 
 test than in memory allocation tests, showcasing the team's effective handling of memory under load. In the basic test, 
 allocations were primarily in 9-16 B, 33-64 B, and 65-128 B ranges. For memory allocations, most fell into the 129-256 B range.
+- Stage 1: Hept 100 Test
+    - Proof size: 3.108 MB
+    - Proof time: 16.95 seconds
 
-    - Stage 1: Hept 100 Test
-        - Proof size: 3.108 MB
-        - Proof time: 16.95 seconds
+- Stage 2: Vec 10000 Test
+    - Proof size: 3.17 MB
+    - Proof time: 20.85 seconds
 
-    - Stage 2: Vec 10000 Test
-        - Proof size: 3.17 MB
-        - Proof time: 20.85 seconds
-
+| ![Image 1](/img/zkvmtest/1.1.1.png) | ![Image 2](/img/zkvmtest/1.1.2.png) | ![Image 3](/img/zkvmtest/1.1.3.pngg) | ![Image 4](/img/zkvmtest/1.1.4.png) | ![Image 5](/img/zkvmtest/1.1.5.png) |
+|------------------------|------------------------|------------------------|------------------------|------------------------|
 ---
-- RISC0 stands out with exceptional performance in proof size and generation time, ranking among the best 
+### 2. RISC0
+RISC0 stands out with exceptional performance in proof size and generation time, ranking among the best 
 (with the exception of Valida and zkWASM's basic test). It also handles memory well, with minor leaks under 0.5 MB 
 and controlled RAM consumption staying below 2.2 GB. RISC0's memory allocations were consistent, primarily in the 17-32 B and 33-64 B ranges.
 
-    - Stage 1: Hept 100 Test
-        - Proof size: 217.4 KB
-        - Proof time: 9.73 seconds
+- Stage 1: Hept 100 Test
+    - Proof size: 217.4 KB
+    - Proof time: 9.73 seconds
 
-    - Stage 2: Vec 10000 Test
-        - Proof size: 217.4 KB
-        - Proof time: 16.63 seconds
+- Stage 2: Vec 10000 Test
+     - Proof size: 217.4 KB
+    - Proof time: 16.63 seconds
 
 A solid candidate for Nescience.
 
 ---
-- Nexus' performance offers interesting insights into folding scheme-based zkVMs. Surprisingly, proof sizes remained consistent 
+### 3. Nexus
+Nexus' performance offers interesting insights into folding scheme-based zkVMs. Surprisingly, proof sizes remained consistent 
 regardless of workload, with no significant memory leaks (under 700 KB). However, while RAM consumption increased slightly with higher 
 workloads (up to 1.2 GB), Nexus performed poorly during memory allocation tests, making it unsuitable for our use case.
 
-    - Allocation Details:
-        - Basic test: Most allocations concentrated in 65-128 B
-        - Memory-heavy test: Allocations in the 129-256 B range
+- Allocation Details:
+    - Basic test: Most allocations concentrated in 65-128 B
+    - Memory-heavy test: Allocations in the 129-256 B range
 
-    - Stage 1: Hept 100 Test
-        - Proof size: 46 MB
-        - Proof time: 12.06 seconds
+- Stage 1: Hept 100 Test
+     - Proof size: 46 MB
+     - Proof time: 12.06 seconds
 
-    - Stage 2: Vec 10000 Test
-        - Proof size: 46 MB
-        - Proof time: 56 minutes
+- Stage 2: Vec 10000 Test
+     - Proof size: 46 MB
+     - Proof time: 56 minutes
 ---
-- zkMIPS presents an intriguing case. While it shows good results in terms of proof size and generation time during the basic test, 
+### 4. zkMIPS
+zkMIPS presents an intriguing case. While it shows good results in terms of proof size and generation time during the basic test, 
 these come at the cost of significant RAM usage and memory leaks. The memory allocation test revealed a concerning 6.7 GB memory leak, 
 with 0.5 GB leaked during the basic test. Despite this, RAM consumption (while high at 17+ GB) remains stable under higher workloads. 
 Allocation sizes are spread across several ranges, with notable concentrations in 17-32 B, 65-128 B, and 257-512 B slots.
 
-    - Stage 1: Hept 100 Test
-        - Proof size: 4.3 MB
-        - Proof time: 9.32 seconds
+- Stage 1: Hept 100 Test
+     - Proof size: 4.3 MB
+    - Proof time: 9.32 seconds
 
-    - Stage 2: Vec 10000 Test
-        - Proof size: 4.898 MB
-        - Proof time: 42.57 seconds
+- Stage 2: Vec 10000 Test
+     - Proof size: 4.898 MB
+     - Proof time: 42.57 seconds
 
 This zkVM provides mixed results with strong proof generation but concerning memory management issues.
+
 ---
-- zkWASM unfortunately performed poorly in both stages regarding proof size and generation time. RAM consumption was particularly high, 
+### 5. zkWASM
+zkWASM unfortunately performed poorly in both stages regarding proof size and generation time. RAM consumption was particularly high, 
 exceeding 7 GB in the basic test, and an astounding 57 GB during memory allocation tests. Despite its impressive memory usage, 
 the proof sizes were relatively large at 18 KB and 334 KB respectively. Allocation sizes were mainly concentrated in the 33-64 B range, 
 with neighboring slots contributing small but notable amounts.
 
-    - Stage 1: Hept 100 Test
-        - Proof size: 18 KB
-        - Proof time: 42.7 seconds
+- Stage 1: Hept 100 Test
+     - Proof size: 18 KB
+     - Proof time: 42.7 seconds
 
-    - Stage 2: Vec 10000 Test
-        - Proof size: 334 KB
-        - Proof time: 323 seconds
+- Stage 2: Vec 10000 Test
+     - Proof size: 334 KB
+     - Proof time: 323 seconds
 ---
-- Valida delivered impressive results in proof generation speed and size, with a proof size of 280 KB and a proof time of < 1 second. 
+### 6. Valida
+Valida delivered impressive results in proof generation speed and size, with a proof size of 280 KB and a proof time of < 1 second. 
 However, profiling was not possible due to Valida's limited Rust support. Valida currently compiles Rust using the LLVM backend, 
 transpiling LLVM IR to leverage its C/C++ implementation, leading to errors when handling Rust-specific data structures or dependencies. 
 As a result, complex memory interactions couldn't be tested, and using Valida with Rust code is currently not advisable. 
 A GitHub issue has been opened to address this.
 
+---
+## Summary table
+### Stage 1
 
+| zkVM   | Proof time | Proof size | Peak RAM consumption | Memory leaked |
+|--------|------------|------------|----------------------|---------------|
+| SP1    | 16.95 s    | 3.108 MB   | 2.1 GB               | 656.8 KB      |
+| RISC0  | 9.73 s     | 217.4 KB   | 1.9 GB               | 470.5 KB      |
+| NEXUS  | 12.06 s    | 46 MB      | 9.7 MB               | 646.5 KB      |
+| zkMIPS | 9.32 s     | 4.3 MB     | 17.3 GB              | 453.8 MB      |
+| zkWASM | 42.7 s     | 18 KB      | 8.2 GB               | 259.4 KB      |
+| Valida | < 1 s      | 280 KB     | N/A                  | N/A           |
+
+---
+
+### Stage 2
+
+| zkVM   | Proof time | Proof size | Peak RAM consumption | Memory leaked |
+|--------|------------|------------|----------------------|---------------|
+| SP1    | 20.85 s    | 3.17 MB    | 1.9 GB               | 616 KB        |
+| RISC0  | 16.63 s    | 217.4 KB   | 2.3 GB               | 485.3 KB      |
+| NEXUS  | 56 m       | 46 MB      | 1.9 GB               | 616 KB        |
+| zkMIPS | 42.57 s    | 4.898 MB   | 18.9 GB              | 6.9 GB        |
+| zkWASM | 323 s      | 334 KB     | 58.8 GB              | 259.4 KB      |
+| Valida | N/A        | N/A        | N/A                  | N/A           |
+
+---
 # Summary
 
 
@@ -215,7 +250,9 @@ In conclusion, RISC0 is the best fit for Nescience at this stage, but Valida rem
 
 
 We’d love to hear your thoughts on our zkVM testing process and results! Do you agree with our conclusions, or do you think we missed a promising zkVM? 
-We’re always open to feedback, insights, and suggestions from the community. Join the discussion and share your perspectives on our forum or try out the tests yourself through our GitHub page!
+We’re always open to feedback, insights, and suggestions from the community. Join the discussion and share your perspectives on 
+[our forum](https://forum.vac.dev/t/zkvm-testing-report-evaluating-zero-knowledge-virtual-machines-for-nescience/) or try out the 
+tests yourself through our [GitHub page](https://github.com/vacp2p/nescience-zkvm-testing!
 
 
 
