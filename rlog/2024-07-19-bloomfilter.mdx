@@ -1,0 +1,266 @@
+---
+title: 'Membership with Bloom Filters and Cuckoo Filters'
+date: 2024-07-19 12:00:00
+authors: marvin
+published: false
+slug: membership-with-bloom-filters-and-cuckoo-filters
+categories: research
+
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+We examine two data structures: Bloom filters and Cuckoo filters.
+
+<!--truncate-->
+
+## Membership with Bloom Filters and Cuckoo Filters
+
+The ability to efficiently query the membership of an element in a given data set is crucial.
+In certain applications, it is more important to output a result quickly than to have a 'perfect' result.
+In particular, false positives may be an acceptable tradeoff for speed.
+In this blog, we examine [Bloom](https://dl.acm.org/doi/10.1145/362686.362692) and [Cuckoo](https://www.cs.cmu.edu/~dga/papers/cuckoo-conext2014.pdf) data filters.
+Both of these filters are data structures that can be used for membership proofs.
+
+Everyone is familiar with the process of creating a new account for various websites, whether it is an e-mail account or a social media account.
+Consider when you enter your desired username.
+Many sites provide real-time feedback, as you type, on the availability of a given string.
+In this scenario, it is necessary that the result is seemingly instant, regardless of the number of existing accounts.
+However, it is not important that the usernames that are flagged as unavailable are, in fact, in use.
+That is, it is sufficient to have a probabilistic check for membership.
+
+**Bloom filters** and **Cuckoo filters** are data structures that can be used to accumulate data with a fixed amount of space.
+The associated filter $F$ for a digest of data $D$ can be queried to determine whether an element is (possibly) a member of $D$:
+
+- **0:** The queried element is definitely not a member of digest $D$.
+- **1:** The entry is possibly a member of the digest $D$.
+
+The algorithms associated with Bloom filters and Cuckoo filters, which we will discuss shortly, are deterministic.
+The possibility of false positives arises from the query algorithm.
+
+
+## Bloom filters
+A **Bloom filter** is a data structure that can be used to accumulate an arbitrary amount of data with a fixed amount of space.
+Bloom filters have been a popular data structure for proof of non-membership due to their small storage size.
+Specifically, a Bloom filter consists of a binary string ${\bf{v}} \in \{0,1\}^n$ and $k$ hash functions $\{h_i: \{0,1\}^* \rightarrow \{0,\dots,n-1\}\}_{i=0}^{k-1}$.
+We note that each hash function $h_i$ is used to determine an index of our binary string ${\bf{v}}$ to flip the associated bit to 1.
+The binary string ${\bf{v}}$ is initialized with every entry as 0.
+The hash functions do not need to be cryptographic hash functions.
+
+
+- **Append:** Suppose that we wish to add the element $x$ to the Bloom filter.
+    - Define the vector ${\bf{b}} \in \{0,\dots,n-1\}^k$ so that ${\bf{b}}[i] := h_i(x)$ for each $i \in \{0,\dots,k-1\}$.
+    - Update the binary string ${\bf{v}}[{\bf{b}}[i]] \leftarrow 1$ for each $i \in \{0,\dots,k-1\}$.
+   
+- **Query:** Suppose that we wish to query the Bloom filter for element $y$.
+    - Return 1 provided ${\bf{v}}[h_i(y)] = 1$ for every $i \in \{0,\dots,k-1\}$. Otherwise, return 0.
+    
+The algorithm **Query** will output 1 for every element $y$ that has been added to the Bloom filter.
+This is a consequence of the **Append** algorithm.
+However, due to potential collisions over a set of hash functions, it is possible for false positives to occur.
+Moreover, the possibility of collisions makes it impossible to remove elements from the Bloom filter.
+
+### Complexity
+The storage of a Bloom filter requires constant space.
+Specifically, the Bloom filter uses $n$ bits regardless of the size of the digest.
+So, regardless of the number of elements that we append, the Bloom filter will use $n$ bits.
+Further, if we assume that each of the $k$ hash functions runs in constant time, then we can append/query an entry in $O(k)$.
+
+### Example
+Suppose that $k = 3$ and $n = 10$. 
+Our Bloom filter is initialized as $\bf{v} = \begin{pmatrix}0&0&0&0&0&0&0&0&0&0\end{pmatrix}.$
+Now, we will append the words $add$, $sum$, and $equal$.
+Suppose that
+
+$\begin{matrix}
+h_0(add) = 1 & h_1(add) = 4 & h_2(add) = 7\\
+h_0(sum) = 9 & h_1(sum) = 2 & h_2(sum) = 1\\
+h_0(equal) = 5 & h_1(equal) = 8 & h_2(equal) = 0.
+\end{matrix}$
+
+After appending these words, the Bloom filter is $\bf{v} = \begin{pmatrix}1&1&1&0&1&1&0&1&1&1\end{pmatrix}.$
+
+Now, suppose that we query the words $subtract$ and $multiple$ so that
+
+$\begin{matrix} h_0(subtract) = 3 & h_1(subtract) = 5 & h_2(subtract) = 1\\ h_0(multiple) = 7 & h_1(multiple) = 1 & h_2(multiple) = 4\\
+\end{matrix}$.
+
+The query for $subtract$ returns 0 since ${\bf{v}}[3]=0$.
+On the other hand, the query for $multiple$ returns 1 since ${\bf{v}}[1]=1, {\bf{v}}[4] = 1$, and ${\bf{v}}[7]=1$.
+Even though $multiple$ was not used to generate the Bloom filter ${\bf{v}}$, our query returns the false positive.
+
+
+### Probability of false positives
+For our analysis, we will assume that the probabilities that arise in our analysis are independent. 
+However, this assumption can be removed to gain the same approximation.
+
+We note that for a single hash function, the probability that a specific bit is flipped to 1 is $1/n$.
+So, the probability that the specific bit is not flipped by the hash function is $1-1/n$.
+Applying our assumption that the $k$ hash functions are 'independent,'
+the probability that the specific bit is not flipped by any of the hash functions is
+$(1-1/n)^k$.
+
+Recall the calculus fact $\lim_{\infty} (1-1/n)^n = e^{-1}$.
+That is, as we increase the number of bits that our Bloom filter uses, the approximate probability that a given bit is not flipped by any of the $k$ hash functions is $e^{-k/n}$.
+
+Suppose that $\ell$ entries have been added to the Bloom filter.
+The probability that a specific bit is still 0 after the $\ell$ entries have been added is approximately $e^{-\ell k/n}$.
+The probability that a queried element is erroneously claimed as a member of the digest is approximately
+$(1-e^{-\ell k/n})^k$.
+
+The following table provides concrete values for these approximations.
+
+| $n$ | $k$ | $\ell$ | $(1-e^{-\ell k/n})^k$|
+| -------- | -------- | -------- | --- |
+| 32     |   3   |  3    | 0.01474 |
+| 32     |   3   |  7    | 0.11143 |
+| 32     |   3   |  12    |0.30802 |
+| 32     |   3   |  17    |0.50595 |
+| 32     |   3   |  28    |0.79804 |
+
+Notice that the probability of false positives increases as the number of elements ($\ell$) that have been added to the digest increases.
+
+### Sliding-Window Bloom filter
+Our toy example and table illustrated an issue concerning Bloom filters.
+The number of entries that can be added to a Bloom filter is restricted by our choice of $k$ and $n$.
+Not only does the probability that false positives will occur increase,
+but it is possible that our vector ${\bf{v}}$ can be a string of all 1s.
+[Szepieniec and Værge](https://eprint.iacr.org/2023/1208.pdf) proposed a modification to Bloom filters to handle this.
+
+Instead of having a fixed number of bits for our Bloom filter, we dynamically allot memory based on the number of entries that have been added to the filter.
+Given a predetermined threshold ($b$) for the number of entries, we shift our 'window' of flipping bits by $s$ bits.
+Note that this means that it is necessary to keep track of when a given entry is added to the digest.
+This means that querying the Sliding-Window Bloom filter will yield different results when different timestamps are used.
+
+This can be done with $k$ hash functions as we used earlier.
+Alternatively, Szepieniec and Værge proposed using the same hash function but to produce $k$ entries in the current window.
+Specifically, we obtain the bits we wish to flip to 1s by computing $h(X || i)$ for each $i \in \{0,\dots, k-1\}$ and $X$ as we will define next.
+For Sliding-Window Bloom filters, $X$ is more than just the element we wish to append to the filter.
+Instead, $X$ consists of the element $x$ and a timestamp $t$. 
+The timestamp $t$ is used to locate the correct window for bits, as we see below:
+
+- **Append:** Suppose that we wish to add the element $x$ with timestamp $t$ to the Sliding-Window Bloom filter.
+    - Define the vector ${\bf{b}} \in \{0,\dots,n-1\}^k$ so that ${\bf{b}}[i] := h(x||t||i)$ for each $i \in \{0,\dots,k-1\}$.
+    - Update the binary string ${\bf{v}}[{\bf{b}}[i]+\lfloor t/b \rfloor s] \leftarrow 1$ for each $i \in \{0,\dots,k-1\}$.
+   
+- **Query:** Suppose that we wish to query the Bloom filter for element $y$ with timestamp $t$.
+    - Return 1 provided ${\bf{v}}[h(y||t||i) + \lfloor t/b \rfloor s] = 1$ for every $i \in \{0,\dots,k-1\}$. Otherwise, return 0.
+    
+
+By incorporating a shifting window, we maintain efficient querying and appending at the cost of constant space.
+However, by losing constant space, we gain 'infinite' scalability.
+
+## Cuckoo filters
+A Cuckoo filter is a data structure for probabilistic membership proofs based on Cuckoo hash tables.
+The specific design goal for Cuckoo filters is to address the inability to remove elements from a Bloom Filter.
+This is done by replacing a list of bits with a list of 'fingerprints.'
+A fingerprint can be thought of as the hash value for an entry in the digest.
+A Cuckoo filter is a fixed-length list of 'fingerprints.'
+If the maximum number of entries that a Cuckoo filter can hold is $n$ and a fingerprint occupies $f$ bits,
+then the Cuckoo filter occupies $nf$ bits.
+
+Now, we describe the algorithms associated with the Cuckoo filter $C$ with hash function $hash(X)$ and fingerprint function $fingerprint(X)$.
+
+- **Append:** Suppose that we wish to add the element $x$ to the Cuckoo filter.
+    - If either position $i_x := hash(x)$ or $j_x := i \otimes hash(fingerprint(x))$ of $C$ is empty,
+    then $fingerprint(x)$ is inserted into an empty position.
+    - If both $i_x$ and $j_x$ are occupied with a fingerprint that is distinct from $fingerprint(x)$,
+    then we select either $i_x$ or $j_x$ to insert $fingerprint(x)$.
+    The fingerprint that had previously occupied this position cannot be discarried.
+    Instead, we insert this fingerprint into its alternate location.
+    This reshuffling process either ends with fingerprints all having their own bucket or one that cannot be inserted.
+    In the case that we have a fingerprint that cannot be inserted, then the Cuckoo filter is overfilled.
+
+- **Query:** Suppose that we wish to query the Cuckoo filter for element $y$.
+    - Return 1 provided $fingerprint(y)$ is either in position $i_y$ or $j_y$.
+
+- **Delete:** Suppose that we wish to delete the element $y$ from the Cuckoo filter.
+    - If $y$ has been added to the Cuckoo filter, then $fingerprint(y)$ is either in position $i_y$ or $j_y$.
+      We remove $fingerprint(y)$ from the appropriate position.
+
+We note that false positives in Cuckoo filters only occur when an element shares a fingerprint and hash with a value that has already been added to the Cuckoo filter.
+
+### Example
+In this example, we will append the words $add$, $sum$, and $equal$ to a Cuckoo filter with 8 slots.
+
+For each word $x$, we compute two indices:
+$i_x := hash(x) \text{ and } j_x := hash(x) \otimes hash(fingerprint(x)).$
+Suppose that we have the following values for
+our words:
+
+| word | $i_x$ | $j_x$|
+|---|---|---|
+|$add$| $(0,1,0)$ | $(1,0,0)$ |
+|$sum$| $(1,0,1)$ | $(1,1,0)$ |
+|$equal$| $(0,1,0)$ | $(1,0,1)$ |
+
+For clarity of the example, we append the words directly to the buckets instead of fingerprints of our data.
+
+| |0 | 1 | 2 | 3 | 4| 5| 6| 7|
+|---|---|---|---|---|---|---|---|---|
+|append $add$| ||$add$||||| |
+|append $sum$| ||$add$|||$sum$|| |
+
+Notice that both of the buckets (2 and 5) that $equal$ can map to are occupied.
+So, we select one of these buckets (say 2) to insert $equal$ into.
+Then, we have to insert $add$ to its possible bucket (1).
+This leaves us with the Cuckoo filter:
+
+|0 | 1 | 2 | 3 | 4| 5| 6| 7|
+|---|---|---|---|---|---|---|---|
+| |$add$|$equal$|||$sum$|| |
+
+### Complexity
+Notice that deletions and queries to Cuckoo filters are done in constant time.
+Specifically, only two locations need to be checked for any data $x$.
+Appends may require shuffling previously added elements to their alternate locations.
+As such, the append does not run in constant time.
+
+## Bloom filters vs Cuckoo filters
+The design of Bloom filters is focused on space efficiency and quick query time.
+Even though they occupy constant space,
+Cuckoo filters require significantly more space for $n$ items than Bloom filters.
+The worst-case append in a Cuckoo filter is slower than the append in a Bloom filter.
+However, an append that does not require any shuffling in a Cuckoo filter can be quicker than appends in Bloom filters.
+Cuckoo filters make up for these disadvantages with quicker query time and the ability to delete entries.
+Further, the probability of false positives in Cuckoo filters is lower than the probability of false positives in Bloom filters.
+
+
+## Combining Filters with RLN
+In a series of posts ([1](https://vac.dev/rlog/rln-anonymous-dos-prevention),[2](https://vac.dev/rlog/rln-v3/),[3](https://vac.dev/rlog/rln-light-verifiers)),
+various versons of rate limiting nullifiers (RLN) that are used by Waku has been discussed.
+RLN uses a sparse Merkle tree for the membership set.
+The computational power required to construct the Merkle tree prevent light clients from participating in verifying membership proofs.
+In [Verifying RLN Proofs in Light Clients with Subtrees](https://vac.dev/rlog/rln-light-verifiers),
+it was proposed to move the membership set on-chain so that it would not be necessary for a light client to construct the entire Merkle tree locally.
+Unfortunately, the naive approach is not practical as the gas limit for a single call is too restrictive for an appropriately sized tree.
+Instead, it was proposed to make utilize of subtrees.
+In this section, we provide a discussion of an alternate solution for light clients by using filters for the membership set.
+The two [parts of RLN](https://rate-limiting-nullifier.github.io/rln-docs/rln_in_details.html) that we will focus on are user registration and deletion.
+
+Both Bloom and Cuckoo filters support user registration as this is can be done as an append.
+The fixed size of these filters would restrict the total number of users that can register.
+This can be migitated by using Sliding-Window Bloom filter as this supports system growth.
+The Sliding-Window can be adapted to Cuckoo filters as well.
+In the case of a Sliding-Window filter, an user would maintain the epoch of when they registered.
+The registration of new users to Bloom filters can be done in constant time which is a significant improvement over appending to subtrees.
+Unfortunately, the complexity of registration to Cuckoo filters cannot be as easily computed.
+
+A user could be slashed from the RLN by sending too many messages in a given epoch.
+Unfortunately, Bloom filters do not support the deletion of members.
+Luckily, Cuckoo filters allow for deletions that can performed in constant time.
+
+Cuckoo filter that use Sliding-Window could be used so that light clients are able to verify proofs of membership in the RLN.
+These proofs are not a substitute to the usual proofs that a heavy client can verify due to the allowance of false positives.
+However, with the allowance of false positives, a light client can participate in verification RLN proofs in an efficient manner.
+
+
+### References
+- [Space/Time Trade-offs in Hash Coding with Allowable Errors](https://dl.acm.org/doi/10.1145/362686.362692)
+- [David Wagner's Lecture Notes on Bloom filters](https://people.eecs.berkeley.edu/~daw/teaching/cs170-s03/Notes/lecture10.pdf)
+- [Mutator Sets and their Application to Scalable Privacy](https://eprint.iacr.org/2023/1208)
+- [Cuckoo Filter: Practically Better than Bloom](https://www.cs.cmu.edu/~dga/papers/cuckoo-conext2014.pdf)
+- [Strengthening Anonymous DoS Prevention with Rate Limiting Nullifiers in Waku](https://vac.dev/rlog/rln-anonymous-dos-prevention)
+- [RLN-v3: Towards a Flexible and Cost-Efficient Implementation](https://vac.dev/rlog/rln-v3/)
+- [Verifying RLN Proofs in Light Clients with Subtrees](https://vac.dev/rlog/rln-light-verifiers)
+- [RLN in details](https://rate-limiting-nullifier.github.io/rln-docs/rln_in_details.html)
