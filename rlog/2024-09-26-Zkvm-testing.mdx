@@ -17,9 +17,11 @@ toc_max_heading_level: 5
 # Introduction
 
 Following our initial exploration of zkVMs in our previous blog post [[1](https://vac.dev/rlog/zkVM-explorations/)], 
-we have conducted a series of tests to identify the most suitable zkVM for the Nescience architecture [[2](https://vac.dev/rlog/Nescience-state-separation-architecture)]. This post outlines the testing process, results, and conclusions. Additionally, 
-the full test suite and scripts can be found on our GitHub page [[3](https://github.com/vacp2p/nescience-zkvm-testing)], 
-allowing others to replicate the results or explore the candidates further. 
+we have conducted a series of tests to identify the most suitable zkVM for the Nescience architecture [[2](https://vac.dev/rlog/Nescience-state-separation-architecture)]. 
+This post outlines the testing process, results, and conclusions. Additionally, the full test suite and scripts can be found 
+on our GitHub page [[3](https://github.com/vacp2p/nescience-zkvm-testing)], allowing others to replicate the results or explore the candidates further. 
+Please note that we chose not to use hardware acceleration in our benchmarks, as our project is aimed at a broad audience. 
+Particularly, we cannot assume AVX512 support by default, as it is typically available only in high-end CPUs.
 
 We've shortlisted the following zkVMs for testing:
 
@@ -278,6 +280,9 @@ Finally, zkWASM exhibited the poorest results, struggling both in proof size and
 the excessive RAM consumption (up to 57 GB in the memory test) rendered it impractical for Nescience’s use case.
 
 In conclusion, RISC0 is the best fit for Nescience at this stage, but Valida remains a future candidate as its development progresses.
+
+In the future, we plan to compare RISC0 and SP1 with CUDA acceleration. Ideally, by that time, more zkVMs will include similar acceleration capabilities, 
+enabling a fairer and more comprehensive comparison across platforms.
 
 
 We’d love to hear your thoughts on our zkVM testing process and results! Do you agree with our conclusions, or do you think we missed a promising zkVM? 
