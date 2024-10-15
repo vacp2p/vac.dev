@@ -1,9 +1,9 @@
 ---
 title: 'Vac 101: Transforming an Interactive Protocol to a Noninteractive Argument'
-date: 2024-09-24 12:00:00
+date: 2024-10-15 12:00:00
 authors: marvin
 published: true
-slug: Vac-101-Fiat-Shaimr
+slug: vac101-fiat-shamir
 categories: research
 
 
@@ -31,10 +31,11 @@ However, this communication is not practical for many applications.
 It is necessary that any party can verify the Prover's claim in decentralized systems.
 It is impractical for the Prover to be in active communication with a large number of verifying parties.
 Instead, it is desirable for the Prover to generate a proof on their own that can convince any party.
-To achieve this, it is necessary for the Prover to generate the Verifier's messages in such a way that the Prover cannot manipulate the Verifier's messages for her benefit.
+To achieve this, it is necessary for the Prover to generate the Verifier's messages in such a way
+that the Prover cannot manipulate the Verifier's messages for her benefit.
 The Fiat-Shamir heuristic [1](https://dl.acm.org/doi/10.5555/36664.36676) is used for this purpose.
 Even though much of our discussion will focus on $\Sigma$-protocols,
-the Fiat-Shamir heuristic is not limited to restricted to $\Sigma$-protocol.
+the Fiat-Shamir heuristic is not limited to $\Sigma$-protocols.
 The Fiat-Shamir heuristic has been applied to zk-SNARKs, but the security in this setting has been the subject of discussion and research in recent years.
 Block et al. [2](https://eprint.iacr.org/2023/1071) provide the first formal analysis of Fiat-Shamir heuristic in zk-SNARKs.
 
@@ -58,7 +59,8 @@ Based on this selection, a dishonest Prover can only convince the the Verifier w
 ### The Schnorr Protocol
 The Schnorr protocol [3](https://link.springer.com/chapter/10.1007/0-387-34805-0_22) is usually the first $\Sigma$-protocol that one studies.
 Additionally, the Schnorr protocol can be used as an efficient signature scheme.
-The Schnorr protocol provides a framework that enables the Prover to convince the Verifier that: for group elements $g$ and $X$, the Prover knows the power to raise $g$ to obtain $X$.
+The Schnorr protocol provides a framework that enables the Prover to convince the Verifier that: for group elements $g$ and $X$,
+the Prover knows the power to raise $g$ to obtain $X$.
 Specifically, the Prover possesses some integer $x$ so that $X = g^x$.
 Cryptographic resources may use either multiplicative or additive notation for groups;
 we will use multiplicative notation.
@@ -101,19 +103,22 @@ A cryptographic hash function satisfies the following properties:
 - **Succinct**: The hash function should be easy to compute; the hash $\mathsf{Hash}({\bf{b}})$ can be efficiently computed for any binary string ${\bf{b}}$.
 - **Preimage Resistance**: It should be computationally infeasible to work backwards given the output of a hash function. Let ${\bf{y}}$ be a binary string of length $n$.
     It should be 'impossible' to find some binary string ${\bf{x}}$ so that ${\bf{y}} = \mathsf{Hash}({\bf{x}})$. 
-- **Collision Resistance**: It should be difficult to find two strings that hash to the same value. It should be computationally infeasible to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $\mathsf{Hash}({\bf{x}_1}) = \mathsf{Hash}({\bf{x}_2}).$
+- **Collision Resistance**: It should be difficult to find two strings that hash to the same value.
+It should be computationally infeasible to find two binary strings ${\bf{x}_1}$ and ${\bf{x}_2}$ so that $\mathsf{Hash}({\bf{x}_1}) = \mathsf{Hash}({\bf{x}_2}).$
 
 A related class of functions is one-way functions.
 A one-way function satisfies the first two conditions of a cryptographic hash function (succinct and preimage resistance).
 All cryptographic hash functions are a one-way functions.
 However, one-way functions do not necessarily satisfy collision-resistance.
 We will simply refer to cryptographic hash functions as hash functions for the rest of this blog.
-Commonly used hash functions include SHA-256 [5](https://www.cs.princeton.edu/~appel/papers/verif-sha.pdf), Keccak [6](https://keccak.team/keccak_specs_summary.html), and Poseidon [7](https://eprint.iacr.org/2019/458).
+Commonly used hash functions include SHA-256 [5](https://www.cs.princeton.edu/~appel/papers/verif-sha.pdf),
+Keccak [6](https://keccak.team/keccak_specs_summary.html), and Poseidon [7](https://eprint.iacr.org/2019/458).
 
 ## The Fiat-Shamir heuristic
 The Fiat-Shamir heuristic is the technique used to convert an interactive protocol to a noninteractive protocol.
 This is done by replacing each of the Verifier's messages with a hashed value.
-Specifically, the Prover generates the Verifier's message by evaluating the hash function $\mathsf{Hash}$ with the concatenation of all public values that appear in the protocol thus far.
+Specifically, the Prover generates the Verifier's message by evaluating the hash function $\mathsf{Hash}$
+with the concatenation of all public values that appear in the protocol thus far.
 If $m_0, \dots, m_t$ denote the public values in the protocol thus far,
 then the Verifier's message is computed as $m_{t+1} := \mathsf{Hash}(m_0|| \cdots || m_t)$.
 
