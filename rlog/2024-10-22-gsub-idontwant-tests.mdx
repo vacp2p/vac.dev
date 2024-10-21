@@ -1,0 +1,110 @@
+---
+title: 'IDONTWANT Message Potential: Performance Insights and Connected Findings'
+date: 2024-10-22 12:00:00
+authors: farooq
+published: true
+slug: gsub-idontwant-tests
+categories: research
+discuss: https://forum.vac.dev/t/idontwant-message-potential-performance-insights-and-connected-findings/374
+
+
+toc_min_heading_level: 2
+toc_max_heading_level: 5
+---
+
+This post provides quick insights into the IDONTWANT message performance and highlights minor tweaks that can further contribute to performance gains.
+<!--truncate-->
+
+## Overview
+
+[IDONTWANT](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md?plain=1#L52) messages are introduced to curtail redundant transmissions without compromising resilience. 
+Cutting down on duplicates can potentially render two significant advantages
+
+1. Minimize bandwidth requirements 
+2. Minimize message dissemination time
+
+For IDONTWANTs to be effective, they must be received and processed by the sender before it starts relaying the message. 
+[Duplicates investigation](https://ethresear.ch/t/number-duplicate-messages-in-ethereums-gossipsub-network/19921#arrival-time-of-duplicates-9) reveals that 
+the average time difference between the first message arrival and the first duplicate arrival is higher than the average round trip time in Ethereum's GossipSub network. 
+
+This allows for timely IDONTWANT reception and canceling of many duplicate transmissions, 
+showing a potential for a significant drop in bandwidth utilization. 
+On the other hand, lowering message dissemination time is only possible by minimizing queuing delays at busy peers. 
+
+## Experiments
+
+We conducted a series of experiments with different arrangements (changing heartbeat_interval and message size) 
+to precisely identify the impact of IDONTWANT messages on bandwidth utilization and message dissemination time. 
+
+The experiments are performed on nim-libp2p using the [shadow simulator](https://github.com/vacp2p/dst-gossipsub-test-node/pull/4). 
+The peer bandwidth and link latency are uniformly set between 50-150 Mbps and 40-130 milliseconds in five stages. 
+
+Every publisher transmits exactly one message to the network, 
+and inter-packet spacing (delay) is set to four seconds. 
+In all experiments, ten messages are transmitted to the network. 
+
+At the start of each experiment, two additional messages are transmitted to raise the $C_{wnd}$ to a reasonable level. 
+These messages are not included in latency computations. The simulation details are presented in the table below.
+
+
+| **Parameter** | **Value** | **Parameter** | **Value** |
+| ------------- | --------- | ------------- | --------- |
+| Peers | 2000 | Publishers | 10 |
+| Peer Bandwidth | 50-150 Mbps | Link Latency | 40-130 ms |
+| Message Size | 1KB, 50KB, 500KB, 1MB | $D$ | 8 |
+| Heartbeat Interval | 700ms, 1000ms, 1500ms | $D_{low}$ | 6 |
+| FloodPublish | False | $D_{high}$ | 12 |
+| Gossip factor | 0.05 | Muxer | yamux |
+
+
+## Findings
+
+Experiments reveal that IDONTWANT messages yield a noticeable (up to 21%) drop in bandwidth utilization. 
+A higher drop is seen with a higher heartbeat interval. 
+Interestingly, a relatively low bandwidth reduction (12-20%) is seen for 1MB messages, 
+compared to 500KB messages (18-21%).   
+
+
+| ![Image 1](/img/idontwanttest/BW_700ms.png) | ![Image 2](/img/idontwanttest/BW_1000ms.png) | ![Image 3](/img/idontwanttest/BW_1500ms.png) |
+|-----------------------------|-----------------------------|-----------------------------|
+
+
+This is because downloading a large message may consume several hundred milliseconds. 
+During this time, a receiver will likely 
+[generate multiple IWANT requests](https://forum.vac.dev/t/iwant-messages-may-have-negative-impact-on-message-dissemination-latency-for-large-messages/366) 
+for the same message, increasing bandwidth utilization. 
+
+Moreover, a peer can generate 
+[IDONTWANTs only after it has finished downloading the message](https://forum.vac.dev/t/large-message-handling-idontwant-imreceiving/281). 
+A longer download time will result in simultaneous reception of the same message from other mesh members. 
+
+
+| ![Image 1](/img/idontwanttest/IWANT_Requests.png) | ![Image 2](/img/idontwanttest/IDONTWANT_Saves.png) |
+|-----------------------------|-----------------------------|
+
+
+These IWANT requests mainly overwhelm early message receivers, 
+which can negatively impact message dissemination time on some occasions. 
+Therefore, a similar message dissemination time is seen with and without IDONTWANT messages. 
+
+
+| ![Image 1](/img/idontwanttest/Lat_700ms.png) | ![Image 2](/img/idontwanttest/Lat_1000ms.png) | ![Image 3](/img/idontwanttest/Lat_1500ms.png) |
+|-----------------------------|-----------------------------|-----------------------------|
+
+
+Please reach out to the [VAC forum for discussions and feedback regarding this post](https://forum.vac.dev/t/idontwant-message-potential-performance-insights-and-connected-findings/374).
+
+## References
+
+- [GossipSub Specifications v1.2](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md)
+- [GossipSub v1.2: IDONTWANT Control Message](https://github.com/libp2p/specs/pull/548)
+- [Number Duplicate Messages in Ethereum’s Gossipsub Network](https://ethresear.ch/t/number-duplicate-messages-in-ethereums-gossipsub-network/19921)
+- [IWANT Messages Impact on Latency ](https://forum.vac.dev/t/iwant-messages-may-have-negative-impact-on-message-dissemination-latency-for-large-messages/366)
+- [Large Message Handling (IDONTWANT + IMReceiving)](https://forum.vac.dev/t/large-message-handling-idontwant-imreceiving/281)
+- [IDONTWANT Message Impact Before/After Message Validation](https://forum.vac.dev/t/idontwant-message-impact/283)
+- [GossipSub for Big Messages](https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw#2)
+- [Regression Test Results: nim-libp2p](https://www.notion.so/Nim-libp2p-v1-5-0-regression-testing-August-2024-25edba733c704ccaa411919555c5db1a)
+- [IDONTWANT Message Performance Evaluation](https://www.notion.so/IDONTWANT-Message-Performance-Evaluation-1158f96fb65c8027b3f7c2bbbd0c8cbb)
+
+
+
