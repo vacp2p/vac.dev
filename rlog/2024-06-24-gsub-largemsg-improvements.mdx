@@ -32,7 +32,7 @@ and numerous improvements have been considered (or even incorporated) for the Go
 [9](https://hackmd.io/@gRwfloEASH6NWWS_KJxFGQ/B18wdnNDh),
 [10](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md?plain=1#L52)].
 
-## Problem Realization:
+## Problem Description
 
 Sending a message to N peers involves approximately $\lceil \log_D(N) \rceil$ rounds,
 with approximately $(D-1)^{X-1} \times D$ transmissions in each round,
@@ -129,7 +129,8 @@ Considering the same bandwidth, the time $\tau_D$ required for sending a message
 even if we relay to all peers in parallel or send sequentially to the peers, i.e., $\tau_D = \sum_{i=1}^{D} \tau_i$. 
 
 However, sequential relaying results in quicker message reception at individual peers ($\tau_1 \ll \tau_D$) due to bandwidth concentration for a particular peer. 
-So, the receiver can start relaying early to its mesh members while the original sender is still sending it to other peers. 
+So, the receiver can start relaying early to its mesh members while the original sender is still sending the message to other peers. 
+
 
 As a result, after every $\frac{\tau_D}{D}$ milliseconds, 
 the number of peers receiving the message increases by $2^r\ \forall\ r \lt D$ and by $\sum_{r=0}^{D-1} \lambda_{r-1}\ \forall\ r \geq D$. 
@@ -268,7 +269,8 @@ IHAVE announcements for newly received large messages trigger IWANTs from nodes
 (including those already receiving the same message),
 leading to an additional workload for early receivers [[14](https://github.com/vacp2p/nim-libp2p/issues/1101)]. 
 
-Potential solutions mitigating these problems include:
+Potential solutions to mitigate these problems include:
+
 
 1) Defering IHAVE announcements for large messages until the next heartbeat interval. 
 
@@ -344,7 +346,8 @@ it learns about the new message and can request it by sending an IWANT request w
 As a result, a significantly smaller number of transmissions is sufficient for propagating the message to the entire network. 
 
 This approach conserves peer bandwidth by minimizing redundant transmissions 
-while ensuring Gossipsub resilience at the cost of one RTT (for missing peers). 
+while ensuring GossipSub resilience at the cost of one RTT (for missing peers). 
+
 Interestingly, curtailing queuing delays can also help lower network-wide message dissemination latency (for huge messages).
 
 
@@ -406,7 +409,8 @@ leading to simultaneous transmissions of the same message.
 3) Replying to (potentially many) IWANT requests can delay the transmission of the same message to mesh peers, 
 resulting in lower peer scores.  
 
-A few possible solutions to mitigating this problem may include:
+A few possible solutions to mitigate this problem may include:
+
 
 1) Allocating a volume-based budget to service IWANT requests during each heartbeat interval.
 
@@ -446,14 +450,15 @@ At the same time, strategies aimed at reducing store-and-forward delays
 - [3] [feat(gossipsub): More lenient flood publishing](https://github.com/libp2p/rust-libp2p/pull/3666)
 - [4] [Disable flood publishing](https://github.com/sigp/lighthouse/pull/4383)
 - [5] [GossipSub for big messages](https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw)
-- [6] [gossipsub: Lazy sending](https://github.com/status-im/nim-libp2p/issues/850)
+- [6] [Gossipsub: Lazy sending](https://github.com/status-im/nim-libp2p/issues/850)
 - [7] [GossipSub: Limit flood publishing](https://github.com/vacp2p/nim-libp2p/pull/911)
-- [8] [gossipsub: lazy prefix detection](https://github.com/vacp2p/nim-libp2p/issues/859)
+- [8] [Gossipsub: lazy prefix detection](https://github.com/vacp2p/nim-libp2p/issues/859)
 - [9] [Potential Gossip improvement list for EIP4844](https://hackmd.io/@gRwfloEASH6NWWS_KJxFGQ/B18wdnNDh)
-- [10] [gossipsub v1.2: IDONTWANT Message](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md?plain=1#L52)
+- [10] [Gossipsub v1.2: IDONTWANT Message](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md?plain=1#L52)
 - [11] [Number Duplicate Messages in Ethereum’s Gossipsub Network](https://ethresear.ch/t/number-duplicate-messages-in-ethereums-gossipsub-network/19921)
 - [12] [ TCP Congestion Control: Re-starting Idle Connections](https://datatracker.ietf.org/doc/html/rfc2581#section-4.1)
 - [13] [PING/PONG control messages](https://github.com/libp2p/specs/pull/558)
 - [14] [IHave/IWant message behavior seriously impacts large message transmissions](https://github.com/vacp2p/nim-libp2p/issues/1101)
 - [15] [Large Message Handling (IDontWant + IMReceiving)](https://forum.vac.dev/t/large-message-handling-idontwant-imreceiving/281)
 - [16] [IDontWant Message Impact](https://forum.vac.dev/t/idontwant-message-impact/283)]
+
