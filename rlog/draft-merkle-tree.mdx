@@ -1,0 +1,78 @@
+---
+title: 'Vac 101 - Climbing Merkle Trees - An Introduction'
+date: 2024-11-01 12:00:00
+authors: marvin
+published: false
+slug: climbing-merkle-trees
+categories: research
+
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+In this post, we introduce a crucial data structure used throughout web3.
+
+<!--truncate-->
+
+## Introduction
+
+A large amount of data is swapped between users on a blockchain in the form of transactions.
+Over the entire lifespan of a blockchain,
+the storage space required to maintain a copy of every transaction becomes untenable for most users.
+However, the integrity of a blockchain relies on a large pool of users being able to validate the blockchain's history to its present state.
+The data representing the blockchain's state is compressed.
+This compression addresses the issue of scale that would greatly restrict the pool of users.
+
+Data compression alone is not the end goal.
+As mentioned, it is essential for users to beable to validate the blockchain's history.
+This problem was solved by Bitcoin by the use of Merkle trees.
+Merkle trees were first by Ralph Merkle in his dissertation (TODO-citation).
+Merkle trees is a data structure that compresses a digest of data to a constant size while still providing a method for proving membership of elements of the digest.
+
+## Tree structure
+
+TODO
+A tree is a mathematical structure consisting of 
+
+A tree is a a special mathematical structure  TODO
+
+
+### Binary Trees
+
+A binary tree is a tree in which each node has at most two children.
+Binary trees are commonly used in practice.
+
+A tree 
+
+## Merkle Trees
+
+TODO
+
+### Proof of Membership
+
+TODO
+### Proof of Non-membership
+
+TODO
+## Extensions of Merkle Trees
+
+TODO
+### Sparse Merkle Trees
+
+TODO
+
+### Tree Ranges (?)
+
+TODO
+### Verkle Trees
+A proof of membership grows in length as the Merkle tree grows.
+The most obvious approach to remedy this scalability issue is to use Merkle trees where each node has more than 2 children.
+However, as we saw earlier, this does not fix the issue.
+An alternate approach is to use a different data structure: [Verkle trees](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf).
+A Verkle tree replaces hash functions with polynomial commitments.
+We will explore Verkle trees is a future Vac 101 edition.
+
+## References
+
+
+- [Verkle Trees](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)
