@@ -44,9 +44,11 @@ to precisely identify the impact of IDONTWANT messages on bandwidth utilization 
 The experiments are performed on nim-libp2p using the [shadow simulator](https://github.com/vacp2p/dst-gossipsub-test-node/pull/4). 
 The peer bandwidth and link latency are uniformly set between 50-150 Mbps and 40-130 milliseconds in five stages. 
 
-Every publisher transmits exactly one message to the network, 
-and inter-packet spacing (delay) is set to four seconds. 
-In all experiments, ten messages are transmitted to the network. 
+In all experiments, ten messages are transmitted to the network, i.e., 
+ten peers (publishers) are selected as the message transmitters. 
+Every publisher transmits exactly one message, 
+and inter-packet spacing (delay) is set to four seconds for each published message. 
+For a fair assessment, we ensure that the publishers are uniformly selected from each bandwidth class. 
 
 At the start of each experiment, two additional messages are transmitted to increase the TCP $C_{wnd}$.
 
@@ -64,6 +66,12 @@ These messages are not included in latency computations. The simulation details 
 
 
 ## Findings
+
+We use bandwidth utilization and latency as evaluation metrics. 
+Bandwidth utilization represents total network-wide traffic (including gossip and other control messages). 
+Latency refers to network-wide message dissemination time. 
+The total number of IWANT requests and the number of message transmissions saved by IDONTWANT messages are also presented for detailed insights.
+
 
 Experiments reveal that IDONTWANT messages yield a noticeable (up to 21%) drop in bandwidth utilization. 
 A higher drop is seen with a higher heartbeat interval. 
@@ -97,6 +105,8 @@ Therefore, a similar message dissemination time is seen with and without IDONTWA
 | ![Image 1](/img/idontwanttest/Lat_700ms.png) | ![Image 2](/img/idontwanttest/Lat_1000ms.png) | ![Image 3](/img/idontwanttest/Lat_1500ms.png) |
 |-----------------------------|-----------------------------|-----------------------------|
 
+Similar results are seen on our large-scale deployment runs, 
+[running Waku nodes in Kubernetes](https://zealous-polka-dc7.notion.site/Nim-libp2p-v1-5-0-regression-testing-August-2024-25edba733c704ccaa411919555c5db1a).
 
 Please feel free to join the discussion and leave feedback regarding this post in the
 [VAC forum](https://forum.vac.dev/t/idontwant-message-potential-performance-insights-and-connected-findings/374).
@@ -111,8 +121,5 @@ Please feel free to join the discussion and leave feedback regarding this post i
 - [Large Message Handling (IDONTWANT + IMReceiving)](https://forum.vac.dev/t/large-message-handling-idontwant-imreceiving/281)
 - [IDONTWANT Message Impact Before/After Message Validation](https://forum.vac.dev/t/idontwant-message-impact/283)
 - [GossipSub for Big Messages](https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw#2)
-- [Regression Test Results: nim-libp2p](https://www.notion.so/Nim-libp2p-v1-5-0-regression-testing-August-2024-25edba733c704ccaa411919555c5db1a)
+- [Regression Test Results: nim-libp2p](https://zealous-polka-dc7.notion.site/Nim-libp2p-v1-5-0-regression-testing-August-2024-25edba733c704ccaa411919555c5db1a)
 - [IDONTWANT Message Performance Evaluation](https://www.notion.so/IDONTWANT-Message-Performance-Evaluation-1158f96fb65c8027b3f7c2bbbd0c8cbb)
-
-
-
