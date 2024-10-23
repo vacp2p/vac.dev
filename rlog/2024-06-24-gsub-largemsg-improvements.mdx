@@ -5,6 +5,7 @@ authors: farooq
 published: true
 slug: gsub-largemsg-improvements
 categories: research
+discuss: https://forum.vac.dev/t/large-message-handling-in-gossipsub-potential-improvements/375
 
 
 toc_min_heading_level: 2
@@ -17,7 +18,7 @@ Large Message Handling in GossipSub: Potential Improvements
 
 ## Motivation
 The challenge of large message transmissions in GossipSub leads to longer than expected network-wide message dissemination times (and relatively higher fluctuations). 
-It is particularly relevant for applications that require on-time, network-wide dissemination of large messages, such as Waku and Ethereum [[1](https://eips.ethereum.org/EIPS/eip-4844),[2](https://docs.waku.org/research/research-and-studies/message-propagation/)]. 
+It is particularly relevant for applications that require on-time, network-wide dissemination of large messages, such as Ethereum and Waku [[1](https://eips.ethereum.org/EIPS/eip-4844),[2](https://docs.waku.org/research/research-and-studies/message-propagation/)]. 
 
 
 This matter has been extensively discussed in the libp2p community [[3](https://github.com/libp2p/rust-libp2p/pull/3666),
@@ -32,7 +33,7 @@ and numerous improvements have been considered (or even incorporated) for the Go
 [9](https://hackmd.io/@gRwfloEASH6NWWS_KJxFGQ/B18wdnNDh),
 [10](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md?plain=1#L52)].
 
-## Problem Description
+## Problem description
 
 Sending a message to N peers involves approximately $\lceil \log_D(N) \rceil$ rounds,
 with approximately $(D-1)^{X-1} \times D$ transmissions in each round,
@@ -60,7 +61,7 @@ triggering additional queuing delays (proportional to the transmission queue siz
 further exaggerating the abovementioned queuing delays.
 This rise is because TCP congestion avoidance algorithms usually limit maximum in-flight bytes in a round trip time (RTT) 
 based on the congestion window ($C_{wnd}$) and maximum segment size (MSS) to approximately ${C_{wnd} \times MSS}$, 
-with $C_{wnd}$ increasing with the data transfer for each flow. 
+with $C_{wnd}$ rising with the data transfer for each flow. 
 Consequently, sending the same message through a newly established (cold) connection takes longer. 
 The message transfer time lowers as the $C_{wnd}$ grows. 
 Therefore, performance-improvement practices such as floodpublish, frequent mesh adjustment, and lazy sending 
@@ -80,7 +81,7 @@ Early gossip (IHAVE announcements) may bring in many IWANT requests to the early
 which adds to their workload.  
 
 5. A busy peer (with a sizeable outgoing message queue) will enqueue (or simultaneously transfer) newly scheduled outgoing messages. 
-As a result, already scheduled messages are prioritized over peers' locally published messages, 
+As a result, already scheduled messages are prioritized over those published by the peer itself, 
 introducing a significant initial delay to the locally published messages. 
 Enqueuing IWANT replies to the outgoing message queue can further exaggerate the problem. 
 The lack of adaptiveness and standardization in outgoing message prioritization are key factors that can lead to noticeable inconsistency 
@@ -128,12 +129,12 @@ Therefore, message fragmentation requires a careful tradeoff analysis between ti
 Considering the same bandwidth, the time $\tau_D$ required for sending a message to D peers stays the same, 
 even if we relay to all peers in parallel or send sequentially to the peers, i.e., $\tau_D = \sum_{i=1}^{D} \tau_i$. 
 
-However, sequential relaying results in quicker message reception at individual peers ($\tau_1 \ll \tau_D$) due to bandwidth concentration for a particular peer. 
+However, sequential relaying results in quicker message reception at individual peers ($\tau_1 \approx \frac{\tau_D}{D}$) due to bandwidth concentration for a particular peer. 
 So, the receiver can start relaying early to its mesh members while the original sender is still sending the message to other peers. 
 
 
 As a result, after every $\frac{\tau_D}{D}$ milliseconds, 
-the number of peers receiving the message increases by $2^r\ \forall\ r \lt D$ and by $\sum_{r=0}^{D-1} \lambda_{r-1}\ \forall\ r \geq D$. 
+the number of peers receiving the message increases by $2^r\ \forall\ r \in \{0, D-1\}$ and by $\sum_{r=0}^{D-1} \lambda_{r-1}\ \forall\ r \geq D$. 
 Here, $r$ represents message transmission round $r = \frac{\tau_D}{D} \text{ only if } D \mid \tau_D$, and $\lambda_r$ represents the number of peers that received the message in round r.
 
 It is worth noting that a realistic network imposes certain constraints on staggering for peers. 
@@ -147,11 +148,10 @@ At the same time, early receivers get many IWANT requests, increasing their work
 
 A slow peer often struggles with a backlog of messages in the outgoing message queue(s) for mesh members. 
 Any new message transmission at this stage (especially the locally published messages) gets delayed. 
-
 Adaptive message-forwarding can help such peers prioritize traffic to minimize latency for essential message transfers. 
+
 For instance, any GossipSub peer will likely receive every message from multiple senders, 
 leading to redundant transmissions [[11](https://ethresear.ch/t/number-duplicate-messages-in-ethereums-gossipsub-network/19921)]. 
-
 Implementing efficient strategies (only for slow senders) like lazy sending 
 and prioritizing locally published messages/IWANT replies over already queued messages 
 can help minimize outgoing message queue sizes and optimize bandwidth for essential message transfers. 
@@ -186,8 +186,8 @@ This data may involve useful details like peer exchange information and gossip t
 or GossipSub can use some dummy data to raise $C_{wnd}$ to a reasonable level.
 
 It's important to understand that some TCP variants reset $C_{wnd}$ after specific periods of inactivity [[12](https://datatracker.ietf.org/doc/html/rfc2581#section-4.1)].
-It can lead to a decline in TCP's performance for applications 
-that generate traffic after long enough intervals to trigger the resetting of the congestion window. 
+This can lead to a decline in TCP's performance for applications 
+that generate traffic after intervals long enough to trigger the resetting of the congestion window. 
 
 Implementing straightforward measures like transport-level ping-pong messages can effectively mitigate this problem [[13](https://github.com/libp2p/specs/pull/558)]. 
 
@@ -195,17 +195,16 @@ Implementing straightforward measures like transport-level ping-pong messages ca
 The limitations faced with $C_{wnd}$ scaling also impact some performance optimizations in GossipSub. 
 For instance, floodpublishing is an optimization relying on additional transmissions by the publisher to minimize message dissemination latency. 
 
-However, new (cold) TCP connections established with floodpublish peers take longer than expected 
-(usually, these peers also receive the same message from other sources during this time), wasting the publisher's bandwidth. 
+However, a small $C_{wnd}$ value in (new/cold) TCP connections established with floodpublish peers significantly increases message transmission time. 
+Usually, these peers also receive the same message from other sources during this time, wasting the publisher's bandwidth. 
 
 The same is the case with IWANT replies. 
 
-Maintaining a bigger mesh (with warm TCP connections) and relaying to $D$ peers can be an alternative to optimizing GossipSub performance for large messages. 
+Maintaining a bigger mesh (with warm TCP connections) and relaying to $D$ peers can be a better alternative to this problem. 
 
 ### 3. Eliminating redundant transmissions
 
 For every received packet, a peer makes roughly $D$ transmissions to contribute its fair share to the spread of messages. 
-
 However, the fact that many recipients had already received the message (from some other peer) 
 makes this message propagation inefficient. 
 
@@ -247,19 +246,17 @@ As previously discussed, [staggering](#b-message-staggering) can significantly r
 This is primarily due to the relatively smaller store-and-forward delays that are inherent in this approach.
 
 Using both staggering and IDONTWANT messages can further enhance efficiency by reducing redundant transmissions.
-
 This is because a node only saturates its bandwidth for a small subset of mesh peers, 
 leading to early transmissions and prompt IDONTWANT message notifications to the mesh members.
 
 It is worth highlighting that staggering can be implemented in various ways.
 
-For example, it can be applied to peers 
-where a node sequentially relays the message to all peers one by one. 
+For example, it can be applied to peers (peer staggering)
+where a node sequentially relays the same message to all peers one by one. 
 
-Alternatively, a node can send a different message to every peer, 
+Alternatively, a node can send a different message to every peer (message staggering or rotational sending), 
 allowing IDONTWANTs for other messages to arrive during this time. 
-
-The message-based staggering approach is beneficial when several large messages are introduced to the network within a short interval of time.
+The message staggering approach is beneficial when several messages are introduced to the network within a short interval of time.
 
 As the peers in staggered sending are sequentially covered 
 (with a faster speed due to bandwidth concentration), this leads to another problem. 
@@ -272,7 +269,7 @@ leading to an additional workload for early receivers [[14](https://github.com/v
 Potential solutions to mitigate these problems include:
 
 
-1) Defering IHAVE announcements for large messages until the next heartbeat interval. 
+1) Defering IHAVE announcements for large messages. 
 
 Deferring IHAVE announcements can indirectly prioritize message transmission to the mesh peers over IWANT replies. 
 However, deciding on a suitable deferred interval is crucial for optimal performance. 
@@ -387,7 +384,7 @@ For example, staggering between peers and messages can be better managed by usin
 However, it's important to note that message prioritization also introduces additional complexity to the system, 
 necessitating sophisticated algorithms for better message handling.   
 
-### 5. Better Benefits from IWANT/FloodPublish
+### 5. Maximizing benefits from IWANT messages
 During heartbeat intervals, GossipSub nodes transmit IHAVE messages (carrying IDs of seen messages) to the peers not included in the full-message mesh. 
 These peers can use IWANT messages to request any missing messages. 
 A budget counter ensures these messages never exceed a specified threshold during each heartbeat interval.
@@ -403,22 +400,25 @@ require careful due diligence when using IWANT messages for reasons not limited 
 
 1) A large message reception may take several hundred milliseconds to complete. 
 During this time, an IHAVE message announcing the same message ID will trigger an IWANT request.
+
 2) A peer can send IWANT requests for the same message to multiple nodes, 
 leading to simultaneous transmissions of the same message.
 
 3) Replying to (potentially many) IWANT requests can delay the transmission of the same message to mesh peers, 
-resulting in lower peer scores.  
+resulting in lower peer scores and slower message propagation.
 
 A few possible solutions to mitigate this problem may include:
 
 
-1) Allocating a volume-based budget to service IWANT requests during each heartbeat interval.
+1) Issuing IHAVE announcements only after the message is delivered to many mesh peers.
 
-2) Deferring IWANT requests for messages that are currently being received. 
+2) Allocating a volume-based budget to service IWANT requests during each heartbeat interval.
 
-3) Deferring IWANT requests if at least $K$ IDONTWANTs are received for the same message.
+3) Deferring IWANT requests for messages that are currently being received. 
 
-4) A large message transmission can yield high $C_{wnd}$; preferring such peers during mesh maintenance can be helpful.
+4) Deferring IWANT requests if at least $K$ IDONTWANTs are received for the same message.
+
+5) A large message transmission can yield high $C_{wnd}$; preferring such peers during mesh maintenance can be helpful.
 
 ## Summary
 This study investigates the pressing issue of considerable fluctuations and rises in network-wide dissemination times for large messages. 
@@ -444,21 +444,33 @@ Therefore, approaches focused on eliminating redundant transmissions
 At the same time, strategies aimed at reducing store-and-forward delays 
 (fragmentation, staggering, prioritization, etc.) can prove beneficial. 
 
+
+It is worth mentioning that many of the strategies suggested in this post are ideas at different stages. 
+Some of these have already been explored and discussed to some extent [5](https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw),
+[17](https://forum.vac.dev/t/iwant-messages-may-have-negative-impact-on-message-dissemination-latency-for-large-messages/366),
+[18](https://vac.dev/rlog/gsub-idontwant-tests/).
+Currently, we are working on a detailed evaluation of these approaches. 
+ 
+Please reach out to the [VAC forum for discussions and feedback regarding this post](https://forum.vac.dev/t/large-message-handling-in-gossipsub-potential-improvements/375).
+
+
 ## References
-- [1] [EIP-4844: Shard Blob Transactions](https://eips.ethereum.org/EIPS/eip-4844)
-- [2] [Message Propagation Times With Waku-RLN](https://docs.waku.org/research/research-and-studies/message-propagation/)
-- [3] [feat(gossipsub): More lenient flood publishing](https://github.com/libp2p/rust-libp2p/pull/3666)
-- [4] [Disable flood publishing](https://github.com/sigp/lighthouse/pull/4383)
-- [5] [GossipSub for big messages](https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw)
-- [6] [Gossipsub: Lazy sending](https://github.com/status-im/nim-libp2p/issues/850)
-- [7] [GossipSub: Limit flood publishing](https://github.com/vacp2p/nim-libp2p/pull/911)
-- [8] [Gossipsub: lazy prefix detection](https://github.com/vacp2p/nim-libp2p/issues/859)
-- [9] [Potential Gossip improvement list for EIP4844](https://hackmd.io/@gRwfloEASH6NWWS_KJxFGQ/B18wdnNDh)
-- [10] [Gossipsub v1.2: IDONTWANT Message](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md?plain=1#L52)
-- [11] [Number Duplicate Messages in Ethereum’s Gossipsub Network](https://ethresear.ch/t/number-duplicate-messages-in-ethereums-gossipsub-network/19921)
-- [12] [ TCP Congestion Control: Re-starting Idle Connections](https://datatracker.ietf.org/doc/html/rfc2581#section-4.1)
-- [13] [PING/PONG control messages](https://github.com/libp2p/specs/pull/558)
-- [14] [IHave/IWant message behavior seriously impacts large message transmissions](https://github.com/vacp2p/nim-libp2p/issues/1101)
-- [15] [Large Message Handling (IDontWant + IMReceiving)](https://forum.vac.dev/t/large-message-handling-idontwant-imreceiving/281)
-- [16] [IDontWant Message Impact](https://forum.vac.dev/t/idontwant-message-impact/283)]
+[1] EIP-4844: Shard Blob Transactions. Retrieved from https://eips.ethereum.org/EIPS/eip-4844
+[2] Message Propagation Times With Waku-RLN. Retrieved from https://docs.waku.org/research/research-and-studies/message-propagation/
+[3] Lenient Flood Publishing. Retrieved from https://github.com/libp2p/rust-libp2p/pull/3666
+[4] Disable Flood Publishing. Retrieved from https://github.com/sigp/lighthouse/pull/4383
+[5] GossipSub for Big Messages. Retrieved from https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw
+[6] Gossipsub: Lazy Sending. Retrieved from https://github.com/status-im/nim-libp2p/issues/850
+[7] GossipSub: Limit Flood Publishing. Retrieved from https://github.com/vacp2p/nim-libp2p/pull/911
+[8] Gossipsub: Lazy Prefix Detection. Retrieved from https://github.com/vacp2p/nim-libp2p/issues/859
+[9] Potential Gossip Improvement List for EIP4844. Retrieved from https://hackmd.io/@gRwfloEASH6NWWS_KJxFGQ/B18wdnNDh
+[10] Gossipsub Specifications v1.2: IDONTWANT Message. Retrieved from https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md?plain=1#L52
+[11] Number of Duplicate Messages in Ethereum’s Gossipsub Network. Retrieved from https://ethresear.ch/t/number-duplicate-messages-in-ethereums-gossipsub-network/19921
+[12] TCP Congestion Control: Re-starting Idle Connections. Retrieved from https://datatracker.ietf.org/doc/html/rfc2581#section-4.1
+[13] PING/PONG Control Messages. Retrieved from https://github.com/libp2p/specs/pull/558
+[14] IHave/IWant Message Impact. Retrieved from https://github.com/vacp2p/nim-libp2p/issues/1101
+[15] Large Message Handling IDontWant + IMReceiving Messages. Retrieved from https://forum.vac.dev/t/large-message-handling-idontwant-imreceiving/281
+[16] IDontWant Message Impact. Retrieved from https://forum.vac.dev/t/idontwant-message-impact/283
+[17] IWANT Message Impact. Retrieved from https://forum.vac.dev/t/iwant-messages-may-have-negative-impact-on-message-dissemination-latency-for-large-messages/366
+[18] IDONTWANT Message Performance. Retrieved from https://vac.dev/rlog/gsub-idontwant-tests/
 
