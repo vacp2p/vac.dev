@@ -18,7 +18,8 @@ Large Message Handling in GossipSub: Potential Improvements
 
 ## Motivation
 The challenge of large message transmissions in GossipSub leads to longer than expected network-wide message dissemination times (and relatively higher fluctuations). 
-It is particularly relevant for applications that require on-time, network-wide dissemination of large messages, such as Ethereum and Waku [[1](https://eips.ethereum.org/EIPS/eip-4844),[2](https://docs.waku.org/research/research-and-studies/message-propagation/)]. 
+It is particularly relevant for applications that require on-time, network-wide dissemination of large messages, 
+such as Ethereum and Waku [[1](https://eips.ethereum.org/EIPS/eip-4844),[2](https://docs.waku.org/research/research-and-studies/message-propagation/)]. 
 
 
 This matter has been extensively discussed in the libp2p community [[3](https://github.com/libp2p/rust-libp2p/pull/3666),
@@ -37,7 +38,6 @@ and numerous improvements have been considered (or even incorporated) for the Go
 
 Sending a message to N peers involves approximately $\lceil \log_D(N) \rceil$ rounds,
 with approximately $(D-1)^{X-1} \times D$ transmissions in each round,
-
 where $X, D$ represent the round number and mesh size. 
 
 Transmitting to a higher number of peers (floodpublish) can theoretically reduce latency by increasing the transmissions in each round to $(D-1)^{X-1} \times (F+D)$, 
@@ -134,8 +134,8 @@ So, the receiver can start relaying early to its mesh members while the original
 
 
 As a result, after every $\frac{\tau_D}{D}$ milliseconds, 
-the number of peers receiving the message increases by $2^r\ \forall\ r \in \{0, D-1\}$ and by $\sum_{r=0}^{D-1} \lambda_{r-1}\ \forall\ r \geq D$. 
-Here, $r$ represents message transmission round $r = \frac{\tau_D}{D} \text{ only if } D \mid \tau_D$, and $\lambda_r$ represents the number of peers that received the message in round r.
+the number of peers receiving the message increases by $2^r\ \forall\ r \in \{0, D-1\}$ and by $\sum_{k=r-D}^{r-1} \lambda_k\ \forall\ r \geq D$. 
+Here, $r$ represents message transmission round $r = \frac{\tau_D}{D} \text{ only if } D \mid \tau_D$, and $\lambda_k$ represents the number of peers that received the message in round $k$.
 
 It is worth noting that a realistic network imposes certain constraints on staggering for peers. 
 For instance, in a network with dissimilar peer capabilities, 
@@ -446,9 +446,9 @@ At the same time, strategies aimed at reducing store-and-forward delays
 
 
 It is worth mentioning that many of the strategies suggested in this post are ideas at different stages. 
-Some of these have already been explored and discussed to some extent [5](https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw),
+Some of these have already been explored and discussed to some extent [[5](https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw),
 [17](https://forum.vac.dev/t/iwant-messages-may-have-negative-impact-on-message-dissemination-latency-for-large-messages/366),
-[18](https://vac.dev/rlog/gsub-idontwant-tests/).
+[18](https://vac.dev/rlog/gsub-idontwant-tests/)].
 Currently, we are working on a detailed evaluation of these approaches. 
  
 Please reach out to the [VAC forum for discussions and feedback regarding this post](https://forum.vac.dev/t/large-message-handling-in-gossipsub-potential-improvements/375).
@@ -456,21 +456,38 @@ Please reach out to the [VAC forum for discussions and feedback regarding this p
 
 ## References
 [1] EIP-4844: Shard Blob Transactions. Retrieved from https://eips.ethereum.org/EIPS/eip-4844
+
 [2] Message Propagation Times With Waku-RLN. Retrieved from https://docs.waku.org/research/research-and-studies/message-propagation/
+
 [3] Lenient Flood Publishing. Retrieved from https://github.com/libp2p/rust-libp2p/pull/3666
+
 [4] Disable Flood Publishing. Retrieved from https://github.com/sigp/lighthouse/pull/4383
+
 [5] GossipSub for Big Messages. Retrieved from https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw
+
 [6] Gossipsub: Lazy Sending. Retrieved from https://github.com/status-im/nim-libp2p/issues/850
+
 [7] GossipSub: Limit Flood Publishing. Retrieved from https://github.com/vacp2p/nim-libp2p/pull/911
+
 [8] Gossipsub: Lazy Prefix Detection. Retrieved from https://github.com/vacp2p/nim-libp2p/issues/859
+
 [9] Potential Gossip Improvement List for EIP4844. Retrieved from https://hackmd.io/@gRwfloEASH6NWWS_KJxFGQ/B18wdnNDh
+
 [10] Gossipsub Specifications v1.2: IDONTWANT Message. Retrieved from https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md?plain=1#L52
+
 [11] Number of Duplicate Messages in Ethereum’s Gossipsub Network. Retrieved from https://ethresear.ch/t/number-duplicate-messages-in-ethereums-gossipsub-network/19921
+
 [12] TCP Congestion Control: Re-starting Idle Connections. Retrieved from https://datatracker.ietf.org/doc/html/rfc2581#section-4.1
+
 [13] PING/PONG Control Messages. Retrieved from https://github.com/libp2p/specs/pull/558
+
 [14] IHave/IWant Message Impact. Retrieved from https://github.com/vacp2p/nim-libp2p/issues/1101
+
 [15] Large Message Handling IDontWant + IMReceiving Messages. Retrieved from https://forum.vac.dev/t/large-message-handling-idontwant-imreceiving/281
+
 [16] IDontWant Message Impact. Retrieved from https://forum.vac.dev/t/idontwant-message-impact/283
+
 [17] IWANT Message Impact. Retrieved from https://forum.vac.dev/t/iwant-messages-may-have-negative-impact-on-message-dissemination-latency-for-large-messages/366
+
 [18] IDONTWANT Message Performance. Retrieved from https://vac.dev/rlog/gsub-idontwant-tests/
 
