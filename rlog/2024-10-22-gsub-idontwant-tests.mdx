@@ -1,9 +1,11 @@
 ---
-title: 'IDONTWANT Message Potential: Performance Insights and Connected Findings'
-date: 2024-10-22 12:00:00
+title: 'Libp2p Gossipsub IDONTWANT Message Performance Impact'
+
+date: 2024-10-24 12:00:00
 authors: farooq
 published: true
-slug: gsub-idontwant-tests
+slug: gsub-idontwant-perf-eval
+
 categories: research
 discuss: https://forum.vac.dev/t/idontwant-message-potential-performance-insights-and-connected-findings/374
 
@@ -20,10 +22,13 @@ This post provides quick insights into the IDONTWANT message performance and hig
 [IDONTWANT](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md?plain=1#L52) messages are introduced to curtail redundant transmissions without compromising resilience. 
 Cutting down on duplicates can potentially render two significant advantages
 
-1. Minimize bandwidth requirements 
-2. Minimize message dissemination time
+1. Reducing bandwidth requirements 
 
-For IDONTWANTs to be effective, they must be received and processed by the sender before it starts relaying the message. 
+2. Reducing message dissemination time (latency)
+
+
+For IDONTWANTs to be effective, they must be received and processed by the sender before the sender starts relaying the respective message. 
+
 [Duplicates investigation](https://ethresear.ch/t/number-duplicate-messages-in-ethereums-gossipsub-network/19921#arrival-time-of-duplicates-9) reveals that 
 the average time difference between the first message arrival and the first duplicate arrival is higher than the average round trip time in Ethereum's GossipSub network. 
 
@@ -43,7 +48,8 @@ Every publisher transmits exactly one message to the network,
 and inter-packet spacing (delay) is set to four seconds. 
 In all experiments, ten messages are transmitted to the network. 
 
-At the start of each experiment, two additional messages are transmitted to raise the $C_{wnd}$ to a reasonable level. 
+At the start of each experiment, two additional messages are transmitted to increase the TCP $C_{wnd}$.
+
 These messages are not included in latency computations. The simulation details are presented in the table below.
 
 
@@ -92,7 +98,9 @@ Therefore, a similar message dissemination time is seen with and without IDONTWA
 |-----------------------------|-----------------------------|-----------------------------|
 
 
-Please reach out to the [VAC forum for discussions and feedback regarding this post](https://forum.vac.dev/t/idontwant-message-potential-performance-insights-and-connected-findings/374).
+Please feel free to join the discussion and leave feedback regarding this post in the
+[VAC forum](https://forum.vac.dev/t/idontwant-message-potential-performance-insights-and-connected-findings/374).
+
 
 ## References
 
