@@ -51,8 +51,9 @@ and inter-packet spacing (delay) is set to four seconds for each published messa
 For a fair assessment, we ensure that the publishers are uniformly selected from each bandwidth class. 
 
 At the start of each experiment, two additional messages are transmitted to increase the TCP $C_{wnd}$.
+These messages are not included in latency computations. 
 
-These messages are not included in latency computations. The simulation details are presented in the table below.
+The simulation details are presented in the table below.
 
 
 | **Parameter** | **Value** | **Parameter** | **Value** |
@@ -122,4 +123,3 @@ Please feel free to join the discussion and leave feedback regarding this post i
 - [IDONTWANT Message Impact Before/After Message Validation](https://forum.vac.dev/t/idontwant-message-impact/283)
 - [GossipSub for Big Messages](https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw#2)
 - [Regression Test Results: nim-libp2p](https://zealous-polka-dc7.notion.site/Nim-libp2p-v1-5-0-regression-testing-August-2024-25edba733c704ccaa411919555c5db1a)
-- [IDONTWANT Message Performance Evaluation](https://www.notion.so/IDONTWANT-Message-Performance-Evaluation-1158f96fb65c8027b3f7c2bbbd0c8cbb)
