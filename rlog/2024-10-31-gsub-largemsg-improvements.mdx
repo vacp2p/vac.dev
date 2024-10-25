@@ -1,6 +1,6 @@
 ---
 title: 'Large Message Handling in GossipSub: Potential Improvements'
-date: 2024-10-29 12:00:00
+date: 2024-10-31 12:00:00
 authors: farooq
 published: true
 slug: gsub-largemsg-improvements
@@ -195,7 +195,8 @@ Implementing straightforward measures like transport-level ping-pong messages ca
 The limitations faced with $C_{wnd}$ scaling also impact some performance optimizations in GossipSub. 
 For instance, floodpublishing is an optimization relying on additional transmissions by the publisher to minimize message dissemination latency. 
 
-However, a small $C_{wnd}$ value in (new/cold) TCP connections established with floodpublish peers significantly increases message transmission time. 
+However, a small $C_{wnd}$ value in (new/cold) TCP connections established with floodpublish peers significantly increases message transmission time 
+[[4](https://github.com/sigp/lighthouse/pull/4383)]. 
 Usually, these peers also receive the same message from other sources during this time, wasting the publisher's bandwidth. 
 
 The same is the case with IWANT replies. 
@@ -451,7 +452,8 @@ Some of these have already been explored and discussed to some extent [[5](https
 [18](https://vac.dev/rlog/gsub-idontwant-tests/)].
 Currently, we are working on a detailed evaluation of these approaches. 
  
-Please reach out to the [VAC forum for discussions and feedback regarding this post](https://forum.vac.dev/t/large-message-handling-in-gossipsub-potential-improvements/375).
+Please feel free to join the discussion and leave feedback regarding this post in the 
+[VAC forum](https://forum.vac.dev/t/large-message-handling-in-gossipsub-potential-improvements/375).
 
 
 ## References
