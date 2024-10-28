@@ -1,5 +1,6 @@
 ---
-title: 'Libp2p Gossipsub IDONTWANT Message Performance Impact'
+title: 'Libp2p GossipSub IDONTWANT Message Performance Impact'
+
 
 date: 2024-10-28 12:00:00
 authors: farooq
@@ -20,7 +21,8 @@ This post provides quick insights into the IDONTWANT message performance and hig
 ## Overview
 
 [IDONTWANT](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md?plain=1#L52) messages are introduced to curtail redundant transmissions without compromising resilience. 
-Cutting down on duplicates can potentially render two significant advantages
+Cutting down on duplicates can potentially render two significant advantages:
+
 
 1. Reducing bandwidth requirements 
 
@@ -59,9 +61,12 @@ The simulation details are presented in the table below.
 | **Parameter** | **Value** | **Parameter** | **Value** |
 | ------------- | --------- | ------------- | --------- |
 | Peers | 2000 | Publishers | 10 |
-| Peer Bandwidth | 50-150 Mbps | Link Latency | 40-130 ms |
-| Message Size | 1KB, 50KB, 500KB, 1MB | $D$ | 8 |
-| Heartbeat Interval | 700ms, 1000ms, 1500ms | $D_{low}$ | 6 |
+| Peer bandwidth | 50-150 Mbps | Link latency | 40-130 ms |
+
+| Message size | 1KB, 50KB, 500KB, 1MB | $D$ | 8 |
+
+| Heartbeat interval | 700ms, 1000ms, 1500ms | $D_{low}$ | 6 |
+
 | FloodPublish | False | $D_{high}$ | 12 |
 | Gossip factor | 0.05 | Muxer | yamux |
 
