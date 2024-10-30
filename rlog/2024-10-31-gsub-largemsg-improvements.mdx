@@ -90,7 +90,7 @@ in message dissemination latency at each hop, even in similar network conditions
 6. Message size directly contributes to peers' workloads in terms of processing and transmission time.
 It also raises the probability of simultaneous redundant transmissions to the same peer, 
 resulting in bandwidth wastage, congestion, and slow message propagation to the network. 
-Moreover, the benefits of sequential message relaying can be compromised by prioritizing slow (or busy) peer(s).
+Moreover, the benefits of sequential message relaying can be compromised by prioritizing slow (or busy) peers.
 
 7. Most use cases necessitate validating received messages before forwarding them to the next-hop peers.
 For a higher message transfer time $(\tau )$, this store-and-forward delay accumulates across the hops traveled by the message.  
@@ -103,7 +103,7 @@ For a higher message transfer time $(\tau )$, this store-and-forward delay accum
 The impact of message size and achievable data rate on message transmit time $\tau$ is crucial 
 as this time accumulates due to the store-and-forward delay introduced at intermediate hops. 
 
-Some possible improvements minimizing overall message dissemination latency include:
+Some possible improvements to minimize overall message dissemination latency include:
 
 #### a. Message fragmentation
 
@@ -114,7 +114,7 @@ and $h, P_h$ being the number of hops in the longest path and message propagatio
  
 Partitioning a large message into n fragments reduces a single fragment transmit time to $\frac{\delta_{Tx}}{n}$. 
 As a received fragment can be immediately relayed by the receiver (while the sender is still transmitting the remaining fragments), 
-it reduces the transmit delay to $\delta_{Tx} = \frac{S}{R} \times \frac{2h-1}{n}$. 
+it reduces the transmit time to $\delta_{Tx} = \frac{S}{R} \times \frac{2h-1}{n}$. 
 
 This time reduction is mainly attributed to the smaller store-and-forward delay involved in fragment transmissions.
 
@@ -134,8 +134,8 @@ So, the receiver can start relaying early to its mesh members while the original
 
 
 As a result, after every $\frac{\tau_D}{D}$ milliseconds, 
-the number of peers receiving the message increases by $2^r\ \forall\ r \in \{0, D-1\}$ and by $\sum_{k=r-D}^{r-1} \lambda_k\ \forall\ r \geq D$. 
-Here, $r$ represents message transmission round $r = \frac{\tau_D}{D} \text{ only if } D \mid \tau_D$, and $\lambda_k$ represents the number of peers that received the message in round $k$.
+the number of peers receiving the message increases by $2^X\ \forall\ X \in \{0, D-1\}$ and by $\sum_{k=X-D}^{X-1} \lambda_k\ \forall\ X \geq D$. 
+Here, $X$ represents message transmission round $X = i \cdot \frac{\tau_D}{D} \mid i \in \mathbb{N}_0$, and $\lambda_k$ represents the number of peers that received the message in round $k$.
 
 It is worth noting that a realistic network imposes certain constraints on staggering for peers. 
 For instance, in a network with dissimilar peer capabilities, 
@@ -382,7 +382,7 @@ Message prioritization can be a powerful tool to ensure that important messages 
 and allow for customizable message handling. 
 
 For example, staggering between peers and messages can be better managed by using priority queues. 
-However, it's important to note that message prioritization also introduces additional complexity to the system, 
+However, it is important to note that message prioritization also introduces additional complexity to the system, 
 necessitating sophisticated algorithms for better message handling.   
 
 ### 5. Maximizing benefits from IWANT messages
@@ -450,7 +450,7 @@ It is worth mentioning that many of the strategies suggested in this post are id
 Some of these have already been explored and discussed to some extent [[5](https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw),
 [17](https://forum.vac.dev/t/iwant-messages-may-have-negative-impact-on-message-dissemination-latency-for-large-messages/366),
 [18](https://vac.dev/rlog/gsub-idontwant-perf-eval/)].
-Currently, we are working on a detailed evaluation of these approaches. 
+We are nearing the completion of a comprehensive performance evaluation of these approaches and will soon share the results of our findings. 
  
 Please feel free to join the discussion and leave feedback regarding this post in the 
 [VAC forum](https://forum.vac.dev/t/large-message-handling-in-gossipsub-potential-improvements/375).
