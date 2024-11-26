@@ -21,7 +21,7 @@ The Prover tries to convince the Verifier of a given claim.
 For example, the Prover may want to convince the Verifier that she owns a specific Unspent Transaction Output (UTXO);
 that is, the Prover possesses the ability to spend the UTXO.
 In many instances, there is information that the Prover does not wish to reveal to the Verifier.
-In our example, it is critical that the Prover does not provide the Verifier with the spending key associated to her UTXO.
+In our example, it is critical that the Prover does not provide the Verifier with the spending key associated with her UTXO.
 In addition to the Prover's claim and secret data, there is additional data, public parameters, that the claimed statement is expressed in terms of.
 The public parameters can be thought of as the basis for all similar claims.
 
@@ -53,7 +53,7 @@ In particular, the protocol has the following framework:
 These three messages form the protocol's transcript: $(\mathsf{commitment}, \mathsf{challenge}, \mathsf{response})$.
 The Verifier uses all three of these messages to validate the Prover's original claim.
 The Verifier's challenge should be selected uniform random from all possible challenges.
-Based on this selection, a dishonest Prover can only convince the the Verifier with a negligible probability.
+Based on this selection, a dishonest Prover can only convince the Verifier with a negligible probability.
 
 
 ### The Schnorr Protocol
@@ -147,28 +147,28 @@ The properties of $\mathsf{Hash}$ fixes the generator $g$ and the Prover's state
 
 ## Improper use of the Fiat-Shamir heuristic
 
-The Fiat-Shamir heuristic appears to be a fairly straight-forward technique to implement.
+The Fiat-Shamir heuristic appears to be a fairly straightforward technique to implement.
 However, a subtle but serious issue that can occur in the application of the Fiat-Shamir heuristic has been a point of discussion for the past few years.
 The issue concerns what messages are included in the hash.
 In particular, are the public parameters used to compute the hash value?
 
-Bernhard et al. [8](https://eprint.iacr.org/2016/771.pdf) provide a discussion of Fiat-Shamir heuristic resticted to $\Sigma$-protocols.
+Bernhard et al. [8](https://eprint.iacr.org/2016/771.pdf) provide a discussion of Fiat-Shamir heuristic restricted to $\Sigma$-protocols.
 In particular, Bernhard et al. discuss the pitfalls of the weak Fiat-Shamir heuristic.
 Recall that the strong Fiat-Shamir heuristic requires that the public parameters are included in the calculations of the Verifier's messages while the weak version does not.
-The inclusion of the public parameters in the hash evaluations fix these public values for the entire protocol.
+The inclusion of the public parameters in the hash evaluations fixes these public values for the entire protocol.
 This means that the Prover cannot retroactively change them.
 
 The issues with the differences in the variants of the Fiat-Shamir heuristics has persisted since Bernhard et al.'s paper. 
-In recent years, auditors from [Trail of Bits](https://www.trailofbits.com/) and [OpenZepellin](https://www.openzeppelin.com/) have 
+In recent years, auditors from [Trail of Bits](https://www.trailofbits.com/) and [OpenZeppelin](https://www.openzeppelin.com/) have 
 released blogs ([9](https://blog.trailofbits.com/2022/04/13/part-1-coordinated-disclosure-of-vulnerabilities-affecting-girault-bulletproofs-and-plonk/),
  [10](https://blog.trailofbits.com/2022/04/14/the-frozen-heart-vulnerability-in-giraults-proof-of-knowledge/),
  [11](https://blog.trailofbits.com/2022/04/15/the-frozen-heart-vulnerability-in-bulletproofs/), [12](https://blog.trailofbits.com/2022/04/18/the-frozen-heart-vulnerability-in-plonk/), [13](https://blog.openzeppelin.com/the-last-challenge-attack))
  and papers ([14](https://eprint.iacr.org/2023/691), [15](https://eprint.iacr.org/2024/398)) 
- describing specific vunerabilities in zero-knowledge papers and repositories associated to the use of the weak Fiat-Shamir heuristic.
+ describing specific vulnerabilities in zero-knowledge papers and repositories associated with the use of the weak Fiat-Shamir heuristic.
 
 Trail of Bits coined the term **FROZEN Heart** to describe the use of weak Fiat-Shamir heuristic.
 Frozen comes from the phrase "FoRging Of ZEro kNowledge proofs",
-and Fiat-Shamir is the "heart" of transforming an interactive protocol to noninteractive procotol.
+and Fiat-Shamir is the "heart" of transforming an interactive protocol to noninteractive protocol.
 
 Now, we examine how weak Fiat-Shamir affects the Schnorr protocol and Chaum-Pedersen protocol.
 
@@ -180,7 +180,7 @@ the second where we include the public parameter $g$ but not the Prover's claim 
 Since we omit the generator $g \in \mathbb{G}$ from the computation for the message $c$ in our first approach,
 then $c = \mathsf{Hash}(X||T)$.
 
-Now, a malicious Prover can completes the transcript for the Schnorr protocol by selecting any $z \in_R \mathbb{Z}_p$.
+Now, a malicious Prover can complete the transcript for the Schnorr protocol by selecting any $z \in_R \mathbb{Z}_p$.
 Since, $g$ is not fixed as it was not included in the computation of $c$.
 But, the malicious Prover needs the transcript $(T,c,z)$ to satisfy $g^z = TX^c$.
 Hence, the malicious Prover can compute the generator $g = (TX^c)^{z^{-1}}.$
@@ -199,7 +199,7 @@ As such, a malicious Prover can generate values for $U,V,W$, and $g$ that satisf
 In the case of a malicious Prover, $T$ and $S$ are randomly group elements instead of being computed using a value $t$ that the Prover selected.
 This means a malicious Prover must randomly select the value $z$ as well.
 
-Given the values that have been fixed so far, each of the Verifier's identities consist of two unknowns.
+Given the values that have been fixed so far, each of the Verifier's identities consists of two unknowns.
 Hence, it is necessary to select one of these unknowns from each identity so that a malicious Prover can compute the last value.
 For instances, suppose that the malicious Prover randomly selects $V$ and $W$.
 The malicious Prover can compute $g = (T V^c)^{1/z}$ and $V = (SW^c)^{1/z}$.
