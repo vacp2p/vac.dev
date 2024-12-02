@@ -1,0 +1,193 @@
+---
+title: 'Vac 101 - Climbing Merkle Trees'
+date: 2024-11-01 12:00:00
+authors: marvin
+published: false
+slug: climbing-merkle-trees
+categories: research
+
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+In this post, we introduce a crucial data structure used throughout web3.
+
+<!--truncate-->
+
+## Introduction
+
+A large amount of data is swapped between users on a blockchain in the form of transactions.
+Over the entire life of a blockchain,
+the storage space required to maintain a copy of every transaction becomes untenable for most users.
+However, the integrity of a blockchain relies on a large pool of users that can validate the blockchain's history from its inception to its present state.
+The data representing the blockchain's state is compressed.
+This compression addresses the issue of scale that would greatly restrict the pool of users.
+
+Data compression alone is not the end goal.
+As mentioned, it is essential for users to beable to validate the blockchain's history.
+The property of compression and validation was solved in Bitcoin by the use of Merkle trees.
+Merkle trees were first by Ralph Merkle in his dissertation [[1](https://www.ralphmerkle.com/papers/Thesis1979.pdf)].
+A Merkle tree is a data structure that compresses a digest of data to a constant size while still providing a method for proving membership of elements of the digest.
+
+## Tree structure
+
+A tree is a special data structure that organizes nodes so that there is exactly one path between any two nodes.
+The trees that we consider can be arranged in layers with multiple nodes (children) merge into a single node (parent) in the preceding node.
+A single node exists in the base layer;
+this special node is called the root node.
+The highest level of the tree consists of parentless nodes called leaves.
+
+TODO- diagram
+
+A binary tree has one additional property:
+each node has at most two children nodes.
+Further, we will assume that nodes in a binary tree are either a parent node with two children or a leaf.
+As strange as it sounds, each child node has exactly one parental node.
+
+TODO- diagram
+
+A binary tree with $2^n$ leaves consist of $n+1$ layers.
+Additionally, such a tree has $2^{n+1}-1$ nodes.
+
+## Merkle trees
+
+A Merkle tree is a specialized tree in which each of its nodes contain the evaluation of a hash function.
+Merkle trees are usually taken to have a binary tree structure.
+As such, the presentation we provide in this section will be for binary trees.
+
+### Construction
+In this section we show how Merkle tree are constructed to compress a digest $D$.
+Suppose that the digest $D$ consists of $2^n$ entries;
+we assume that the digest $D$ has this many entries since a Merkle tree is a binary tree.
+Additionally, each digest can be padded to ensure that $D$ has the desired number of entries.
+
+Each leaf of the Merkle tree contains the hash of a digest entry.
+Each parent node contains the hash of the concatenation of their children nodes.
+Through this iterative construction, we reach the root of the tree.
+The value contained in the root node is called the root hash.
+The root hash is a compressed representation of the digest $D$.
+
+TODO: diagram of a Merkle tree.
+
+Each node in the Merkle tree is computed by taking a hash.
+Since a binary tree with $2^n$ leaves has $2^{n+1}-1$ nodes,
+then we need to evaluate $2^{n+1}-1$ hashes to construct the Merkle tree.
+
+### Merkle tree intregity
+
+A large quantity of data can be compressed to a single hash value.
+A natural question to ask is: could a clever party find another digest that yields a Merkle tree with the same root hash?
+If possible, this would compromise the ledger since the blockchain's history could be altered.
+Fortunately, Merkle trees are quite secure.
+In fact, Merkle trees can be used to both bind and hide a digest.
+
+The Merkle tree is able to bind a digest with one of the properties of hash functions (see our previous Vac-101 [[2](https://vac.dev/rlog/vac101-fiat-shamir#hash-functions)] for information on hash functions).
+A hash function is collision resistant; it is difficult for a malicious party to find two values share the same hash value.
+This collision resistance property, essentially, fixes the input to each leaf and into their parent, their parent's parent, and so on.
+
+In certain applications,
+it may be desirable for the digest of a Merkle tree to be kept confidential.
+This is achieved with the preimage resistant propery of hash functions.
+A hash function is preimage resistant provided that it is difficult reverse the hashing operation. 
+It would be necessary for a malicious party to find preimages to each node starting from the root node to determine original digest.
+
+Now, we see that Merkle trees are secured structures that are tamper resistant.
+
+### Proof of membership
+An interesting and critical use of Merkle trees is its ability to prove any piece of data is a part of its digest.
+This can be done with logarthmic storage and logartihmic computation time.
+
+Suppose that we want to show that data $\ell$ is part of the Merkle tree's digest.
+Additionally, suppose that $\mathsf{hash}$ is the hash function used to construct the tree.
+We assume that the hash function $\mathsf{hash}$ can be computed in constant-time for any input.
+
+Suppose that the Prover provides data $\ell$ to the Verifier,
+and tells the Verifier that $\ell$ corresponds to the $i$th leaf of the Merkle tree.
+For the Verifier to be convinced that $\ell$ is part of the digest, he needs to be able to construct the tree's root hash using $\mathsf{hash}$, $i$, $\ell$ and some additional information from the Prover.
+Specifically, the Prover must provide the sibling hashes for each value that the Verifier can compute.
+This enables the Verifier to compute the parents of the siblings that the Prover provides and the values that he was able to produce himself.
+
+The leaf index $i$ indicates whether a hash value provided by the Prover is a left or right sibling.
+This is done by looking at the binary expansion of $i$.
+
+The Verifier can compute the leaf $h_0 = \mathsf{hash}(\ell)$.
+Next, using $h_0$'s sibling, $h'_0$, provided by the Prover:
+the Verifier can compute $h_1 = \mathsf{hash}(h_0 \|h'_0)$ or $h_1 = \mathsf{hash}(h'_0 \| h_0)$
+depending on whether $h'_0$ is a left or right sibling.
+This pathing continues until the Verifier either successfully computes the root hash (in $n+1$ hashes) or fails to.
+
+The Prover has to provide $n$ sibling nodes for the proof of membership.
+
+## Extensions of Merkle trees
+
+Merkle trees can be extended in multiple ways.
+In this section, we explore a select few of these extensions.
+
+### Sparse Merkle trees
+
+A sparse Merkle tree (SMT) is a special Merkle tree that can be used to represent digests with nonconsecutive entries.
+Specifically, each digest entry has a particular leaf index.
+For simplicity, we assume that the indexed values are given by the entry's hash.
+We note that this is a sorted SMT.
+
+Let $n$ denote the number of bits that a hash value can possess. This means that our SMT can have at most $2^n$ leaves.
+
+A SMT is treated as a Merkle tree in which each entry is placed in the leaf corresponding to their hash value, and the other entries have a $\mathsf{null}$ marker inserted in.
+This means that we can prove membership in the way as described.
+However, we can also prove nonmembership of an element by showing that $\mathsf{null}$ is located in the element's hash location.
+The crucial difference between a sorted and unsorted SMT is that the unsorted variant cannot be used to prove nonmembership.
+
+We can take advantage of the sparse nature of SMT to provide shorten proofs.
+Specifically, it is unlikely for entries to cluster together.
+As such, it is efficient to maintain a list of values:
+
+|Null values |
+|---|
+|$d_0 := \mathsf{Hash(null)},$|
+|$d_1 := \mathsf{Hash(d_0 \|\| d_0)},$|
+|$d_2 := \mathsf{Hash(d_1 \|\| d_1)},$|
+|$\vdots$|
+|$d_{n-1} := \mathsf{Hash(d_{n-2} \|\| d_{n-2})}.$|
+
+Each of the $d_i$'s represents the root hash of a Merkle tree with $2^i$ leaves containing $\mathsf{null}$.
+These values can be used to shorten the time to construct a SMT, and the length of proofs.
+
+### Proof of nonmembership
+
+In the first Vac-101 [[4](https://vac.dev/rlog/vac101-membership-with-bloom-filters-and-cuckoo-filters)], we examined Bloom and Cuckoo filters that could be used for proof of membership and nonmembership.
+However, the proof of membership may result in false-positives due to collisions.
+This would affect nonmembership proofs as well.
+Sparse Merkle trees can be adapted to provide greater assurance that a given piece of data is not a member of the digest.
+
+Why is sorting essential?
+The sorting mechanism of data can be arbitrarily chosen.
+However, it is essential that there are no gaps in the ordering.
+It must be known what the maximal number of elements that could ever exist in the digest is.
+A simple method for this is to use a hash function to provide fingerprints to the data.
+Each hash using either SHA-256 or Keccak has 256-bits.
+Our entire digest could consist of a maximum of $2^{256}$ entries.
+This assumes that our digest does not contain collisions.
+
+The fingerprint of a piece of data $\ell$ indicates which leaf of the SMT it is contained in.
+This means that a nonmembership of $\ell$ in the SMT becomes a matter of proving that $\mathsf{null}$ is contained in $\ell$'s location. 
+
+It is crucial for the SMT to be sorted. 
+Otherwise, an malicious party can append the entry $\ell$ to a random location.
+This allows for the malicious party to contradictory proofs that prove both membership and nonmemberhip.
+We note that the requirement that a SMT is sorted can be too strong of an assumption in centralized cases.
+However, sorted is a necessary property of SMT for decentralized systems.
+
+### Verkle Trees
+A proof of membership grows in length as the Merkle tree grows.
+The most obvious approach to remedy this scalability issue is to use Merkle trees where each node has more than 2 children.
+However, as we saw earlier, this does not fix the issue.
+An alternate approach is to use a different data structure: [Verkle trees](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf).
+A Verkle tree replaces hash functions with polynomial commitments.
+We will explore Verkle trees is a future Vac 101 edition.
+
+## References
+
+- 1. [Secrey, Authentication, and Public Key Systems](https://www.ralphmerkle.com/papers/Thesis1979.pdf) 
+- 2. [Vac 101: Transforming an Interactive Protocol to a Noninteractive Argument](https://vac.dev/rlog/vac101-fiat-shamir#hash-functions)
+- 3. [Vac 101: Membership with Bloom Filters and Cuckoo Filters](https://vac.dev/rlog/vac101-membership-with-bloom-filters-and-cuckoo-filters)
+- 4. [Verkle Trees](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)
