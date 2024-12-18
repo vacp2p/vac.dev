@@ -101,7 +101,7 @@ Suppose that we want to show that data $\ell$ is part of the Merkle tree's diges
 Additionally, suppose that $\mathsf{hash}$ is the hash function used to construct the tree.
 We assume that the hash function $\mathsf{hash}$ can be computed in constant-time for any input.
 
-Suppose that the Prover provides data $\ell$ to the Verifier,
+Suppose that a Prover provides data $\ell$ to a Verifier,
 and tells the Verifier that $\ell$ corresponds to the $i$th leaf of the Merkle tree.
 For the Verifier to be convinced that $\ell$ is part of the digest, he needs to be able to construct the tree's root hash using $\mathsf{hash}$, $i$, $\ell$ and some additional information from the Prover.
 Specifically, the Prover must provide the sibling hashes for each value that the Verifier can compute.
