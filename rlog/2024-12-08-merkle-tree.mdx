@@ -28,6 +28,7 @@ As mentioned, it is essential for users to be able to validate the blockchain's 
 The property of compression and validation was solved in Bitcoin by the use of Merkle trees.
 Merkle trees were first by Ralph Merkle in his dissertation [[1](https://www.ralphmerkle.com/papers/Thesis1979.pdf)].
 A Merkle tree is a data structure that compresses a digest of data to a constant size while still providing a method for proving membership of elements of the digest.
+A previous rlog[[2](https://vac.dev/rlog/rln-light-verifiers/)], described how Merkle trees with their proof of membership could be used for lightweight clients for RLN. 
 
 ## Tree structure
 
@@ -82,6 +83,7 @@ Fortunately, Merkle trees are quite secure.
 In fact, Merkle trees can be used to both bind and hide a digest.
 
 The Merkle tree is able to bind a digest with one of the properties of hash functions (see our previous Vac-101 [[2](https://vac.dev/rlog/vac101-fiat-shamir#hash-functions)] for information on hash functions).
+The Merkle tree is able to bind a digest with one of the properties of hash functions (see our previous Vac-101 [[3](https://vac.dev/rlog/vac101-fiat-shamir#hash-functions)] for information on hash functions).
 A hash function is collision resistant; it is infeasible for a malicious party to find two values share the same hash value.
 This collision resistance property, essentially, fixes the input to each leaf and into their parent, their parent's parent, and so on.
 
@@ -122,6 +124,11 @@ There is a key detail that is essential for the proof of membership to be secure
 The root hash has to be provided to the Verifier prior to the selection of data $\ell$.
 Otherwise, Prover could generate a series of hash values (with the corresponding root hash) to forge a proof of membership.
 
+#### Capped proof of membership
+Polygon provides an implementation [[4](https://github.com/0xPolygonZero/plonky2/blob/main/plonky2/src/hash/merkle_tree.rs)] of a shorten proof of membership with a slight modification.
+A specific layer of the Merkle tree is published instead of just the root hash.
+By doing this, a capped proof of membership is just the path from leaf to the published layer.
+
 ## Extensions of Merkle trees
 
 Merkle trees can be extended in multiple ways.
@@ -158,7 +165,7 @@ These values can be used to shorten the time to construct a SMT, and the length 
 
 ### Proof of nonmembership
 
-In the first Vac-101 [[4](https://vac.dev/rlog/vac101-membership-with-bloom-filters-and-cuckoo-filters)], we examined Bloom and Cuckoo filters that could be used for proof of membership and nonmembership.
+In the first Vac-101 [[5](https://vac.dev/rlog/vac101-membership-with-bloom-filters-and-cuckoo-filters)], we examined Bloom and Cuckoo filters that could be used for proof of membership and nonmembership.
 However, the proof of membership may result in false-positives due to collisions.
 This would affect nonmembership proofs as well.
 Sparse Merkle trees can be adapted to provide greater assurance that a given piece of data is not a member of the digest.
@@ -184,14 +191,24 @@ However, sorted is a necessary property of SMT for decentralized systems.
 ### Verkle Trees
 A proof of membership grows in length as the Merkle tree grows.
 The most obvious approach to remedy this scalability issue is to use Merkle trees where each node has more than 2 children.
-However, as we saw earlier, this does not fix the issue.
-An alternate approach is to use a different data structure: [Verkle trees](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf).
-A Verkle tree replaces hash functions with polynomial commitments.
+However, this does not fix the issue.
+A proof of membership in a $k$-nary Merkle tree (each node has $k$ children) has a proof size $\log_k(n)(k-1)$.
+The multiple $k-1$ is the number of silbings that a node has on each layer.
+Hence, the scaling is worst than logarithmic.
+For additional information on $k$-nary Merkle trees see John Kuszmaul's paper on Verkle trees [[6](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)]
+
+An alternate approach is to use a different data structure: Verkle trees [[6](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)].
+A Verkle tree replaces hash functions with polynomial commitments [[7](https://ethresear.ch/t/using-polynomial-commitments-to-replace-state-roots/7095), [8](https://dankradfeist.de/ethereum/2020/06/16/kate-polynomial-commitments.html)].
 We will explore Verkle trees is a future Vac 101 edition.
 
 ## References
 
 - 1. [Secrecy, Authentication, and Public Key Systems](https://www.ralphmerkle.com/papers/Thesis1979.pdf) 
-- 2. [Vac 101: Transforming an Interactive Protocol to a Noninteractive Argument](https://vac.dev/rlog/vac101-fiat-shamir#hash-functions)
-- 3. [Vac 101: Membership with Bloom Filters and Cuckoo Filters](https://vac.dev/rlog/vac101-membership-with-bloom-filters-and-cuckoo-filters)
-- 4. [Verkle Trees](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)
+- 2. [Verifying RLN Proofs in Light Clients with Subtrees](https://vac.dev/rlog/rln-light-verifiers/)
+- 3. [Vac 101: Transforming an Interactive Protocol to a Noninteractive Argument](https://vac.dev/rlog/vac101-fiat-shamir#hash-functions)
+- 4. [Capped merkle tree in Plonky2](https://github.com/0xPolygonZero/plonky2/blob/main/plonky2/src/hash/merkle_tree.rs)
+- 5. [Vac 101: Membership with Bloom Filters and Cuckoo Filters](https://vac.dev/rlog/vac101-membership-with-bloom-filters-and-cuckoo-filters)
+- 6. [Verkle Trees](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)
+- 7. [Using polynomial commitments to replace state roots](https://ethresear.ch/t/using-polynomial-commitments-to-replace-state-roots/7095)
+- 8. [KZG polynomial commitments](https://dankradfeist.de/ethereum/2020/06/16/kate-polynomial-commitments.html)
+- 9. [O1 labs' Verkle Tree repo](https://github.com/o1-labs/verkle-tree)
