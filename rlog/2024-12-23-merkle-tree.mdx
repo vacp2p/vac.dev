@@ -173,7 +173,7 @@ Sparse Merkle trees can be adapted to provide greater assurance that a given pie
 Why is sorting essential?
 The sorting mechanism of data can be arbitrarily chosen.
 However, it is essential that there are no gaps in the ordering.
-It must be known what the maximal number of elements that could ever exist in the digest is.
+The maximum number of elements that could ever exist in the digest must be known.
 A simple method for this is to use a hash function to provide fingerprints to the data.
 Each hash using either SHA-256 or Keccak has 256-bits.
 Our entire digest could consist of a maximum of $2^{256}$ entries.
