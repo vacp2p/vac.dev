@@ -112,7 +112,7 @@ This enables the verifier to compute the parents of the siblings that the prover
 The leaf index $i$ indicates whether a hash value provided by the prover is a left or right sibling.
 This is done by looking at the binary expansion of $i$.
 
-The Verifier can compute the leaf $h_0 = \mathsf{hash}(\ell)$.
+The verifier can compute the leaf $h_0 = \mathsf{hash}(\ell)$.
 Next, using $h_0$'s sibling, $h'_0$, provided by the Prover:
 the Verifier can compute $h_1 = \mathsf{hash}(h_0 \|h'_0)$ or $h_1 = \mathsf{hash}(h'_0 \| h_0)$
 depending on whether $h'_0$ is a left or right sibling.
