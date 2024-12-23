@@ -109,7 +109,7 @@ For the verifier to be convinced that $\ell$ is part of the digest, he needs to 
 Specifically, the prover must provide the sibling hashes for each value that the verifier can compute.
 This enables the verifier to compute the parents of the siblings that the prover provides and the values that he was able to produce himself.
 
-The leaf index $i$ indicates whether a hash value provided by the Prover is a left or right sibling.
+The leaf index $i$ indicates whether a hash value provided by the prover is a left or right sibling.
 This is done by looking at the binary expansion of $i$.
 
 The Verifier can compute the leaf $h_0 = \mathsf{hash}(\ell)$.
