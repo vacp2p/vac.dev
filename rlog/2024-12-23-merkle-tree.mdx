@@ -192,10 +192,9 @@ However, sorted is a necessary property of SMTs for decentralized systems.
 A proof of membership grows in length as the Merkle tree grows.
 The most obvious approach to remedy this scalability issue is to use Merkle trees in which each node has more than two children.
 However, this does not fix the issue.
-A proof of membership in a $k$-nary Merkle tree (each node has $k$ children) has a proof size $\log_k(n)(k-1)$.
+A proof of membership in a $k$-nary Merkle tree [[6](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)] (each node has $k$ children) has a proof size $\log_k(n)(k-1)$.
 The multiple $k-1$ is the number of silbings that a node has on each layer.
-Hence, the scaling is worst than logarithmic.
-For additional information on $k$-nary Merkle trees see John Kuszmaul's paper on Verkle trees [[6](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)]
+Hence, the complexity for scalability is larger than a logarithmic function.
 
 An alternate approach is to use a different data structure: Verkle trees [[6](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)].
 A Verkle tree replaces hash functions with polynomial commitments [[7](https://ethresear.ch/t/using-polynomial-commitments-to-replace-state-roots/7095), [8](https://dankradfeist.de/ethereum/2020/06/16/kate-polynomial-commitments.html)].
