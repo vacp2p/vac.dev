@@ -116,7 +116,7 @@ The verifier can compute the leaf $h_0 = \mathsf{hash}(\ell)$.
 Next, using $h_0$'s sibling, $h'_0$, provided by the prover:
 the verifier can compute $h_1 = \mathsf{hash}(h_0 \|h'_0)$ or $h_1 = \mathsf{hash}(h'_0 \| h_0)$
 depending on whether $h'_0$ is a left or right sibling.
-This pathing continues until the Verifier either successfully computes the root hash (in $n+1$ hashes) or fails to.
+This pathing continues until the verifier either successfully computes the root hash (in $n+1$ hashes) or fails to do so.
 
 The Prover has to provide $n$ sibling nodes for the proof of membership.
 
