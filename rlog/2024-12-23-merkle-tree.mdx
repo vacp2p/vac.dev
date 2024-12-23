@@ -106,7 +106,7 @@ We assume that the hash function $\mathsf{hash}$ can be computed in constant-tim
 Suppose that a prover provides data $\ell$ to a verifier,
 and tells the verifier that $\ell$ corresponds to the $i$th leaf of the Merkle tree.
 For the verifier to be convinced that $\ell$ is part of the digest, he needs to be able to construct the tree's root hash using $\mathsf{hash}$, $i$, $\ell$ and some additional information from the prover.
-Specifically, the Prover must provide the sibling hashes for each value that the Verifier can compute.
+Specifically, the prover must provide the sibling hashes for each value that the verifier can compute.
 This enables the Verifier to compute the parents of the siblings that the Prover provides and the values that he was able to produce himself.
 
 The leaf index $i$ indicates whether a hash value provided by the Prover is a left or right sibling.
