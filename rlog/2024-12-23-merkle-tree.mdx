@@ -63,7 +63,7 @@ we assume that the digest $D$ has this many entries since a Merkle tree is a bin
 Additionally, each digest can be padded to ensure that $D$ has the desired number of entries.
 
 Each leaf of the Merkle tree contains the hash of a digest entry.
-Each parent node contains the hash of the concatenation of their children nodes.
+Each parent node contains the hash of the concatenation of their child nodes.
 Through this iterative construction, we reach the root of the tree.
 The value contained in the root node is called the root hash.
 The root hash is a compressed representation of the digest $D$.
