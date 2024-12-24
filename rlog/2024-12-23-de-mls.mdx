@@ -12,6 +12,40 @@ toc_max_heading_level: 4
 
 ## Introduction
 
+Secure Group Messaging (SGM) is resource-intensive when aiming for robust security features like forward secrecy (FS) and post-compromise security (PCS). 
+
+One straightforward approach to SGM is a pairwise group chat, where each pair of group members establishes a unique encryption key using Diffie-Hellman. While this method ensures security, it falls short in terms of practicality:
+
+- **High storage requirements**: Each participant must store encryption keys for every other participant.
+- **Inefficient encryption**: Each message must be encrypted separately for every participant, leading to significant computational overhead.
+- **Cumbersome group management**: Adding or removing users and refreshing keys becomes increasingly inefficient as the group grows.
+
+One scalable solution for SGM is Message Layer Security (MLS). Leveraging TreeKEM, MLS organizes group members in a cryptographic tree structure, where each participant is responsible for maintaining specific parts of the tree. This structure enables efficient group operations:
+
+- **Logarithmic time complexity**: Adding or removing users and refreshing keys are performed in logarithmic time relative to the group size.
+
+Despite its scalability, MLS has a notable limitation: it is inherently designed for server-based federated architectures, even when the servers themselves don't need to be trusted. To address this, we proposed decentralized MLS (de-MLS), leveraging Waku nodes as peer-to-peer communication protocols to eliminate reliance on centralized servers.
+
+**de-MLS** is a decentralized, scalable, end-to-end encrypted (E2EE) SGM protocol that ensures FS and PCS. It offers two distinct configurations:
+
+1. **Single Admin Over a Single Waku Node**: 
+   - A single authorized identity (admin) manages the group including removing or adding users.
+   
+2. **Multi-Admin Over Multiple Waku Nodes**: 
+   - Multiple admins have equal authority to add or remove users.
+   - A consensus mechanism ensures consistency in handling concurrent changes in the same epoch. 
+
+In multi-admin settings, de-MLS requires consensus to handle concurrent changes within the same epoch. MLS operates on an epoch-based model, where group state changes (e.g., adding/removing users or key refreshes) occur between epochs:
+
+For example, if a user U is removed in epoch E, the group generates a new key in epoch E + 1. The removed user cannot decrypt messages sent after epoch E + 1.
+
+For the consensus integration, ongoing research explores two promising approaches:
+
+1. **Smart contracts**: Outsourcing consensus to a blockchain-based solution for transparent and immutable agreement.
+2. **Off-chain consensus mechanisms**: Utilizing existing consensus protocol to design efficient, decentralized protocols.
+
+In this post, we focus on the implementation details of the single admin over a single Waku node as the first step.
+
 ## Background
 
 ## Waku
