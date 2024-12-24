@@ -36,13 +36,13 @@ A tree is a special data structure that organizes nodes so that there is exactly
 The trees that we consider can be arranged in layers with multiple nodes (children) merge into a single node (parent) in the preceding node.
 A single node exists in the base layer;
 this special node is called the root node.
-The highest level of the tree consists of parentless nodes called leaves.
+The highest level of the tree consists of childless nodes called leaves.
 
 ![Image 1](/img/vac101/vac101_tree.png)
 
 A binary tree has one additional property:
-each node has exactly two children nodes.
-Further, we will assume that nodes in a binary tree are either a parent node with two children or a leaf.
+each nonleaf node has exactly two children nodes.
+That is, we assume that nodes in a binary tree are either a parent node with two children or a leaf.
 As strange as it sounds, each child node has exactly one parental node.
 
 ![Image 2](/img/vac101/vac101_binary_tree.png)
