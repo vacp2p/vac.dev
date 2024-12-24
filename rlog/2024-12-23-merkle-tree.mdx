@@ -125,7 +125,7 @@ The root hash has to be provided to the Verifier prior to the selection of data 
 Otherwise, Prover could generate a series of hash values (with the corresponding root hash) to forge a proof of membership.
 
 #### Capped proof of membership
-Polygon provides an implementation [[4](https://github.com/0xPolygonZero/plonky2/blob/main/plonky2/src/hash/merkle_tree.rs)] of a shorten proof of membership with a slight modification.
+Polygon provides an implementation [[4](https://github.com/0xPolygonZero/plonky2/blob/main/plonky2/src/hash/merkle_tree.rs)] of a shortened proof of membership with a slight modification.
 A specific layer of the Merkle tree is published instead of just the root hash.
 By doing this, a capped proof of membership is just the path from leaf to the published layer.
 
