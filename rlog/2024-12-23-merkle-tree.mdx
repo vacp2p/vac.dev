@@ -26,7 +26,7 @@ This compression addresses the issue of scalability that would otherwise greatly
 Data compression alone is not the end goal.
 As mentioned, it is essential for users to be able to validate the blockchain's history.
 The property of compression and validation was solved in Bitcoin by the use of Merkle trees.
-Merkle trees were first by Ralph Merkle in his dissertation [[1](https://www.ralphmerkle.com/papers/Thesis1979.pdf)].
+Merkle trees were introduced first by Ralph Merkle in his dissertation [[1](https://www.ralphmerkle.com/papers/Thesis1979.pdf)].
 A Merkle tree is a data structure that compresses a digest of data to a constant size while still providing a method for proving membership of elements of the digest.
 A previous rlog[[2](https://vac.dev/rlog/rln-light-verifiers/)] described how Merkle trees, with their proof of membership, could be used for lightweight clients for RLN. 
 
@@ -91,7 +91,7 @@ In certain applications,
 it may be desirable for the digest of a Merkle tree to be kept confidential.
 This is achieved with the preimage resistant propery of hash functions.
 A hash function is preimage resistant provided that it is difficult reverse the hashing operation. 
-It would be necessary for a malicious party to find preimages to each node starting from the root node to determine original digest.
+It would be necessary for a malicious party to find preimages to each node starting from the root node to determine the original digest.
 
 Now, we see that Merkle trees are secured structures that are tamper resistant.
 
