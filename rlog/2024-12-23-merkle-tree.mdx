@@ -122,7 +122,7 @@ The Prover has to provide $n$ sibling nodes for the proof of membership.
 
 There is a key detail that is essential for the proof of membership to be secure.
 The root hash has to be provided to the Verifier prior to the selection of data $\ell$.
-Otherwise, Prover could generate a series of hash values (with the corresponding root hash) to forge a proof of membership.
+Otherwise, the prover could generate a series of hash values (with the corresponding root hash) to forge a proof of membership.
 
 #### Capped proof of membership
 Polygon provides an implementation [[4](https://github.com/0xPolygonZero/plonky2/blob/main/plonky2/src/hash/merkle_tree.rs)] of a shortened proof of membership with a slight modification.
