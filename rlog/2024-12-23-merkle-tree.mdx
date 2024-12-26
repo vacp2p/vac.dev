@@ -28,7 +28,7 @@ As mentioned, it is essential for users to be able to validate the blockchain's 
 The property of compression and validation was solved in Bitcoin by the use of Merkle trees.
 Merkle trees were introduced first by Ralph Merkle in his dissertation [[1](https://www.ralphmerkle.com/papers/Thesis1979.pdf)].
 A Merkle tree is a data structure that compresses a digest of data to a constant size while still providing a method for proving membership of elements of the digest.
-A previous rlog[[2](https://vac.dev/rlog/rln-light-verifiers/)] described how Merkle trees, with their proof of membership, could be used for lightweight clients for RLN. 
+A previous rlog[[2](https://vac.dev/rlog/rln-light-verifiers/)] described how Merkle trees with their proof of membership could be used for lightweight clients for RLN. 
 
 ## Tree structure
 
@@ -68,7 +68,7 @@ Through this iterative construction, we reach the root of the tree.
 The value contained in the root node is called the root hash.
 The root hash is a compressed representation of the digest $D$.
 
-![Image 2](/img/vac101/vac101_merkle_tree.png)
+![Image 3](/img/vac101/vac101_merkle_tree.png)
 
 Each node in the Merkle tree is computed by taking a hash.
 Since a binary tree with $2^n$ leaves has $2^{n+1}-1$ nodes,
@@ -89,8 +89,8 @@ This collision resistance property, essentially, fixes the input to each leaf an
 
 In certain applications,
 it may be desirable for the digest of a Merkle tree to be kept confidential.
-This is achieved with the preimage resistant propery of hash functions.
-A hash function is preimage resistant provided that it is difficult reverse the hashing operation. 
+This is achieved with the preimage resistant property of hash functions.
+A hash function is preimage resistant provided that it is difficult to reverse the hashing operation. 
 It would be necessary for a malicious party to find preimages to each node starting from the root node to determine the original digest.
 
 Now, we see that Merkle trees are secured structures that are tamper resistant.
@@ -108,12 +108,13 @@ and tells the verifier that $\ell$ corresponds to the $i$th leaf of the Merkle t
 For the verifier to be convinced that $\ell$ is part of the digest, he needs to be able to construct the tree's root hash using $\mathsf{hash}$, $i$, $\ell$ and some additional information from the prover.
 Specifically, the prover must provide the sibling hashes for each value that the verifier can compute.
 This enables the verifier to compute the parents of the siblings that the prover provides and the values that he was able to produce himself.
+The last of the computed parents is the root.
 
 The leaf index $i$ indicates whether a hash value provided by the prover is a left or right sibling.
 This is done by looking at the binary expansion of $i$.
 
 The verifier can compute the leaf $h_0 = \mathsf{hash}(\ell)$.
-Next, using $h_0$'s sibling, $h'_0$, provided by the prover:
+Next, using $h_0$'s sibling, $h'_0$, provided by the prover,
 the verifier can compute $h_1 = \mathsf{hash}(h_0 \|h'_0)$ or $h_1 = \mathsf{hash}(h'_0 \| h_0)$
 depending on whether $h'_0$ is a left or right sibling.
 This pathing continues until the verifier either successfully computes the root hash (in $n+1$ hashes) or fails to do so.
@@ -150,7 +151,7 @@ The crucial difference between a sorted and unsorted SMT is that the unsorted va
 
 We can take advantage of the sparse nature of SMTs to provide shortened proofs.
 Specifically, it is unlikely for entries to cluster together.
-As such, it is efficient to maintain a list of values:
+Thus, it is efficient to maintain a list of values:
 
 |Null values |
 |---|
@@ -185,8 +186,8 @@ This means that a nonmembership of $\ell$ in the SMT becomes a matter of proving
 It is crucial for the SMT to be sorted. 
 Otherwise, a malicious party can append the entry $\ell$ to a random location.
 This allows for the malicious party to provide contradictory proofs that prove both membership and nonmembership.
-We note that the requirement that an SMT is sorted can be too strong of an assumption in centralized cases.
-However, sorted is a necessary property of SMTs for decentralized systems.
+We note that the requirement that an SMT is sorted may be too strong of an assumption in centralized cases.
+However, sortedness is a necessary property of SMTs for decentralized systems.
 
 ### Verkle Trees
 A proof of membership grows in length as the Merkle tree grows.
@@ -198,7 +199,7 @@ Hence, the complexity for scalability is larger than a logarithmic function.
 
 An alternate approach is to use a different data structure: Verkle trees [[6](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)].
 A Verkle tree replaces hash functions with polynomial commitments [[7](https://ethresear.ch/t/using-polynomial-commitments-to-replace-state-roots/7095), [8](https://dankradfeist.de/ethereum/2020/06/16/kate-polynomial-commitments.html)].
-We will explore Verkle trees is a future Vac 101 edition.
+We will explore Verkle trees in a future Vac 101 edition.
 
 ## References
 
