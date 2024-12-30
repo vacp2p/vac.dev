@@ -1,6 +1,6 @@
 ---
 title: 'Vac 101: Climbing Merkle Trees'
-date: 2024-12-23 12:00:00
+date: 2024-12-30 12:00:00
 authors: marvin
 published: true
 slug: climbing-merkle-trees
@@ -33,7 +33,7 @@ A previous rlog[[2](https://vac.dev/rlog/rln-light-verifiers/)] described how Me
 ## Tree structure
 
 A tree is a special data structure that organizes nodes so that there is exactly one path between any two nodes.
-The trees that we consider can be arranged in layers with multiple nodes (children) merged into a single node (parent) in the preceding node.
+The trees that we consider can be arranged in layers with multiple nodes (children) merged into a single node (parent) in the preceding layer.
 A single node exists in the base layer;
 this special node is called the root node.
 The highest level of the tree consists of childless nodes called leaves.
