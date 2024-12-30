@@ -139,7 +139,7 @@ In this section, we explore a select few of these extensions.
 
 A sparse Merkle tree (SMT) is a special Merkle tree that can be used to represent digests with nonconsecutive entries.
 Specifically, each digest entry has a particular leaf index.
-For simplicity, we assume that the indexed values are given by the entry's hash.
+For simplicity, we assume that the index value is computed by taking the hash of the entry.
 We note that this is a sorted SMT.
 
 Let $n$ denote the number of bits that a hash value can possess. This means that our SMT can have at most $2^n$ leaves.
@@ -195,7 +195,7 @@ The most obvious approach to remedy this scalability issue is to use Merkle tree
 However, this does not fix the issue.
 A proof of membership in a $k$-nary Merkle tree [[6](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)] (each node has $k$ children) has a proof size $\log_k(n)(k-1)$.
 The multiple $k-1$ is the number of silbings that a node has on each layer.
-Hence, the complexity for scalability is larger than a logarithmic function.
+Hence, the proof size grows faster than a logarithmic function of the digest size.
 
 An alternate approach is to use a different data structure: Verkle trees [[6](https://math.mit.edu/research/highschool/primes/materials/2018/Kuszmaul.pdf)].
 A Verkle tree replaces hash functions with polynomial commitments [[7](https://ethresear.ch/t/using-polynomial-commitments-to-replace-state-roots/7095), [8](https://dankradfeist.de/ethereum/2020/06/16/kate-polynomial-commitments.html)].
