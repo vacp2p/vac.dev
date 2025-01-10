@@ -12,8 +12,8 @@
         <id>https://vac.dev/rlog/2024-recap</id>
         <link href="https://vac.dev/rlog/2024-recap"/>
         <updated>2025-01-09T18:30:00.000Z</updated>
-        <summary type="html"><![CDATA[With 2024 now behind us and a new year ahead,]]></summary>
-        <content type="html"><![CDATA[<p>With 2024 now behind us and a new year ahead,
+        <summary type="html"><![CDATA[In this post, we recap Vac's achievements in 2024 and look forward to 2025.]]></summary>
+        <content type="html"><![CDATA[<p>In this post, we recap Vac's achievements in 2024 and look forward to 2025.</p><h1>Vac 2024 Year in Review</h1><p>With 2024 now behind us and a new year ahead,
 Vac is proud to reflect on the milestones and breakthroughs that defined another year of researching and developing free and open digital public goods for the <a href="https://free.technology/" target="_blank" rel="noopener noreferrer">Institute of Free Technology</a> and wider web3 ecosystem.</p><p>Vac comprises various subteams and service units, each with its own focus.
 Below, we celebrate each unit's achievements and look forward to its 2025 plans.</p><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="nescience">Nescience<a href="#nescience" class="hash-link" aria-label="Direct link to Nescience" title="Direct link to Nescience">​</a></h2><p>Nescience is our state separation architecture that aims to enable private transactions and provide a general-purpose execution environment for classical applications. </p><h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="highlights">Highlights<a href="#highlights" class="hash-link" aria-label="Direct link to Highlights" title="Direct link to Highlights">​</a></h3><p>This year, the Nescience state separation architecture moved from exploration to real progress,
 taking significant steps towards building a functional and reliable system.
