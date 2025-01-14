@@ -48,7 +48,19 @@ In this post, we focus on the implementation details of the single admin over a 
 
 ## Background
 
-## Waku
+### MLS
+
+The Message Layer Security (MLS) protocol offers scalable and secure group messaging by organizing participants into a cryptographic tree structure, enabling efficient operations like adding or removing members with logarithmic time complexity. MLS provides strong security guarantees, including FS and PCS. However, it traditionally relies on a centralized delivery service (DS) to perform two key functions:
+
+Distributing messages to users in the correct order.
+
+Managing user key packages.
+
+In a decentralized setting, these functions must be reimagined to eliminate reliance on a central server while preserving the protocol's security properties.
+
+### Waku
+
+Waku is a decentralized messaging protocol built on the gosipsub protocol, designed for secure and efficient communication in peer-to-peer networks. In Waku, users join groups by subscribing to specific pub-sub topics. These topics determine the scope and type of messages exchanged, enabling flexible communication patterns.
 
 ## Integration
 
@@ -57,3 +69,63 @@ In this post, we focus on the implementation details of the single admin over a 
 ## Future Work
 
 ## References
+
+
+---
+
+The main difficulty in moving to a decentralized system was that, according to the DS specification, DS performs two key functions.
+
+1. Sending out messages, which includes not only sending to the correct user but also deciding on the correct sequence (docs reference here)
+2. Manages the key package of users 
+
+Now, we can't store the necessary key packages in one place, so users have to provide them on request, and we have to validate them.
+
+One of the first ideas was to use SC instead of server-side from the package manager's point of view. But this was not the right idea because, as we know, anything that gets into the blockchain cannot be deleted without a trace, and one of the requirements is that each package must be used once and then deleted. 
+
+---
+waku is based on gosipsub protocol and accordingly from the network point of view joining a group for a user will look like subscribing to the necessary topics
+
+We have pub-sub topics that send messages in the network. We also have content topics, which determine the groups and what messages are sent.
+
+There are three types of topics: 
+- app_msg - the owner of the topic where messages encrypted with the group key are sent, thanks to encryption, even if someone not from the group subscribes to the topic, they will not be able to read the correspondence itself.
+- commit-msg - all messages related to changes in the group state - adding users, deleting users, key rotation - are sent here. By design only administrators can send messages about the deletion and addition of users, key update is still under development. At this stage proposal and commit messages are not differentiated and all are considered commit messages
+- welcome msg is a special topic for joining the group. With it, we solve the problem of how users can join a group without the server side. 
+
+How the welcome topic works:
+- when a group is created, the admin/admins start posting a special public key with a signature with a set frequency (once per epoch). New users are initially subscribed only to this content topic and upon receiving this message they encrypt their key package with this key.
+- at the end of the epoch the administrator prepares a commit message with all new users (in case he wants them to join the group) publishes it in the commit channel, and publishes a welcome message to all new users in the current channel.
+- if this process is successful, all new users are subscribed to all other topics and have a group key.  
+- admin does not store key packages longer than one epoch
+- if a user fails to send a message to the current epoch, his message is rejected and he has to get the key again and repeat the whole procedure.
+
+This architecture does not have a 1-1 channel with the admin to request to join, the situation is not excluded in that the admin can personally request a package and add a member to the group himself.
+---
+
+The current version so far assumes only one administrator - this is because we need to have a consensus between several users in terms of which commits to accept and which to reject and in what order. 
+
+---
+
+The architecture itself is based on actors, which allows us to focus on the processing of messages rather than on how they will be passed between different entities.
+
+the following actors are implemented
+- waku actor - responsible for generating and sending messages to waku, subscribing and unsubscribing to threads (receiving messages from waku is implemented as a constant receiving of events from the node and their processing by sending them to other actors).
+- user actor - Manages user-related functionalities, including user creation, group management, and message handling.
+- group actor - Handles group-related operations, including group creation, membership management, and message broadcasting.
+--- 
+
+That in terms of keys, cryptography, etc. 
+
+You can see 3 types of keys.
+
+- eth key - for authorization of the user his private eth key is used, and the ID is actually his wallet. In fact, this step can be replaced by any web3 service that allows authorization. 
+- openmls keys - for poc we use openmls, which provides all necessary API to work with MLS, as well as creating and storing key packages. One of the ideas was to use eth data to allocate all necessary keys for groups, but unfortunately, now openmls does not support curve as in eth, so we link these keys not through allocation, but through specification in the identity wallet
+- admin keys - constantly rotating key which is used in the welcome top to receive key packages from the user
+
+
+--- 
+
+So how did we end up solving DS tasks with Waku: 
+- sending messages from the server to clients -> publishing/subscribing to pub-sub topics
+- determining how to apply commit messages -> introduced administrators, how consensus will be reached is under development
+- storage and distribution of key packages by server -> moved to the idea that users provide packages themselves when joining a group + openmls has validation that a package has already been used once for a particular group 
