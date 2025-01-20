@@ -50,30 +50,23 @@ In this post, we focus on the implementation details of the single admin over a 
 
 ### MLS
 
-The Message Layer Security (MLS) protocol offers scalable and secure group messaging by organizing participants into a cryptographic tree structure, enabling efficient operations like adding or removing members with logarithmic time complexity. MLS provides strong security guarantees, including FS and PCS. However, it traditionally relies on a centralized delivery service (DS) to perform two key functions:
+The Message Layer Security (MLS) protocol offers scalable and secure group messaging by organizing participants into a cryptographic tree structure, enabling efficient operations like adding or removing members with logarithmic time complexity. 
+MLS provides strong security guarantees, including FS and PCS.
+However, it traditionally relies on a centralized delivery service (DS) to perform two key functions:
 
-Distributing messages to users in the correct order.
-
-Managing user key packages.
+- Distributing messages to users in the correct order.
+- Managing user key packages.
 
 In a decentralized setting, these functions must be reimagined to eliminate reliance on a central server while preserving the protocol's security properties.
 
 ### Waku
 
-Waku is a decentralized messaging protocol built on the gosipsub protocol, designed for secure and efficient communication in peer-to-peer networks. In Waku, users join groups by subscribing to specific pub-sub topics. These topics determine the scope and type of messages exchanged, enabling flexible communication patterns.
+Waku is a decentralized messaging protocol built on the gossipsub protocol, designed for secure and efficient communication in peer-to-peer networks. In Waku, users join groups by subscribing to specific pub-sub topics.
+These topics determine the scope and type of messages exchanged, enabling flexible communication patterns.
 
 ## Integration
 
-## Conclusion
-
-## Future Work
-
-## References
-
-
----
-
-The main difficulty in moving to a decentralized system was that, according to the DS specification, DS performs two key functions.
+The main difficulty in moving to a decentralized system was that, according to the Delivery Service specification, Delivery Service performs two key functions.
 
 1. Sending out messages, which includes not only sending to the correct user but also deciding on the correct sequence (docs reference here)
 2. Manages the key package of users 
@@ -82,29 +75,39 @@ Now, we can't store the necessary key packages in one place, so users have to pr
 
 One of the first ideas was to use SC instead of server-side from the package manager's point of view. But this was not the right idea because, as we know, anything that gets into the blockchain cannot be deleted without a trace, and one of the requirements is that each package must be used once and then deleted. 
 
----
-waku is based on gosipsub protocol and accordingly from the network point of view joining a group for a user will look like subscribing to the necessary topics
+Let's start with the solution of the first key function of the Delivery Service.
+
+### How to distribute messages
+
+Waku is based on gossipsub protocol and accordingly from the network point of view joining a group for a user will look like subscribing to the necessary topics
 
 We have pub-sub topics that send messages in the network. We also have content topics, which determine the groups and what messages are sent.
 
 There are three types of topics: 
-- app_msg - the owner of the topic where messages encrypted with the group key are sent, thanks to encryption, even if someone not from the group subscribes to the topic, they will not be able to read the correspondence itself.
-- commit-msg - all messages related to changes in the group state - adding users, deleting users, key rotation - are sent here. By design only administrators can send messages about the deletion and addition of users, key update is still under development. At this stage proposal and commit messages are not differentiated and all are considered commit messages
-- welcome msg is a special topic for joining the group. With it, we solve the problem of how users can join a group without the server side. 
-
-How the welcome topic works:
-- when a group is created, the admin/admins start posting a special public key with a signature with a set frequency (once per epoch). New users are initially subscribed only to this content topic and upon receiving this message they encrypt their key package with this key.
-- at the end of the epoch the administrator prepares a commit message with all new users (in case he wants them to join the group) publishes it in the commit channel, and publishes a welcome message to all new users in the current channel.
-- if this process is successful, all new users are subscribed to all other topics and have a group key.  
-- admin does not store key packages longer than one epoch
-- if a user fails to send a message to the current epoch, his message is rejected and he has to get the key again and repeat the whole procedure.
+- `app_msg` - the owner of the topic where messages encrypted with the group key are sent, thanks to encryption, even if someone not from the group subscribes to the topic, they will not be able to read the correspondence itself.
+- `commit_msg` - all messages related to changes in the group state - adding users, deleting users, key rotation - are sent here. 
+By design only administrators can send messages about the deletion and addition of users, key update is still under development. 
+At this stage proposal and commit messages are not differentiated and all are considered commit messages
+- `welcome` is a special topic for joining the group. With it, we solve the problem of how users can join a group without the server side. 
 
 This architecture does not have a 1-1 channel with the admin to request to join, the situation is not excluded in that the admin can personally request a package and add a member to the group himself.
----
+
+### How to manage key packages
+
+The main idea is that users provide key packages themselves when joining a group. For this we use the welcome topic.
+
+How the welcome topic works:
+- When a group is created, the admin/admins start posting a special public key with a signature with a set frequency (once per epoch). New users are initially subscribed only to this content topic and upon receiving this message they encrypt their key package with this key.
+- At the end of the epoch the administrator prepares a commit message with all new users (in case he wants them to join the group) publishes it in the commit channel, and publishes a welcome message to all new users in the current channel.
+- If this process is successful, all new users are subscribed to all other topics and have a group key.  
+
+Some important notes:
+- Admin does not store key packages longer than one epoch.
+- If a user fails to send a message to the current epoch, their message is rejected and they have to get the key again and repeat the whole procedure.
 
 The current version so far assumes only one administrator - this is because we need to have a consensus between several users in terms of which commits to accept and which to reject and in what order. 
 
----
+## Architecture notes
 
 The architecture itself is based on actors, which allows us to focus on the processing of messages rather than on how they will be passed between different entities.
 
@@ -123,9 +126,61 @@ You can see 3 types of keys.
 - admin keys - constantly rotating key which is used in the welcome top to receive key packages from the user
 
 
---- 
 
-So how did we end up solving DS tasks with Waku: 
+## Benchmark
+
+All measurements were performed on a laptop on Apple M3 Pro @ 4.05GHz and 12-Core CPU/18-Core GPU. 
+
+The main advantage of the MLS protocol is that we do not need to exchange messages in pairs between all participants
+and decentralisation allows us to send only 2 messages to the group when new participants join - commit message and welcome message. 
+
+But not everything is as smooth as we would like it to be, the bottlenecks of the protocol is that: 
+
+- Firstly, the admin/admins need to receive a key package from each member who wants to join the group. 
+And this action involves sequential message exchange, as well as encryption, decryption and signatures.
+- Secondly joining a member to a group requires rebuilding the tree and computing new keys. 
+Even when we say that we are joining a bunch of users, we are in fact sequentially updating the tree and sending the last commit to the existing members of the group, 
+as well as one welcome message to the new members.
+
+So we were interested to understand how increasing the number of users will increase the computation time.
+
+The following measurements were made:
+
+1. We measured how long it takes to process the entire chain of receiving a user key package (which includes generating the admin key, generating messages with signatures and encryption, as well as processing these messages).
+It's worth noting that this does not include message forwarding time.
+
+`Share Key Package - 1.8395 ms`
+
+2. And how long does it take to create a commit and welcome message from a ready-made key package bunch 
+
+```
+Add 10 users to group - 1.8662 ms 
+Add 100 users to group - 14.124 ms
+Add 500 users to group - 121.85 ms
+Add 1000 users to group - 412.39 ms
+Add 5000 users to group ~ 15-20 s
+Add 10000 users to group ~ 1-1,5 min
+```
+
+Here we also do not take into account network time as well as user application of received commits. 
+We plan to implement these measurements as well, but at a later date 
+
+## Conclusion
+
+So let's summarize how did we end up solving DS tasks with Waku: 
+
 - sending messages from the server to clients -> publishing/subscribing to pub-sub topics
 - determining how to apply commit messages -> introduced administrators, how consensus will be reached is under development
 - storage and distribution of key packages by server -> moved to the idea that users provide packages themselves when joining a group + openmls has validation that a package has already been used once for a particular group 
+
+## Future Work
+
+In next iterations we plan to implement the following:
+
+- Multi-admin over multiple Waku nodes
+- Consensus mechanism for handling concurrent changes within the same epoch
+- Off-chain consensus mechanisms
+- Key rotation
+- Benchmarking for the multi-admin case and over the network
+
+## References
