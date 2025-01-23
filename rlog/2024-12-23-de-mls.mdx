@@ -22,7 +22,7 @@ One straightforward approach to SGM is a pairwise group chat, where each pair of
 
 One scalable solution for SGM is Message Layer Security (MLS). Leveraging TreeKEM, MLS organizes group members in a cryptographic tree structure, where each participant is responsible for maintaining specific parts of the tree.
 
-In this post, we present the implementation details of the first version **de-MLS** which is an SGM protocol that satisfies the following features:
+In this post, we present the implementation details of the first version of Decentralized MLS (de-MLS) which is an SGM protocol that satisfies the following features:
 
 - Decentralized
 - Scalable
@@ -50,38 +50,36 @@ Lastly, MLS operates on an epoch-based model, where group state changes (e.g., a
 
 ### Waku
 
-Waku is a peer-to-peer communication network. Waku enables private, secure, censorship-free communication by removing the centralized third parties. As a messaging layer, Waku is built on the gosipsub protocol that users join groups by subscribing to specific pub-sub topics. These topics determine the scope and type of messages exchanged, enabling flexible communication patterns.
+Waku is a peer-to-peer communication network designed to facilitate private, secure, and censorship-resistant communication by eliminating centralized intermediaries. Built on the Gossipsub protocol, Waku operates as a messaging layer where users join groups by subscribing to specific pub-sub topics. These topics define the scope and nature of the messages exchanged, allowing for adaptable communication patterns. The Waku network is composed of multiple interconnected Waku nodes.
 
 ## de-MLS 
 
-de-MLS is a peer-to-peer SGM protocol that can be used with any P2P messaging application for the DS while we choose Waku as a messaging protocol. The decentralization is not only achieved at the DS level but also at the authentication service (AS) level. We use the special nodes as an authorized identity that authenticate the user before they join the group and remove them. 
+Decentralized MLS (de-MLS) is a peer-to-peer SGM protocol compatible with any P2P messaging application for the DS, with Waku selected as the messaging protocol. Decentralization is achieved not only at the DS level but also within the authentication service (AS). Multiple special nodes in the group serve as authorized identities to authenticate users before they join or are removed from the group.
 
-de-MLS offers two distinct user management configurations both use Waku protocol as DS:
+de-MLS provides two different user management configurations, both utilizing the Waku protocol for DS:
 
 1. **Single Admin Over a Single Waku Node**: 
    - A single authorized identity (admin) manages the group including removing or adding users.
    
 2. **Multi-Admin Over Multiple Waku Nodes**: 
    - Multiple admins have equal authority to add or remove users.
-   - A consensus mechanism ensures consistency in handling concurrent changes in the same epoch against the division. 
+    - A consensus mechanism ensures consistency by resolving concurrent changes within the same epoch and preventing possible conflicts. In each epoch, all modifications are managed exclusively by a single admin.
 
-In multi-admin settings, de-MLS requires a consensus among admins since changes in an epoch in MLS are required to be conducted by a single identity, that is the admin. 
+In multi-admin settings, de-MLS requires a consensus among admins that have equal rights in the group since changes in an epoch in MLS are required to be conducted by a single identity, that is the admin. 
 
 For the consensus integration, ongoing research explores two promising approaches:
 
-1. **Smart contracts**: Outsourcing consensus to a blockchain-based solution for transparent and immutable agreement.
+1. **On-chain consensus mechanisms**: Outsourcing consensus to a smart contract solution for transparent and immutable agreement.
 2. **Off-chain consensus mechanisms**: Utilizing off-chain consensus protocol to design efficient, decentralized protocols.
 
 ### Waku Integration
 
-The main challenge in moving to a decentralized system was converting the centralized DS to the decentralized DS; which has two key functions.
+Waku integration is one of step of building the de-MLS by replacing the client-server messages with the Waku communication. The main challenge in moving to a decentralized system was converting the centralized DS to the decentralized DS; which has two key functions.
 
 1. Sending out messages, which includes not only sending to the correct user but also deciding on the correct sequence (docs reference here). 
 2. Manages the key package of users. 
 
-Since we can't store the necessary key packages in one place, so users have to provide them on request, and we have to validate them.
-
-One of the first ideas was to use a smart contract (SC) instead of server-side from the package manager's point of view. But this was not the right idea because, as we know, anything that gets into the blockchain cannot be deleted without a trace, and one of the requirements is that each package must be used once and then deleted. 
+To ensure decentralization, key packages cannot be stored in a centralized location. Initially, the idea of using a smart contract (SC) as a replacement for the server-side, from the package manager's perspective, was considered. However, this approach proved unsuitable because, once data is added to the blockchain, it cannot be deleted without leaving a trace. One of the key requirements is that each package must be used only once and then deleted afterward, which conflicts with the immutable nature of blockchain storage. Instead, users must provide them upon request to be validated.
 
 ### Distribution of the Messages
 
@@ -92,91 +90,90 @@ We have pub-sub topics that send messages in the network. We also have content t
 There are three types of topics: 
 - `app_msg`: The owner of the topic where messages encrypted with the group key are sent, thanks to encryption, even if someone not from the group subscribes to the topic, they will not be able to read the correspondence itself.
 - `commit_msg`: All messages related to changes in the group state - adding users, deleting users, key rotation - are sent here. By design only administrators can send messages about the deletion and addition of users, key update is still under development. At this stage proposal and commit messages are not differentiated and all are considered commit messages
--  `welcome`: A special topic for joining the group. With it, we solve the problem of how users can join a group without the server side. 
+-  `welcome`: A special topic for joining the group. With it, we solve the problem of how users can join a group without the server side. This topic is also used for providing the key packages by the users. 
 
-This architecture does not have a 1-1 channel with the admin to request to join, the situation is not excluded in that the admin can personally request a package and add a member to the group himself.
+This architecture does not require a direct 1-to-1 channel with the admin for join requests. However, it does allow for the possibility that the admin can personally request a key package and manually add a member to the group.
 
 ### Managing the Key Packages
 
-The main idea is that users provide key packages themselves when joining a group. For this, we use the welcome topic.
+As previously mentioned, the core concept is that users provide their key packages themselves through the welcome topic when joining a group. The working process of the welcome topic is as follows: 
 
+- When a group is created, the admin (or admins) periodically publish a special public key along with a signature at a set frequency (e.g., once per epoch). New users initially subscribe only to this content topic, and upon receiving the message, they encrypt their key package using the provided public key.
+- At the end of the epoch, the administrator prepares a commit message containing the details of all new users (if they are approved to join the group). This commit message is published in the commit channel, followed by a welcome message sent to all new users in the current channel.
+- If the previous process is completed successfully, all new users are subscribed to the relevant topics and receive the group key, which enables encrypted messaging for all members of the group. 
+- Admin deletes the key packages with the next epoch.
+- If a user fails to send a valid message to the current epoch, his message is rejected and he has to get the key again and repeat the whole procedure.
 
-How the welcome topic works:
-- When a group is created, the admin/admins start posting a special public key with a signature with a set frequency (once per epoch). New users are initially subscribed only to this content topic and upon receiving this message they encrypt their key package with this key.
-- At the end of the epoch the administrator prepares a commit message with all new users (in case he wants them to join the group) publishes it in the commit channel, and publishes a welcome message to all new users in the current channel.
-- If this process is successful, all new users are subscribed to all other topics and have a group key.  
-- Admin does not store key packages longer than one epoch
-- If a user fails to send a message to the current epoch, his message is rejected and he has to get the key again and repeat the whole procedure.
-
-The current version so far assumes only one administrator - this is because we need to have a consensus between several users in terms of which commits to accept and which to reject and in what order. 
+The current implementation assumes support for a single admin. This is because achieving consensus among multiple users would require agreement on which commits to accept, which to reject, and in what order they should be processed. 
 
 ## Architecture notes
 
-The architecture itself is based on actors, which allows us to focus on the processing of messages rather than on how they will be passed between different entities.
+The architectural design of the de-MLS implementation can be analyzed through two key aspects: the actor-based model and the use of cryptographic keys.
 
-the following actors are implemented
-- waku actor - responsible for generating and sending messages to waku, subscribing and unsubscribing to threads (receiving messages from waku is implemented as a constant receiving of events from the node and their processing by sending them to other actors).
-- user actor - Manages user-related functionalities, including user creation, group management, and message handling.
-- group actor - Handles group-related operations, including group creation, membership management, and message broadcasting.
+**Actor-based model:** 
 
-That in terms of keys, cryptography, etc. 
+The architecture is built on an actor-based model, enabling a focus on the processing of messages rather than the specifics of how messages are transmitted between different entities. The following actors are implemented as described below:
 
-You can see 3 types of keys.
+- `waku actor` manages the generation and transmission of messages to Waku, including subscribing to and unsubscribing from topics. Message reception from Waku is designed as a continuous stream of events from the node, which are processed and routed to other actors for further handling.
+- `user actor` manages user-related functionalities, such as user creation, group management, and message handling.
+- `group actor` handles group-related operations, including group creation, membership management, and message broadcasting.
 
-- Ethereum key: Used for authentication of the user with his private key and the ID is actually the wallet of the user. In fact, this step can be replaced by any web3 service that allows authorization. 
-- OpenMLS keys: Used for the reference implementation of de-MLS based on OpenMLS, which provides all necessary API to work with MLS, as well as creating and storing key packages. One of the ideas was to use Ethereum accounts to allocate all necessary keys for groups, but unfortunately, now OpenMLS does not support Ethereum curve operations, so we link these keys not through allocation, but through specification in the identity wallet.
-- Admin keys: Used for constantly rotating key which is used in the welcome top to receive key packages from the user
+**Cryptographic keys:**
+
+- `Ethereum key` is used to authenticate the user via their private key, with the user's ID essentially functioning as their wallet address. Alternatively, this step can be replaced by any Web3 service that supports authorization. Therefore, all users in the group can be assured about the authenticity of the other users.
+- `OpenMLS keys` is utilized for the reference implementation of de-MLS based on OpenMLS, which provides all necessary APIs to work with MLS such as creating and storing key packages. The ultimate goal is to leverage Ethereum accounts to manage all necessary keys for groups. However, since OpenMLS currently lacks support for Ethereum curve operations, these keys are temporarily linked through specification within the identity wallet rather than direct allocation.
+- `Admin keys` is a constantly rotating key used in the welcome topic to securely receive key packages from users.
 
 ## Benchmark
 
-One of the main advantages of the MLS protocol is that It does not require to exchange of messages in pairs between all participants and decentralization allows us to send only two messages to the group when new participants join which are a commit message and a welcome message. 
+This section presents the performance evaluation of de-MLS. One of the key advantages of the MLS protocol is its efficiency, as it eliminates the need for pairwise message exchanges between all participants. Instead, the decentralized DS enables the addition of new participants by sending only two messages to the group: a commit message and a welcome message. However, despite this advantage, the protocol does have certain bottlenecks, which are as follows: 
 
-In contrast to this advantage, the bottlenecks of the protocol are: 
-
-- First, the admin/admins need to receive a key package from each member who wants to join the group. This action involves sequential message exchange, as well as encryption, decryption, and signatures.
+- Firstly, the admin must receive the key packages from each member wishing to join the group. This process requires sequential message exchanges and involves computationally intensive tasks such as encryption, decryption, and digital signature verification. Even when multiple users are added to the group simultaneously, the process is essentially sequential. The tree structure is updated one user at a time, followed by sending the final commit message to the existing group members and a single welcome message to the new members.
 - Secondly adding a member to a group requires rebuilding the tree and computing new keys.  
 
-Even when we say that we are joining a bunch of users, we are in fact sequentially updating the tree and sending the last commit to the existing members of the group,  as well as one welcome message to the new members.
+The following measurements were made as follows:
 
-The following measurements were made:
-
-1. We measured how long it takes to process the entire chain of receiving a user key package (which includes generating the admin key, generating messages with signatures and encryption, as well as processing these messages).
-It's worth noting that this does not include message forwarding time.
+1. The time required for the entire sequence of receiving a user key package is presented here. This includes generating the admin key, creating messages with signatures and encryption, and processing these messages.
 
 `Share Key Package - 1.8395 ms`
 
-2. And how long does it take to create a commit and welcome message from a ready-made key package bunch 
+Note that these measurements do not account for the time taken to forward messages.
 
-```
-Add 10 users to group - 1.8662 ms 
-Add 100 users to group - 14.124 ms
-Add 500 users to group - 121.85 ms
-Add 1000 users to group - 412.39 ms
-Add 5000 users to group ~ 15-20 s
-Add 10000 users to group ~ 1-1,5 min
-```
-All measurements were performed on a laptop on Apple M3 Pro @ 4.05GHz and 12-Core CPU/18-Core GPU. 
+2. The time required for creating the commit and welcome message from a ready-made package bunches is shown in this table.
 
-Here we also do not take into account network time as well as user application of received commits. 
-We plan to implement these measurements in future work.  
+| Group Size (by users) | Time           |
+|------------|----------------|
+| 10    | 1.8662 ms      |
+| 100   | 14.124 ms      |
+| 500   | 121.85 ms      |
+| 1000  | 412.39 ms      |
+| 5000  | ~ 15-20 s      |
+| 10000 | ~ 1-1.5 min    |
+
+The tests were conducted on the following configuration:
+Apple M3 Pro @ 4.05GHz and 12-Core CPU/18-Core GPU. 
+
+Here, the network latency and the time taken by users to apply the received commits are also excluded. These aspects are planned to be measured and evaluated in future work. 
 
 ## Conclusion
 
-So let's summarize how we end up solving DS tasks with Waku: 
+To summarize, the approach to solving decentralized DS tasks with Waku can be outlined as shown in the comparison table:
 
-- Sending messages from the server to clients is replaced with publishing/subscribing to pub-sub topics.
-- Determining how to apply to commit messages is replaced with introducing administrators, and how consensus will be reached is under development.
-- Storage and distribution of key packages by server is replaced by moving to the idea that users provide packages themselves when joining a group + openmls has validation that a package has already been used once for a particular group 
+| Feature| MLS | de-MLS |
+|-------------------------------------------|-------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| Message Distribution | Messages are sent from the server to clients | Messages are sent by publishing/subscribing to pub-sub topics |
+| Commit Message Handling | Relies on a server | Relies on a admin  |
+| Key Package Management | Key packages are stored and distributed by the server | Key packages are provided by the users themselves |
 
 ## Future Work
 
-In the next iterations, we plan to implement the following:
+In the next iterations, the implementations are planned as following:
 
-- Multi-admin over multiple Waku nodes
+- Multi-admin support over multiple Waku nodes
 - Consensus mechanism for handling concurrent changes within the same epoch
-- Off-chain consensus mechanisms
+- On-chain and off-chain consensus mechanisms
 - Key rotation
-- Benchmarking for the multi-admin case and over the network
+- Benchmarking for the multi-admin configuration including the network time
 
 ## References
 
