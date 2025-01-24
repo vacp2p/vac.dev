@@ -91,7 +91,7 @@ We have pub-sub topics that send messages in the network. We also have content t
 There are three types of topics: 
 - `app_msg`: The owner of the topic where messages encrypted with the group key are sent, thanks to encryption, even if someone not from the group subscribes to the topic, they will not be able to read the correspondence itself.
 - `commit_msg`: All messages related to changes in the group state - adding users, deleting users, key rotation - are sent here. By design only administrators can send messages about the deletion and addition of users, key update is still under development. At this stage proposal and commit messages are not differentiated and all are considered commit messages
--  `welcome`: A special topic for joining the group. With it, we solve the problem of how users can join a group without the server side. This topic is also used for providing the key packages by the users. 
+- `welcome`: A special topic for joining the group. With it, we solve the problem of how users can join a group without the server side. This topic is also used for providing the key packages by the users. 
 
 This architecture does not require a direct 1-to-1 channel with the admin for join requests. However, it does allow for the possibility that the admin can personally request a key package and manually add a member to the group.
 
@@ -130,48 +130,7 @@ This actor is responsible for the next actions:
 
 - Processing of a new connection with authorisation and group creation (or request to join a group). 
 - Processing of a user's message from chat (it can be a message to a group or deletion of a user). 
-
-```
-pub struct RawWsMessage {
-    pub message: String,
-}
-
-pub enum WsAction {
-    Connect(ConnectMessage),
-    UserMessage(UserMessage),
-    RemoveUser(String, String),
-    DoNothing,
-}
-
-impl Message<RawWsMessage> for WsActor {
-    type Reply = Result<WsAction, WsError>;
-
-    async fn handle(
-      &mut self, 
-      msg: RawWsMessage, 
-      _ctx: Context<'_, Self, Self::Reply>) -> Self::Reply {}
-}
-```
-
 - Send message to the websocket for printing it in the output (frontend in our case)
-
-```
-pub struct MessageToPrint {
-    pub sender: String,
-    pub message: String,
-    pub group_name: String,
-}
-
-impl Message<MessageToPrint> for WsActor {
-    type Reply = Result<(), WsError>;
-
-    async fn handle(
-        &mut self,
-        msg: MessageToPrint,
-        _ctx: Context<'_, Self, Self::Reply>) -> Self::Reply {}
-}
-```
-
 
 ** Waku actor **
 
@@ -180,56 +139,8 @@ The `waku actor` manages the generation and transmission of messages to Waku, in
 This actor is responsible for the next actions:
 
 - Sending messages to the Waku node.
-
-```
-pub struct ProcessMessageToSend {
-    pub msg: Vec<u8>,
-    pub subtopic: String,
-    pub group_id: String,
-    pub app_id: Vec<u8>,
-}
-impl Message<ProcessMessageToSend> for WakuActor {
-    type Reply = Result<String, DeliveryServiceError>;
-
-    async fn handle(
-        &mut self,
-        msg: ProcessMessageToSend,
-        _ctx: Context<'_, Self, Self::Reply>) -> Self::Reply {}
-}
-```
 - Subscribing to the topics related to the group.
-
-```
-pub struct ProcessSubscribeToGroup {
-    pub group_name: String,
-}
-
-impl Message<ProcessSubscribeToGroup> for WakuActor {
-    type Reply = Result<Vec<WakuContentTopic>, DeliveryServiceError>;
-
-    async fn handle(
-        &mut self,
-        msg: ProcessSubscribeToGroup,
-        _ctx: Context<'_, Self, Self::Reply>) -> Self::Reply {}
-}
-```
-
 - Unsubscribing from the topics related to the group.
-
-```
-pub struct ProcessUnsubscribeFromGroup {
-    pub group_name: String,
-}
-
-impl Message<ProcessUnsubscribeFromGroup> for WakuActor {
-    type Reply = Result<(), DeliveryServiceError>;
-
-    async fn handle(
-        &mut self,
-        msg: ProcessUnsubscribeFromGroup,
-        _ctx: Context<'_, Self, Self::Reply>) -> Self::Reply {}
-}
-```
 
 Let's take a look how we use these actors to send message from user to other to waku node and get it back.
 We assume that all inside operations are done by the handling blocks and focus on the communication between the actors.
@@ -261,10 +172,12 @@ This vector ultimately turns into to two actions - to send the message back to t
 
 #### The magic of the user actor and the group actor
 
-TODO
+For the purposes of this blogpost, we will focus on Waku and related stuff. So I will not describe the user actor and the group actor in detail, 
+just give a brief overview of their functionality and where to find more information.
 
-The user actor and the group actor are the main actors in the de-MLS. They are responsible for the management of the all MLS related operations. 
+The `user actor` and the `group actor` are the main actors in the de-MLS. They are responsible for the management of the all MLS related operations. 
 
+The most interesting part is how to join the group and we have described in the [section](#waku-integration), and how keys are formed for MLS and encryption can be found in our RFC.
 
 #### Cryptographic keys and why so many?
 
