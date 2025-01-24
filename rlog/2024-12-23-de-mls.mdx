@@ -1,10 +1,11 @@
 ---
 title: 'De-MLS with Waku'
-date: 2024-12-23 19:00:00
+date: 2025-01-24 19:00:00
 authors: seemenkina
 published: true
 slug: de-mls-with-waku
-categories: 
+image: /img/de-mls/waku-ws-actor.png
+categories: research
 
 toc_min_heading_level: 2
 toc_max_heading_level: 4
@@ -108,21 +109,176 @@ The current implementation assumes support for a single admin. This is because a
 
 ## Architecture notes
 
-The architectural design of the de-MLS implementation can be analyzed through two key aspects: the actor-based model and the use of cryptographic keys.
+The architecture of the de-MLS is based on the actor-based model. In this section we will give a brief overview of the architecture and the main actors. 
+Also, we discuss the cryptographic keys and their usage in the implementation. 
 
-**Actor-based model:** 
+### Actor-based model
 
-The architecture is built on an actor-based model, enabling a focus on the processing of messages rather than the specifics of how messages are transmitted between different entities. The following actors are implemented as described below:
+**Disclaimer:** these architectural solutions are primarily intended to demonstrate the performance of de-mls. 
+Please do not use them in production, they may contain vulnerabilities and may not scale well!
 
-- `waku actor` manages the generation and transmission of messages to Waku, including subscribing to and unsubscribing from topics. Message reception from Waku is designed as a continuous stream of events from the node, which are processed and routed to other actors for further handling.
-- `user actor` manages user-related functionalities, such as user creation, group management, and message handling.
-- `group actor` handles group-related operations, including group creation, membership management, and message broadcasting.
+The architecture is built on an actor-based model, enabling a focus on the processing of messages rather than the specifics of how messages are transmitted between different entities. 
+We will give a brief overview of the architecture and the main actors. Let's start with the actors which are provide all network communication: the `waku actor` and the `websocket actor`. 
 
-**Cryptographic keys:**
+#### Communication between actors: WebSocket <-> Application <-> Waku
+
+** Websocket actor **
+
+Websocket actor is a wrapper around websocket, providing a websocket interface to send and receive messages from the user. 
+
+This actor is responsible for the next actions:
+
+- Processing of a new connection with authorisation and group creation (or request to join a group). 
+- Processing of a user's message from chat (it can be a message to a group or deletion of a user). 
+
+```
+pub struct RawWsMessage {
+    pub message: String,
+}
+
+pub enum WsAction {
+    Connect(ConnectMessage),
+    UserMessage(UserMessage),
+    RemoveUser(String, String),
+    DoNothing,
+}
+
+impl Message<RawWsMessage> for WsActor {
+    type Reply = Result<WsAction, WsError>;
+
+    async fn handle(
+      &mut self, 
+      msg: RawWsMessage, 
+      _ctx: Context<'_, Self, Self::Reply>) -> Self::Reply {}
+}
+```
+
+- Send message to the websocket for printing it in the output (frontend in our case)
+
+```
+pub struct MessageToPrint {
+    pub sender: String,
+    pub message: String,
+    pub group_name: String,
+}
+
+impl Message<MessageToPrint> for WsActor {
+    type Reply = Result<(), WsError>;
+
+    async fn handle(
+        &mut self,
+        msg: MessageToPrint,
+        _ctx: Context<'_, Self, Self::Reply>) -> Self::Reply {}
+}
+```
+
+
+** Waku actor **
+
+The `waku actor` manages the generation and transmission of messages to Waku, including subscribing to and unsubscribing from topics. Message reception from Waku is designed as a continuous stream of events from the node, which are processed and routed to other actors for further handling.
+
+This actor is responsible for the next actions:
+
+- Sending messages to the Waku node.
+
+```
+pub struct ProcessMessageToSend {
+    pub msg: Vec<u8>,
+    pub subtopic: String,
+    pub group_id: String,
+    pub app_id: Vec<u8>,
+}
+impl Message<ProcessMessageToSend> for WakuActor {
+    type Reply = Result<String, DeliveryServiceError>;
+
+    async fn handle(
+        &mut self,
+        msg: ProcessMessageToSend,
+        _ctx: Context<'_, Self, Self::Reply>) -> Self::Reply {}
+}
+```
+- Subscribing to the topics related to the group.
+
+```
+pub struct ProcessSubscribeToGroup {
+    pub group_name: String,
+}
+
+impl Message<ProcessSubscribeToGroup> for WakuActor {
+    type Reply = Result<Vec<WakuContentTopic>, DeliveryServiceError>;
+
+    async fn handle(
+        &mut self,
+        msg: ProcessSubscribeToGroup,
+        _ctx: Context<'_, Self, Self::Reply>) -> Self::Reply {}
+}
+```
+
+- Unsubscribing from the topics related to the group.
+
+```
+pub struct ProcessUnsubscribeFromGroup {
+    pub group_name: String,
+}
+
+impl Message<ProcessUnsubscribeFromGroup> for WakuActor {
+    type Reply = Result<(), DeliveryServiceError>;
+
+    async fn handle(
+        &mut self,
+        msg: ProcessUnsubscribeFromGroup,
+        _ctx: Context<'_, Self, Self::Reply>) -> Self::Reply {}
+}
+```
+
+Let's take a look how we use these actors to send message from user to other to waku node and get it back.
+We assume that all inside operations are done by the handling blocks and focus on the communication between the actors.
+
+The labelling in the picture below is as follows: 
+
+- Actors are highlighted in green. 
+- The blue colour is the channel between the application processing all events coming from the Waku, 
+it is at this stage that we filter out all messages that do not belong to any of the possible groups. 
+When connecting to the application, we create a connection to the node/nodes and put callback on all events. 
+- The yellow colour denotes the internal broadcast channel of the application from waku to all users - each receiver corresponds to one websocket and one user. 
+- The purple colour indicates channels for sending and receiving messages from the socket.The web socket actor works directly with the channel for sending a message to the frontend.
+
+
+![Figure 1](//img/de-mls/waku-ws-actor.png)
+
+1. When we receive a message from a websocket, we send it for processing. `Handle Websocket Action` includes two main actions: 
+   - processing of a new connection with authorisation and group creation (or request to join a group) and 
+   - processing of a user's message from chat (it can be a message to a group or deletion of a user). 
+ The `Handle Websocket Action` hides the communication with the user actor, which as a result will ask to send a message to waku (see 2) or send message to websocket (see 4).
+2. Having received a message to send (already encrypted with an indication in which specific topic to send it) `waku actor` forms a `waku message` and then publishes it on nodes.
+3. All applications connected to the `waku node` receive an event that includes the message, if the message is relevant, it is further sent to all users and the message processing is started, at the output of which we get a vector of possible user actions. 
+This vector ultimately turns into to two actions - to send the message back to the websocket (see 4) or to send the message to waku (see 5).
+4. Sending a message to the websocket only involves converting the message to json and sending it to the appropriate receiver. 
+5. After `Handle User Action` we can
+	- Send messages to the node, this includes both sending internal protocol messages (to `commit`, `welcome` topics) and sending messages to the group, which will cause this message to be displayed on our frontend as well.
+	- Unsubscribe from content topics when deleting from the group.
+	- Subscribe to content topics when joining to the group.
+
+#### The magic of the user actor and the group actor
+
+TODO
+
+The user actor and the group actor are the main actors in the de-MLS. They are responsible for the management of the all MLS related operations. 
+
+
+#### Cryptographic keys and why so many?
+
+Let's go back to cryptography and see what our keys are and why we have them.
+First, let's define the operations that require keys: encrypting messages in a group, receiving key packages from a user by the admin, and authenticating to the application.
+
+So for now we have as many keys as there are in required operations: 
 
 - `Ethereum key` is used to authenticate the user via their private key, with the user's ID essentially functioning as their wallet address. Alternatively, this step can be replaced by any Web3 service that supports authorization. Therefore, all users in the group can be assured about the authenticity of the other users.
 - `OpenMLS keys` is utilized for the reference implementation of de-MLS based on OpenMLS, which provides all necessary APIs to work with MLS such as creating and storing key packages. The ultimate goal is to leverage Ethereum accounts to manage all necessary keys for groups. However, since OpenMLS currently lacks support for Ethereum curve operations, these keys are temporarily linked through specification within the identity wallet rather than direct allocation.
 - `Admin keys` is a constantly rotating key used in the welcome topic to securely receive key packages from users.
+
+The first reason is that using only eth Ethereum is not allowed by the lack of a corresponding curve in OpenMLS implementation, and also the concept of using Ethereum key as a master key to generate new key packets etc. requires a lot of research to be sure it is worth it.
+For admin we need constantly rotating keys, but we can bind to the Ethereum key by replacing the rotating key signature with an Ethereum key signature. 
 
 ## Benchmark
 
