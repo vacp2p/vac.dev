@@ -18,7 +18,8 @@ Secure Group Messaging (SGM) is resource-intensive when aiming for robust securi
 One straightforward approach to SGM is a pairwise group chat, where each pair of group members establishes a unique encryption key using Diffie-Hellman. While this method ensures security, it falls short in terms of practicality:
 
 - **High storage requirements**: Each participant must store encryption keys for every other participant.
-- **Inefficient encryption**: Each message must be encrypted separately for every participant, leading to significant computational overhead.
+- **Inefficient encryption**: Each message must be encrypted separately for every participant, leading to significant computational overhead. 
+- **Inefficient message storage and delivery**: Each separately encrypted message must then be sent over the wire, whatever this wire might be. Or stored in database.
 - **Cumbersome group management**: Adding or removing users and refreshing keys becomes increasingly inefficient as the group grows.
 
 One scalable solution for SGM is Message Layer Security (MLS). Leveraging TreeKEM, MLS organizes group members in a cryptographic tree structure, where each participant is responsible for maintaining specific parts of the tree.
@@ -37,7 +38,7 @@ In this post, we present the implementation details of the first version of Dece
 
 The Message Layer Security (MLS) protocol offers scalable and secure group messaging protocol by organizing participants into a cryptographic tree structure, enabling efficient operations like adding or removing members with logarithmic time complexity relative to the group size. MLS provides strong security guarantees, including FS and PCS. 
 
-MLS assumes that we have the two services are provided:
+MLS assumes that two services are provided:
 
    *  An Authentication Service (AS): It enables group members to
       authenticate the credentials presented by other group members.
@@ -51,7 +52,7 @@ Lastly, MLS operates on an epoch-based model, where group state changes (e.g., a
 
 ### Waku
 
-Waku is a peer-to-peer communication network designed to facilitate private, secure, and censorship-resistant communication by eliminating centralized intermediaries. Built on the Gossipsub protocol, Waku operates as a messaging layer where users join groups by subscribing to specific pub-sub topics. These topics define the scope and nature of the messages exchanged, allowing for adaptable communication patterns. The Waku network is composed of multiple interconnected Waku nodes.
+Waku is a decentralized messaging protocol designed for secure and efficient communication in peer-to-peer networks. It operates as a broadcast-based routing layer where content topics can be used to tag and filter messages. Users join channels by subscribing to specific content topics, which determine the scope and type of messages exchanged. This enables flexible and efficient communication patterns in a decentralized environment.
 
 ## de-MLS 
 
@@ -59,12 +60,12 @@ Decentralized MLS (de-MLS) is a peer-to-peer SGM protocol compatible with any P2
 
 de-MLS provides two different user management configurations, both utilizing the Waku protocol for DS:
 
-1. **Single Admin Over a Single Waku Node**: 
+1. **Single Admin**: 
    - A single authorized identity (admin) manages the group including removing or adding users.
    
-2. **Multi-Admin Over Multiple Waku Nodes**: 
+2. **Multi-Admin**: 
    - Multiple admins have equal authority to add or remove users.
-    - A consensus mechanism ensures consistency by resolving concurrent changes within the same epoch and preventing possible conflicts. In each epoch, all modifications are managed exclusively by a single admin.
+   - A consensus mechanism ensures consistency by resolving concurrent changes within the same epoch and preventing possible conflicts. In each epoch, all modifications are managed exclusively by a single admin.
 
 In multi-admin settings, de-MLS requires a consensus among admins that have equal rights in the group since changes in an epoch in MLS are required to be conducted by a single identity, that is the admin. 
 
@@ -84,16 +85,16 @@ To ensure decentralization, key packages cannot be stored in a centralized locat
 
 ### Distribution of the Messages
 
-Since the Waku is based on gossipsub protocol and accordingly from the network point of view joining a group for a user will look like subscribing to the necessary topics.
+From the network point of view joining a group for a user will look like subscribing to the necessary topics.
 
 We have pub-sub topics that send messages in the network. We also have content topics, which determine the groups and what messages are sent.
 
 There are three types of topics: 
-- `app_msg`: The owner of the topic where messages encrypted with the group key are sent, thanks to encryption, even if someone not from the group subscribes to the topic, they will not be able to read the correspondence itself.
+- `app_msg`: This content topic is for sending messages within the group, all messages are encrypted on the current group key for this epoch.
 - `commit_msg`: All messages related to changes in the group state - adding users, deleting users, key rotation - are sent here. By design only administrators can send messages about the deletion and addition of users, key update is still under development. At this stage proposal and commit messages are not differentiated and all are considered commit messages
 - `welcome`: A special topic for joining the group. With it, we solve the problem of how users can join a group without the server side. This topic is also used for providing the key packages by the users. 
 
-This architecture does not require a direct 1-to-1 channel with the admin for join requests. However, it does allow for the possibility that the admin can personally request a key package and manually add a member to the group.
+One of the advantages is that join requests don't need an out-of-band secure channel and are handled at the de-MLS DS layer. 
 
 ### Managing the Key Packages
 
