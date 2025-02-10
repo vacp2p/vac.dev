@@ -111,14 +111,12 @@ Assuming there are $n$ Waku content topics, a receiver has $n$-anonymity with re
 Technically, Waku allows distributing messages over several libp2p pubsub topics.
 This yields $k$-anonymity, assuming $k$ content topics share the same pubsub topic.
 However, if done wrongly, such sharding of pubsub topics can breach anonymity.
-A formal specification of anonymity-preserving topic sharding building on the concepts of [partitioned topics](https://rfc.vac.dev/status/deprecated/10/waku-usage.md
-#partitioned-topic) is part of our roadmap.
+A formal specification of anonymity-preserving topic sharding building on the concepts of [partitioned topics](https://rfc.vac.dev/status/deprecated/10/waku-usage#partitioned-topic) is part of our roadmap.
 
 Also, Waku is not directly concerned with 1:1 communication, so for this post, 1:1 communication is out of scope.
 Channels for 1:1 communication can be implemented on top of Waku relay.
 In the future, a 1:1 communication protocol might be added to Waku.
-Similar to topic sharding, it would maintain receiver anonymity leveraging [partitioned topics](https://rfc.vac.dev/status/deprecated/10/waku-usage.md
-#partitioned-topic).
+Similar to topic sharding, it would maintain receiver anonymity leveraging [partitioned topics](https://rfc.vac.dev/status/deprecated/10/waku-usage/#partitioned-topic).
 
 #### Sender Anonymity
 
@@ -363,7 +361,7 @@ we aim to provide alternatives without the cost of lowering the anonymity level.
 - [Noise Protocol Framework](https://noiseprotocol.org/)
 - [plausible deniability](https://en.wikipedia.org/wiki/Plausible_deniability#Use_in_cryptography)
 - [Waku v2 message](https://rfc.vac.dev/waku/standards/core/14/message)
-- [partitioned topics](https://rfc.vac.dev/status/deprecated/10/waku-usage.md
+- [partitioned topics](https://rfc.vac.dev/status/deprecated/10/waku-usage
 #partitioned-topic)
 - [Sybil attack](https://en.wikipedia.org/wiki/Sybil_attack)
 - [Dolev-Yao model](https://en.wikipedia.org/wiki/Dolev%E2%80%93Yao_model)
