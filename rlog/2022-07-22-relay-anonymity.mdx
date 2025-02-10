@@ -19,7 +19,7 @@ Introducing a basic threat model and privacy/anonymity analysis for the Waku v2 
 
 <!--truncate-->
 
-[Waku v2](https://rfc.vac.dev/spec/10/) enables secure, privacy preserving communication using a set of modular P2P protocols.
+[Waku v2](https://rfc.vac.dev/waku/standards/core/10/waku2) enables secure, privacy preserving communication using a set of modular P2P protocols.
 Waku v2 also aims at protecting the user's anonymity.
 This post is the first in a series about Waku v2 security, privacy, and anonymity.
 The goal is to eventually have a full privacy and anonymity analysis for each of the Waku v2 protocols, as well as covering the interactions of various Waku v2 protocols.
@@ -27,7 +27,7 @@ This provides transparency with respect to Waku's current privacy and anonymity 
 
 In this post, we first give an informal description of security, privacy and anonymity in the context of Waku v2.
 For each definition, we summarize Waku's current guarantees regarding the respective property.
-We also provide attacker models, an attack-based threat model, and a first anonymity analysis of [Waku v2 relay](https://rfc.vac.dev/spec/11/) within the respective models.
+We also provide attacker models, an attack-based threat model, and a first anonymity analysis of [Waku v2 relay](https://rfc.vac.dev/waku/standards/core/11/relay) within the respective models.
 
 Waku comprises many protocols that can be combined in a modular way.
 For our privacy and anonymity analysis, we start with the relay protocol because it is at the core of Waku v2 enabling Waku's publish subscribe approach to P2P messaging.
@@ -90,7 +90,7 @@ We subdivide anonymity into _receiver anonymity_ and _sender anonymity_.
 #### Receiver Anonymity
 
 We define receiver anonymity as _unlinkability of users' identities and the data they receive and/or related actions_.
-The data transmitted via Waku relay must be a [Waku message](https://rfc.vac.dev/spec/14/), which contains a content topic field.
+The data transmitted via Waku relay must be a [Waku message](https://rfc.vac.dev/waku/standards/core/14/message), which contains a content topic field.
 Because each message is associated with a content topic, and each receiver is interested in messages with specific content topics,
 receiver anonymity in the context of Waku corresponds to _subscriber-topic unlinkability_.
 An example for the "action" part of our receiver anonymity definition is subscribing to a specific topic.
@@ -111,21 +111,23 @@ Assuming there are $n$ Waku content topics, a receiver has $n$-anonymity with re
 Technically, Waku allows distributing messages over several libp2p pubsub topics.
 This yields $k$-anonymity, assuming $k$ content topics share the same pubsub topic.
 However, if done wrongly, such sharding of pubsub topics can breach anonymity.
-A formal specification of anonymity-preserving topic sharding building on the concepts of [partitioned topics](https://specs.status.im/spec/10#partitioned-topic) is part of our roadmap.
+A formal specification of anonymity-preserving topic sharding building on the concepts of [partitioned topics](https://rfc.vac.dev/status/deprecated/10/waku-usage.md
+#partitioned-topic) is part of our roadmap.
 
 Also, Waku is not directly concerned with 1:1 communication, so for this post, 1:1 communication is out of scope.
 Channels for 1:1 communication can be implemented on top of Waku relay.
 In the future, a 1:1 communication protocol might be added to Waku.
-Similar to topic sharding, it would maintain receiver anonymity leveraging [partitioned topics](https://specs.status.im/spec/10#partitioned-topic).
+Similar to topic sharding, it would maintain receiver anonymity leveraging [partitioned topics](https://rfc.vac.dev/status/deprecated/10/waku-usage.md
+#partitioned-topic).
 
 #### Sender Anonymity
 
 We define sender anonymity as _unlinkability of users' identities and the data they send and/or related actions_.
 Because the data in the context of Waku is Waku messages, sender anonymity corresponds to _sender-message unlinkability_.
 
-In summary, Waku offers weak sender anonymity because of [Waku's strict no sign policy](https://rfc.vac.dev/spec/11/#signature-policy),
+In summary, Waku offers weak sender anonymity because of [Waku's strict no sign policy](https://rfc.vac.dev/waku/standards/core/11/relay),
 which has its origins in the [Ethereum consensus specs](https://github.com/ethereum/consensus-specs/blob/dev/specs/phase0/p2p-interface.md#why-are-we-using-the-strictnosign-signature-policy).
-[17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/) and [18/WAKU2-SWAP](https://rfc.vac.dev/spec/18/) mitigate replay and injection attacks.
+[17/WAKU-RLN-RELAY](https://rfc.vac.dev/waku/standards/core/17/rln-relay) and [18/WAKU2-SWAP](https://rfc.vac.dev/waku/deprecated/18/swap) mitigate replay and injection attacks.
 
 Waku currently does not offer sender anonymity in stronger attacker models, as well as cannot protect against targeted attacks in weaker attacker models like the single or multi node attacker.
 We will cover this in more detail in later sections.
@@ -193,7 +195,7 @@ which Waku uses for ambient peer discovery.
 
 ### External
 
-An external attacker can only see encrypted traffic (protected by a secure channel set up with [Noise](https://rfc.vac.dev/spec/35/)).
+An external attacker can only see encrypted traffic (protected by a secure channel set up with [WAKU2-NOISE](https://github.com/waku-org/specs/blob/master/standards/application/noise.md)).
 Because an internal position can be easily obtained,
 in practice external attackers would mount combined attacks that leverage both internal an external attacks.
 We cover this more below when describing attacks.
@@ -244,8 +246,8 @@ This also goes well with the modular design philosophy of Waku v2, as layers of 
 Instead of looking at a multiplicative explosion of possible interactions, we look at the core in this article, and cover the most relevant combinations in future posts.
 
 Further restricting the scope, we will look at the data field of a relay message as a black box.
-In a second article on Waku v2 relay, we will look into the data field, which according to the [specification of Waku v2 relay](https://rfc.vac.dev/spec/11/#message-fields) must be a [Waku v2 message](https://rfc.vac.dev/spec/14/).
-We only consider messages with version field `2`, which indicates that the payload has to be encoded using [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/).
+In a second article on Waku v2 relay, we will look into the data field, which according to the [specification of Waku v2 relay](https://rfc.vac.dev/waku/standards/core/11/relay#message-fields) must be a [Waku v2 message](https://rfc.vac.dev/waku/standards/core/14/message).
+We only consider messages with version field `2`, which indicates that the payload has to be encoded using [WAKU2-NOISE](https://github.com/waku-org/specs/blob/master/standards/application/noise.md).
 
 ### Prerequisite: Get a Specific Position in the Network
 
@@ -263,7 +265,7 @@ A linearly scaling nodes attacker can leverage DHT based discovery systems to bo
 
 In the scope we defined above, Waku v2 is resilient against replay attacks.
 GossipSub nodes, and by extension Waku relay nodes, feature a `seen` cache, and only relay messages they have not seen before.
-Further, replay attacks will be punished by [RLN](https://rfc.vac.dev/spec/17/) and [SWAP](https://rfc.vac.dev/spec/18/).
+Further, replay attacks will be punished by [RLN](https://rfc.vac.dev/waku/standards/core/17/rln-relay) and [SWAP](https://rfc.vac.dev/waku/deprecated/18/swap).
 
 ### Neighbourhood Surveillance
 
@@ -311,8 +313,8 @@ An active single node attacker could run a disruption attack by
 
 While (1) has a negative effect on availability, the impact is not significant.
 A linearly scaling botnet attacker, however, could significantly disrupt the network with such an attack.
-(2) is thwarted by [RLN](https://rfc.vac.dev/spec/17/).
-Also [SWAP](https://rfc.vac.dev/spec/18/) helps mitigating DoS attacks.
+(2) is thwarted by [RLN](https://rfc.vac.dev/waku/standards/core/17/rln-relay).
+Also [SWAP](https://rfc.vac.dev/waku/deprecated/18/swap) helps mitigating DoS attacks.
 
 A local attacker can DoS Waku by dropping all Waku traffic within its controlled network segment.
 An AS attacker can DoS Waku within its authority, while a global attacker can DoS the whole network.
@@ -323,7 +325,7 @@ A countermeasure are censorship resistance techniques like [Pluggable Transports
 Currently, Waku v2 relay offers k-anonymity with respect to receiver anonymity.
 This also includes k-anonymity towards legitimate members of the same topic.
 
-Waku v2 relay offers sender anonymity in the single node attacker model with its [strict no sign policy](https://rfc.vac.dev/spec/11/#signature-policy).
+Waku v2 relay offers sender anonymity in the single node attacker model with its [strict no sign policy](https://rfc.vac.dev/waku/standards/core/11/relay/#signature-policy).
 Currently, Waku v2 does not guarantee sender anonymity in the multi node and stronger attacker models.
 However, we are working on modular anonymity-preserving protocols and building blocks as part of our privacy/anonymity roadmap.
 The goal is to allow tunable anonymity with respect to trade offs between _strong anonymity_, _low bandwidth_, and _low latency_.
@@ -341,40 +343,41 @@ As an intermediate step, we might directly employ Tor for onion-routing, and [Ny
 In future research log posts, we will cover further Waku v2 protocols and identify anonymity problems that will be added to our roadmap.
 These protocols comprise
 
-- [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/), which can violate receiver anonymity as it allows filtering by content topic.
+- [13/WAKU2-STORE](https://rfc.vac.dev/waku/standards/core/13/store), which can violate receiver anonymity as it allows filtering by content topic.
   A countermeasure is using the content topic exclusively for local filters.
-- [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/), which discloses nodes' interest in topics;
-- [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/spec/19/), which also discloses nodes' interest in topics and links the lightpush client as the sender of a message to the lightpush service node;
-- [21/WAKU2-FTSTORE](https://rfc.vac.dev/spec/21/), which discloses nodes' interest in specific time ranges allowing to infer information like online times.
+- [12/WAKU2-FILTER](https://rfc.vac.dev/waku/standards/core/12/filter), which discloses nodes' interest in topics;
+- [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/waku/standards/core/19/lightpush), which also discloses nodes' interest in topics and links the lightpush client as the sender of a message to the lightpush service node;
+- [21/WAKU2-FTSTORE](https://rfc.vac.dev/waku/standards/application/21/fault-tolerant-store), which discloses nodes' interest in specific time ranges allowing to infer information like online times.
 
 While these protocols are not necessary for the operation of Waku v2, and can be seen as pluggable features,
 we aim to provide alternatives without the cost of lowering the anonymity level.
 
 ## References
 
-- [10/WAKU2](https://rfc.vac.dev/spec/10/)
-- [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/)
+- [10/WAKU2](https://rfc.vac.dev/waku/standards/core/10/waku2)
+- [11/WAKU2-RELAY](https://rfc.vac.dev/waku/standards/core/11/relay)
 - [libp2p GossipSub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md)
 - [Security](https://en.wikipedia.org/wiki/Information_security)
 - [Authentication](https://en.wikipedia.org/wiki/Authentication)
 - [Non-repudiation](https://en.wikipedia.org/wiki/Non-repudiation)
 - [Noise Protocol Framework](https://noiseprotocol.org/)
 - [plausible deniability](https://en.wikipedia.org/wiki/Plausible_deniability#Use_in_cryptography)
-- [Waku v2 message](https://rfc.vac.dev/spec/14/)
-- [partitioned topics](https://specs.status.im/spec/10#partitioned-topic)
+- [Waku v2 message](https://rfc.vac.dev/waku/standards/core/14/message)
+- [partitioned topics](https://rfc.vac.dev/status/deprecated/10/waku-usage.md
+#partitioned-topic)
 - [Sybil attack](https://en.wikipedia.org/wiki/Sybil_attack)
 - [Dolev-Yao model](https://en.wikipedia.org/wiki/Dolev%E2%80%93Yao_model)
-- [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/)
+- [WAKU2-NOISE](https://github.com/waku-org/specs/blob/master/standards/application/noise.md)
 - [33/WAKU2-DISCV5](https://vac.dev/wakuv2-apd)
 - [strict no sign policy](https://github.com/ethereum/consensus-specs/blob/dev/specs/phase0/p2p-interface.md#why-are-we-using-the-strictnosign-signature-policy)
-- [Waku v2 strict no sign policy](https://rfc.vac.dev/spec/11/#signature-policy)
-- [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/)
+- [Waku v2 strict no sign policy](https://rfc.vac.dev/waku/standards/core/11/relay#signature-policy)
+- [17/WAKU-RLN-RELAY](https://rfc.vac.dev/waku/standards/core/17/rln-relay)
 - [anonymity trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html)
-- [18/WAKU2-SWAP](https://rfc.vac.dev/spec/18/)
+- [18/WAKU2-SWAP](https://rfc.vac.dev/waku/deprecated/18/swap)
 - [Pluggable Transports](https://www.pluggabletransports.info/about/)
 - [Nym](https://nymtech.net/)
 - [Dandelion++](https://arxiv.org/abs/1805.11060)
-- [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
-- [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/)
-- [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/spec/19/)
-- [21/WAKU2-FTSTORE](https://rfc.vac.dev/spec/21/)
+- [13/WAKU2-STORE](https://rfc.vac.dev/waku/standards/core/13/store)
+- [12/WAKU2-FILTER](https://rfc.vac.dev/waku/standards/core/12/filter)
+- [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/waku/standards/core/19/lightpush)
+- [21/WAKU2-FTSTORE](https://rfc.vac.dev/waku/standards/application/21/fault-tolerant-store)
