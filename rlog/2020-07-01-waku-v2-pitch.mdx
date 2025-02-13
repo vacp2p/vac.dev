@@ -108,7 +108,7 @@ Very experimental and incomplete libp2p support can be found in the nim-waku rep
 
 ### 2. Simplify the protocol
 
-Due to Waku's origins in Whisper, devp2p and as a standalone protocol, there are a lot of stuff that has accumulated (<https://rfc.vac.dev/spec/6/>). Not all of it serves it purpose anymore. For example, do we still need RLP here when we have Protobuf messages? What about extremely low PoW when we have peer scoring? What about key management / encryption when have encryption at libp2p and Status protocol level?
+Due to Waku's origins in Whisper, devp2p and as a standalone protocol, there are a lot of stuff that has accumulated (<https://rfc.vac.dev/waku/standards/legacy/6/waku1/>). Not all of it serves it purpose anymore. For example, do we still need RLP here when we have Protobuf messages? What about extremely low PoW when we have peer scoring? What about key management / encryption when have encryption at libp2p and Status protocol level?
 
 Not everything has to be done in one go, but being minimalist at this stage will the protocol lean and make us more adaptable.
 
