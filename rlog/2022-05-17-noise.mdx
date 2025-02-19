@@ -19,7 +19,7 @@ We provide an overview of the Noise Protocol Framework as a tool to design effic
 
 ## Introduction
 
-In this post we will provide an overview of how [Waku v2](https://rfc.vac.dev/spec/10/) users can adopt [Noise handshakes](http://www.noiseprotocol.org/noise.html) to agree on cryptographic keys used to securely encrypt messages.
+In this post we will provide an overview of how [Waku v2](https://rfc.vac.dev/waku/standards/core/10/waku2) users can adopt [Noise handshakes](http://www.noiseprotocol.org/noise.html) to agree on cryptographic keys used to securely encrypt messages.
 
 This process belongs to the class of _key-exchange_ mechanisms, consisting of all those protocols that, with different levels of complexity and security guarantees, allow two parties to publicly agree on a secret without letting anyone else know what this secret is.
 
@@ -27,18 +27,18 @@ But why do we need key-exchange mechanisms in the first place?
 
 With the advent of [public-key cryptography](https://en.wikipedia.org/wiki/Public-key_cryptography), it become possible to decouple encryption from decryption through use of two distinct cryptographic keys: one _public_, used to encrypt information and that can be made available to anyone, and one _private_ (kept secret), which enables decryption of messages encrypted with its corresponding public key. The same does not happen in the case of [symmetric encryption schemes](https://en.wikipedia.org/wiki/Symmetric-key_algorithm) where, instead, the same key is used for both encryption and decryption operations and hence cannot be publicly revealed as for public keys.
 
-In order to address specific application needs, many different public, symmetric and hybrid cryptographic schemes were designed: [Waku v1](https://rfc.vac.dev/spec/6/) and [Waku v2](https://rfc.vac.dev/spec/10/), which inherits part of their design from the Ethereum messaging protocol [Whisper](https://ethereum.org/en/developers/docs/networking-layer/#whisper), provide [support](https://rfc.vac.dev/spec/26/) to both public-key primitives ([`ECIES`](https://en.wikipedia.org/wiki/Integrated_Encryption_Scheme), [`ECDSA`](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm)) and symmetric primitives ([`AES-256-GCM`](https://en.wikipedia.org/wiki/Galois/Counter_Mode), [`KECCAK-256`](https://en.wikipedia.org/wiki/SHA-3)), used to sign, hash, encrypt and decrypt exchanged messages.
+In order to address specific application needs, many different public, symmetric and hybrid cryptographic schemes were designed: [Waku v1](https://rfc.vac.dev/spec/6/) and [Waku v2](https://rfc.vac.dev/waku/standards/core/10/waku2), which inherits part of their design from the Ethereum messaging protocol [Whisper](https://ethereum.org/en/developers/docs/networking-layer/#whisper), provide [support](https://rfc.vac.dev/waku/standards/application/26/payload) to both public-key primitives ([`ECIES`](https://en.wikipedia.org/wiki/Integrated_Encryption_Scheme), [`ECDSA`](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm)) and symmetric primitives ([`AES-256-GCM`](https://en.wikipedia.org/wiki/Galois/Counter_Mode), [`KECCAK-256`](https://en.wikipedia.org/wiki/SHA-3)), used to sign, hash, encrypt and decrypt exchanged messages.
 
 In principle, when communications employ public-key based encryption schemes (`ECIES`, in the case of Waku), there is no need for a key-agreement among parties: messages can be directly encrypted using the recipient's public-key before being sent over the network. However, public-key encryption and decryption primitives are usually very inefficient in processing large amount of data, and this may constitute a bottleneck for many of today's applications. Symmetric encryption schemes such as `AES-256-GCM`, on the other hand, are much more efficient, but the encryption/decryption key needs to be shared among users beforehand any encrypted messages is exchanged.
 
 To counter the downsides given by each of these two approaches while taking advantage of their strengths, hybrid constructions were designed. In these, public-key primitives are employed to securely agree on a secret key which, in turn, is used with a symmetric cipher for encrypting messages. In other words, such constructions specify a (public-key based) key-agreement mechanism!
 
-Waku, up to [payload version 1](https://rfc.vac.dev/spec/14/#payload-encryption), does not implement nor recommend any protocol for exchanging symmetric ciphers' keys, leaving such task to the application layer. It is important to note that the kind of key-agreement employed has a direct impact on the security properties that can be granted on later encrypted messages, while security requirements usually depend on the specific application for which encryption is needed in the first place.
+Waku, up to [payload version 1](https://rfc.vac.dev/waku/standards/core/14/message/#payload-encryption), does not implement nor recommend any protocol for exchanging symmetric ciphers' keys, leaving such task to the application layer. It is important to note that the kind of key-agreement employed has a direct impact on the security properties that can be granted on later encrypted messages, while security requirements usually depend on the specific application for which encryption is needed in the first place.
 
-In this regard, [Status](https://status.im), which builds on top of Waku, [implements](https://specs.status.im/spec/5) a custom version of the [X3DH](https://signal.org/docs/specifications/x3dh/) key-agreement protocol, in order to allow users to instantiate end-to-end encrypted communication channels. However, although such a solution is optimal when applied to (distributed) E2E encrypted chats, it is not flexible enough to fit or simplify the variety of applications Waku aims to address.
+In this regard, [Status](https://status.im), which builds on top of Waku, [implements](https://rfc.vac.dev/status/deprecated/secure-transport) a custom version of the [X3DH](https://signal.org/docs/specifications/x3dh/) key-agreement protocol, in order to allow users to instantiate end-to-end encrypted communication channels. However, although such a solution is optimal when applied to (distributed) E2E encrypted chats, it is not flexible enough to fit or simplify the variety of applications Waku aims to address.
 Hence, proposing and implementing one or few key-agreements which provide certain (presumably _strong_) security guarantees, would inevitably degrade performances of all those applications for which, given their security requirements, more tailored and efficient key-exchange mechanisms can be employed.
 
-Guided by different examples, in the following sections we will overview Noise, a protocol framework we are [currently integrating](https://rfc.vac.dev/spec/35/) in Waku, for building secure key-agreements between two parties. One of the great advantage of using Noise is that it is possible to add support to new key-exchanges by just specifying users' actions from a predefined list, requiring none to minimal modifications to existing implementations. Furthermore, Noise provides a framework to systematically analyze protocols' security properties and the corresponding attacker threat models. This allows not only to easily design new key-agreements eventually optimized for specific applications we want to address, but also to easily analyze or even [formally verify](https://noiseexplorer.com/) any of such custom protocol!
+Guided by different examples, in the following sections we will overview Noise, a protocol framework we are [currently integrating](https://github.com/waku-org/specs/blob/master/standards/application/noise.md) in Waku, for building secure key-agreements between two parties. One of the great advantage of using Noise is that it is possible to add support to new key-exchanges by just specifying users' actions from a predefined list, requiring none to minimal modifications to existing implementations. Furthermore, Noise provides a framework to systematically analyze protocols' security properties and the corresponding attacker threat models. This allows not only to easily design new key-agreements eventually optimized for specific applications we want to address, but also to easily analyze or even [formally verify](https://noiseexplorer.com/) any of such custom protocol!
 
 We believe that with its enormous flexibility and features, Noise represents a perfect candidate for bringing key-exchange mechanisms in Waku.
 
@@ -171,7 +171,7 @@ Nonetheless, due to the pure _token-based_ nature of handshake processing rules,
 
 On a side note, we already mentioned that identity-hiding properties can be guaranteed against a passive attacker that only reads the communication occurring between Alice and Bob. However, an active attacker who compromised one party's static key and actively interferes with the parties' exchanged messages, may lower the identity-hiding security guarantees provided by some handshake patterns. In our security model we exclude such adversary, but, for completeness, in the following we report a summary of possible de-anonymization attacks that can be performed by such an active attacker.
 
-For more details on supported handshakes and on how these are implemented in Waku, we refer to [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/) RFC.
+For more details on supported handshakes and on how these are implemented in Waku, we refer to [WAKU2-NOISE](https://github.com/waku-org/specs/blob/master/standards/application/noise.md) RFC.
 
 ### The K1K1 Handshake
 
@@ -248,7 +248,7 @@ The core idea is to exchange after-handshake messages (encrypted with a Cipher S
 
 This allows to decouple the handshaking phase from the actual encrypted communication, thus improving users' identity-hiding capabilities.
 
-Furthermore, by publicly revealing a value derived from `session-id` on the corresponding session content topic, a Noise session can be marked as _stale_, enabling peers to save resources by discarding any eventually [stored](https://rfc.vac.dev/spec/13/) message sent to such content topic.
+Furthermore, by publicly revealing a value derived from `session-id` on the corresponding session content topic, a Noise session can be marked as _stale_, enabling peers to save resources by discarding any eventually [stored](https://rfc.vac.dev/waku/standards/core/13/store) message sent to such content topic.
 
 One relevant aspect in today's applications is the possibility for users to employ different devices in their communications. In some cases, this is non-trivial to achieve since, for example, encrypted messages might be required to be synced on different devices which do not necessarily share the necessary key material for decryption and may be temporarily offline.
 
@@ -264,13 +264,13 @@ Informally, in the $N11M$ session management scheme, once the first Noise sessio
 
 In the $NM$ session management scheme, instead, all pairs of Alice's and Bob's devices have a distinct Noise session: a message is then sent from the currently-in-use sender’s device to all recipient’s devices, by properly encrypting and sending it to the content topics of each corresponding Noise session. If sent messages should be available on all sender’s devices as well, we require each pair of sender’s devices to instantiate a Noise session used for syncing purposes.
 
-For more technical details on how Noise sessions are instantiated and managed within these two mechanisms and the different trade-offs provided by the latter, we refer to [37/WAKU2-NOISE-SESSIONS](https://rfc.vac.dev/spec/37/).
+For more technical details on how Noise sessions are instantiated and managed within these two mechanisms and the different trade-offs provided by the latter, we refer to [WAKU2-NOISE-SESSIONS](https://github.com/waku-org/specs/blob/master/standards/application/noise-sessions.md).
 
 ## Conclusions
 
 In this post we provided an overview of Noise, a protocol framework for designing Diffie-Hellman based key-exchange mechanisms allowing systematic security and threat model analysis.
 
-The flexibility provided by Noise components allows not only to fully replicate with same security guarantees well established key-exchange primitives such as X3DH, currently employed by Status [5/TRANSPORT-SECURITY](https://specs.status.im/spec/5), but enables also optimizations based on the reciprocal knowledge parties have of each other while allowing easier protocols' security analysis and (formal) verification.
+The flexibility provided by Noise components allows not only to fully replicate with same security guarantees well established key-exchange primitives such as X3DH, currently employed by Status [TRANSPORT-SECURITY](https://rfc.vac.dev/status/deprecated/secure-transport), but enables also optimizations based on the reciprocal knowledge parties have of each other while allowing easier protocols' security analysis and (formal) verification.
 
 Furthermore, different handshakes can be combined and executed one after each other, a particularly useful feature to authenticate multiple static keys employed by different applications but also to ease keys revocation.
 
@@ -286,13 +286,13 @@ The available [implementation](https://github.com/status-im/nwaku/tree/master/wa
 
 ## References
 
-- [6/WAKU1](https://rfc.vac.dev/spec/6/)
-- [10/WAKU2](https://rfc.vac.dev/spec/10/)
-- [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
-- [26/WAKU-PAYLOAD](https://rfc.vac.dev/spec/26/)
-- [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/)
-- [37/WAKU2-NOISE-SESSIONS](https://rfc.vac.dev/spec/37/)
-- [5/TRANSPORT-SECURITY](https://specs.status.im/spec/5)
+- [6/WAKU1](https://rfc.vac.dev/waku/standards/legacy/6/waku1)
+- [10/WAKU2](https://rfc.vac.dev/waku/standards/core/10/waku2)
+- [13/WAKU2-STORE](https://rfc.vac.dev/waku/standards/core/13/store)
+- [26/WAKU-PAYLOAD](https://rfc.vac.dev/waku/standards/application/26/payload)
+- [WAKU2-NOISE](https://github.com/waku-org/specs/blob/master/standards/application/noise.md)
+- [37/WAKU2-NOISE-SESSIONS](https://github.com/waku-org/specs/blob/master/standards/application/noise-sessions.md)
+- [TRANSPORT-SECURITY](https://rfc.vac.dev/status/deprecated/secure-transport)
 - [The PubSub/GossipSub Protocols](https://github.com/libp2p/specs/tree/master/pubsub)
 - [The Noise Protocol Framework](http://www.noiseprotocol.org/noise.html)
 - [The X3DH Key-agreement Protocol](https://signal.org/docs/specifications/x3dh/)
