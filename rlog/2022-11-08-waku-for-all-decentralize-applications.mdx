@@ -139,11 +139,11 @@ Waku can help:
   share transactions with other sequencers. Waku nodes can act as a neutral network to enable all sequences to access
   transactions.
 - Enable censorship-resistant wallet&lt;&gt;L2 communication,
-- Provide rate limiting mechanism for spam protection: Using [RLN](https://rfc.vac.dev/spec/32/) to prevent DDOS.
+- Provide rate limiting mechanism for spam protection: Using [RLN](https://rfc.vac.dev/vac/32/rln-v1) to prevent DDOS.
 
 ## Device pairing and communication
 
-With [Waku Device Pairing](https://rfc.vac.dev/spec/43/), a user can setup a secure encrypted communication channel
+With [Waku Device Pairing](https://github.com/waku-org/specs/blob/master/standards/application/device-pairing.md), a user can setup a secure encrypted communication channel
 between their devices. As this channel would operate over Waku, it would be censorship-resistant and privacy preserving.
 These two devices could be:
 
@@ -172,8 +172,8 @@ What you can expect next:
 - [Scalability and performance studies](https://forum.vac.dev/t/waku-v2-scalability-studies/142/9) and improvement across Waku software,
 - [New websites](https://github.com/waku-org/waku.org/issues/15) to easily find documentation about Waku and its implementations,
 - New Waku protocols implemented in all code bases and cross client PoCs
-  ([noise](https://rfc.vac.dev/spec/35/), [noise-sessions](https://rfc.vac.dev/spec/37/),
-  [waku-rln-relay](https://rfc.vac.dev/spec/17/), etc),
+  ([noise](https://github.com/waku-org/specs/blob/master/standards/application/noise.md), [noise-sessions](https://github.com/waku-org/specs/blob/master/standards/application/noise-sessions.md),
+  [waku-rln-relay](https://rfc.vac.dev/waku/standards/core/17/rln-relay), etc),
 - Easier to [run your own waku node](https://github.com/status-im/nwaku/issues/828), more operator trials,
 - Dogfooding and Improvement of existing protocols (e.g. [Waku Filter](https://github.com/vacp2p/rfc/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc++12%2FWAKU2-FILTER)),
 - Continue our focus Waku portability: Browser,
