@@ -10,6 +10,10 @@ toc_min_heading_level: 2
 toc_max_heading_level: 4
 ---
 
+This article introduces MDSECheck method — a novel approach 
+to checking square MDS matrices for unconditional security
+as the components of affine permutation boxes of P-SP-networks.
+
 <!--truncate-->
 
 ## Introduction
@@ -20,9 +24,9 @@ In particular, square MDS matrices are commonly used in
 affine permutation layers of 
 partial substitution-permutation networks (P-SPNs). 
 These are widespread designs of 
-the modern symmetric ciphers and hash functions, 
-which include Poseidon [[1]](#references) — 
-a well-known hash function for zk-SNARK proving systems.
+the modern symmetric ciphers and hash functions. 
+A classic example of the latter is Poseidon [[1]](#references), 
+a well-known hash function used in zk-SNARK proving systems.
 
 Square MDS matrices differ in terms of security 
 that they are able to provide for P-SPNs.
@@ -42,7 +46,7 @@ a P-SPN substitution layer, i.e. to check whether the matrix belongs to
 the class of square MDS matrices, which are referred to 
 as unconditionally secure in the current article.
 
-The article aims to introduce MDSECheck method — 
+This article aims to introduce MDSECheck method — 
 a novel approach to checking square MDS matrices for unconditional security, 
 which has already been implemented in the Rust programming language as 
 the library crate [[3]](#references).
@@ -54,7 +58,7 @@ and outline possible future research directions.
 ## MDS matrix: how to define and construct
 
 An $m$ x $n$ matrix $M$ over a finite field is called MDS, 
-*iff* for any distinct $n$-dimensional column vectors $v_1$ and $v_2$
+if and only if for distinct $n$-dimensional column vectors $v_1$ and $v_2$ 
 the column vectors $v_1 \: | \: M v_1$ and $v_2 \: | \: M v_2$, 
 where $|$ stands for vertical concatenation, 
 do not coincide in $n$ or more components.
@@ -68,15 +72,15 @@ There are several equivalent definitions of MDS matrices,
 but the next one is especially useful for constructing them 
 directly by means of algebraic methods.
 A matrix over a finite field is called MDS, 
-*iff* all its square submatrices are nonsingular.
+if and only if all its square submatrices are nonsingular.
 The matrix entries and the matrix itself are also considered submatrices.
 
 One of the most efficient and straightforward methods to directly construct 
 an MDS matrix is generating a Cauchy matrix [[4]](#references). 
 Such an $m$ x $n$ matrix is defined using
 $m$-dimensional vector $x$ and $n$-dimensional vector $y$, 
-for which all elements in the concatenation of $x$ and $y$ are distinct.
-The elements of the Cauchy matrix are described by the formula 
+for which all entries in the concatenation of $x$ and $y$ are distinct.
+The entries of the Cauchy matrix are described by the formula 
 $M_{i, j} = 1 \: / \: (x_i - y_j)$.
 It is obvious that any submatrix of a Cauchy matrix is also a Cauchy matrix.
 The Cauchy determinant formula [[5]](#references) implies that 
@@ -165,7 +169,8 @@ of small period for vulnerable P-SPNs. [[2]](#references).
 Such matrices are called insecure with respect to particular P-SPNs.
 
 An infinitely long subspace trail of period $l$ exists for a P-SPN, 
-*iff* there is a proper subspace of differences of internal state vectors,
+if and only if there is a proper subspace 
+of differences of internal state vectors,
 such that if for a pair of initial internal states 
 the difference belongs to this subspace, 
 then the difference for the new internal states, 
@@ -191,12 +196,12 @@ Theorem 8 in [[2]](#references) and consists in checking that
 the minimal polynomial of the $p$-th power of the tested matrix 
 has maximum degree and is irreducible for all $p \in [1..l]$.
 The aforesaid sufficient non-existence condition is satisfied by the matrix, 
-*iff* all the checks yield positive results. 
+if and only if all the checks yield positive results. 
 
 It is convenient to define 
 the unconditional P-SPN security level of the square MDS matrix as follows: 
 this level is $l$ for the matrix $M$, 
-*iff* the minimal polynomials of $M$, $M^2$, $...$, $M^l$ 
+if and only if the minimal polynomials of $M$, $M^2$, $...$, $M^l$ 
 have maximum degree and are irreducible, 
 but for $M^{l \: + \: 1}$ the minimal polynomial does not have this property.
 Using this definition, the purpose of the sufficient test method 
@@ -309,7 +314,7 @@ do not belong to any nontrivial subfield of $GF(q^n)$. $\blacksquare$
 The approaches to implementing the first distinctive feature 
 can be explained and proven to be correct as follows.
 Since $GF(q^w)$ is a nontrivial subfield of $GF(q^u)$ 
-*iff* $w$ divides $u$ and $w < u$ [[7]](#references), 
+if and only if $w$ divides $u$ and $w < u$ [[7]](#references), 
 the presence of some $ε$ in $GF(q^h)$, 
 which is a nontrivial subfield of $GF(q^n)$, 
 implies that $ε \in GF(q^{n \: / \: ν})$ for some prime $ν$ dividing $n$, 
