@@ -128,7 +128,7 @@ It is enabled in a `nwaku` node by default.
 
 This is a DHT-based discovery mechanism adapted to store and relay _node records_.
 Our implementation is based on [Ethereum's Discovery v5 protocol](https://github.com/ethereum/devp2p/blob/fa6428ada7385c13551873b2ae6ad2457c228eb8/discv5/discv5-theory.md)
-with some [minor modifications](https://rfc.vac.dev/spec/33/) to isolate our discovery network from that of Ethereum.
+with some [minor modifications](https://rfc.vac.dev/waku/standards/core/33/discv5) to isolate our discovery network from that of Ethereum.
 The decision to separate the Waku Discovery v5 network from Ethereum's was made on considerations of lookup efficiency.
 This comes at a possible tradeoff in network resilience.
 We are considering merging with the Ethereum Discovery v5 network in future,
@@ -137,8 +137,8 @@ or even implement a hybrid solution.
 
 ## 5. Spam protection using RLN
 
-An early addition to our suite of protocols was [an extension of `11/WAKU-RELAY`](https://rfc.vac.dev/spec/32/)
-that provided spam protection using [Rate Limiting Nullifiers (RLN)](https://rfc.vac.dev/spec/32/).
+An early addition to our suite of protocols was [an extension of `11/WAKU-RELAY`](https://rfc.vac.dev/vac/32/rln-v1)
+that provided spam protection using [Rate Limiting Nullifiers (RLN)](https://rfc.vac.dev/vac/32/rln-v1).
 The `nwaku` client now contains a working demonstration and integration of RLN relay.
 Check out [this tutorial](https://github.com/status-im/nim-waku/blob/ee96705c7fbe4063b780ac43b7edee2f6c4e351b/docs/tutorial/rln-chat2-live-testnet.md) to see the protocol in action using a toy chat application built on `nwaku`.
 We'd love for people to join us in dogfooding RLN spam protection as part of our operator incentive testnet.
@@ -264,9 +264,9 @@ You can also view the changelog for past releases [here](https://github.com/stat
 
 ## References
 
-- [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/)
-- [32/RLN](https://rfc.vac.dev/spec/32/)
-- [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/)
+- [17/WAKU-RLN-RELAY](https://rfc.vac.dev/waku/standards/core/17/rln-relay)
+- [32/RLN](https://rfc.vac.dev/vac/32/rln-v1)
+- [33/WAKU2-DISCV5](https://rfc.vac.dev/waku/standards/core/33/discv5)
 - [Capabilities advertising](https://github.com/vacp2p/rfc/issues/429)
 - [Configuring a domain name](https://github.com/status-im/nim-waku/tree/d2fccb5220144893f994a67f2cc26661247f101f/waku/v2#configuring-a-domain-name)
 - [Conversational security](https://github.com/vacp2p/research/issues/97)

@@ -15,7 +15,7 @@ A look at EIP-1459 and the benefits of DNS based discovery.
 
 Discovery in p2p networks is the process of how nodes find each other and specific resources they are looking for. Popular discovery protocols, such as [Kademlia](https://pdos.csail.mit.edu/~petar/papers/maymounkov-kademlia-lncs.pdf) which utilizes a [distributed hash table](https://en.wikipedia.org/wiki/Distributed_hash_table) or DHT, are highly inefficient for resource restricted devices. These methods use short connection windows, and it is quite battery intensive to keep establishing connections. Additionally, we cannot expect a mobile phone for example to synchronize an entire DHT using cellular data.
 
-Another issue is how we do the initial bootstrapping. In other words, how does a client find its first node to then discover the rest of the network? In most applications, including Status right now, this is done with a [static list of nodes](https://specs.status.im/spec/1#bootstrapping) that a client can connect to.
+Another issue is how we do the initial bootstrapping. In other words, how does a client find its first node to then discover the rest of the network? In most applications, including Status right now, this is done with a [static list of nodes](https://rfc.vac.dev/status/deprecated/client/#bootstrapping) that a client can connect to.
 
 In summary, we have a static list that provides us with nodes we can connect to which then allows us to discover the rest of the network using something like Kademlia. But what we need is something that can easily be mutated, guarantees a certain amount of security, and is efficient for resource restricted devices. Ideally our solution would also be robust and scalable.
 
@@ -23,7 +23,7 @@ How do we do this?
 
 [EIP 1459: Node Discovery via DNS](https://eips.ethereum.org/EIPS/eip-1459), which is one of the strategies we are using for discovering waku nodes. [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459) is a DNS-based discovery protocol that stores [merkle trees](https://en.wikipedia.org/wiki/Merkle_tree) in DNS records which contain connection information for nodes.
 
-_Waku is our fork of Whisper. Oskar recently wrote an [entire post](https://vac.dev/fixing-whisper-with-waku) explaining it. In short, Waku is our method of fixing the shortcomings of Whisper in a more iterative fashion. You can find the specification [here](https://rfc.vac.dev/spec/6/)_
+_Waku is our fork of Whisper. Oskar recently wrote an [entire post](https://vac.dev/fixing-whisper-with-waku) explaining it. In short, Waku is our method of fixing the shortcomings of Whisper in a more iterative fashion. You can find the specification [here](https://rfc.vac.dev/waku/standards/legacy/6/waku1/)_
 
 DNS-based methods for bootstrapping p2p networks are quite popular. Even Bitcoin uses it, but it uses a concept called DNS seeds, which are just DNS servers that are configured to return a list of randomly selected nodes from the network upon being queried. This means that although these seeds are hardcoded in the client, the IP addresses of actual nodes do not have to be.
 
