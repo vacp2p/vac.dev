@@ -4,6 +4,7 @@ hide_table_of_contents: true
 ---
 
 # Vac R&D Service Units
+
 Vac's R&D Service Units are integral to supporting [IFT](https://free.technology) projects by researching and developing base components
 and secure, unbiased protocols.
 They implement them in software artifacts like [nim-libp2p](https://github.com/status-im/nim-libp2p) and [zerokit](https://github.com/vacp2p/zerokit).
@@ -18,7 +19,7 @@ This approach allows for efficient resource allocation and knowledge sharing acr
 Furthermore, these units conduct applied research, spearheading exploration and cutting-edge innovation within the IFT.
 Their primary focus is on researching topics that are practically relevant and directly helpful to projects.
 This approach actively bridges the gap between theory and practice,
-including identifying opportunities for and initiating new incubator projects. 
+including identifying opportunities for and initiating new incubator projects.
 
 Please find the Vac service units' roadmaps [here](https://roadmap.vac.dev/),
 the weekly updates [here](https://roadmap.vac.dev/tags/vac-updates),
@@ -28,19 +29,16 @@ and the broader ecosystem beyond.
 
 ## P2P
 
-The P2P R&D Service Unit is a vital part of Vac, specialising in peer-to-peer (P2P) technologies.
-The P2P unit develops [nim-libp2p](https://github.com/status-im/nim-libp2p),
-works on improving the [libp2p gossipsub](https://docs.libp2p.io/concepts/pubsub/overview/) protocol,
-and assists projects with the integration of P2P network layers.
-By conducting in-depth research and proposing improvements to libp2p protocols (focusing on Gossipsub),
-the P2P unit aims to optimise information sharing and communication within decentralised networks,
+The P2P service unit develops [nim-libp2p](https://github.com/status-im/nim-libp2p),
+and works on improving libp2p protocols with a focus on gossipsub.
+We prioritize requests for libp2p protocol improvements and nim-libp2p feature requests originating from IFT projects.
+
+The P2P unit aims to optimise information sharing and communication within decentralised networks,
 contributing to the overall robustness and scalability of the P2P layers of IFT projects.
-By focusing on advancing P2P technologies, the P2P unit contributes to the overall improvement and efficiency of decentralised networks,
-enabling seamless decentralised communication within IFT projects and beyond.
 
 ## Token Economics (TKE)
 
-The Vac Token Economics Unit is dedicated to assisting IFT projects in designing their token economies, incentives, and markets.
+The Vac Token Economics unit is dedicated to assisting IFT projects in designing their token economies, incentives, and markets.
 TKE's collaboration with IFT project teams is intensive and occurs on a day-to-day basis,
 where TKE not only responds to their needs but also proactively drives the conversation forward by suggesting new ideas and strategies
 based on TKE's research.
@@ -49,7 +47,7 @@ and general cryptoeconomics.
 
 ## Distributed Systems Testing (DST)
 
-The Distributed Systems Testing (DST) R&D Service Unit is responsible for developing distributed systems testing software.
+The Distributed Systems Testing (DST) R&D service unit is responsible for developing distributed systems testing software.
 DST's primary objective is to assist IFT projects in understanding the scaling behaviour of their nodes within larger networks.
 By conducting thorough regression testing, the DST unit helps identify potential bottlenecks and performance issues,
 ensuring the reliability and stability of the projects.
@@ -67,12 +65,16 @@ Through meticulous testing and quality assurance processes, the QA Service Unit 
 
 ## Smart Contracts (SC)
 
-Vac's Smart Contracts Service Unit specialises in the development, maintenance, and auditing of smart contracts for IFT projects.
-The SC unit ensures that all smart contracts are robust, secure, and aligned with project requirements.
-SC designs and develops smart contracts tailored to the specific needs of IFT projects,
-ensuring they function as intended and are up-to-date with any project changes or requirements.
-The unit's thorough auditing process involves meticulously reviewing smart contracts to identify and rectify potential vulnerabilities,
-ensuring the highest standards of security and reliability.
+Vac's Smart Contracts service unit specializes in developing, maintaining, and auditing smart contracts for IFT projects.
+This unit ensures all smart contracts are robust, secure, and aligned with project requirements.
+They enhance existing smart contracts and develop new ones using [Certora](https://www.certora.com/) formal verification rules,
+a cutting-edge approach that mathematically proves contract adherence to intended specifications6.
+
+The SC unit designs and implements smart contracts tailored to the unique needs of IFT projects,
+guaranteeing they function as intended and remain current with evolving project requirements.
+By leveraging tools like the Certora Prover, the team can detect rare and hard-to-find bugs,
+providing the widest possible coverage for smart contract security.
+This approach not only ensures the integrity of the contracts but also streamlines operations and reduces potential risks for IFT projects.
 
 ## Nim
 
@@ -90,7 +92,6 @@ The Applied Cryptography & ZK (ACZ) R&D service unit works on cryptographic solu
 zero-knowledge (ZK) proofs and argument systems, as well as network security protocols.
 The unit mainly works on base components, protocols, and their implementations.
 These include
-
 
 * RLN ([RLNv1](https://rfc.vac.dev/vac/32/rln-v1), [RLNv2](https://rfc.vac.dev/vac/raw/rln-v2), [RLNv3](https://vac.dev/rlog/rln-v3)) and
 * its backend implementation [zerokit](https://github.com/vacp2p/zerokit),
