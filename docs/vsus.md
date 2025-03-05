@@ -68,7 +68,7 @@ Through meticulous testing and quality assurance processes, the QA Service Unit 
 Vac's Smart Contracts service unit specializes in developing, maintaining, and auditing smart contracts for IFT projects.
 This unit ensures all smart contracts are robust, secure, and aligned with project requirements.
 They enhance existing smart contracts and develop new ones using [Certora](https://www.certora.com/) formal verification rules,
-a cutting-edge approach that mathematically proves contract adherence to intended specifications6.
+a cutting-edge approach that mathematically proves contract adherence to intended specifications.
 
 The SC unit designs and implements smart contracts tailored to the unique needs of IFT projects,
 guaranteeing they function as intended and remain current with evolving project requirements.
