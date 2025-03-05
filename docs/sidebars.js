@@ -2,7 +2,7 @@ module.exports = {
   main: [
     'index',
     'vsus',
-    'deepresearch',
+    'research',
     'vips',
     'principles',
     'contribute',
