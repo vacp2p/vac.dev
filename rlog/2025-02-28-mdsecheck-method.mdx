@@ -1,0 +1,457 @@
+---
+title: 'The MDSECheck method: choosing secure square MDS matrices for P-SP-networks'
+date: 2025-02-28 23:00:00
+authors: aleksei
+published: true
+slug: mdsecheck-method
+categories: research
+
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+This article introduces MDSECheck method — a novel approach 
+to checking square MDS matrices for unconditional security
+as the components of affine permutation layers of P-SP-networks.
+
+<!--truncate-->
+
+## Introduction
+
+Maximum distance separable (MDS) matrices play a significant role 
+in algebraic coding theory and symmetric cryptography.
+In particular, square MDS matrices are commonly used in 
+affine permutation layers of 
+partial substitution-permutation networks (P-SPNs). 
+These are widespread designs of 
+the modern symmetric ciphers and hash functions. 
+A classic example of the latter is Poseidon [[1]](#references), 
+a well-known hash function used in zk-SNARK proving systems.
+
+Square MDS matrices differ in terms of security 
+that they are able to provide for P-SPNs.
+The use of some such matrices in certain P-SPNs may result in existence 
+of infinitely long subspace trails of small period for the latter, 
+which make them vulnerable to differential cryptanalysis [[2]](#references).
+
+Two methods for security checking of square MDS matrices for P-SPNs 
+have been proposed in [[2]](#references).
+The first one, which is referred to as the three tests method 
+in the rest of the article, is aimed at security checking for 
+a specified structure of the substitution layer of a P-SPN.
+The second method, which is referred here as the sufficient test method, 
+has been designed to determine whether a square MDS matrix satisfies 
+a sufficient condition of being secure regardless of the structure of 
+a P-SPN substitution layer, i.e. to check whether the matrix belongs to 
+the class of square MDS matrices, which are referred to 
+as unconditionally secure in the current article.
+
+This article aims to introduce MDSECheck method — 
+a novel approach to checking square MDS matrices for unconditional security, 
+which has already been implemented in the Rust programming language as 
+the library crate [[3]](#references).
+The next sections explain the notions mentioned above, 
+describe the MDSECheck method as well as its mathematical foundations, 
+provide a brief overview of the MDSECheck library crate 
+and outline possible future research directions.
+
+## MDS matrix: how to define and construct
+
+An $m$ x $n$ matrix $M$ over a finite field is called MDS, 
+if and only if for distinct $n$-dimensional column vectors $v_1$ and $v_2$ 
+the column vectors $v_1 \: | \: M v_1$ and $v_2 \: | \: M v_2$, 
+where $|$ stands for vertical concatenation, 
+do not coincide in $n$ or more components.
+The set of all possible column vectors $v \: | \: M v$ for 
+some fixed matrix $M$ is a systematic MDS code, i.e. 
+a linear code, which contains input symbols on their original positions 
+and achieves the Singleton bound.
+The latter property results in good error-correction capability.
+
+There are several equivalent definitions of MDS matrices, 
+but the next one is especially useful for constructing them 
+directly by means of algebraic methods.
+A matrix over a finite field is called MDS, 
+if and only if all its square submatrices are nonsingular.
+The matrix entries and the matrix itself are also considered submatrices.
+
+One of the most efficient and straightforward methods to directly construct 
+an MDS matrix is generating a Cauchy matrix [[4]](#references). 
+Such an $m$ x $n$ matrix is defined using
+$m$-dimensional vector $x$ and $n$-dimensional vector $y$, 
+for which all entries in the concatenation of $x$ and $y$ are distinct.
+The entries of the Cauchy matrix are described by the formula 
+$M_{i, j} = 1 \: / \: (x_i - y_j)$.
+It is obvious that any submatrix of a Cauchy matrix is also a Cauchy matrix.
+The Cauchy determinant formula [[5]](#references) implies that 
+every square Cauchy matrix is nonsingular.
+Thus, Cauchy matrices satisfy the second definition of MDS matrices.
+
+## Partial substitution-permutation networks
+
+Describing SPNs in algebraic terms is convenient, 
+so this approach has been chosen for this article.
+SPNs are designs of the symmetric cryptoprimitives, 
+which operate on an internal state, which is represented 
+as an $n$-dimensional vector over some finite field,
+and update this state iteratively by means of 
+the round transformations described below.
+
+Each round begins with an optional update of the internal state by 
+adding to its components some input data or extraction of 
+some of these components as the output data.
+This optional step depends on the specific cryptoprimitive 
+and the current round number.
+The next step is called the nonlinear substitution layer
+and lies in replacing the $i$-th component of the internal state 
+with $S_i(c)$ for each $i \in [1..n]$, where $c$ is the component value 
+and $S_i(x)$ is a nonlinear invertible function over the finite field.
+The function $S_i(x)$ is specific to the cryptoprimitive and called an S-Box. 
+The final step, which is known as the affine permutation layer, 
+replaces the internal state with $M X + c$, 
+where $X$ is the current internal state, 
+$M$ is a nonsingular square matrix and 
+$c$ is the vector of the round constants.
+The value of $c$ is specific to the cryptoprimitive 
+and the current round number, 
+while $M$ typically depends only on the cryptoprimitive.
+The data flow diagram for an SPN is given below.
+```
+..................................                         
+   │        │        │        │                           
+   ▼        ▼        ▼        ▼                           
+┌────────────────────────────────┐                         
+│ Optional addition / extraction │ <─────> Input / output
+└──┬────────┬────────┬────────┬──┘                         
+   ▼        ▼        ▼        ▼                            
+┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐                         
+│S₁(x)│  │S₂(x)│  │ ... │  │Sₙ(x)│                         
+└──┬──┘  └──┬──┘  └──┬──┘  └──┬──┘                         
+   ▼        ▼        ▼        ▼                            
+┌────────────────────────────────┐                         
+│       Affine permutation       │                         
+└──┬────────┬────────┬────────┬──┘                         
+   ▼        ▼        ▼        ▼                            
+┌────────────────────────────────┐                         
+│ Optional addition / extraction │ <─────> Input / output
+└──┬────────┬────────┬────────┬──┘                         
+   ▼        ▼        ▼        ▼                            
+┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐                         
+│S₁(x)│  │S₂(x)│  │ ... │  │Sₙ(x)│                         
+└──┬──┘  └──┬──┘  └──┬──┘  └──┬──┘                         
+   ▼        ▼        ▼        ▼                            
+┌────────────────────────────────┐                         
+│       Affine permutation       │                         
+└──┬────────┬────────┬────────┬──┘                         
+   ▼        ▼        ▼        ▼                            
+..................................                         
+```
+Partial SPNs are modifications of SPNs, 
+where for certain rounds some S-Boxes are replaced with 
+the identity functions to reduce computational efforts [[2]](#references).
+For example, the nonlinear substitution layers of the partial rounds of 
+Poseidon update only the first internal state component [[1]](#references).
+In the case of P-SPNs, security considerations commonly demand to choose $M$ 
+as a square MDS matrix, because these matrices provide 
+perfect diffusion property for the affine permutation layer [[6]](#references).
+Possessing this property means ensuring that 
+any two $n$-dimensional internal states, 
+which differ in exactly $t$ components, 
+are mapped by the affine permutation layer to 
+two new internal states that differ in at least $n - t + 1$ components.
+
+## Square MDS matrix security check in the context of P-SPNs
+
+Certain square MDS matrices should not be used in certain P-SPNs 
+to avoid making them vulnerable to differential cryptanalysis,
+since it may exploit the existence of infinitely long subspace trails 
+of small period for vulnerable P-SPNs. [[2]](#references).
+Such matrices are called insecure with respect to particular P-SPNs.
+
+An infinitely long subspace trail of period $l$ exists for a P-SPN, 
+if and only if there is a proper subspace 
+of differences of internal state vectors,
+such that if for a pair of initial internal states 
+the difference belongs to this subspace, 
+then the difference for the new internal states, 
+which are obtained from the initial ones 
+by means of the same $l$-round transformation,
+also belongs to this subspace [[2]](#references).
+
+Two methods for checking square MDS matrices for suitability for P-SPNs 
+in terms of existence of infinitely long subspace trails 
+have been proposed in [[2]](#references).
+The three tests method is aimed at checking 
+whether using a specified matrix for a P-SPN 
+with a specified structure of the substitution layer 
+leads to existence of infinitely long subspace trails of period $p$ 
+for this P-SPN for all $p$ no larger than a given $l$.
+The sufficient test method has been designed to determine
+whether a square MDS matrix satisfies a sufficient condition 
+of non-existence of infinitely long subspace trails of period $p$ 
+for P-SPNs using this matrix for all $p$ no larger than a specified $l$.
+
+The sufficient test method is a direct consequence of 
+Theorem 8 in [[2]](#references) and consists in checking that 
+the minimal polynomial of the $p$-th power of the tested matrix 
+has maximum degree and is irreducible for all $p \in [1..l]$.
+The aforesaid sufficient non-existence condition is satisfied by the matrix, 
+if and only if all the checks yield positive results. 
+
+It is convenient to define 
+the unconditional P-SPN security level of the square MDS matrix as follows: 
+this level is $l$ for the matrix $M$, 
+if and only if the minimal polynomials of $M$, $M^2$, $...$, $M^l$ 
+have maximum degree and are irreducible, 
+but for $M^{l \: + \: 1}$ the minimal polynomial does not have this property.
+Using this definition, the purpose of the sufficient test method 
+can be described as checking whether 
+the unconditional P-SPN security level of the specified matrix 
+is no less than a given bound.
+
+## MDSECheck method: getting rid of the matrix powers
+
+The MDSECheck method, whose name is derived from 
+the words "MDS", "security", "elaborated" and "check", 
+has the same purpose as the sufficient test method, 
+but achieves it differently.
+The differences of the first method from the latter 
+and approaches to implementing them can be described as follows:
+
+1. Computation and verification of minimal polynomials 
+of $M^2$, $M^3$, $...$, $M^l$, where $M$ is 
+the tested $n$ x $n$ matrix over $GF(q)$ 
+and $l$ is the security level bound,
+has been replaced with checks for the corresponding powers 
+of a root of the characteristic polynomial of $M$ 
+for non-presence in nontrivial subfields of $GF(q^n)$.
+
+   1. The non-presence check is performed without 
+straightforward consideration of all nontrivial subfields of $GF(q^n)$.
+The root is checked only for non-presence in the subfields 
+$GF(q^{n \: / \: p_1})$, $GF(q^{n \: / \: p_2})$, $...$, 
+$GF(q^{n \: / \: p_d})$, where $p_1$, $p_2$, $...$, $p_d$ 
+are all prime divisors of $n$.
+
+   1. The non-presence check reuses some data computed during 
+the checking for irreducibility the minimal polynomial of $M$, 
+which in this case coincides with $f(y)$ 
+designating the characteristic polynomial of $M$.
+The values of $y^{q^{n \: / \: p_j}} \mod f(y)$ are saved 
+for each $j \in [1..d]$ during the irreducibility check 
+to replace exponentiations with sequential computations 
+of $(y^i)^{q^{n \: / \: p_j}} \mod f(y)$ from 
+$(y^{(i \: - \: 1)})^{q^{n \: / \: p_j}} \mod f(y)$ 
+as its product with $y^{q^{n \: / \: p_j}} \mod f(y)$.
+
+1. The check of the minimal polynomial of $M$ 
+for irreducibility and maximum degree 
+is performed without unconditional computation of this polynomial.
+This computation has been replaced with the Krylov method fragment, 
+which consists in building and solving 
+only one system of linear equations over $GF(q)$.
+If $M$ has an irreducible minimal polynomial of maximum degree, 
+then its coefficients are trivially determined from the system solution.
+If the system is degenerate, 
+then the minimal polynomial of $M$ does not have such properties.
+
+The correctness of the first distinctive feature can be proven as follows.
+Verifying that the minimal polynomial of a matrix 
+is of maximum degree and irreducible 
+is equivalent to verifying that 
+the characteristic polynomial of this matrix is irreducible, 
+because the minimal polynomial divides the characteristic one.
+Also, it is trivially proven that for a matrix with such a minimal polynomial 
+it is equal to the characteristic polynomial.
+Thus, the required checks for the matrices $M^2$, $M^3$, $...$, $M^l$ 
+can be done by checking their characteristic polynomials for irreducibility.
+
+Let $M$ be $n$ x $n$ matrix over $GF(q)$, 
+whose minimal polynomial is of maximum degree and irreducible.
+The statements in the previous paragraph imply that $f(y)$, 
+which is the $n$-degree characteristic polynomial of $M$, is irreducible.
+Consider $M$ over the extension field $GF(q^n)$, 
+which is the splitting field of $f(y)$.
+Let $α \in GF(q^n)$ be a root of $f(y)$.
+According to standard results from the Galois field theory, 
+$α$, $α^q$, $α^{q^2}$, $...$, $α^{q^{n \: - \: 1}}$ 
+are distinct roots of $f(y)$ [[7]](#references).
+Thus, these powers of $α$ are $n$ distinct eigenvalues of $M$.
+Hence, due to matrix similarity properties, there is some matrix $S$ 
+such that $S M S^{-1} = D$, where $D$ is the diagonal matrix, 
+whose nonzero elements are 
+$α$, $α^q$, $α^{q^2}$, $...$, $α^{q^{n \: - \: 1}}$.
+Therefore, $S M^i S^{-1} = D^i$, 
+so the roots of the characteristic polynomial of $M^i$ 
+are $α^i$, $(α^q)^i$, $(α^{q^2})^i$, $...$, $(α^{q^{n \: - \: 1}})^i$.
+If the minimal polynomial of $α^i$ has degree less than $n$, 
+then the characteristic polynomial of $M^i$ is divisible 
+by this minimal polynomial, 
+while $α^i$ lies in some nontrivial subfield of $GF(q^n)$.
+One of the fields isomorphic to this subfield is a residue class ring 
+of polynomials modulo the minimal polynomial of $α^i$ [[7]](#references).
+If the minimal polynomial of $α^i$ is of degree $n$, 
+then the characteristic polynomial of $M^i$ 
+equals this minimal polynomial and therefore is irreducible, 
+while $α^i$ does not lie in any nontrivial subfield of $GF(q^n)$.
+In this case, $1$, $α^i$, $(α^i)^2$, $...$, $(α^i)^{n \: - \: 1}$ 
+are linearly independent as distinct roots of 
+an irreducible polynomial over a finite field [[7]](#references), 
+so any field containing $α^i$ has at least $q^n$ elements 
+and therefore cannot be a trivial subfield of $GF(q^n)$.
+Thus, checking the characteristic polynomials of 
+the matrices $M^2$, $M^3$, $...$, $M^l$ for irreducibility 
+is equivalent to verifying that $α^2$, $α^3$, $...$, $α^l$ 
+do not lie in any nontrivial subfield of $GF(q^n)$.
+
+The last sentences of the two previous paragraphs imply the following:
+verifying that the minimal polynomials of $M^2$, $M^3$, $...$, $M^l$ 
+are of maximum degree and irreducible can be performed 
+by verifying that the corresponding powers of a root of 
+the characteristic polynomial of the $n$ x $n$ matrix $M$ over $GF(q)$ 
+do not belong to any nontrivial subfield of $GF(q^n)$. $\blacksquare$
+
+The approaches to implementing the first distinctive feature 
+can be explained and proven to be correct as follows.
+Since $GF(q^w)$ is a nontrivial subfield of $GF(q^u)$ 
+if and only if $w$ divides $u$ and $w < u$ [[7]](#references), 
+the presence of some $ε$ in $GF(q^h)$, 
+which is a nontrivial subfield of $GF(q^n)$, 
+implies that $ε \in GF(q^{n \: / \: ν})$ for some prime $ν$ dividing $n$, 
+because $h$ divides the quotient of $n$ and some of its prime factors.
+Thus, checking that some value does not belong to subfields 
+$GF(q^{n \: / \: p_1})$, $GF(q^{n \: / \: p_2})$, $...$, 
+$GF(q^{n \: / \: p_d})$, 
+where $p_1$, $p_2$, $...$, $p_d$ are all prime divisors of $n$, 
+is equivalent to checking this value for 
+non-presence in nontrivial subfields of $GF(q^n)$.
+
+Checking for irreducibility the minimal polynomial of $M$ 
+is performed by means of Algorithm 2.2.9 in [[8]](#references)
+and consists in sequential computation of 
+$y^p \mod f(y)$, $y^{p^2} \mod f(y)$, $...$, 
+$y^{p^{\lfloor n \: / \: 2 \rfloor}} \mod f(y)$ 
+and checking that $GCD(y^{p^i} \mod f(y) \: - \: y, f(y)) = 1$ 
+for each $i \in [1..\lfloor n \: / \: 2 \rfloor]$, 
+where $f(y)$ is the characteristic polynomial of $M$ 
+and coincides with the minimal polynomial in this case.
+The optimized root non-presence check is performed 
+by checking that for each $i \in [2..l]$ for each $j \in [1..d]$ 
+the value of $((y^i)^{q^{n \: / \: p_j}} - y^i) \mod f(y)$ is nonzero.
+This approach is based on the following standard results 
+from the Galois field theory [[7]](#references):
+
+- $GF(q^n)$ is isomorphic to the residue class ring of 
+univariate polynomials in $y$ modulo $f(y)$, 
+because at this point $f(y)$ is known to be irreducible, 
+and some root of $f(y)$ is mapped by this isomorphism to 
+the residue class the polynomial $y$ in this ring.
+
+- All elements of a finite field $GF(q^w)$ and only they 
+are roots of $y^{q^w} - y$.
+
+The expression $((y^i)^{q^{n \: / \: p_j}} - y^i) \mod f(y)$ 
+can be rewritten as $((y^{q^{n \: / \: p_j}})^i - y^i) \mod f(y)$,
+which can be computed without exponentiation as the product of 
+$(y^{(i \: - \: 1)})^{q^{n \: / \: p_j}} \mod f(y)$ and 
+$y^{q^{n \: / \: p_j}} \mod f(y)$, 
+which has been saved during the irreducibility check.
+
+The second distinctive feature can be 
+explained and proven to be correct in following way.
+The $n$ x $n$ matrix $M$ does not have a minimal polynomial of maximum degree, 
+if some Krylov subspace of order $n$ for it is not $n$-dimensional.
+Indeed, the minimal polynomial of the matrix is divisible 
+by the minimal polynomial of the restriction of 
+this linear operator to an arbitrary subspace, 
+and in the considered case the latter polynomial has degree less than $n$,
+because the degree of the minimal polynomial of a linear operator cannot
+exceed the dimension of the subspace the operator acts on.
+Thus, an unconditional computation of the minimal polynomial of $M$ 
+is not required to determine 
+whether this polynomial is irreducible and has maximum degree.
+Using this computation has been replaced with the Krylov method fragment,
+which consists in choosing any nonzero $n$-dimensional column vector $v$ 
+and solving the system of linear equations $A X = b$, 
+where $A$ is an $n$ x $n$ matrix, 
+whose columns are $v$, $M v$, $M^2 v$, $...$, $M^{n \: - \: 1} v$, 
+and $b$ is $M^n v$.
+If $A$ is singular, 
+the minimal polynomial of $M$ is reducible or does not have maximum degree, 
+so checking $M$ has been accomplished; 
+otherwise, $f(y)$, which is the minimal and characteristic polynomial of $M$, 
+can be expressed as $y^n - X_{n \: - \: 1} y^{n \: - \: 1} - 
+X_{n \: - \: 2} y^{n \: - \: 2} - … - X_1 y - X_0$.
+
+The steps of MDSECheck method can be summarized as follows:
+
+1. The square MDS matrix $M$ over $GF(q)$ 
+and the unconditional P-SPN security level bound $l$ are received as inputs.
+
+1. The Krylov method fragment is used to compute the minimal polynomial of $M$.
+If the computation fails, then $M$ is not unconditionally secure, 
+so the check of $M$ is complete.
+If it succeeds, then the minimal polynomial has maximum degree 
+and, therefore, coincides with the characteristic polynomial of $M$.
+
+1. Algorithm 2.2.9 is used 
+to check for irreducibility the minimal polynomial of $M$,
+which is also the characteristic polynomial of $M$ in this case.
+Some data computed during this step is saved to be reused at the next one.
+If the polynomial is reducible, then the check of $M$ is complete, 
+because $M$ has been found to be not unconditionally secure.
+
+1. The values of $α^2$, $α^3$, $...$, $α^l$, 
+where $α$ is a root of the characteristic polynomial of $M$, 
+are sequentially checked for non-presence in 
+nontrivial subfields of $GF(q^n)$ as described above.
+If $α^i$ belongs to some nontrivial subfield of $GF(q^n)$, 
+then the unconditional P-SPN security level of $M$ is $i \: - \: 1$, 
+so the check of $M$ is complete.
+If all the values do not belong to such a subfield, 
+then the unconditional P-SPN security level is at least $l$.
+
+## MDSECheck library crate: implementation in Rust
+
+The library crate [[3]](#references) provides tools for 
+generating random square Cauchy MDS matrices over prime finite fields 
+and applying the MDSECheck method 
+to check such matrices for unconditional security. 
+The used data types of field elements and polynomials are provided by 
+the crates ark-ff [[9]](#references) and ark-poly [[10]](#references).
+The auxiliary tools in the crate modules are accessible as well.
+
+Generating by means of this crate a 10 x 10 MDS matrix, 
+which is defined over the BN254 scalar field [[11]](#references) 
+and has unconditional P-SPN security level is 1000, 
+takes less than 60 milliseconds on average 
+for the laptop with the processor Intel® Core™ i9-14900HX, 
+whose maximum clock frequency is 5.8 GHz.
+
+## Conclusion
+
+The MDSECheck method proposed in this article is a novel approach 
+to checking square MDS matrices for unconditional security 
+as the components of affine permutation layers of P-SPNs.
+It has been implemented as a practical library crate 
+for generating unconditionally secure square MDS matrices 
+for P-SPNs over prime finite fields.
+
+The future research directions may include 
+theoretical and experimental studies of performance of approaches,
+which use the MDSECheck method 
+to generate unconditionally secure square MDS matrices for P-SPNs.
+
+## References
+
+1. L. Grassi, D. Khovratovich, C. Rechberger, A. Roy, M. Schofnegger. "[POSEIDON: A New Hash Function for Zero-Knowledge Proof Systems (Updated Version)](https://eprint.iacr.org/2019/458.pdf)".
+1. L. Grassi, C. Rechberger, M. Schofnegger. "[Proving Resistance Against Infinitely Long Subspace Trails: How to Choose the Linear Layer](https://eprint.iacr.org/2020/500.pdf)".
+1. The page "[mdsecheck](https://crates.io/crates/mdsecheck)" on crates.io.
+1. Y. Kumar, P. Mishra, S. Samanta, K. Chand Gupta, A. Gaur. "[Construction of all MDS and involutory MDS matrices](https://arxiv.org/pdf/2403.10372)".
+1. The page "[Value of Cauchy Determinant](https://proofwiki.org/wiki/Value_of_Cauchy_Determinant)" on proofwiki.org.
+1. T. Silva, R. Dahab "[MDS Matrices for Cryptography](https://www.ic.unicamp.br/~reltech/PFG/2021/PFG-21-43.pdf)".
+1. S. Huczynska, M. Neunhöffer. "[Finite Fields](http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Teaching/ff2012/ff2012.pdf)"
+1. R. Crandall, C. Pomerance. "[Prime Numbers: A Computational Perspective](http://thales.doa.fmph.uniba.sk/macaj/skola/teoriapoli/primes.pdf)" (2nd edition).
+1. The page "[ark-ff](https://crates.io/crates/ark-ff)" on crates.io.
+1. The page "[ark-poly](https://crates.io/crates/ark-poly)" on crates.io.
+1. The page "[ark-bn254](https://crates.io/crates/ark-bn254)" on crates.io.
