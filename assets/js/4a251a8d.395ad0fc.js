@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkvac_dev=self.webpackChunkvac_dev||[]).push([[5527],{66896:e=>{e.exports=JSON.parse('{"permalink":"/rlog/page/5","page":5,"postsPerPage":10,"totalPages":5,"totalCount":41,"previousPage":"/rlog/page/4","blogDescription":"Blog","blogTitle":"Research Blog"}')}}]);
