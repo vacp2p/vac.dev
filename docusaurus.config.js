@@ -44,6 +44,11 @@ const config = {
           rehypePlugins: [katex],
         },
         og: {},
+        localSearch: {
+          singleIndex: false,
+          blogDir: 'rlog',
+          blogRouteBasePath: '/rlog',
+        },
         generated: {
           jobList: {
             jobBoard: 'vac',
