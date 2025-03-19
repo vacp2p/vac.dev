@@ -1,15 +1,15 @@
 {
-    "timestamp": "2025-03-18T17:05:39Z",
+    "timestamp": "2025-03-19T17:05:36Z",
     "git": {
         "commit": "94c2339e04bbe4826a7e8279682f3faa3386da0a",
         "branch": "origin/develop",
         "url": "git@github.com:vacp2p/vac.dev.git"
     },
     "build": {
-        "id": "3387",
-        "number": "3387",
+        "id": "3388",
+        "number": "3388",
         "name": "website/dev.vac.dev",
         "slave": "linux-02",
-        "url": "https://ci.infra.status.im/job/website/job/dev.vac.dev/3387/"
+        "url": "https://ci.infra.status.im/job/website/job/dev.vac.dev/3388/"
     }
 }
