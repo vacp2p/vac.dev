@@ -16,7 +16,7 @@ toc_max_heading_level: 5
 
 This post is going to give you an overview of how spam protection can be achieved in Waku Relay through rate-limiting nullifiers. We will cover a summary of spam-protection methods in centralized and p2p systems, and the solution overview and details of the economic spam-protection method. The open issues and future steps are discussed in the end.
 
-<!--truncate-->
+{/* truncate */}
 
 ## Introduction
 
@@ -84,7 +84,7 @@ The remainder of this post is all about the story of how to enforce this limit o
 
 **Zero-knowledge proof**: Zero-knowledge proof (ZKP)[^14] allows a _prover_ to show a _verifier_ that they know something, without revealing what that something is. This means you can do the trust-minimized computation that is also privacy-preserving. As a basic example, instead of showing your ID when going to a bar you simply give them proof that you are over 18, without showing the doorman your id. In this write-up, by ZKP we essentially mean zkSNARK[^15] which is one of the many types of ZKPs.
 
-**Threshold Secret Sharing Scheme**: (m,n) Threshold secret-sharing is a method by which you can split a secret value s into n pieces in a way that the secret s can be reconstructed by having m pieces (m <= n). The economic-incentive spam protection utilizes a (2,n) secret sharing realized by Shamir Secret Sharing Scheme[^13].
+**Threshold Secret Sharing Scheme**: (m,n) Threshold secret-sharing is a method by which you can split a secret value s into n pieces in a way that the secret s can be reconstructed by having m pieces (m `<=` n). The economic-incentive spam protection utilizes a (2,n) secret sharing realized by Shamir Secret Sharing Scheme[^13].
 
 ## Overview: Economic-Incentive Spam protection through Rate Limiting Nullifiers
 

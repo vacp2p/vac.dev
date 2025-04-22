@@ -10,8 +10,8 @@ You can use [Frontmatter](https://docusaurus.io/docs/markdown-features#front-mat
 
 ## CI/CD
 
-- [CI builds](https://ci.infra.status.im/job/website/job/vac.dev/) `master` and pushes to `deploy-master` branch, which is hosted at <https://vac.dev//>.
-- [CI builds](https://ci.infra.status.im/job/website/job/dev.vac.dev/) `develop` and pushes to `deploy-develop` branch, which is hosted at <https://dev.vac.dev//>.
+- [CI builds](https://ci.infra.status.im/job/website/job/vac.dev/) `master` and pushes to `deploy-master` branch, which is hosted at https://vac.dev/.
+- [CI builds](https://ci.infra.status.im/job/website/job/dev.vac.dev/) `develop` and pushes to `deploy-develop` branch, which is hosted at https://dev.vac.dev/.
 
 The hosting is done using [Caddy server with Git plugin for handling GitHub webhooks](https://github.com/status-im/infra-misc/blob/master/ansible/roles/caddy-git).
 

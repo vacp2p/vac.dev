@@ -11,7 +11,7 @@ categories: research
 
 A quick history of discovery in peer-to-peer networks, along with a look into discv4 and discv5, detailing what they are, how they work and where they differ.
 
-<!--truncate-->
+{/* truncate */}
 
 If you've been working on Ethereum or adjacent technologies you've probably heard of [discv4](https://github.com/ethereum/devp2p/blob/master/discv4.md) or [discv5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md). But what are they actually? How do they work and what makes them different? To answer these questions, we need to start at the beginning, so this post will assume that there is little knowledge on the subject so the post should be accessible for anyone.
 
@@ -107,7 +107,7 @@ Logarithmic distance means we first calculate the distance and then run it throu
 log2(A xor B)
 ```
 
-And the second, more important change, is that discv5 aims at solving one of the biggest issues of discv4: the differentiation of sub-protocols. It does this by adding topic tables. Topic tables are [first in first out](<https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)>) lists that contain nodes which have advertised that they provide a specific service. Nodes get themselves added to this list by registering `ads` on their peers.
+And the second, more important change, is that discv5 aims at solving one of the biggest issues of discv4: the differentiation of sub-protocols. It does this by adding topic tables. Topic tables are [first in first out](https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)) lists that contain nodes which have advertised that they provide a specific service. Nodes get themselves added to this list by registering `ads` on their peers.
 
 As of writing, there is still an issue with this proposal. There is currently no efficient way for a node to place `ads` on multiple peers, since it would require separate requests for every peer which is inefficient in a large-scale network.
 
