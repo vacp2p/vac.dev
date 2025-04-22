@@ -13,7 +13,7 @@ discuss: https://forum.vac.dev/t/discussion-waku-v1-vs-waku-v2-bandwidth-compari
 
 A local comparison of bandwidth profiles showing significantly improved scalability in Waku v2 over Waku v1.
 
-<!--truncate-->
+{/* truncate */}
 
 ## Background
 
@@ -40,7 +40,7 @@ and compares bandwidth usage for similar message propagation scenarios.
 
 ## Theoretical improvements in Waku v2
 
-Messages are propagated in Waku v1 using [flood routing](<https://en.wikipedia.org/wiki/Flooding_(computer_networking)>).
+Messages are propagated in Waku v1 using [flood routing](https://en.wikipedia.org/wiki/Flooding_(computer_networking)).
 This means that every peer will forward every new incoming message to all its connected peers (except the one it received the message from).
 This necessarily leads to unnecessary duplication (termed _amplification factor_),
 wasting bandwidth and resources.
