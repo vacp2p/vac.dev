@@ -2,8 +2,8 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 require('dotenv').config()
 
-const math = require('remark-math')
-const katex = require('rehype-katex')
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -40,12 +40,11 @@ const config = {
           breadcrumbs: false,
           routeBasePath: '/',
           sidebarPath: 'docs/sidebars.js',
-          remarkPlugins: [math],
-          rehypePlugins: [katex],
+          remarkPlugins: [remarkMath],
+          rehypePlugins: [rehypeKatex],
         },
         og: {},
         localSearch: {
-          singleIndex: false,
           blogDir: 'rlog',
           blogRouteBasePath: '/rlog',
         },
@@ -68,8 +67,8 @@ const config = {
         blogTitle: 'Research Blog',
         blogSidebarCount: 0,
         authorsMapPath: 'authors.yml',
-        remarkPlugins: [math],
-        rehypePlugins: [katex],
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
       }),
     ],
     [
@@ -163,10 +162,10 @@ const config = {
 
   stylesheets: [
     {
-      href: 'https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css',
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
       type: 'text/css',
       integrity:
-        'sha384-vZTG03m+z5ZkWZJgN+5RqqznB0TjvHahcGq1+EK7Y5xnepK84VHe5F4I9xgDnUHg',
+        'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
       crossorigin: 'anonymous',
     },
   ],
