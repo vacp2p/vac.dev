@@ -86,23 +86,25 @@ Decentralized MLS (de-MLS) is a peer-to-peer SGM protocol compatible with any P2
 with Waku selected as the messaging protocol.
 Decentralization is achieved not only at the delivery service (DS) level
 but also within the authentication service (AS).
-Multiple special nodes in the group serve as authorized identities to authenticate users
-before they join or are removed from the group.
+Multiple special nodes named Steward in the group serve as authorized identities to authenticate users
+before they join or are removed from the group transparently.
 
 de-MLS provides two different user management configurations, both utilizing the Waku protocol for DS:
 
-1. **Single Admin**:
-    - A single authorized identity (admin) manages the group,
+1. **Single Steward**:
+    - A single authorized identity (Steward) manages the group,
     including removing or adding users with agreement among users by a voting-based consensus.
-2. **Multi-Admin**:
-    - Multiple admins have equal authority to add or remove users.
+2. **Multi-Steward**:
+    - Multiple Stewards have equal authority to add or remove users.
     - A consensus mechanism ensures consistency by resolving concurrent changes
     within the same epoch and preventing possible conflicts.
-    In each epoch, all modifications are managed exclusively by a single admin.
+    In each epoch, all modifications are managed exclusively by a single Steward.
 
-In multi-admin settings, de-MLS requires a consensus among admins
+Note: We chose the term Steward to reflect the role of transparently coordinating and organizing passengers at stations, much like Stewards do in transit systems. 
+
+In multi-Steward settings, de-MLS requires a consensus among Stewards
 that have equal rights in the group since changes in an epoch in MLS are required
-to be conducted by a single identity, that is the admin.
+to be conducted by a single identity, that is the Steward.
 
 For the consensus integration, ongoing research explores two promising approaches:
 
@@ -138,39 +140,39 @@ This ensures both compliance with MLS's security model and alignment with decent
 ### Flow
 
 The flow section explains the processes that 
-when a user wants to join a group in both admin and users side also their interactions.
+when a user wants to join a group in both Steward and users side also their interactions.
 The flow of de-MLS is as follows:
 
 ![Figure 1](/img/de-mls/flow.png)
 
-### 1. Admin joins the welcome topic
+### 1. Steward joins the welcome topic
 
-The welcome topic is a topic created and monitored by the admin for a specific secure messaging group,
+The welcome topic is a topic created and monitored by the Steward for a specific secure messaging group,
 allowing any Waku node to subscribe permissionlessly.
 Being in the welcome topic does not imply group membership,
 it acts as a waiting room where users can send their key material,
-which the admin listens for and processes before granting access to the secure group.
+which the Steward listens for and processes before granting access to the secure group.
 
 ### 2. Group initialization
 
-Admin initalizes a group with parameters such as cipher suite and group ID.
+Steward initalizes a group with parameters such as cipher suite and group ID.
 
-### 3. Emitting Group Anouncement (GA) by admin
+### 3. Emitting Group Anouncement (GA) by Steward
 
-Admin creates group announcement (GA) periodically to the welcome channel
-that the users can find the who the admin is.
+Steward creates group announcement (GA) periodically to the welcome channel
+that the users can find the who the Steward is.
 This will be important for the next step.
 
 ### 4. User joins the welcome topic
 
 As first, the users who wants to be part of the decentralized MLS should subscribe the welcome channel.
-Then user can find the group name and also corresponding GA message from admin.
+Then user can find the group name and also corresponding GA message from Steward.
 This GA message helps the user to create a valid `keyPackages` which define in section 10 
 in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/) for the group.
 
 ### 5. User creates the its key package
 
-User creates the `keyPackage` and encrypt by public key of the Admin then send it to the admin.
+User creates the `keyPackage` and encrypt by public key of the Steward then send it to the Steward.
 Since the message is encrypted, stay secure though the welcome (permissionless) topic.
 
 ### 6. Admin receives the User's key package
@@ -196,20 +198,20 @@ The consensus mechanism should be a lightweight consensus that cannot be bottlen
 Basically, the consensus returns the binary result for given a proposal.
 If the result is NO, the proposal is dropped otherwise process.
 
-Ones admin creates the proposal send it to network for the voting.
-If the result of the consensus is YES, lastly admin sends two different message.
+Ones Steward creates the proposal send it to network for the voting.
+If the result of the consensus is YES, lastly Steward sends two different message.
 
 ### 9. Creating commit message
 
 Commit messages are the messages that starts new epochs.
 They include key and tree material that existing members can generate the new state of tree.
 
-After admin gets the YES from consensus, admin creates commit messages 
+After Steward gets the YES from consensus, Steward creates commit messages 
 that inject new entropy for the existing group members.
 
 ### 10. Sending messages
 
-After admin creates then sends two messages:
+After Steward creates then sends two messages:
 
 1. Commit message informs existing group member to update their key
 to align with the new member’s key for the upcoming epoch.
@@ -217,7 +219,7 @@ to align with the new member’s key for the upcoming epoch.
 that matches the key existing members will use in the upcoming epoch.
 
 Although existing users had different group keys in the previous epoch and the new user had none,
-the admin message ensures that both existing and new users converge on the same group key in the next epoch.
+the Steward message ensures that both existing and new users converge on the same group key in the next epoch.
 
 ### 11. Applying welcome message
 
@@ -244,7 +246,7 @@ Instead, the decentralized DS enables the addition of new participants by sendin
 a commit message and a welcome message.
 However, despite this advantage, the protocol does have certain bottlenecks, which are as follows:
 
-- Firstly, the admin must receive the key packages from each member wishing to join the group.
+- Firstly, the Steward must receive the key packages from each member wishing to join the group.
 This process requires sequential message exchanges and involves computationally intensive tasks such as encryption,
 decryption, and digital signature verification.
 Even when multiple users are added to the group simultaneously, the process is essentially sequential.
@@ -256,7 +258,7 @@ and a single welcome message to the new members.
 The following measurements were made as follows:
 
 1. The time required for the entire sequence of receiving a user key package is presented here.
-This includes generating the admin key, creating messages with signatures and encryption,
+This includes generating the Steward key, creating messages with signatures and encryption,
 and processing these messages.
 
 `Share Key Package - 1.8395 ms`
@@ -290,8 +292,8 @@ In this section we present the potential drawbacks and possible countermeasures 
 this is required each user must be online for joining to a group.
     - We can consider to use [Waku sync nodes](https://docs.waku.org/guides/js-waku/store-retrieve-messages/)
     that are nodes has storing ability for a temporary storing of `keyPackage`s.
-- DoS attack to admin: Admin is known in welcome message from periodic group announcement message
-so admin can be targeted for DoS attack.
+- DoS attack to Steward: Admin is known in welcome message from periodic group announcement message
+so Steward can be targeted for DoS attack.
     - As always we consider to use Rate-Limiting Nullifier (RLN) with Waku to protect network from spam.
 - Message loss or delay : Because of P2P and consensus settings, message can be lost or delayed.,
     - We can integrate reliability mechanisms to Waku such as
@@ -310,18 +312,18 @@ can be outlined as shown in the comparison table:
 | Feature | MLS | de-MLS |
 | --- | --- | --- |
 | Message Distribution | Messages are sent from the server to clients | Messages are sent by publishing/subscribing to pub-sub topics |
-| Commit Message Handling | Relies on a server | Relies on a consensus and transparent admin |
+| Commit Message Handling | Relies on a server | Relies on a consensus and transparent Steward |
 | Key Package Management | Key packages are stored and distributed by the server | Key packages are provided by the users themselves |
 
 ## Future Work
 
 In the next iterations, the implementations are planned as following:
 
-- Dual-Consensus Multi-Admin Support: One consensus mechanism selects an admin from all users,
-while a second governs group decisions among the elected admins
+- Dual-Consensus Multi-Admin Support: One consensus mechanism selects an Steward from all users,
+while a second governs group decisions among the elected Stewards
 - Consensus mechanism for handling concurrent changes within the same epoch
 - Key rotation
-- Benchmarking for the multi-admin configuration including the network time
+- Benchmarking for the multi-Steward configuration including the network time
 
 ## References
 
