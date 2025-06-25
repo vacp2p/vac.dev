@@ -1,0 +1,392 @@
+---
+title: 'Scaling libp2p GossipSub for Large Messages: An Evaluation of Performance Improvement Proposals'
+
+
+date: 2025-06-25 12:00:00
+authors: farooq
+published: true
+slug: gsub-perf-imp-comparison
+
+categories: research
+discuss: https://forum.vac.dev/t/gsub-perf-imp-comparison/xxx
+
+
+toc_min_heading_level: 2
+toc_max_heading_level: 5
+---
+
+This post provides a concise overview and performance evaluation of ongoing efforts aimed at improving the GossipSub protocol's performance.
+{/* truncate */}
+
+## Overview
+
+For every subscribed topic, GossipSub nodes maintain a full-message mesh comprising $D$ peers 
+and a metadata-only (gossip) mesh comprising additional $K$ peers. 
+All messages flow through the full-message mesh, and metadata flows through the gossip mesh. 
+
+The metadata contains IHAVE messages, announcing IDs of seen messages. 
+Upon receiving an IHAVE announcement about an unseen message ID, 
+a receiver responds with an IWANT request to retrieve the announced message. 
+IHAVE announcements serve multiple purposes: 
+
+1. Offer additional resilience in situations involving non-conforming peers or network partitions. 
+2. Speed up message propagation by allowing far-off peers to fetch overdue messages. 
+
+Since GossipSub v1.1 [[1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)], 
+replying to IWANT requests is optional, 
+which encourages any peer to make redundant IWANT requests for the same message. 
+While this arrangement works well for small messages, it can be inefficient for bigger ones. 
+This inefficiency arises from an increased number of duplicates 
+and a higher volume of IWANT requests due to longer transmission times for large messages. 
+As a result, we observe a significant rise in bandwidth utilization and message dissemination times across the network. 
+
+IDONTWANT messages in GossipSub v1.2 [[2](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md)] help reduce some duplicates. 
+However, further efforts are necessary to mitigate this problem
+[[3](https://ethresear.ch/t/number-duplicate-messages-in-ethereums-gossipsub-network/19921),
+[4](https://ethresear.ch/t/impact-of-idontwant-in-the-number-of-duplicates/22652),
+[5](https://www.arxiv.org/abs/2505.17337)]. 
+That is why many recent works focus on improving GossipSub's performance when handling large messages 
+[[6](https://arxiv.org/abs/2504.10365),
+[7](https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw),
+[8](https://ethresear.ch/t/fulldas-towards-massive-scalability-with-32mb-blocks-and-beyond/19529),
+[9](https://github.com/libp2p/specs/pull/681)]. 
+
+In this post, we evaluate the push-pull phase transition (PPPT) mechanism 
+[[10](https://ethresear.ch/t/pppt-fighting-the-gossipsub-overhead-with-push-pull-phase-transition/22118/1)],
+the GossipSub v1.4 proposal [[11](https://github.com/libp2p/specs/pull/654),
+[5](https://www.arxiv.org/abs/2505.17337)], 
+and the GossipSub v2.0 proposal [[12](https://github.com/libp2p/specs/pull/653)] 
+for performance against Gossipsub v1.2. 
+For this purpose, we implement minimal proof-of-concept (PoC) versions of these protocols in nim-libp2p
+[[13](https://github.com/vacp2p/nim-libp2p)] 
+and use the shadow simulator to provide performance evaluation results.
+
+We begin by discussing the issues of message dissemination times and duplicate messages in GossipSub. 
+Next, we provide a brief overview of the proposals under review, 
+followed by the experiments and findings from our performance evaluations. 
+
+
+## Message Transfer Time and Duplicates
+
+Assuming uniform link characteristics, message dissemination to full-message mesh concludes in 
+$\tau_D \approx (D \times \tau_{tx}) + \tau_p$ time, where $\tau_{tx} = \frac{S}{R}$, 
+with $S$, $R$, and $\tau_p$ being the message size, data rate, and link latency, respectively. 
+
+This simplifies network-wide dissemination time to $\tau_{N} \approx \tau_D \times h$, 
+with $h$ indicating the number of hops along the longest path. 
+This implies that a tenfold increase in message size results in an eightyfold rise in $D \times \tau_{tx}$ for a mesh with $D = 8$, 
+which accumulates across $h$ hops. 
+This leads to two fundamental problems:
+
+1. A longer contention interval ($\tau_D$) raises the likelihood of simultaneous redundant transmissions, 
+thereby increasing the number of duplicates. 
+Reducing $D$ inadvertently increases $h$.
+
+2. Peers are unaware of ongoing message receptions and may generate redundant IWANT requests 
+for the messages they are already receiving. 
+Most of these requests are entertained by early message receivers, 
+which increases message dissemination time by increasing the workload at peers situated along the optimal path.
+
+Talking about duplicates, a network comprising $N$ peers, 
+each with a degree $D$, has a total of $\frac {N \times D}{2}$ edges (links), 
+as every link connects two peers. 
+Assuming that a message traverses every link exactly once, 
+we get $\frac {N \times D}{2}$ transmissions. 
+
+Only $N-1$ transmissions are necessary for delivering a message to all peers. 
+As a result, we get $\frac {N \times D}{2} -(N-1)$ duplicates in the network. 
+We can simplify average duplicates received by a single peer to $\bar{d}_{min} \approx \frac{D}{2}-1$. 
+Here, $\bar{d}_{min}$ represents the lower bound on average duplicates 
+because we assume that the send and receive operations are mutually exclusive. 
+This assumption requires that message transmission times (and link latencies) 
+are so small that no two peers simultaneously transmit the same message to each other.
+
+However, a large message can noticeably increase the contention interval, 
+which increases the likelihood that many peers will simultaneously transmit the same message to each other. 
+
+Authors in [[14](https://streamr-public.s3.amazonaws.com/streamr-network-scalability-whitepaper-2020-08-20.pdf)] 
+explore the upper bound ($\bar{d}_{max}$) on duplicates. 
+They argue that a node can forward a received message to a maximum of $D-1$ peers 
+while the original publisher sends it to $D$ peers. 
+As a result, we get $N(D-1)+1$ transmissions in the network. 
+Out of these, $N(D-1)+1-(N-1)$ messages are duplicates, 
+which simplifies the upper bound on average duplicates received by each peer to $\bar{d}_{max} \approx D-2$. 
+This rise in average duplicates indicates the impact of increasing message size on the number of duplicates. 
+It is worth mentioning that the impact of IWANT/IDONTWANT messages is not considered in $\bar{d}$ computations above.
+
+
+## Protocols Considered
+
+### [Push-Pull Phase Transition (PPPT)](https://ethresear.ch/t/pppt-fighting-the-gossipsub-overhead-with-push-pull-phase-transition/22118/1)
+
+In PPPT, authors argue that most redundant transmissions occur during the later stages of message propagation. 
+As a message traverses through the network, 
+the peers forwarding the message should gradually reduce the number of mesh members that directly receive (push) 
+the message and send immediate IHAVE announcements to the remaining peers in the mesh. 
+The remaining mesh members can fetch any missing messages using IWANT requests (Pull). 
+The authors also suggest two strategies to estimate the message propagation stage:
+
+1. Include a hop count in the message header to identify the number of hops traversed by that message. 
+When a peer forwards a received message, 
+it performs a pull operation for a subset of mesh members that equals the specified hop count 
+and a push operation for the remaining mesh members.
+
+2. Infer the message propagation stage by looking into 
+the number of received IHAVE announcements and duplicates for that message. 
+Use this information to choose a balance between pull-based and push-based message forwarding.
+
+The authors suggest that instead of simultaneously pushing a message to the selected peers, 
+sequentially initiating transmission to each peer after a short delay 
+enhances the likelihood of timely receiving a higher number of IDONTWANT requests.
+
+
+#### Key Considerations and [PoC Implementation](https://github.com/vacp2p/nim-libp2p/tree/research_gs_pppt)
+
+The use of hop count is a more effective and straightforward method for identifying the message propagation stage 
+than relying on the duplicate count. 
+However, this approach may compromise the publisher's anonymity and may reveal information about its mesh members. 
+Additional due diligence may be needed to address these issues.
+
+In the PoC implementation[[15](https://github.com/vacp2p/nim-libp2p/tree/research_gs_pppt)], 
+we use hop count to determine the message propagation stage. 
+When forwarding a message, every peer selects a subset of mesh members 
+equal to the advertised hop count for pull operation and 
+forwards the message to the remaining mesh members.
+
+
+### [GossipSub v1.4 Proposal](https://github.com/libp2p/specs/pull/654)
+
+GossipSub v1.4 proposal considers longer large-message transfer times ($\tau_D$) as contention intervals and 
+argues that most duplicates occur during these intervals for two fundamental reasons:
+
+1. Peers are unaware of ongoing message receptions and 
+may generate redundant IWANT requests for messages they are already receiving.
+
+2. Peers can send IDONTWANT announcements only after receiving the entire message. 
+However, a large contention interval increases the likelihood that 
+many redundant transmissions will start before IDONTWANT messages are issued.
+
+GossipSub v1.4 proposal eliminates contention interval with help from two new control messages: 
+PREAMBLE and IMRECEIVING. 
+A PREAMBLE precedes every large message transmission. 
+Upon receiving a preamble, a peer learns about the messages it is receiving and performs two actions:
+
+1. Notify mesh members about ongoing message reception using an IMRECEIVING announcement. 
+On receiving an IMRECEIVING announcement from a peer, 
+mesh members defer sending the announced message to that peer.
+
+2. Defer IWANT requests for messages that are currently being received. 
+Peers also limit the outstanding IWANT requests for any message to one.
+
+
+#### Key Considerations and [PoC Implementation](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v1_4)
+
+The use of PREAMBLE/IMRECEIVING addresses the limitation of IDONTWANT messages. 
+For instance, consider a peer $X$ begins receiving a message $m$ at time $t_1$. 
+It can transmit IDONTWANT only after receiving $m$, i.e., at time $t_1+\tau_D$. 
+Therefore, it can not cancel any duplicate receptions of $m$ that start before $t1 + \tau_D + \tau_p$. 
+In contrast, IMRECEIVING announcements for $m$ start at $t_1 + \Delta$, 
+where $\Delta$ denotes PREAMBLE processing time and satisfies $\Delta \ll \tau_D$. 
+As a result, peer $X$ can eliminate all duplicate receptions of $m$ that start after $t_1 + \Delta +\tau_p$, 
+which noticeably reduces duplicates.
+
+The use of PREAMBLE also allows deferring IWANT requests for messages we are already receiving, 
+which can also improve message dissemination time by 
+reducing the workload on peers along the optimal message forwarding path.
+
+It is worth mentioning that a malicious peer can exploit this approach by sending a PREAMBLE and 
+never completing (or deliberately delaying) the promised message transfer. 
+The GossipSub v1.4 proposal defines the sending and processing of PREAMBLE/IMRECEIVING messages as optional. 
+While the proposal introduces an optional safety strategy, 
+it leaves room for implementations to use custom safety strategies.
+
+For the performance evaluations in this post, we utilize the PoC implementation of GossipSub v1.4 
+[[16](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v1_4)]. 
+Additionally, a production-grade implementation is currently under development 
+[[17](https://github.com/vacp2p/nim-libp2p/pull/1448)].
+
+
+### [GossipSub v2.0 Proposal](https://github.com/libp2p/specs/pull/653)
+
+GossipSub v2.0 introduces a hybrid method for message dissemination 
+that combines both push and pull strategies through two new control messages: 
+IANNOUNCE and INEED. 
+
+The balance between push and pull approach is determined by the $D_{announce}$ parameter. 
+On receiving a message, a peer forwards it to $D - D_{announce}$ mesh members and 
+sends IANNOUNCE messages to the remaining mesh peers. 
+IANNOUNCE acts as an IHAVE announcement, signaling the availability of a message. 
+On receiving an IANNOUNCE for an unseen message, 
+a peer can request it using an INEED message. 
+It is important to note that a peer can send only one unfinished INEED request per message. 
+If the message transfer does not complete in the specified message transfer interval, 
+the receiver can issue a new INEED request. 
+
+
+#### Key Considerations and [PoC Implementation](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v2_0)
+
+The $D_announce$ parameter governs the balance between push and pull operations. 
+Setting $D_{announce} = D$ results in a pull-only operation, 
+which can eliminate duplicates at the cost of increased message dissemination time. 
+In contrast, setting $D_{announce}$ to zero reverts to standard GossipSub v1.2 operation. 
+
+It is important to note that malicious peers can exploit this approach 
+by delaying or entirely omitting responses to INEED requests. 
+Similarly, sending INEED requests to suboptimal or overwhelmed peers can further increase message dissemination time. 
+The authors propose a timeout strategy to address these issues.
+
+For the performance evaluations in this post, 
+we utilize the PoC implementation of GossipSub v2.0 
+[[18](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v2_0)] from nim-libp2p. 
+We set $D_{announce} = D-1$ and allow any peer to send a single IWANT request for a message, 
+only if it has not previously sent an INEED request for the same message.
+
+
+## Experiments
+
+We conducted a series of experiments under various configurations to evaluate the performance of 
+the GossipSub v1.4 proposal, the PPPT approach, and the GossipSub v2.0 proposal 
+against the baseline GossipSub v1.2 protocol. 
+To support these evaluations, we extended the nim-libp2p implementation to incorporate the proposed protocols 
+[[16](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v1_4),
+[15](https://github.com/vacp2p/nim-libp2p/tree/research_gs_pppt),
+[18](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v2_0)]  
+and used the Shadow simulator [[19](https://github.com/vacp2p/dst-gossipsub-test-node/pull/6)] 
+to carry out performance evaluations.
+
+For GossipSub v1.4 and PPPT, we also report results from delayed forwarding, 
+where peers introduce a short delay before relaying a message to every mesh member.
+This delay helps reduce the number of redundant transmissions 
+by increasing the likelihood of timely receiving a higher number of IDONTWANT notifications. 
+
+We evaluate performance using network-wide message dissemination time (latency), 
+network-wide bandwidth utilization (bandwidth), 
+and the average number of duplicates received by a peer for every transmitted message. 
+We also report the average number of IWANT requests transmitted by a peer for a single message. 
+
+For each experiment, we transmit multiple messages in the network. 
+We average the network-wide dissemination time for these messages to report latency. 
+Bandwidth refers to the total traffic volume, 
+encompassing both control traffic and actual data transmissions. 
+A peer usually receives multiple copies of any transmitted message. 
+Excluding the first received message, all copies are duplicates. 
+We compute average duplicates received by a peer as $\frac{1}{N M} \sum_{j=1}^{M} \sum_{i=1}^{N} d_{i,j}$ 
+where $N$ and $M$ denote the number of peers and the number of transmitted messages, respectively, 
+and $d_{i,j}$ represents the number of duplicates received by peer $i$ for message $j$. 
+A similar mechanism computes average IWANT requests.
+
+
+Three simulation scenarios are considered: 
+
+- **Scenario 1:** The number of publishers and message size are kept constant while the network size gradually increases.
+
+- **Scenario 2:** The number of publishers and the network size remain constant while the message size gradually increases.
+ 
+- **Scenario 3:** The number of nodes and message size remain constant while the number of publishers gradually increases.
+
+In all experiments, we transmit multiple messages such that 
+every publisher sends exactly one message to the network. 
+After a publisher transmits a message, 
+each subsequent publisher waits for a specified interval (inter-message delay) before sending the next message. 
+
+Rotating publishers ensures that every message traverses a different path, 
+which helps achieve fair performance evaluation. 
+On the other hand, changing inter-message delays allows for creating varying traffic patterns. 
+A shorter inter-message delay implies more messages can be in transit simultaneously, 
+which helps evaluate performance against large message counts. 
+A longer delay ensures every message is fully disseminated before introducing a new message. 
+Similarly, increasing message size stresses the network. 
+As a result, we evaluate performance across a broader range of use cases. 
+
+
+The simulation details are presented in the tables below. 
+The experiments are conducted using the shadow simulator. 
+We uniformly set peer bandwidths and link latencies between 40-200 Mbps and 
+40-130 milliseconds in five variations. 
+
+
+**Table 1:** Simulation Scenarios.
+| **Experiment** | **No. of Nodes** | **No. of Publishers** | **Message Size (KB)** | **Inter-Message Delay (ms)** |
+|:-------------:|:-------------:|:---------:|:-------------:|:---------:|
+| Scenario 1 | 3000, 6000, 9000, 12000 | 7 | 150 | 10000 |
+| Scenario 2 | 1500 | 10 | 200, 600, 1000, 1400, 1800 | 10000 |
+| Scenario 3 | 1500 | 25, 50, 75, 100, 125 | 50 | 50 |
+
+
+**Table 2:** Simulation Parameters.
+| **Parameter** | **Value** | **Parameter** | **Value** |
+|:-------------:|:---------:|:-------------:|:---------:|
+| $D$ | 8 | $D_{low}$ | 6 |
+| $D_{lazy}$ | 6 | $D_{high}$ | 12 |
+| Gossip factor | 0.05 | Muxer | yamux |
+| Heartbeat interval | 1000 ms | Floodpublish | false |
+| Peer Bandwidth | 40-200 Mbps | Link Latency| 40-130ms |
+| $D_{announce}$ GossipSub v2.0| 7 | Forward delay in PPPT/v1.4 with delay| 35 ms |
+
+
+### Results
+
+#### Scenario1: Increasing Network Size
+
+| ![Bandwidth](/img/gsub-imp-comparison/S1_BW.png) | ![Latency](/img/gsub-imp-comparison/S1_Lat.png) | ![Duplicates](/img/gsub-imp-comparison/S1_Dup.png) | ![IWANTs](/img/gsub-imp-comparison/S1_IWANT.png) |
+|:--:|:--:|:--:|:--:|
+| Bandwidth | Latency | Average Duplicates | Average IWANT Requests |
+
+
+#### Scenario2: Increasing Message Size
+
+| ![Bandwidth](/img/gsub-imp-comparison/S2_BW.png) | ![Latency](/img/gsub-imp-comparison/S2_Lat.png) | ![Duplicates](/img/gsub-imp-comparison/S2_Dup.png) | ![IWANTs](/img/gsub-imp-comparison/S2_IWANT.png) |
+|:--:|:--:|:--:|:--:|
+| Bandwidth | Latency | Average Duplicates | Average IWANT Requests |
+
+
+#### Scenario3: Increasing Number of Publishers
+
+| ![Bandwidth](/img/gsub-imp-comparison/S3_BW.png) | ![Latency](/img/gsub-imp-comparison/S3_Lat.png) | ![Duplicates](/img/gsub-imp-comparison/S3_Dup.png) | ![IWANTs](/img/gsub-imp-comparison/S3_IWANT.png) |
+|:--:|:--:|:--:|:--:|
+| Bandwidth | Latency | Average Duplicates | Average IWANT Requests |
+
+
+Please feel free to join the discussion and leave feedback regarding this post in the
+[VAC forum](https://forum.vac.dev/t/gsub-perf-imp-comparison/xxx).
+
+
+## References
+
+[1] [GossipSub v1.1 Specifications](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
+
+[2] [GossipSub v1.2 Specifications](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.2.md)
+
+[3] [Number of Duplicate Messages in Ethereum’s Gossipsub Network](https://ethresear.ch/t/number-duplicate-messages-in-ethereums-gossipsub-network/19921)
+
+[4] [Impact of IDONTWANT in the Number of Duplicates](https://ethresear.ch/t/impact-of-idontwant-in-the-number-of-duplicates/22652)
+
+[5] [PREAMBLE and IMRECEIVING for Improved Large Message Handling](https://www.arxiv.org/abs/2505.17337)
+
+[6] [Staggering and Fragmentation for Improved Large Message Handling](https://arxiv.org/abs/2504.10365)
+
+[7] [GossipSub for Big Messages](https://hackmd.io/X1DoBHtYTtuGqYg0qK4zJw)
+
+[8] [FullDAS: Towards Massive Scalability with 32MB Blocks and Beyond](https://ethresear.ch/t/fulldas-towards-massive-scalability-with-32mb-blocks-and-beyond/19529)
+
+[9] [Choke Extension for GossipSub](https://github.com/libp2p/specs/pull/681)
+
+[10] [PPPT: Fighting the GossipSub Overhead with Push-Pull Phase Transition](https://ethresear.ch/t/pppt-fighting-the-gossipsub-overhead-with-push-pull-phase-transition/22118/1)
+
+[11] [GossipSub v1.4 Specifications Proposal](https://github.com/libp2p/specs/pull/654)
+
+[12] [GossipSub v2.0 Specifications Proposal](https://github.com/libp2p/specs/pull/653)
+
+[13] [Libp2p Implementation in nim](https://github.com/vacp2p/nim-libp2p)
+
+[14] [The Streamr Network: Performance and Scalability](https://streamr-public.s3.amazonaws.com/streamr-network-scalability-whitepaper-2020-08-20.pdf)
+
+[15] [PPPT: PoC Implementation in nim-libp2p](https://github.com/vacp2p/nim-libp2p/tree/research_gs_pppt)
+
+[16] [GossipSub v1.4: PoC Implementation in nim-libp2p](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v1_4)
+
+[17] [GossipSub v1.4: Production Implementation in nim-libp2p](https://github.com/vacp2p/nim-libp2p/pull/1448)
+
+[18] [GossipSub v2.0: PoC Implementation in nim-libp2p](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v2_0)
+
+[19] [nim-libp2p GossipSub Test Node](https://github.com/vacp2p/dst-gossipsub-test-node/pull/6)
