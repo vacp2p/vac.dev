@@ -1,0 +1,145 @@
+---
+title: 'Logos Nim News - July 2025'
+date: 2025-07-04 23:00:00
+authors: [ivansete, gabrielmer]
+published: true
+slug: nim-news-july-2025
+categories: nim
+
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+Welcome to the first edition of **Logos Nim News** — a monthly newsletter covering all things Nim: features, patterns, libraries, projects, and more.
+
+If you have comments or suggestions, feel free to reach out to the authors directly or start a thread in the [Logos Discord server](https://discord.gg/logosnetwork).
+
+
+{/* truncate */}
+
+
+# Nim 2.2  – Better Stability, Smarter Memory, and Smoother Development
+
+The Nim 2.2 release series focuses on improving language stability, fixing long-standing bugs, and optimizing performance—particularly in the ORC memory management system. The latest patch in this series, version 2.2.4, continues to build on these goals.
+
+Here are some of the key highlights from the 2.2 series:
+
+- **More powerful generics and type expressions:** Stabilization of generics, typedesc, and static types. These features now support arbitrary expressions that previously only worked in limited cases, making them more reliable.
+- **Improved tuple unpacking:** Tuple unpacking now supports discarding values using underscores (_) and allows inline type annotations for unpacked elements.
+- **Memory leak fixes:** Issues with memory leaks when using std/nre’s regular expressions or nested exceptions have been resolved.
+- **More efficient async code:** Futures no longer always copy data, resulting in better performance in asynchronous workflows.
+- **String bug fixes:** Several issues involving string and cstring usage have been corrected.
+
+In addition to core language improvements:
+
+- **NimSuggest stability:** The language server has received multiple fixes, improving the experience in IDEs and editors that rely on NimSuggest for autocompletion and error checking.
+- **Better code generation:** Numerous issues related to invalid or broken C and C++ code generation and backend-specific bugs have been addressed, improving Nim’s reliability when targeting other languages.
+
+You can read the full release announcement and changelog [here](https://nim-lang.org/blog/2024/10/02/nim-220-2010.html)
+
+# **Error Handling in Nim: Why Results Beat Exceptions**
+
+Error handling is one of the most critical aspects of writing reliable software, yet it remains a contentious topic in many programming languages. In Nim, developers face a unique challenge: multiple error handling paradigms are supported, leading to confusion about which approach to choose. For robust, maintainable code, our answer at Logos is increasingly clear—favor Result types over exceptions.
+
+### **The Exception Problem**
+
+While exceptions might seem convenient for quick scripts and prototypes, they introduce significant challenges in complex, long-running applications:
+
+- **Silent API Changes**: One of the most dangerous aspects of exception-based error handling is that changes deep within dependencies can break your code without any compile-time warning. When a function suddenly starts throwing a new exception type, your code may fail at runtime under exceptional circumstances—often when you least expect it.
+- **Resource Management Issues**: Exceptions create unpredictable control flow that can lead to resource leaks, security vulnerabilities, and unexpected crashes. When an exception unwinds the stack, resources may not be properly cleaned up.
+- **Refactoring Difficulties**: The compiler provides little assistance when working with exception-based code. Adding a new exception type breaks the ABI but leaves the API unchanged, making it nearly impossible to track down all the places that need updating.
+
+### **The Result Advantage**
+
+The Result type offers a compelling alternative that makes error handling explicit, predictable, and compiler-verified:
+
+```bash
+# Enforce that no exceptions can't be raised in this module
+{.push raises: [].}
+
+import results
+
+proc doSomething(): Result[void, string] =
+# Implementation here
+
+proc getRandomInt(): Result[int, string] =
+# Implementation here
+
+doSomething().isOkOr:
+
+echo "Failed doing something, error: ", & error
+
+randomInt = getRandomInt().valueOr:
+
+echo "Failed getting random int, error: ", & error
+```
+
+Notice that this usage of Result is much more concise and easier to follow than try-except blocks
+
+### **Best Practices for Result-Based Error Handling**
+
+- **Make Errors Explicit**: Use Result when multiple failure paths exist and calling code needs to differentiate between them. This makes error handling visible at the call site and forces developers to consciously handle failure cases.
+- **Handle Errors Locally**: Address errors at each abstraction level rather than letting them bubble up through multiple layers. This prevents spurious abstraction leakage and keeps error handling logic close to where problems occur.
+- **Use Exception Tracking**: Enable exception tracking with {.push raises: [].} at the module level. This helps identify any remaining exception-throwing code and ensures new code follows the Result pattern.
+
+### **When to Break the Rules**
+
+While Result should be your default choice, exceptions still have their place:
+
+- **Assertions and Logic Errors**: Use assertions for violated preconditions or situations where recovery isn't possible or expected.
+- **Legacy Integration**: When interfacing with exception-heavy libraries, you may need to use exceptions at integration boundaries, but convert them to Result types as quickly as possible. To ensure safe exception handling, explicitly declare which exceptions a procedure may raise using the `{.raises: [SpecificException].}` pragma.
+
+Error handling in Nim continues to evolve, but the trend is clear: explicit error handling through Result types provides better safety, maintainability, and debugging experience than exceptions. By making errors part of your function signatures and forcing explicit handling at call sites, you create more robust software that fails gracefully and predictably.
+
+# Debugging in Nim
+
+Nowadays, analyzing the behavior of a Nim program is not as straightforward as debugging a C++ application, for example. 
+
+### GDB
+
+GDB can be used, and step-by-step debugging with GDB and VSCode is possible. However, the interaction is not very smooth. You can set breakpoints in VSCode and press F5 to run the program up to the breakpoint and continue debugging from there. That said, the state of variables is not fully demangled—for example:
+
+![image.png](Nim%20in%20Logos%20July%202025%202038f96fb65c8042bcbbe676ee8f2182/image.png)
+
+For that reason, GDB is not the preferred option in Logos
+
+### Logs - Chronicles
+
+At Logos, we primarily debug Nim applications using log outputs. In particular, we make extensive use of the [nim-chronicles](https://github.com/status-im/nim-chronicles) library.
+
+`nim-chronicles` is a robust logging library that automatically includes the following contextual information in each log entry:
+
+- Calling thread ID
+- Current timestamp
+- Log level (e.g., TRACE, DEBUG, INFO, WARN, ERROR, FATAL)
+- Source file name
+- Line number of the log statement
+
+Additionally, `chronicles` supports attaching custom log messages along with relevant variable values, which proves especially useful for debugging. For instance, in the following example, the log message is `"Configuration. Shards"`, and it includes the value of an additional variable, `shard`.
+
+```jsx
+INF 2025-07-01 09:56:57.705+02:00 Configuration. Shards                      topics="waku conf" tid=28817 file=waku_conf.nim:147 shard=64
+```
+
+There are also useful techniques for displaying more detailed information about specific variables:
+
+- `repr(p)` — Returns a string representation of the variable `p`, providing a more comprehensive view of its contents.
+- `name(typeof(p))` — Extracts the type of the variable `p` as a string. This is particularly helpful when working with pointers or generics.
+
+### Logs - echo
+
+The [echo](https://nim-lang.org/docs/system.html#echo%2Cvarargs%5Btyped%2C%5D) statement in Nim serves as a basic debugging tool, although it is less powerful and flexible compared to `nim-chronicles`.
+
+Besides, [debugEcho](https://www.notion.so/Nim-in-Logos-July-2025-2038f96fb65c8042bcbbe676ee8f2182?pvs=21) is an interesting alternative, which behaves similarly to `echo` but it allows working on routines marked with no side effects.
+
+### Heaptrack
+
+This technique enables precise insight into where memory is being consumed within a Nim application.
+
+It is particularly useful for identifying potential memory leaks and is widely employed in **nwaku** (Nim Waku). For more details, refer to the documentation: [Heaptrack Tutorial](https://github.com/waku-org/nwaku/blob/master/docs/tutorial/heaptrack.md).
+
+# Formatting code in Nim
+
+Maintaining a consistent code format is essential for readability and for facilitating clear diff comparisons during code reviews.
+
+To support this, Logos strongly recommends using [*nph*](https://arnetheduck.github.io/nph/) across all Nim projects.
