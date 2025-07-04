@@ -15,10 +15,7 @@ Welcome to the first edition of **Logos Nim News** — a monthly newsletter cove
 If you have comments or suggestions, feel free to reach out to the authors directly or start a thread in the [Logos Discord server](https://discord.gg/logosnetwork).
 
 
-{/* truncate */}
-
-
-# Nim 2.2  – Better Stability, Smarter Memory, and Smoother Development
+## Nim 2.2  – Better Stability, Smarter Memory, and Smoother Development
 
 The Nim 2.2 release series focuses on improving language stability, fixing long-standing bugs, and optimizing performance—particularly in the ORC memory management system. The latest patch in this series, version 2.2.4, continues to build on these goals.
 
@@ -37,11 +34,11 @@ In addition to core language improvements:
 
 You can read the full release announcement and changelog [here](https://nim-lang.org/blog/2024/10/02/nim-220-2010.html)
 
-# **Error Handling in Nim: Why Results Beat Exceptions**
+## Error Handling in Nim: Why Results Beat Exceptions
 
 Error handling is one of the most critical aspects of writing reliable software, yet it remains a contentious topic in many programming languages. In Nim, developers face a unique challenge: multiple error handling paradigms are supported, leading to confusion about which approach to choose. For robust, maintainable code, our answer at Logos is increasingly clear—favor Result types over exceptions.
 
-### **The Exception Problem**
+#### The Exception Problem
 
 While exceptions might seem convenient for quick scripts and prototypes, they introduce significant challenges in complex, long-running applications:
 
@@ -49,7 +46,7 @@ While exceptions might seem convenient for quick scripts and prototypes, they in
 - **Resource Management Issues**: Exceptions create unpredictable control flow that can lead to resource leaks, security vulnerabilities, and unexpected crashes. When an exception unwinds the stack, resources may not be properly cleaned up.
 - **Refactoring Difficulties**: The compiler provides little assistance when working with exception-based code. Adding a new exception type breaks the ABI but leaves the API unchanged, making it nearly impossible to track down all the places that need updating.
 
-### **The Result Advantage**
+#### The Result Advantage
 
 The Result type offers a compelling alternative that makes error handling explicit, predictable, and compiler-verified:
 
@@ -76,13 +73,13 @@ echo "Failed getting random int, error: ", & error
 
 Notice that this usage of Result is much more concise and easier to follow than try-except blocks
 
-### **Best Practices for Result-Based Error Handling**
+#### Best Practices for Result-Based Error Handling
 
 - **Make Errors Explicit**: Use Result when multiple failure paths exist and calling code needs to differentiate between them. This makes error handling visible at the call site and forces developers to consciously handle failure cases.
 - **Handle Errors Locally**: Address errors at each abstraction level rather than letting them bubble up through multiple layers. This prevents spurious abstraction leakage and keeps error handling logic close to where problems occur.
-- **Use Exception Tracking**: Enable exception tracking with {.push raises: [].} at the module level. This helps identify any remaining exception-throwing code and ensures new code follows the Result pattern.
+- **Use Exception Tracking**: Enable exception tracking with `{.push raises: [].}` at the module level. This helps identify any remaining exception-throwing code and ensures new code follows the Result pattern.
 
-### **When to Break the Rules**
+#### When to Break the Rules
 
 While Result should be your default choice, exceptions still have their place:
 
@@ -91,19 +88,19 @@ While Result should be your default choice, exceptions still have their place:
 
 Error handling in Nim continues to evolve, but the trend is clear: explicit error handling through Result types provides better safety, maintainability, and debugging experience than exceptions. By making errors part of your function signatures and forcing explicit handling at call sites, you create more robust software that fails gracefully and predictably.
 
-# Debugging in Nim
+## Debugging in Nim
 
 Nowadays, analyzing the behavior of a Nim program is not as straightforward as debugging a C++ application, for example. 
 
-### GDB
+#### GDB
 
 GDB can be used, and step-by-step debugging with GDB and VSCode is possible. However, the interaction is not very smooth. You can set breakpoints in VSCode and press F5 to run the program up to the breakpoint and continue debugging from there. That said, the state of variables is not fully demangled—for example:
 
-![image.png](Nim%20in%20Logos%20July%202025%202038f96fb65c8042bcbbe676ee8f2182/image.png)
+![img](/img/nim-gdb.png)
 
 For that reason, GDB is not the preferred option in Logos
 
-### Logs - Chronicles
+#### Logs - Chronicles
 
 At Logos, we primarily debug Nim applications using log outputs. In particular, we make extensive use of the [nim-chronicles](https://github.com/status-im/nim-chronicles) library.
 
@@ -126,19 +123,19 @@ There are also useful techniques for displaying more detailed information about 
 - `repr(p)` — Returns a string representation of the variable `p`, providing a more comprehensive view of its contents.
 - `name(typeof(p))` — Extracts the type of the variable `p` as a string. This is particularly helpful when working with pointers or generics.
 
-### Logs - echo
+#### Logs - echo
 
 The [echo](https://nim-lang.org/docs/system.html#echo%2Cvarargs%5Btyped%2C%5D) statement in Nim serves as a basic debugging tool, although it is less powerful and flexible compared to `nim-chronicles`.
 
 Besides, [debugEcho](https://www.notion.so/Nim-in-Logos-July-2025-2038f96fb65c8042bcbbe676ee8f2182?pvs=21) is an interesting alternative, which behaves similarly to `echo` but it allows working on routines marked with no side effects.
 
-### Heaptrack
+#### Heaptrack
 
 This technique enables precise insight into where memory is being consumed within a Nim application.
 
 It is particularly useful for identifying potential memory leaks and is widely employed in **nwaku** (Nim Waku). For more details, refer to the documentation: [Heaptrack Tutorial](https://github.com/waku-org/nwaku/blob/master/docs/tutorial/heaptrack.md).
 
-# Formatting code in Nim
+## Formatting code in Nim
 
 Maintaining a consistent code format is essential for readability and for facilitating clear diff comparisons during code reviews.
 
