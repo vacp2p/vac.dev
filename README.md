@@ -28,7 +28,7 @@ Information about deployed build can be also found in `/build.json` available on
 
 1. Clone this repository
 ```bash
-$ git clone https://github.com/acid-info/logos-blog-template.git
+$ git clone git@github.com:vacp2p/vac.dev.git
 ```
 
 2. Install the dependencies:
