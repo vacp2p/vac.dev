@@ -11,7 +11,7 @@ toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
 
-[Zerokit](https://github.com/vacp2p/zerokit/) is a toolkit
+[<u>Zerokit</u>](https://github.com/vacp2p/zerokit/) is a toolkit
 providing powerful zero-knowledge utilities, including a
 means to answer the question "How do you prevent spam when
 every message is anonymous?". Its use of the Merkle hash
@@ -27,10 +27,10 @@ to face the world.
 
 ## Background
 
-Our friends over at [Waku](https://free.technology/waku) are
+Our friends over at [<u>Waku</u>](https://free.technology/waku) are
 particularly enthusiastic about anonymous spam prevention
 technologies. They have been using the Rate Limiting
-Nullifier ([RLN](https://crates.io/crates/rln)) tooling that
+Nullifier ([<u>RLN</u>](https://crates.io/crates/rln)) tooling that
 Zerokit provides to enforce a message-rate policy among
 users—a crucial feature unless we want a community bombarded
 with "totally legit, not scams" messages on repeat. However,
@@ -55,7 +55,7 @@ water, unless we can meet the challenge put to us.
 The plan of attack that the team put together was twofold:
 get rid of redundant operations and data taking up precious
 resources, and make the remaining operations go
-[*Blazingly Fast™*.](https://old.reddit.com/r/rust/comments/1avf1d8/blazingly_fast_memory_vulnerabilities_written_in/)
+[<u>*Blazingly Fast™*.</u>](https://old.reddit.com/r/rust/comments/1avf1d8/blazingly_fast_memory_vulnerabilities_written_in/)
 
 Introducing the the star of the show for part 1: The main
 point of having this tree is to generate proofs so that
@@ -138,7 +138,7 @@ diligently put relevant hypothesis to the test. The advocate
 must see that the reports made reach out to where it makes
 the most impact, the list goes on. Much of this is out of
 scope for this article, and so I will treat you with
-[a link](https://www.youtube.com/watch?v=qUN4Tln608Q&list=PLtoQeavghzr3nlXyJEXaTLU9Ca0DXWMnt).
+[<u>a link</u>](https://www.youtube.com/watch?v=qUN4Tln608Q&list=PLtoQeavghzr3nlXyJEXaTLU9Ca0DXWMnt).
 Here’s your chance to see a hardcore OS engineer at the top
 of their chosen field speak on the subject of their passion.
 
@@ -177,7 +177,7 @@ that effectively "pair programs with you" to help avoid
 common pitfalls, includeing those of the performance
 veriety.
 
-The [Criterion](https://crates.io/crates/criterion) crate is
+The [<u>Criterion</u>](https://crates.io/crates/criterion) crate is
 considered the go-to library for micro-benchmarking within
 the Rust ecosystem, and is generally regarded as an
 invaluable tool for obtaining high-quality telemetry.
@@ -243,19 +243,19 @@ allowed it all to happen, and those working quietly in the
 background providing the leadership, resources, and
 coordination needed to bring this all together. Two VAC/ACZ
 engineers in particular call for specific mention:
-[Ekaterina](https://github.com/seemenkina) for her role in
+[<u>Ekaterina</u>](https://github.com/seemenkina) for her role in
 taking lead in the R&D of the Zerokit ecosystem, and
-[Sylvain](https://github.com/sydhds) for his efforts in
+[<u>Sylvain</u>](https://github.com/sydhds) for his efforts in
 squeezing out some impressive optimizations.
-[Vinh](https://github.com/vinhtc27) for unleashing the power of multiple threads, not
+[<u>Vinh</u>](https://github.com/vinhtc27) for unleashing the power of multiple threads, not
 only for native, but for when running in the browser as well.
 
 Perhaps you want to get involved! Maybe you have some ideas
 about what the community needs for standard benchmarks.
 Would you like to see another implementation added to the
 thunderdome?
-[Raise an issue](https://github.com/vacp2p/zerokit/issues/new),
-or join us on [our forum](https://forum.vac.dev/). We look
+[<u>Raise an issue</u>](https://github.com/vacp2p/zerokit/issues/new),
+or join us on [<u>our forum</u>](https://forum.vac.dev/). We look
 forward to seeing your voice added.
 
 This is just one story, coming out of one relatively small
