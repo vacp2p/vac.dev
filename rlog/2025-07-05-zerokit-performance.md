@@ -1,7 +1,7 @@
 ---
 title: 'Zerokit optimizations: A performance journey'
 date: 2025-07-05 18:30:00
-authors: BenPH
+authors: benph
 published: false
 slug: 2025-zerokit-perf
 categories: research
