@@ -91,16 +91,33 @@ mach-ludicrous.
 
 Fortunately, the core of our already existing implementation
 was sane and well put together. Double-lucky for us, the
-talents of newly minted VAC/ACZ team member Sylvain were
-readily available. With a solid background in the Rust
-programming language, and having graduated from the most
-challenging parts of its infamous learning curve, Sylvain
-was able to zero in on some subtle performance pathologies.
+talents of newly minted VAC/ACZ team members Sylvain and Vinh were
+readily available. Sylvain, with a solid background in the Rust
+programming language, having already graduated from the most
+challenging parts of its infamous learning curve. He quickly
+got to work zeroing in on some subtle performance pathologies.
 Something as simple as using a mutable iterator to change
 values directly. Clever use of references to avoid copying
 data, and other memory optimization techniques that can be
 hidden to those that cannot “see the matrix” when working in
 Rust lead to very promising bench-marking results.
+
+Vinh, having recently graduated from his CS studies, was presented
+with the challenge of parrelising computations. For those not
+familiar with Rust, this might seem unreasonable, but thanks
+to the `rayon` crate, and Rusts promise of "fearless concurrency"
+afforded by its type and ownership system, this kind of refactor
+becomes surprisingly easy, even for a talented individual at
+the start of their career. Of particular note: These parallelisations
+have been made available to the browser. Browser threads are
+relatively now, and by diving into this bleeding-edge technology,
+and making use of libraries that are still in early development
+stages, _Blazingly Fast™_ is now available within the browser.
+With all that in the bag, all these performance gains are
+gift-wrapped in the use of browser-native WASM runtimes.
+
+Well done, everyone!
+
 
 ## The importance of benchmarks
 
@@ -226,10 +243,12 @@ allowed it all to happen, and those working quietly in the
 background providing the leadership, resources, and
 coordination needed to bring this all together. Two VAC/ACZ
 engineers in particular call for specific mention:
-[Ekatrina](https://github.com/seemenkina) for her role in
+[Ekaterina](https://github.com/seemenkina) for her role in
 taking lead in the R&D of the Zerokit ecosystem, and
 [Sylvain](https://github.com/sydhds) for his efforts in
 squeezing out some impressive optimizations.
+[Vinh](https://github.com/vinhtc27) for unleashing the power of multiple threads, not
+only for native, but for when running in the browser as well.
 
 Perhaps you want to get involved! Maybe you have some ideas
 about what the community needs for standard benchmarks.
