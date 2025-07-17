@@ -4,10 +4,246 @@
         <title>Vac Research Blog</title>
         <link>https://vac.dev/rlog</link>
         <description>Vac Research Blog</description>
-        <lastBuildDate>Fri, 28 Feb 2025 23:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 05 Jul 2025 18:30:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[Zerokit optimizations: A performance journey]]></title>
+            <link>https://vac.dev/rlog/2025-zerokit-perf</link>
+            <guid>https://vac.dev/rlog/2025-zerokit-perf</guid>
+            <pubDate>Sat, 05 Jul 2025 18:30:00 GMT</pubDate>
+            <description><![CDATA[Zerokit is a toolkit]]></description>
+            <content:encoded><![CDATA[<p><a href="https://github.com/vacp2p/zerokit/" target="_blank" rel="noopener noreferrer"><u>Zerokit</u></a> is a toolkit
+providing powerful zero-knowledge utilities, including a
+means to answer the question "How do you prevent spam when
+every message is anonymous?". Its use of the Merkle hash
+tree, combined Poseidon hasher are keys to the answer we
+seek here, and with other questions that ask the improbable.
+These technologies, however, can take a heavy toll on
+resources if not used correctly. What follows is a window
+into the efforts made to squeeze out optimizations, and
+culling of redundant resource use. A story of cripplingly
+slow performance meets engineering talent, we arrive at a
+place where Zerokit comes through, fast and efficient, ready
+to face the world.</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="background">Background<a href="https://vac.dev/rlog/2025-zerokit-perf#background" class="hash-link" aria-label="Direct link to Background" title="Direct link to Background">​</a></h2>
+<p>Our friends over at <a href="https://free.technology/waku" target="_blank" rel="noopener noreferrer"><u>Waku</u></a> are
+particularly enthusiastic about anonymous spam prevention
+technologies. They have been using the Rate Limiting
+Nullifier (<a href="https://crates.io/crates/rln" target="_blank" rel="noopener noreferrer"><u>RLN</u></a>) tooling that
+Zerokit provides to enforce a message-rate policy among
+users—a crucial feature unless we want a community bombarded
+with "totally legit, not scams" messages on repeat. However,
+as is often the case with new technology, some problematic
+delays began to surface. Node recalculations, a common
+operation, were taking tens of seconds at the scales being
+tested and deployed—even exceeding 40 seconds at times.
+These delays accumulate, leading to total delays on the
+order of three hours under certain conditions.</p>
+<p>Naturally, we couldn't just let this sit. While we've
+touched on the issue of spam prevention, it's important to
+recognize that this technology is foundational that
+challenges conventional wisdom on how things must be done.
+Does the idea of "smart contracts without gas" catch your
+attention? Don't hold your breath just yet: the really
+interesting applications of this tech will be dead in the
+water, unless we can meet the challenge put to us.</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="the-challenge">The Challenge<a href="https://vac.dev/rlog/2025-zerokit-perf#the-challenge" class="hash-link" aria-label="Direct link to The Challenge" title="Direct link to The Challenge">​</a></h2>
+<p>The plan of attack that the team put together was twofold:
+get rid of redundant operations and data taking up precious
+resources, and make the remaining operations go
+<a href="https://old.reddit.com/r/rust/comments/1avf1d8/blazingly_fast_memory_vulnerabilities_written_in/" target="_blank" rel="noopener noreferrer"><u><em>Blazingly Fast™</em>.</u></a></p>
+<p>Introducing the the star of the show for part 1: The main
+point of having this tree is to generate proofs so that
+peers can verify the claims being made. That doesn’t require
+the whole Merkle tree, just a single path, from leaf to
+root. The engineering work took us in a direction where
+these paths were the primary context in which ZK proofs
+operated, relegating the tree itself to an off-network
+reference. This reduced the burden imposed on the network
+significantly. Updating the data on the tree has similarly
+reduced, with the exception being that the siblings of each
+node were retained. This is called the <strong>Stateless</strong>
+approach.</p>
+<p>Well, stateless in the context of proof generation and
+verification. This is the critical context when it comes to
+performance, and the stateless approach does a great job,
+but these proofs have to come from <em>somewhere</em>. Each
+participant still needs to maintain the Merkle tree in their
+local environment. Without this tree, one cannot generate
+proofs or verify the proofs provided to them. Fortunately,
+one does not need to track the entire tree, but can be
+limited to a subset of the tree needed. With millions of
+participants on-chain, this can make the difference needed
+to make Zerokit empowered technologies accessible to those
+running raspberry Pis. Combine this with the fact that the
+heavy lifting operations of proof gen/verification being
+modular and separate, each participant can optimise to run
+things according to the strengths and requirements of their
+native hardware, easing the way to allow each participants
+to run their tree implementation at the speed of
+mach-ludicrous.</p>
+<p>Fortunately, the core of our already existing implementation
+was sane and well put together. Double-lucky for us, the
+talents of newly minted VAC/ACZ team members Sylvain and Vinh were
+readily available. Sylvain, with a solid background in the Rust
+programming language, having already graduated from the most
+challenging parts of its infamous learning curve. He quickly
+got to work zeroing in on some subtle performance pathologies.
+Something as simple as using a mutable iterator to change
+values directly. Clever use of references to avoid copying
+data, and other memory optimization techniques that can be
+hidden to those that cannot “see the matrix” when working in
+Rust lead to very promising bench-marking results.</p>
+<p>Vinh, having recently graduated from his CS studies, was presented
+with the challenge of parrelising computations. For those not
+familiar with Rust, this might seem unreasonable, but thanks
+to the <code>rayon</code> crate, and Rusts promise of "fearless concurrency"
+afforded by its type and ownership system, this kind of refactor
+becomes surprisingly easy, even for a talented individual at
+the start of their career. Of particular note: These parallelisations
+have been made available to the browser. Browser threads are
+relatively now, and by diving into this bleeding-edge technology,
+and making use of libraries that are still in early development
+stages, <em>Blazingly Fast™</em> is now available within the browser.
+With all that in the bag, all these performance gains are
+gift-wrapped in the use of browser-native WASM runtimes.</p>
+<p>Well done, everyone!</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="the-importance-of-benchmarks">The importance of benchmarks<a href="https://vac.dev/rlog/2025-zerokit-perf#the-importance-of-benchmarks" class="hash-link" aria-label="Direct link to The importance of benchmarks" title="Direct link to The importance of benchmarks">​</a></h2>
+<p>No performance project is complete without high quality
+benchmark data. Writing a quick benchmark for tracking
+improvements through development is one thing, but having a
+system of telemetry that allows you to credibly assert
+claims of superior performance is what completes the
+project. With such credible claims in hand, these efforts
+can bring about significant impact on the field at large.
+The key word being <strong>credible</strong>. Credibility cannot depend
+on “trust me bro” (obviously). The truth of these claims
+must come out of the directed efforts of a multitude of
+thought-disciplines. The engineer must have a solid model to
+understand the nature of the system. The statistician sets
+the quality standards of the data. The Scientist must
+diligently put relevant hypothesis to the test. The advocate
+must see that the reports made reach out to where it makes
+the most impact, the list goes on. Much of this is out of
+scope for this article, and so I will treat you with
+<a href="https://www.youtube.com/watch?v=qUN4Tln608Q&amp;list=PLtoQeavghzr3nlXyJEXaTLU9Ca0DXWMnt" target="_blank" rel="noopener noreferrer"><u>a link</u></a>.
+Here’s your chance to see a hardcore OS engineer at the top
+of their chosen field speak on the subject of their passion.</p>
+<p>All this is to say we are not the only team implementing
+Merkle tree tech, which also includes the Poseidon hash
+function it needs. In order to be a premier research
+destination, key aspect of why VAC exists, the fruits of our
+labor is just the beginning. We must prove the merit of our
+efforts through comparative benchmarks that satisfies the
+skeptics and decision makers.</p>
+<p>Comparative benchmarks are among the most high-stakes
+element of performance critical projects. Get it right, and
+quality research output can become industry standard
+technology. Get it wrong, and be ready to lose the trust the
+field has in you as your precious R&amp;D fades into obscurity.</p>
+<p>For the time being, our comparative benchmarks have been
+used internally to inform decision-makers. As benchmarks
+become standardised, independently verified and executed,
+this initial effort may be the first of many steps to a
+community-wide ecosystem. A thunderdome of benchmarks,
+leaving us with a single champion that cannot be denied, but
+which technology will claim this mantle? May the bits be
+<em>ever</em> in your favor...</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="benchmarking-with-rusts-criterion-crate">Benchmarking with Rusts <code>criterion</code> Crate<a href="https://vac.dev/rlog/2025-zerokit-perf#benchmarking-with-rusts-criterion-crate" class="hash-link" aria-label="Direct link to benchmarking-with-rusts-criterion-crate" title="Direct link to benchmarking-with-rusts-criterion-crate">​</a></h2>
+<p>Rust, much like Nim, offers unadulterated, fine-grained, and
+direct control over performance, but with Rust, this control
+is even more immediate. With its sophisticated ownership
+model, powerful type system, and comprehensive tooling, Rust
+has earned an unrivaled reputation for enabling "fearless
+concurrency," ease of refactoring, and providing tooling
+that effectively "pair programs with you" to help avoid
+common pitfalls, includeing those of the performance
+veriety.</p>
+<p>The <a href="https://crates.io/crates/criterion" target="_blank" rel="noopener noreferrer"><u>Criterion</u></a> crate is
+considered the go-to library for micro-benchmarking within
+the Rust ecosystem, and is generally regarded as an
+invaluable tool for obtaining high-quality telemetry.
+Through its ergonomic idioms and well-thought-out API,
+writing high-quality benchmarks becomes straightforward once
+you become familiar with its features. Criterion helps avoid
+common traps such as inappropriate compiler optimizations,
+improper performance sampling, and failing to prune
+telemetry overhead. As is typical for the Rust ecosystem,
+the documentation is thorough, leaving little to be desired,
+and the examples are extensive, making the initial learning
+process a pleasant experience.</p>
+<p>Most importantly, it automatically generates tables and
+graphs from this data, making the crucial task of analysis
+straightforward and accessible. At this point, we are ready
+to appreciate the results of our efforts.</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="promising-results">Promising results<a href="https://vac.dev/rlog/2025-zerokit-perf#promising-results" class="hash-link" aria-label="Direct link to Promising results" title="Direct link to Promising results">​</a></h2>
+<p>When it comes to Merkle trees, we have two elements to
+consider: The tree itself, and the hashing function that is
+plugged into it. In the benchmarks we put together for the
+benefit of internal processes, we put our implementation up
+against a corresponding FOSS implementation. Scenarios were
+developed to isolate key performance telemetry, obtain a
+statistically usable sampling, with the resulting data
+rendered into a human readable form that can be read with a
+reasonable degree of confidence: enjoy! The brief summary:
+It appears that our in house implementation consistently
+outperforms others, and we’ve decided to continue committing
+to the R&amp;D of our in-house implementations. Congratulations
+to the Zerokit team for this accomplishment.</p>
+<p>Despite the promising results, these “micro-benchmarks” form
+just some of the many pieces of the whole system performance
+when it comes to product needs. How the system performs as a
+whole is all that matters. This is a promising on it’s own,
+but watching the performance benefits being realized in the
+wild is the true goal.</p>
+<p>Which brings us back to what started all this: Waku came to
+us with concerns about performance issues within Zerokit
+limiting the scope and scale in which it can be used. The
+engineering talent brought to bear on this issue has
+successfully achieved the performance goals needed, and the
+results of these effort have demonstrated there is merit in
+continuing our commitment to this project.</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="conclusion">Conclusion<a href="https://vac.dev/rlog/2025-zerokit-perf#conclusion" class="hash-link" aria-label="Direct link to Conclusion" title="Direct link to Conclusion">​</a></h2>
+<p>We’ve covered a story that starts with crippling performance
+bottlenecks in Waku, and ends on this high-note: The
+problematic performance scaling issues are no more, and in
+the process of resolving this critical pain-point, we have
+established internal benchmarks that allow us to confidently
+state that what we are doing, we are doing well. These
+accomplishments come down to a solid team effort. The open
+communication coming in from Waku, the talented engineers
+working together to bring their skills and contributions to
+bear, the community developed tools and prior works that
+allowed it all to happen, and those working quietly in the
+background providing the leadership, resources, and
+coordination needed to bring this all together. Two VAC/ACZ
+engineers in particular call for specific mention:
+<a href="https://github.com/seemenkina" target="_blank" rel="noopener noreferrer"><u>Ekaterina</u></a> for her role in
+taking lead in the R&amp;D of the Zerokit ecosystem, and
+<a href="https://github.com/sydhds" target="_blank" rel="noopener noreferrer"><u>Sylvain</u></a> for his efforts in
+squeezing out some impressive optimizations.
+<a href="https://github.com/vinhtc27" target="_blank" rel="noopener noreferrer"><u>Vinh</u></a> for unleashing the power of multiple threads, not
+only for native, but for when running in the browser as well.</p>
+<p>Perhaps you want to get involved! Maybe you have some ideas
+about what the community needs for standard benchmarks.
+Would you like to see another implementation added to the
+thunderdome?
+<a href="https://github.com/vacp2p/zerokit/issues/new" target="_blank" rel="noopener noreferrer"><u>Raise an issue</u></a>,
+or join us on <a href="https://forum.vac.dev/" target="_blank" rel="noopener noreferrer"><u>our forum</u></a>. We look
+forward to seeing your voice added.</p>
+<p>This is just one story, coming out of one relatively small
+project from VAC research. The two driving directives of the
+team is to be a conduit of expertise within IFT, and to be a
+premier research destination within the domains we work in.
+You might be independent of IFT with an interest in what we
+do, an IFT core contributor, or anything in between: our
+services are at your disposal. Join us on discord to start
+the conversation, email one of our team members, or maybe
+you might hear a knock on your door, should something in
+your field of work catch our interest.</p>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[The MDSECheck method: choosing secure square MDS matrices for P-SP-networks]]></title>
             <link>https://vac.dev/rlog/mdsecheck-method</link>
@@ -5501,288 +5737,6 @@ discussions on our <a href="https://vac.dev/rlog/forum.vac.dev/">forum</a> or <a
 Discord. We are also <a href="https://jobs.status.im/" target="_blank" rel="noopener noreferrer">hiring</a>, and we have started
 expanding into other privacy infrastructure tech like private and provable
 computation with ZK-WASM.</p>]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[Waku Privacy and Anonymity Analysis Part I: Definitions and Waku Relay]]></title>
-            <link>https://vac.dev/rlog/wakuv2-relay-anon</link>
-            <guid>https://vac.dev/rlog/wakuv2-relay-anon</guid>
-            <pubDate>Fri, 22 Jul 2022 10:00:00 GMT</pubDate>
-            <description><![CDATA[Introducing a basic threat model and privacy/anonymity analysis for the Waku v2 relay protocol.]]></description>
-            <content:encoded><![CDATA[<p>Introducing a basic threat model and privacy/anonymity analysis for the Waku v2 relay protocol.</p>
-<!-- -->
-<p><a href="https://rfc.vac.dev/waku/standards/core/10/waku2" target="_blank" rel="noopener noreferrer">Waku v2</a> enables secure, privacy preserving communication using a set of modular P2P protocols.
-Waku v2 also aims at protecting the user's anonymity.
-This post is the first in a series about Waku v2 security, privacy, and anonymity.
-The goal is to eventually have a full privacy and anonymity analysis for each of the Waku v2 protocols, as well as covering the interactions of various Waku v2 protocols.
-This provides transparency with respect to Waku's current privacy and anonymity guarantees, and also identifies weak points that we have to address.</p>
-<p>In this post, we first give an informal description of security, privacy and anonymity in the context of Waku v2.
-For each definition, we summarize Waku's current guarantees regarding the respective property.
-We also provide attacker models, an attack-based threat model, and a first anonymity analysis of <a href="https://rfc.vac.dev/waku/standards/core/11/relay" target="_blank" rel="noopener noreferrer">Waku v2 relay</a> within the respective models.</p>
-<p>Waku comprises many protocols that can be combined in a modular way.
-For our privacy and anonymity analysis, we start with the relay protocol because it is at the core of Waku v2 enabling Waku's publish subscribe approach to P2P messaging.
-In its current form, Waku relay is a minor extension of <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md" target="_blank" rel="noopener noreferrer">libp2p GossipSub</a>.</p>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Figure 1: The Waku v2 relay mesh is based on the GossipSub mesh" src="https://vac.dev/assets/images/libp2p_gossipsub_types_of_peering-d0772153a5d11dea7b24c0bdc307a93d.png" width="800" height="305" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="informal-definitions-security-privacy-and-anonymity">Informal Definitions: Security, Privacy, and Anonymity<a href="https://vac.dev/rlog/wakuv2-relay-anon#informal-definitions-security-privacy-and-anonymity" class="hash-link" aria-label="Direct link to Informal Definitions: Security, Privacy, and Anonymity" title="Direct link to Informal Definitions: Security, Privacy, and Anonymity">​</a></h2>
-<p>The concepts of security, privacy, and anonymity are linked and have quite a bit of overlap.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="security">Security<a href="https://vac.dev/rlog/wakuv2-relay-anon#security" class="hash-link" aria-label="Direct link to Security" title="Direct link to Security">​</a></h3>
-<p>Of the three, <a href="https://en.wikipedia.org/wiki/Information_security" target="_blank" rel="noopener noreferrer">Security</a> has the clearest agreed upon definition,
-at least regarding its key concepts: <em>confidentiality</em>, <em>integrity</em>, and <em>availability</em>.</p>
-<ul>
-<li>confidentiality: data is not disclosed to unauthorized entities.</li>
-<li>integrity: data is not modified by unauthorized entities.</li>
-<li>availability: data is available, i.e. accessible by authorized entities.</li>
-</ul>
-<p>While these are the key concepts, the definition of information security has been extended over time including further concepts,
-e.g. <a href="https://en.wikipedia.org/wiki/Authentication" target="_blank" rel="noopener noreferrer">authentication</a> and <a href="https://en.wikipedia.org/wiki/Non-repudiation" target="_blank" rel="noopener noreferrer">non-repudiation</a>.
-We might cover these in future posts.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="privacy">Privacy<a href="https://vac.dev/rlog/wakuv2-relay-anon#privacy" class="hash-link" aria-label="Direct link to Privacy" title="Direct link to Privacy">​</a></h3>
-<p>Privacy allows users to choose which data and information</p>
-<ul>
-<li>they want to share</li>
-<li>and with whom they want to share it.</li>
-</ul>
-<p>This includes data and information that is associated with and/or generated by users.
-Protected data also comprises metadata that might be generated without users being aware of it.
-This means, no further information about the sender or the message is leaked.
-Metadata that is protected as part of the privacy-preserving property does not cover protecting the identities of sender and receiver.
-Identities are protected by the <a href="https://vac.dev/rlog/wakuv2-relay-anon#anonymity">anonymity property</a>.</p>
-<p>Often privacy is realized by the confidentiality property of security.
-This neither makes privacy and security the same, nor the one a sub category of the other.
-While security is abstract itself (its properties can be realized in various ways), privacy lives on a more abstract level using security properties.
-Privacy typically does not use integrity and availability.
-An adversary who has no access to the private data, because the message has been encrypted, could still alter the message.</p>
-<p>Waku offers confidentiality via secure channels set up with the help of the <a href="https://noiseprotocol.org/" target="_blank" rel="noopener noreferrer">Noise Protocol Framework</a>.
-Using these secure channels, message content is only disclosed to the intended receivers.
-They also provide good metadata protection properties.
-However, we do not have a metadata protection analysis as of yet,
-which is part of our privacy/anonymity roadmap.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="anonymity">Anonymity<a href="https://vac.dev/rlog/wakuv2-relay-anon#anonymity" class="hash-link" aria-label="Direct link to Anonymity" title="Direct link to Anonymity">​</a></h3>
-<p>Privacy and anonymity are closely linked.
-Both the identity of a user and data that allows inferring a user's identity should be part of the privacy policy.
-For the purpose of analysis, we want to have a clearer separation between these concepts.</p>
-<p>We define anonymity as <em>unlinkablity of users' identities and their shared data and/or actions</em>.</p>
-<p>We subdivide anonymity into <em>receiver anonymity</em> and <em>sender anonymity</em>.</p>
-<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="receiver-anonymity">Receiver Anonymity<a href="https://vac.dev/rlog/wakuv2-relay-anon#receiver-anonymity" class="hash-link" aria-label="Direct link to Receiver Anonymity" title="Direct link to Receiver Anonymity">​</a></h4>
-<p>We define receiver anonymity as <em>unlinkability of users' identities and the data they receive and/or related actions</em>.
-The data transmitted via Waku relay must be a <a href="https://rfc.vac.dev/waku/standards/core/14/message" target="_blank" rel="noopener noreferrer">Waku message</a>, which contains a content topic field.
-Because each message is associated with a content topic, and each receiver is interested in messages with specific content topics,
-receiver anonymity in the context of Waku corresponds to <em>subscriber-topic unlinkability</em>.
-An example for the "action" part of our receiver anonymity definition is subscribing to a specific topic.</p>
-<p>The Waku message's content topic is not related to the libp2p pubsub topic.
-For now, Waku uses a single libp2p pubsub topic, which means messages are propagated via a single mesh of peers.
-With this, the receiver discloses its participation in Waku on the gossipsub layer.
-We will leave the analysis of libp2p gossipsub to a future article within this series, and only provide a few hints and pointers here.</p>
-<p>Waku offers k-anonymity regarding content topic interest in the global adversary model.
-<a href="https://en.wikipedia.org/wiki/K-anonymity" target="_blank" rel="noopener noreferrer">K-anonymity</a> in the context of Waku means an attacker can link receivers to content topics with a maximum certainty of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mi>k</mi></mrow><annotation encoding="application/x-tex">1/k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em"></span><span class="mord">1/</span><span class="mord mathnormal" style="margin-right:0.03148em">k</span></span></span></span>.
-The larger <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em"></span><span class="mord mathnormal" style="margin-right:0.03148em">k</span></span></span></span>, the less certainty the attacker gains.
-Receivers basically hide in a pool of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em"></span><span class="mord mathnormal" style="margin-right:0.03148em">k</span></span></span></span> content topics, any subset of which could be topics they subscribed to.
-The attacker does not know which of those the receiver actually subscribed to,
-and the receiver enjoys <a href="https://en.wikipedia.org/wiki/Plausible_deniability#Use_in_cryptography" target="_blank" rel="noopener noreferrer">plausible deniability</a> regarding content topic subscription.
-Assuming there are <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal">n</span></span></span></span> Waku content topics, a receiver has <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal">n</span></span></span></span>-anonymity with respect to association to a specific content topic.</p>
-<p>Technically, Waku allows distributing messages over several libp2p pubsub topics.
-This yields <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em"></span><span class="mord mathnormal" style="margin-right:0.03148em">k</span></span></span></span>-anonymity, assuming <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em"></span><span class="mord mathnormal" style="margin-right:0.03148em">k</span></span></span></span> content topics share the same pubsub topic.
-However, if done wrongly, such sharding of pubsub topics can breach anonymity.
-A formal specification of anonymity-preserving topic sharding building on the concepts of <a href="https://rfc.vac.dev/status/deprecated/10/waku-usage#partitioned-topic" target="_blank" rel="noopener noreferrer">partitioned topics</a> is part of our roadmap.</p>
-<p>Also, Waku is not directly concerned with 1:1 communication, so for this post, 1:1 communication is out of scope.
-Channels for 1:1 communication can be implemented on top of Waku relay.
-In the future, a 1:1 communication protocol might be added to Waku.
-Similar to topic sharding, it would maintain receiver anonymity leveraging <a href="https://rfc.vac.dev/status/deprecated/10/waku-usage/#partitioned-topic" target="_blank" rel="noopener noreferrer">partitioned topics</a>.</p>
-<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="sender-anonymity">Sender Anonymity<a href="https://vac.dev/rlog/wakuv2-relay-anon#sender-anonymity" class="hash-link" aria-label="Direct link to Sender Anonymity" title="Direct link to Sender Anonymity">​</a></h4>
-<p>We define sender anonymity as <em>unlinkability of users' identities and the data they send and/or related actions</em>.
-Because the data in the context of Waku is Waku messages, sender anonymity corresponds to <em>sender-message unlinkability</em>.</p>
-<p>In summary, Waku offers weak sender anonymity because of <a href="https://rfc.vac.dev/waku/standards/core/11/relay" target="_blank" rel="noopener noreferrer">Waku's strict no sign policy</a>,
-which has its origins in the <a href="https://github.com/ethereum/consensus-specs/blob/dev/specs/phase0/p2p-interface.md#why-are-we-using-the-strictnosign-signature-policy" target="_blank" rel="noopener noreferrer">Ethereum consensus specs</a>.
-<a href="https://rfc.vac.dev/waku/standards/core/17/rln-relay" target="_blank" rel="noopener noreferrer">17/WAKU-RLN-RELAY</a> and <a href="https://rfc.vac.dev/waku/deprecated/18/swap" target="_blank" rel="noopener noreferrer">18/WAKU2-SWAP</a> mitigate replay and injection attacks.</p>
-<p>Waku currently does not offer sender anonymity in stronger attacker models, as well as cannot protect against targeted attacks in weaker attacker models like the single or multi node attacker.
-We will cover this in more detail in later sections.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="anonymity-trilemma">Anonymity Trilemma<a href="https://vac.dev/rlog/wakuv2-relay-anon#anonymity-trilemma" class="hash-link" aria-label="Direct link to Anonymity Trilemma" title="Direct link to Anonymity Trilemma">​</a></h3>
-<p><a href="https://freedom.cs.purdue.edu/projects/trilemma.html" target="_blank" rel="noopener noreferrer">The Anonymity trilemma</a> states that only two out of <em>strong anonymity</em>, <em>low bandwidth</em>, and <em>low latency</em> can be guaranteed in the global on-net attacker model.
-Waku's goal, being a modular set of protocols, is to offer any combination of two out of these three properties, as well as blends.
-An example for blending is an adjustable number of pubsub topics and peers in the respective pubsub topic mesh; this allows tuning the trade-off between anonymity and bandwidth.</p>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Figure 2: Anonymity Trilemma: pick two. " src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iMjEuMzEyMTEzbW0iCiAgIGhlaWdodD0iMjQuODY2NzIybW0iCiAgIHZpZXdCb3g9IjAgMCAyMS4zMTIxMTMgMjQuODY2NzIyIgogICB2ZXJzaW9uPSIxLjEiCiAgIGlkPSJzdmc1IgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxkZWZzCiAgICAgaWQ9ImRlZnMyIiAvPgogIDxnCiAgICAgaWQ9ImxheWVyMSIKICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMy42NTM0ODM0LC02LjE1OTM5ODQpIj4KICAgIDxlbGxpcHNlCiAgICAgICBzdHlsZT0iZmlsbDojYzgwMDAwO2ZpbGwtb3BhY2l0eTowLjI7ZmlsbC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlLXdpZHRoOjAuMjY0NTgzIgogICAgICAgaWQ9InBhdGgzOS0zIgogICAgICAgY3g9Ii04LjA5NDkxMTYiCiAgICAgICBjeT0iMTUuMzc4NTM4IgogICAgICAgcng9IjkuMzkyNzA3OCIKICAgICAgIHJ5PSIzLjk2ODc1IgogICAgICAgdHJhbnNmb3JtPSJyb3RhdGUoLTYwLjczMzYxMykiIC8+CiAgICA8ZWxsaXBzZQogICAgICAgc3R5bGU9ImZpbGw6IzAwMDA2NDtmaWxsLW9wYWNpdHk6MC4yO2ZpbGwtcnVsZTpldmVub2RkO3N0cm9rZS13aWR0aDowLjI2NDU4MyIKICAgICAgIGlkPSJwYXRoMzktNiIKICAgICAgIGN4PSIxNC4xMTAyNDMiCiAgICAgICBjeT0iMjIuNDY4NjI4IgogICAgICAgcng9IjkuMzkyNzA3OCIKICAgICAgIHJ5PSIzLjk2ODc1IiAvPgogICAgPGVsbGlwc2UKICAgICAgIHN0eWxlPSJmaWxsOiMyODAwMjg7ZmlsbC1vcGFjaXR5OjAuMztmaWxsLXJ1bGU6ZXZlbm9kZDtzdHJva2Utd2lkdGg6MC4xOTU5MDEiCiAgICAgICBpZD0icGF0aDM5LTciCiAgICAgICBjeD0iMTQuMTIzMzI5IgogICAgICAgY3k9IjI5LjA3NDIzNiIKICAgICAgIHJ4PSIxMC40Njk4NDYiCiAgICAgICByeT0iMS45NTE4ODUxIiAvPgogICAgPGVsbGlwc2UKICAgICAgIHN0eWxlPSJmaWxsOiMwMDY0MDA7ZmlsbC1vcGFjaXR5OjAuMjtmaWxsLXJ1bGU6ZXZlbm9kZDtzdHJva2Utd2lkdGg6MC4yNjQ1ODMiCiAgICAgICBpZD0iZWxsaXBzZTc4NyIKICAgICAgIGN4PSItMjIuMTEyMzEyIgogICAgICAgY3k9Ii05LjYzNDU1MDEiCiAgICAgICByeD0iOS4zOTI3MDc4IgogICAgICAgcnk9IjMuOTY4NzUiCiAgICAgICB0cmFuc2Zvcm09Im1hdHJpeCgtMC40ODg4NzA3NiwtMC44NzIzNTYyMiwtMC44NzIzNTYyMiwwLjQ4ODg3MDc2LDAsMCkiIC8+CiAgICA8dGV4dAogICAgICAgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zaXplOjEuNTQxNTVweDtmb250LWZhbWlseTpzYW5zLXNlcmlmO2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MC4wMzg1Mzg2IgogICAgICAgeD0iLTEwLjYzMjMwNSIKICAgICAgIHk9IjE2LjM2NjU3OSIKICAgICAgIGlkPSJ0ZXh0NDI1OSIKICAgICAgIHRyYW5zZm9ybT0icm90YXRlKC01NS4wMjk4MDcpIj48dHNwYW4KICAgICAgICAgaWQ9InRzcGFuNDI1NyIKICAgICAgICAgc3R5bGU9InN0cm9rZS13aWR0aDowLjAzODUzODYiCiAgICAgICAgIHg9Ii0xMC42MzIzMDUiCiAgICAgICAgIHk9IjE2LjM2NjU3OSI+bG93IGxhdGVuY3k8L3RzcGFuPjwvdGV4dD4KICAgIDx0ZXh0CiAgICAgICB4bWw6c3BhY2U9InByZXNlcnZlIgogICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXNpemU6MS42MDUxN3B4O2ZvbnQtZmFtaWx5OnNhbnMtc2VyaWY7ZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDowLjA0MDEyOTQiCiAgICAgICB4PSIxNy4xMzU3NCIKICAgICAgIHk9Ii04Ljc1MjMyNiIKICAgICAgIGlkPSJ0ZXh0MTAzMjMiCiAgICAgICB0cmFuc2Zvcm09InJvdGF0ZSg1OC4wMjkxOSkiPjx0c3BhbgogICAgICAgICBpZD0idHNwYW4xMDMyMSIKICAgICAgICAgc3R5bGU9InN0cm9rZS13aWR0aDowLjA0MDEyOTQiCiAgICAgICAgIHg9IjE3LjEzNTc0IgogICAgICAgICB5PSItOC43NTIzMjYiPmxvdyBiYW5kd2lkdGg8L3RzcGFuPjwvdGV4dD4KICAgIDx0ZXh0CiAgICAgICB4bWw6c3BhY2U9InByZXNlcnZlIgogICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXNpemU6MS41NTM0NnB4O2ZvbnQtZmFtaWx5OnNhbnMtc2VyaWY7ZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDowLjAzODgzNjciCiAgICAgICB4PSI3LjQ3NTA3ODYiCiAgICAgICB5PSIyMi45MzU0IgogICAgICAgaWQ9InRleHQxMjk0MyI+PHRzcGFuCiAgICAgICAgIGlkPSJ0c3BhbjEyOTQxIgogICAgICAgICBzdHlsZT0ic3Ryb2tlLXdpZHRoOjAuMDM4ODM2NyIKICAgICAgICAgeD0iNy40NzUwNzg2IgogICAgICAgICB5PSIyMi45MzU0Ij5zdHJvbmcgYW5vbnltaXR5PC90c3Bhbj48L3RleHQ+CiAgICA8dGV4dAogICAgICAgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zaXplOjEuNDk2MjFweDtmb250LWZhbWlseTpzYW5zLXNlcmlmO2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MC4wMzc0MDUzIgogICAgICAgeD0iNi4xNjc4NDEiCiAgICAgICB5PSIyOS42ODc5MjUiCiAgICAgICBpZD0idGV4dDE0MzgzIj48dHNwYW4KICAgICAgICAgaWQ9InRzcGFuMTQzODEiCiAgICAgICAgIHN0eWxlPSJzdHJva2Utd2lkdGg6MC4wMzc0MDUzIgogICAgICAgICB4PSI2LjE2Nzg0MSIKICAgICAgICAgeT0iMjkuNjg3OTI1Ij5mcmVxdWVuY3kgLyBwYXR0ZXJuPC90c3Bhbj48L3RleHQ+CiAgPC9nPgo8L3N2Zz4K" width="81" height="94" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<p>A fourth factor that influences <a href="https://freedom.cs.purdue.edu/projects/trilemma.html" target="_blank" rel="noopener noreferrer">the anonymity trilemma</a> is <em>frequency and patterns</em> of messages.
-The more messages there are, and the more randomly distributed they are, the better the anonymity protection offered by a given anonymous communication protocol.
-So, incentivising users to use the protocol, for instance by lowering entry barriers, helps protecting the anonymity of all users.
-The frequency/patterns factor is also related to the above described k-anonymity.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="censorship-resistance">Censorship Resistance<a href="https://vac.dev/rlog/wakuv2-relay-anon#censorship-resistance" class="hash-link" aria-label="Direct link to Censorship Resistance" title="Direct link to Censorship Resistance">​</a></h3>
-<p>Another security related property that Waku aims to offer is censorship resistance.
-Censorship resistance guarantees that users can participate even if an attacker tries to deny them access.
-So, censorship resistance ties into the availability aspect of security.
-In the context of Waku that means users should be able to send messages as well as receive all messages they are interested in,
-even if an attacker tries to prevent them from disseminating messages or tries to deny them access to messages.</p>
-<p>Currently, Waku only guarantees censorship resistance in the weak single node attacker model.
-While currently employed secure channels mitigate targeted censorship, e.g. blocking specific content topics,
-general censorship resistance in strong attacker models is part of our roadmap.
-Among other options, we will investigate <a href="https://www.pluggabletransports.info/about/" target="_blank" rel="noopener noreferrer">Pluggable Transports</a> in future articles.</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="attacker-types">Attacker Types<a href="https://vac.dev/rlog/wakuv2-relay-anon#attacker-types" class="hash-link" aria-label="Direct link to Attacker Types" title="Direct link to Attacker Types">​</a></h2>
-<p>The following lists various attacker types with varying degrees of power.
-The more power an attacker has, the more difficult it is to gain the respective attacker position.</p>
-<p>Each attacker type comes in a passive and an active variant.
-While a passive attacker can stay hidden and is not suspicious,
-the respective active attacker has more (or at least the same) deanonymization power.</p>
-<p>We also distinguish between internal and external attackers.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="internal">Internal<a href="https://vac.dev/rlog/wakuv2-relay-anon#internal" class="hash-link" aria-label="Direct link to Internal" title="Direct link to Internal">​</a></h3>
-<p>With respect to Waku relay, an internal attacker participates in the same pubsub topic as its victims.
-Without additional measures on higher layer protocols, access to an internal position is easy to get.</p>
-<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="single-node">Single Node<a href="https://vac.dev/rlog/wakuv2-relay-anon#single-node" class="hash-link" aria-label="Direct link to Single Node" title="Direct link to Single Node">​</a></h4>
-<p>This attacker controls a single node.
-Because this position corresponds to normal usage of Waku relay, it is trivial to obtain.</p>
-<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="multi-node">Multi Node<a href="https://vac.dev/rlog/wakuv2-relay-anon#multi-node" class="hash-link" aria-label="Direct link to Multi Node" title="Direct link to Multi Node">​</a></h4>
-<p>This attacker controls several nodes. We assume a smaller static number of controlled nodes.
-The multi node position can be achieved relatively easily by setting up multiple nodes.
-Botnets might be leveraged to increase the number of available hosts.
-Multi node attackers could use <a href="https://en.wikipedia.org/wiki/Sybil_attack" target="_blank" rel="noopener noreferrer">Sybil attacks</a> to increase the number of controlled nodes.
-A countermeasure is for nodes to only accept libp2p gossipsub graft requests from peers with different IP addresses, or even different subnets.</p>
-<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="linearly-scaling-nodes">Linearly Scaling Nodes<a href="https://vac.dev/rlog/wakuv2-relay-anon#linearly-scaling-nodes" class="hash-link" aria-label="Direct link to Linearly Scaling Nodes" title="Direct link to Linearly Scaling Nodes">​</a></h4>
-<p>This attacker controls a number of nodes that scales linearly with the number of nodes in the network.
-This attacker is especially interesting to investigate in the context of DHT security,
-which Waku uses for ambient peer discovery.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="external">External<a href="https://vac.dev/rlog/wakuv2-relay-anon#external" class="hash-link" aria-label="Direct link to External" title="Direct link to External">​</a></h3>
-<p>An external attacker can only see encrypted traffic (protected by a secure channel set up with <a href="https://github.com/waku-org/specs/blob/master/standards/application/noise.md" target="_blank" rel="noopener noreferrer">WAKU2-NOISE</a>).
-Because an internal position can be easily obtained,
-in practice external attackers would mount combined attacks that leverage both internal an external attacks.
-We cover this more below when describing attacks.</p>
-<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="local">Local<a href="https://vac.dev/rlog/wakuv2-relay-anon#local" class="hash-link" aria-label="Direct link to Local" title="Direct link to Local">​</a></h4>
-<p>A local attacker has access to communication links in a local network segment.
-This could be a rogue access point (with routing capability).</p>
-<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="as">AS<a href="https://vac.dev/rlog/wakuv2-relay-anon#as" class="hash-link" aria-label="Direct link to AS" title="Direct link to AS">​</a></h4>
-<p>An AS attacker controls a single AS (autonomous system).
-A passive AS attacker can listen to traffic on arbitrary links within the AS.
-An active AS attacker can drop, inject, and alter traffic on arbitrary links within the AS.</p>
-<p>In practice, a malicious ISP would be considered as an AS attacker.
-A malicious ISP could also easily setup a set of nodes at specific points in the network,
-gaining internal attack power similar to a strong multi node attacker.</p>
-<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="global-on-net">Global On-Net<a href="https://vac.dev/rlog/wakuv2-relay-anon#global-on-net" class="hash-link" aria-label="Direct link to Global On-Net" title="Direct link to Global On-Net">​</a></h4>
-<p>A global on-net attacker has complete overview over the whole network.
-A passive global attacker can listen to traffic on all links,
-while the active global attacker basically carries the traffic: it can freely drop, inject, and alter traffic at all positions in the network.
-This basically corresponds to the <a href="https://en.wikipedia.org/wiki/Dolev%E2%80%93Yao_model" target="_blank" rel="noopener noreferrer">Dolev-Yao model</a>.</p>
-<p>An entity with this power would, in practice, also have the power of the internal linearly scaling nodes attacker.</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="attack-based-threat-analysis">Attack-based Threat Analysis<a href="https://vac.dev/rlog/wakuv2-relay-anon#attack-based-threat-analysis" class="hash-link" aria-label="Direct link to Attack-based Threat Analysis" title="Direct link to Attack-based Threat Analysis">​</a></h2>
-<p>The following lists various attacks including the weakest attacker model in which the attack can be successfully performed.
-The respective attack can be performed in all stronger attacker models as well.</p>
-<p>An attack is considered more powerful if it can be successfully performed in a weaker attacker model.</p>
-<p>If not stated otherwise, we look at these attacks with respect to their capability to deanonymize the message sender.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="scope">Scope<a href="https://vac.dev/rlog/wakuv2-relay-anon#scope" class="hash-link" aria-label="Direct link to Scope" title="Direct link to Scope">​</a></h3>
-<p>In this post, we introduce a simple tightly scoped threat model for Waku v2 Relay, which will be extended in the course of this article series.</p>
-<p>In this first post, we will look at the relay protocol in isolation.
-Even though many threats arise from layers Waku relay is based on, and layers that in turn live on top of relay,
-we want to first look at relay in isolation because it is at the core of Waku v2.
-Addressing and trying to solve all security issues of a complex system at once is an overwhelming task, which is why we focus on the soundness of relay first.</p>
-<p>This also goes well with the modular design philosophy of Waku v2, as layers of varying levels of security guarantees can be built on top of relay, all of which can relay on the guarantees that Waku provides.
-Instead of looking at a multiplicative explosion of possible interactions, we look at the core in this article, and cover the most relevant combinations in future posts.</p>
-<p>Further restricting the scope, we will look at the data field of a relay message as a black box.
-In a second article on Waku v2 relay, we will look into the data field, which according to the <a href="https://rfc.vac.dev/waku/standards/core/11/relay#message-fields" target="_blank" rel="noopener noreferrer">specification of Waku v2 relay</a> must be a <a href="https://rfc.vac.dev/waku/standards/core/14/message" target="_blank" rel="noopener noreferrer">Waku v2 message</a>.
-We only consider messages with version field <code>2</code>, which indicates that the payload has to be encoded using <a href="https://github.com/waku-org/specs/blob/master/standards/application/noise.md" target="_blank" rel="noopener noreferrer">WAKU2-NOISE</a>.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="prerequisite-get-a-specific-position-in-the-network">Prerequisite: Get a Specific Position in the Network<a href="https://vac.dev/rlog/wakuv2-relay-anon#prerequisite-get-a-specific-position-in-the-network" class="hash-link" aria-label="Direct link to Prerequisite: Get a Specific Position in the Network" title="Direct link to Prerequisite: Get a Specific Position in the Network">​</a></h3>
-<p>Some attacks require the attacker node(s) to be in a specific position in the network.
-In most cases, this corresponds to trying to get into the mesh peer list for the desired pubsub topic of the victim node.</p>
-<p>In libp2p gossipsub, and by extension Waku v2 relay, nodes can simply send a graft message for the desired topic to the victim node.
-If the victim node still has open slots, the attacker gets the desired position.
-This only requires the attacker to know the gossipsub multiaddress of the victim node.</p>
-<p>A linearly scaling nodes attacker can leverage DHT based discovery systems to boost the probability of malicious nodes being returned, which in turn significantly increases the probability of attacker nodes ending up in the peer lists of victim nodes.
-<a href="https://vac.dev/wakuv2-apd" target="_blank" rel="noopener noreferrer">Waku v2 discv5</a> will employ countermeasures that mitigate the amplifying effect this attacker type can achieve.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="replay-attack">Replay Attack<a href="https://vac.dev/rlog/wakuv2-relay-anon#replay-attack" class="hash-link" aria-label="Direct link to Replay Attack" title="Direct link to Replay Attack">​</a></h3>
-<p>In the scope we defined above, Waku v2 is resilient against replay attacks.
-GossipSub nodes, and by extension Waku relay nodes, feature a <code>seen</code> cache, and only relay messages they have not seen before.
-Further, replay attacks will be punished by <a href="https://rfc.vac.dev/waku/standards/core/17/rln-relay" target="_blank" rel="noopener noreferrer">RLN</a> and <a href="https://rfc.vac.dev/waku/deprecated/18/swap" target="_blank" rel="noopener noreferrer">SWAP</a>.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="neighbourhood-surveillance">Neighbourhood Surveillance<a href="https://vac.dev/rlog/wakuv2-relay-anon#neighbourhood-surveillance" class="hash-link" aria-label="Direct link to Neighbourhood Surveillance" title="Direct link to Neighbourhood Surveillance">​</a></h3>
-<p>This attack can be performed by a single node attacker that is connected to all peers of the victim node <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> with respect to a specific topic mesh.
-The attacker also has to be connected to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span>.
-In this position, the attacker will receive messages <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>v</mi></msub></mrow><annotation encoding="application/x-tex">m_v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span></span></span></span> sent by <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> both on the direct path from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span>, and on indirect paths relayed by peers of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span>.
-It will also receive messages <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>x</mi></msub></mrow><annotation encoding="application/x-tex">m_x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span></span></span></span> that are not sent by <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span>. These messages <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>x</mi></msub></mrow><annotation encoding="application/x-tex">m_x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span></span></span></span> are relayed by both <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> and the peers of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span>.
-Messages that are received (significantly) faster from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> than from any other of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span>'s peers are very likely messages that <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> sent,
-because for these messages the attacker is one hop closer to the source.</p>
-<p>The attacker can (periodically) measure latency between itself and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span>, and between itself and the peers of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> to get more accurate estimates for the expected timings.
-An AS attacker (and if the topology allows, even a local attacker) could also learn the latency between <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> and its well-behaving peers.
-An active AS attacker could also increase the latency between <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> and its peers to make the timing differences more prominent.
-This, however, might lead to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> switching to other peers.</p>
-<p>This attack cannot (reliably) distinguish messages <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>v</mi></msub></mrow><annotation encoding="application/x-tex">m_v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span></span></span></span> sent by <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> from messages <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">m_y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em"><span></span></span></span></span></span></span></span></span></span> relayed by peers of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> the attacker is not connected to.
-Still, there are hop-count variations that might be leveraged.
-Messages <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>v</mi></msub></mrow><annotation encoding="application/x-tex">m_v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span></span></span></span> always have a hop-count of 1 on the path from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> to the attacker, while all other paths are longer.
-Messages <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">m_y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em"><span></span></span></span></span></span></span></span></span></span> might have the same hop-count on the path from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> as well as on other paths.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="controlled-neighbourhood">Controlled Neighbourhood<a href="https://vac.dev/rlog/wakuv2-relay-anon#controlled-neighbourhood" class="hash-link" aria-label="Direct link to Controlled Neighbourhood" title="Direct link to Controlled Neighbourhood">​</a></h3>
-<p>If a multi node attacker manages to control all peers of the victim node, it can trivially tell which messages originated from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span>.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="observing-messages">Observing Messages<a href="https://vac.dev/rlog/wakuv2-relay-anon#observing-messages" class="hash-link" aria-label="Direct link to Observing Messages" title="Direct link to Observing Messages">​</a></h3>
-<p>If Waku relay was not protected with Noise, the AS attacker could simply check for messages leaving <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> which have not been relayed to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span>.
-These are the messages sent by <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span>.
-Waku relay protects against this attack by employing secure channels setup using Noise.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="correlation">Correlation<a href="https://vac.dev/rlog/wakuv2-relay-anon#correlation" class="hash-link" aria-label="Direct link to Correlation" title="Direct link to Correlation">​</a></h3>
-<p>Monitoring all traffic (in an AS or globally), allows the attacker to identify traffic correlated with messages originating from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span>.
-This (alone) does not allow an external attacker to learn which message <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em"></span><span class="mord mathnormal" style="margin-right:0.03588em">v</span></span></span></span> sent, but it allows identifying the respective traffic propagating through the network.
-The more traffic in the network, the lower the success rate of this attack.</p>
-<p>Combined with just a few nodes controlled by the attacker, the actual message associated with the correlated traffic can eventually be identified.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="dos">DoS<a href="https://vac.dev/rlog/wakuv2-relay-anon#dos" class="hash-link" aria-label="Direct link to DoS" title="Direct link to DoS">​</a></h3>
-<p>An active single node attacker could run a disruption attack by</p>
-<ul>
-<li>(1) dropping messages that should be relayed</li>
-<li>(2) flooding neighbours with bogus messages</li>
-</ul>
-<p>While (1) has a negative effect on availability, the impact is not significant.
-A linearly scaling botnet attacker, however, could significantly disrupt the network with such an attack.
-(2) is thwarted by <a href="https://rfc.vac.dev/waku/standards/core/17/rln-relay" target="_blank" rel="noopener noreferrer">RLN</a>.
-Also <a href="https://rfc.vac.dev/waku/deprecated/18/swap" target="_blank" rel="noopener noreferrer">SWAP</a> helps mitigating DoS attacks.</p>
-<p>A local attacker can DoS Waku by dropping all Waku traffic within its controlled network segment.
-An AS attacker can DoS Waku within its authority, while a global attacker can DoS the whole network.
-A countermeasure are censorship resistance techniques like <a href="https://www.pluggabletransports.info/about/" target="_blank" rel="noopener noreferrer">Pluggable Transports</a>.</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="summary-and-future-work">Summary and Future Work<a href="https://vac.dev/rlog/wakuv2-relay-anon#summary-and-future-work" class="hash-link" aria-label="Direct link to Summary and Future Work" title="Direct link to Summary and Future Work">​</a></h2>
-<p>Currently, Waku v2 relay offers k-anonymity with respect to receiver anonymity.
-This also includes k-anonymity towards legitimate members of the same topic.</p>
-<p>Waku v2 relay offers sender anonymity in the single node attacker model with its <a href="https://rfc.vac.dev/waku/standards/core/11/relay/#signature-policy" target="_blank" rel="noopener noreferrer">strict no sign policy</a>.
-Currently, Waku v2 does not guarantee sender anonymity in the multi node and stronger attacker models.
-However, we are working on modular anonymity-preserving protocols and building blocks as part of our privacy/anonymity roadmap.
-The goal is to allow tunable anonymity with respect to trade offs between <em>strong anonymity</em>, <em>low bandwidth</em>, and <em>low latency</em>.
-All of these cannot be fully guaranteed as the <a href="https://freedom.cs.purdue.edu/projects/trilemma.html" target="_blank" rel="noopener noreferrer">the anonymity trilemma</a> states.
-Some applications have specific requirements, e.g. low latency, which require a compromise on anonymity.
-Anonymity-preserving mechanisms we plan to investigate and eventually specify as pluggable anonymity protocols for Waku comprise</p>
-<ul>
-<li><a href="https://arxiv.org/abs/1805.11060" target="_blank" rel="noopener noreferrer">Dandelion++</a> for lightweight anonymity;</li>
-<li><a href="https://en.wikipedia.org/wiki/Onion_routing" target="_blank" rel="noopener noreferrer">onion routing</a> as a building block adding a low latency anonymization layer;</li>
-<li><a href="https://en.wikipedia.org/wiki/Mix_network" target="_blank" rel="noopener noreferrer">a mix network</a> for providing strong anonymity (on top of onion routing) even in the strongest attacker model at the cost of higher latency.</li>
-</ul>
-<p>These pluggable anonymity-preserving protocols will form a sub-set of the Waku v2 protocol set.
-As an intermediate step, we might directly employ Tor for onion-routing, and <a href="https://nymtech.net/" target="_blank" rel="noopener noreferrer">Nym</a> as a mix-net layer.</p>
-<p>In future research log posts, we will cover further Waku v2 protocols and identify anonymity problems that will be added to our roadmap.
-These protocols comprise</p>
-<ul>
-<li><a href="https://rfc.vac.dev/waku/standards/core/13/store" target="_blank" rel="noopener noreferrer">13/WAKU2-STORE</a>, which can violate receiver anonymity as it allows filtering by content topic.
-A countermeasure is using the content topic exclusively for local filters.</li>
-<li><a href="https://rfc.vac.dev/waku/standards/core/12/filter" target="_blank" rel="noopener noreferrer">12/WAKU2-FILTER</a>, which discloses nodes' interest in topics;</li>
-<li><a href="https://rfc.vac.dev/waku/standards/core/19/lightpush" target="_blank" rel="noopener noreferrer">19/WAKU2-LIGHTPUSH</a>, which also discloses nodes' interest in topics and links the lightpush client as the sender of a message to the lightpush service node;</li>
-<li><a href="https://rfc.vac.dev/waku/standards/application/21/fault-tolerant-store" target="_blank" rel="noopener noreferrer">21/WAKU2-FTSTORE</a>, which discloses nodes' interest in specific time ranges allowing to infer information like online times.</li>
-</ul>
-<p>While these protocols are not necessary for the operation of Waku v2, and can be seen as pluggable features,
-we aim to provide alternatives without the cost of lowering the anonymity level.</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="references">References<a href="https://vac.dev/rlog/wakuv2-relay-anon#references" class="hash-link" aria-label="Direct link to References" title="Direct link to References">​</a></h2>
-<ul>
-<li><a href="https://rfc.vac.dev/waku/standards/core/10/waku2" target="_blank" rel="noopener noreferrer">10/WAKU2</a></li>
-<li><a href="https://rfc.vac.dev/waku/standards/core/11/relay" target="_blank" rel="noopener noreferrer">11/WAKU2-RELAY</a></li>
-<li><a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md" target="_blank" rel="noopener noreferrer">libp2p GossipSub</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Information_security" target="_blank" rel="noopener noreferrer">Security</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Authentication" target="_blank" rel="noopener noreferrer">Authentication</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Non-repudiation" target="_blank" rel="noopener noreferrer">Non-repudiation</a></li>
-<li><a href="https://noiseprotocol.org/" target="_blank" rel="noopener noreferrer">Noise Protocol Framework</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Plausible_deniability#Use_in_cryptography" target="_blank" rel="noopener noreferrer">plausible deniability</a></li>
-<li><a href="https://rfc.vac.dev/waku/standards/core/14/message" target="_blank" rel="noopener noreferrer">Waku v2 message</a></li>
-<li>[partitioned topics](<a href="https://rfc.vac.dev/status/deprecated/10/waku-usage" target="_blank" rel="noopener noreferrer">https://rfc.vac.dev/status/deprecated/10/waku-usage</a>
-#partitioned-topic)</li>
-<li><a href="https://en.wikipedia.org/wiki/Sybil_attack" target="_blank" rel="noopener noreferrer">Sybil attack</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Dolev%E2%80%93Yao_model" target="_blank" rel="noopener noreferrer">Dolev-Yao model</a></li>
-<li><a href="https://github.com/waku-org/specs/blob/master/standards/application/noise.md" target="_blank" rel="noopener noreferrer">WAKU2-NOISE</a></li>
-<li><a href="https://vac.dev/wakuv2-apd" target="_blank" rel="noopener noreferrer">33/WAKU2-DISCV5</a></li>
-<li><a href="https://github.com/ethereum/consensus-specs/blob/dev/specs/phase0/p2p-interface.md#why-are-we-using-the-strictnosign-signature-policy" target="_blank" rel="noopener noreferrer">strict no sign policy</a></li>
-<li><a href="https://rfc.vac.dev/waku/standards/core/11/relay#signature-policy" target="_blank" rel="noopener noreferrer">Waku v2 strict no sign policy</a></li>
-<li><a href="https://rfc.vac.dev/waku/standards/core/17/rln-relay" target="_blank" rel="noopener noreferrer">17/WAKU-RLN-RELAY</a></li>
-<li><a href="https://freedom.cs.purdue.edu/projects/trilemma.html" target="_blank" rel="noopener noreferrer">anonymity trilemma</a></li>
-<li><a href="https://rfc.vac.dev/waku/deprecated/18/swap" target="_blank" rel="noopener noreferrer">18/WAKU2-SWAP</a></li>
-<li><a href="https://www.pluggabletransports.info/about/" target="_blank" rel="noopener noreferrer">Pluggable Transports</a></li>
-<li><a href="https://nymtech.net/" target="_blank" rel="noopener noreferrer">Nym</a></li>
-<li><a href="https://arxiv.org/abs/1805.11060" target="_blank" rel="noopener noreferrer">Dandelion++</a></li>
-<li><a href="https://rfc.vac.dev/waku/standards/core/13/store" target="_blank" rel="noopener noreferrer">13/WAKU2-STORE</a></li>
-<li><a href="https://rfc.vac.dev/waku/standards/core/12/filter" target="_blank" rel="noopener noreferrer">12/WAKU2-FILTER</a></li>
-<li><a href="https://rfc.vac.dev/waku/standards/core/19/lightpush" target="_blank" rel="noopener noreferrer">19/WAKU2-LIGHTPUSH</a></li>
-<li><a href="https://rfc.vac.dev/waku/standards/application/21/fault-tolerant-store" target="_blank" rel="noopener noreferrer">21/WAKU2-FTSTORE</a></li>
-</ul>]]></content:encoded>
         </item>
     </channel>
 </rss>
