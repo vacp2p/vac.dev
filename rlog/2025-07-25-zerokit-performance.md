@@ -1,8 +1,8 @@
 ---
 title: 'Zerokit optimizations: A performance journey'
-date: 2025-07-05 18:30:00
+date: 2025-07-25 18:30:00
 authors: benph
-published: false
+published: true
 slug: 2025-zerokit-perf
 categories: research
 
@@ -24,6 +24,8 @@ culling of redundant resource use. A story of cripplingly
 slow performance meets engineering talent, we arrive at a
 place where Zerokit comes through, fast and efficient, ready
 to face the world.
+
+{/* truncate */}
 
 ## Background
 
