@@ -24,7 +24,6 @@ culling of redundant resource use. A story of cripplingly
 slow performance meets engineering talent, we arrive at a
 place where Zerokit comes through, fast and efficient, ready
 to face the world.
-
 {/* truncate */}
 
 ## Background
@@ -59,7 +58,7 @@ get rid of redundant operations and data taking up precious
 resources, and make the remaining operations go
 [<u>*Blazingly Fast™*.</u>](https://old.reddit.com/r/rust/comments/1avf1d8/blazingly_fast_memory_vulnerabilities_written_in/)
 
-Introducing the the star of the show for part 1: The main
+Introducing the star of the show for part 1: The main
 point of having this tree is to generate proofs so that
 peers can verify the claims being made. That doesn’t require
 the whole Merkle tree, just a single path, from leaf to
@@ -69,7 +68,7 @@ operated, relegating the tree itself to an off-network
 reference. This reduced the burden imposed on the network
 significantly. Updating the data on the tree has similarly
 reduced, with the exception being that the siblings of each
-node were retained. This is called the **Stateless**
+node were retained. This is called the **stateless**
 approach.
 
 Well, stateless in the context of proof generation and
@@ -167,7 +166,7 @@ leaving us with a single champion that cannot be denied, but
 which technology will claim this mantle? May the bits be
 _ever_ in your favor...
 
-## Benchmarking with Rusts `criterion` Crate
+## Benchmarking with Rust's criterion crate
 
 Rust, much like Nim, offers unadulterated, fine-grained, and
 direct control over performance, but with Rust, this control
@@ -179,7 +178,7 @@ that effectively "pair programs with you" to help avoid
 common pitfalls, includeing those of the performance
 veriety.
 
-The [<u>Criterion</u>](https://crates.io/crates/criterion) crate is
+The [<u>criterion</u>](https://crates.io/crates/criterion) crate is
 considered the go-to library for micro-benchmarking within
 the Rust ecosystem, and is generally regarded as an
 invaluable tool for obtaining high-quality telemetry.
