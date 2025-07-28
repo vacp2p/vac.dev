@@ -15,7 +15,14 @@ toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
 
-This post provides a concise overview and performance evaluation of ongoing efforts aimed at improving the GossipSub protocol's performance.
+The original GossipSub design emphasizes robustness, with less focus on message sizes. 
+However, emerging use cases—such as Ethereum's EIP-4844 and 
+data availability sampling (DAS) require rapid propagation of high data volumes, 
+often in the form of large messages. 
+Many ongoing research efforts attempt to find solutions 
+for efficiently forwarding large messages through the GossipSub network. 
+This post provides a concise overview and performance evaluation of some research initiatives 
+aimed at improving GossipSub to meet the performance needs of modern P2P networks.
 {/* truncate */}
 
 ## Overview
@@ -33,8 +40,8 @@ IHAVE announcements serve multiple purposes:
 2. Speed up message propagation by allowing far-off peers to fetch overdue messages. 
 
 Since GossipSub v1.1 [[1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)], 
-replying to IWANT requests is optional, 
-which encourages any peer to make redundant IWANT requests for the same message. 
+replying to IWANT requests is optional, to safeguard honest peers from adversaries. 
+This change encourages peers to make redundant IWANT requests for the same message. 
 While this arrangement works well for small messages, it can be inefficient for bigger ones. 
 This inefficiency arises from an increased number of duplicates 
 and a higher volume of IWANT requests due to longer transmission times for large messages. 
@@ -78,9 +85,9 @@ This implies that a tenfold increase in message size results in an eightyfold ri
 which accumulates across $h$ hops. 
 This leads to two fundamental problems:
 
-1. A longer contention interval ($\tau_D$) raises the likelihood of simultaneous redundant transmissions, 
-thereby increasing the number of duplicates. 
-Reducing $D$ inadvertently increases $h$.
+1. A longer contention interval ($\tau_D$) increases the chance that peers receive the same message from multiple mesh members during that interval,  
+leading to redundant transmissions and more duplicates.
+Reducing $D$ inadvertently increases $h$ — potentially slowing propagation overall.
 
 2. Peers are unaware of ongoing message receptions and may generate redundant IWANT requests 
 for the messages they are already receiving. 
@@ -91,7 +98,7 @@ Talking about duplicates, a network comprising $N$ peers,
 each with a degree $D$, has a total of $\frac {N \times D}{2}$ edges (links), 
 as every link connects two peers. 
 Assuming that a message traverses every link exactly once, 
-we get $\frac {N \times D}{2}$ transmissions. 
+we get at least $\frac {N \times D}{2}$ transmissions. 
 
 Only $N-1$ transmissions are necessary for delivering a message to all peers. 
 As a result, we get $\frac {N \times D}{2} -(N-1)$ duplicates in the network. 
@@ -109,10 +116,11 @@ explore the upper bound ($\bar{d}_{max}$) on duplicates.
 They argue that a node can forward a received message to a maximum of $D-1$ peers 
 while the original publisher sends it to $D$ peers. 
 As a result, we get $N(D-1)+1$ transmissions in the network. 
-Out of these, $N(D-1)+1-(N-1)$ messages are duplicates, 
+Only $N-1$ transmissions are necessary to deliver a message to all peers.
+Remaining $N(D-1)+1-(N-1)$ transmissions are duplicates, 
 which simplifies the upper bound on average duplicates received by each peer to $\bar{d}_{max} \approx D-2$. 
-This rise in average duplicates indicates the impact of increasing message size on the number of duplicates. 
-It is worth mentioning that the impact of IWANT/IDONTWANT messages is not considered in $\bar{d}$ computations above.
+This rise indicates that larger messages can lead to more duplicates due to longer contention intervals. 
+It is essential to highlight that the impact of IWANT/IDONTWANT messages is not considered in $\bar{d}$ computations above.
 
 
 ## Protocols Considered
@@ -144,14 +152,16 @@ enhances the likelihood of timely receiving a higher number of IDONTWANT request
 
 The use of hop count is a more effective and straightforward method for identifying the message propagation stage 
 than relying on the duplicate count. 
-However, this approach may compromise the publisher's anonymity and may reveal information about its mesh members. 
+However, this approach may compromise the publisher's anonymity and may reveal information about the publisher and its mesh members. 
 Additional due diligence may be needed to address these issues.
 
 In the PoC implementation[[15](https://github.com/vacp2p/nim-libp2p/tree/research_gs_pppt)], 
 we use hop count to determine the message propagation stage. 
 When forwarding a message, every peer selects a subset of mesh members 
 equal to the advertised hop count for pull operation and 
-forwards the message to the remaining mesh members.
+forwards the message to the remaining mesh members. 
+If the advertised hop count exceeds the number of mesh members chosen for message forwarding, 
+the sender relays the message to all selected peers.
 
 
 ### [GossipSub v1.4 Proposal](https://github.com/libp2p/specs/pull/654)
@@ -196,9 +206,16 @@ reducing the workload on peers along the optimal message forwarding path.
 
 It is worth mentioning that a malicious peer can exploit this approach by sending a PREAMBLE and 
 never completing (or deliberately delaying) the promised message transfer. 
-The GossipSub v1.4 proposal defines the sending and processing of PREAMBLE/IMRECEIVING messages as optional. 
-While the proposal introduces an optional safety strategy, 
-it leaves room for implementations to use custom safety strategies.
+The optional safety strategy in GossipSub v1.4 proposal suggests using a peer score threshold 
+for PREAMBLE processing and a behavior penalty for broken promises. 
+A timeout strategy helps recover such messages.
+
+It is essential to mention that sending and processing of PREAMBLE/IMRECEIVING messages is optional. 
+This flexibility allows for the use of custom safety strategies in various implementations. 
+For example, the ongoing nim-libp2p implementation of GossipSub v1.4 allows peers to ignore PREAMBLEs 
+unless they come from mesh members with higher data rates 
+(bandwidth estimation becomes trivial with PREAMBLEs) and good peer scores. 
+This implementation also lets peers choose between a push or pull strategy for handling broken promises.
 
 For the performance evaluations in this post, we utilize the PoC implementation of GossipSub v1.4 
 [[16](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v1_4)]. 
@@ -209,31 +226,37 @@ Additionally, a production-grade implementation is currently under development
 ### [GossipSub v2.0 Proposal](https://github.com/libp2p/specs/pull/653)
 
 GossipSub v2.0 introduces a hybrid method for message dissemination 
-that combines both push and pull strategies through two new control messages: 
-IANNOUNCE and INEED. 
+that combines both push and pull strategies through two new control messages: IANNOUNCE and INEED. 
+These messages are analogous to IHAVE and IWANT messages, respectively. 
+However, IANNOUNCE messages are issued to the mesh members 
+immediately after validating a received message without waiting for the heartbeat interval. 
+Similarly, INEED requests are made exclusively to mesh members, 
+and a peer generates only one INEED request for a received message.
 
-The balance between push and pull approach is determined by the $D_{announce}$ parameter. 
+The balance between push and pull approaches is determined by the $D_{announce}$ parameter. 
 On receiving a message, a peer forwards it to $D - D_{announce}$ mesh members and 
 sends IANNOUNCE messages to the remaining mesh peers. 
-IANNOUNCE acts as an IHAVE announcement, signaling the availability of a message. 
 On receiving an IANNOUNCE for an unseen message, 
 a peer can request it using an INEED message. 
-It is important to note that a peer can send only one unfinished INEED request per message. 
-If the message transfer does not complete in the specified message transfer interval, 
-the receiver can issue a new INEED request. 
 
 
 #### Key Considerations and [PoC Implementation](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v2_0)
 
-The $D_announce$ parameter governs the balance between push and pull operations. 
+The $D_{announce}$ parameter governs the balance between push and pull operations. 
 Setting $D_{announce} = D$ results in a pull-only operation, 
 which can eliminate duplicates at the cost of increased message dissemination time. 
 In contrast, setting $D_{announce}$ to zero reverts to standard GossipSub v1.2 operation. 
+The authors suggest setting $D_{announce} = D-1$ to moderately decrease dissemination time 
+while incurring only a small number of duplicate transmissions.
 
 It is important to note that malicious peers can exploit this approach 
 by delaying or entirely omitting responses to INEED requests. 
 Similarly, sending INEED requests to suboptimal or overwhelmed peers can further increase message dissemination time. 
 The authors propose a timeout strategy to address these issues.
+The authors propose using a timeout strategy and negative peer scoring to address these issues.
+If a message transfer does not complete within the specified interval, 
+the receiver decreases the sender's peer score 
+and issues a new INEED request to an alternative mesh member.
 
 For the performance evaluations in this post, 
 we utilize the PoC implementation of GossipSub v2.0 
@@ -247,7 +270,7 @@ only if it has not previously sent an INEED request for the same message.
 We conducted a series of experiments under various configurations to evaluate the performance of 
 the GossipSub v1.4 proposal, the PPPT approach, and the GossipSub v2.0 proposal 
 against the baseline GossipSub v1.2 protocol. 
-To support these evaluations, we extended the nim-libp2p implementation to incorporate the proposed protocols 
+To support these evaluations, we extended the nim-libp2p implementation to include minimal PoC implementations of the considered protocols 
 [[16](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v1_4),
 [15](https://github.com/vacp2p/nim-libp2p/tree/research_gs_pppt),
 [18](https://github.com/vacp2p/nim-libp2p/tree/research_gs_v2_0)]  
@@ -266,8 +289,8 @@ We also report the average number of IWANT requests transmitted by a peer for a 
 
 For each experiment, we transmit multiple messages in the network. 
 We average the network-wide dissemination time for these messages to report latency. 
-Bandwidth refers to the total traffic volume, 
-encompassing both control traffic and actual data transmissions. 
+Bandwidth refers to the total volume of traffic in the network, 
+encompassing control messages and data transmissions (including duplicates and IWANT replies). 
 A peer usually receives multiple copies of any transmitted message. 
 Excluding the first received message, all copies are duplicates. 
 We compute average duplicates received by a peer as $\frac{1}{N M} \sum_{j=1}^{M} \sum_{i=1}^{N} d_{i,j}$ 
