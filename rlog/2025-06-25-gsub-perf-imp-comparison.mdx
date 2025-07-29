@@ -370,6 +370,35 @@ We uniformly set peer bandwidths and link latencies between 40-200 Mbps and
 | Bandwidth | Latency | Average Duplicates | Average IWANT Requests |
 
 
+## Findings
+
+- The number of IWANT requests increases with the message size. 
+Limiting ongoing IWANT requests for each message to one can be beneficial. 
+Additionally, the use of message PREAMBLEs can help eliminate IWANT requests 
+for messages that are already being received.
+
+- Pull-based approaches can substantially reduce bandwidth utilization, 
+but may result in much longer message dissemination times. 
+However, these approaches can achieve simultaneous propagation of multiple messages 
+by implicitly rotating among outgoing messages. 
+As a result, increasing the number of messages yields similar dissemination times. 
+ 
+- Transition from push to pull operation during the later stages of message propagation can reduce bandwidth consumption, 
+without compromising latency. 
+However, determining the propagation stage is challenging. 
+Methods like hop counts may compromise anonymity, 
+while using IHAVE announcements can be misleading. For instance, in the case of large messages, 
+peers may receive IHAVE announcements much earlier than the actual message spreads through the network.
+
+- Push-based approaches achieve the fastest message dissemination 
+but often produce a higher number of duplicate messages. 
+Employing mechanisms like PREAMBLE/IMRECEIVING messages 
+for guided elimination of duplicate messages can significantly reduce bandwidth consumption. 
+This reduction not only minimizes redundant transmissions 
+but also decreases the overall message dissemination time 
+by lessening the workload on peers located along optimal message forwarding paths.
+
+
 Please feel free to join the discussion and leave feedback regarding this post in the
 [VAC forum](https://forum.vac.dev/t/gsub-perf-imp-comparison/xxx).
 
