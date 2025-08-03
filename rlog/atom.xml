@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://vac.dev/rlog</id>
     <title>Vac Research Blog</title>
-    <updated>2025-07-05T18:30:00.000Z</updated>
+    <updated>2025-07-25T18:30:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://vac.dev/rlog"/>
     <subtitle>Vac Research Blog</subtitle>
@@ -11,7 +11,7 @@
         <title type="html"><![CDATA[Zerokit optimizations: A performance journey]]></title>
         <id>https://vac.dev/rlog/2025-zerokit-perf</id>
         <link href="https://vac.dev/rlog/2025-zerokit-perf"/>
-        <updated>2025-07-05T18:30:00.000Z</updated>
+        <updated>2025-07-25T18:30:00.000Z</updated>
         <summary type="html"><![CDATA[Zerokit is a toolkit]]></summary>
         <content type="html"><![CDATA[<p><a href="https://github.com/vacp2p/zerokit/" target="_blank" rel="noopener noreferrer"><u>Zerokit</u></a> is a toolkit
 providing powerful zero-knowledge utilities, including a
@@ -26,6 +26,7 @@ culling of redundant resource use. A story of cripplingly
 slow performance meets engineering talent, we arrive at a
 place where Zerokit comes through, fast and efficient, ready
 to face the world.</p>
+<!-- -->
 <h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="background">Background<a href="https://vac.dev/rlog/2025-zerokit-perf#background" class="hash-link" aria-label="Direct link to Background" title="Direct link to Background">​</a></h2>
 <p>Our friends over at <a href="https://free.technology/waku" target="_blank" rel="noopener noreferrer"><u>Waku</u></a> are
 particularly enthusiastic about anonymous spam prevention
@@ -53,7 +54,7 @@ water, unless we can meet the challenge put to us.</p>
 get rid of redundant operations and data taking up precious
 resources, and make the remaining operations go
 <a href="https://old.reddit.com/r/rust/comments/1avf1d8/blazingly_fast_memory_vulnerabilities_written_in/" target="_blank" rel="noopener noreferrer"><u><em>Blazingly Fast™</em>.</u></a></p>
-<p>Introducing the the star of the show for part 1: The main
+<p>Introducing the star of the show for part 1: The main
 point of having this tree is to generate proofs so that
 peers can verify the claims being made. That doesn’t require
 the whole Merkle tree, just a single path, from leaf to
@@ -63,7 +64,7 @@ operated, relegating the tree itself to an off-network
 reference. This reduced the burden imposed on the network
 significantly. Updating the data on the tree has similarly
 reduced, with the exception being that the siblings of each
-node were retained. This is called the <strong>Stateless</strong>
+node were retained. This is called the <strong>stateless</strong>
 approach.</p>
 <p>Well, stateless in the context of proof generation and
 verification. This is the critical context when it comes to
@@ -150,7 +151,7 @@ community-wide ecosystem. A thunderdome of benchmarks,
 leaving us with a single champion that cannot be denied, but
 which technology will claim this mantle? May the bits be
 <em>ever</em> in your favor...</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="benchmarking-with-rusts-criterion-crate">Benchmarking with Rusts <code>criterion</code> Crate<a href="https://vac.dev/rlog/2025-zerokit-perf#benchmarking-with-rusts-criterion-crate" class="hash-link" aria-label="Direct link to benchmarking-with-rusts-criterion-crate" title="Direct link to benchmarking-with-rusts-criterion-crate">​</a></h2>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="benchmarking-with-rusts-criterion-crate">Benchmarking with Rust's criterion crate<a href="https://vac.dev/rlog/2025-zerokit-perf#benchmarking-with-rusts-criterion-crate" class="hash-link" aria-label="Direct link to Benchmarking with Rust's criterion crate" title="Direct link to Benchmarking with Rust's criterion crate">​</a></h2>
 <p>Rust, much like Nim, offers unadulterated, fine-grained, and
 direct control over performance, but with Rust, this control
 is even more immediate. With its sophisticated ownership
@@ -160,7 +161,7 @@ concurrency," ease of refactoring, and providing tooling
 that effectively "pair programs with you" to help avoid
 common pitfalls, includeing those of the performance
 veriety.</p>
-<p>The <a href="https://crates.io/crates/criterion" target="_blank" rel="noopener noreferrer"><u>Criterion</u></a> crate is
+<p>The <a href="https://crates.io/crates/criterion" target="_blank" rel="noopener noreferrer"><u>criterion</u></a> crate is
 considered the go-to library for micro-benchmarking within
 the Rust ecosystem, and is generally regarded as an
 invaluable tool for obtaining high-quality telemetry.
@@ -244,6 +245,95 @@ you might hear a knock on your door, should something in
 your field of work catch our interest.</p>]]></content>
         <author>
             <name>BenPH</name>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Nim in Logos - 1st Edition]]></title>
+        <id>https://vac.dev/rlog/nim-in-logos-01</id>
+        <link href="https://vac.dev/rlog/nim-in-logos-01"/>
+        <updated>2025-07-04T23:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Welcome to the first edition of Nim in Logos — a newsletter covering major Nim features from Logos' perspective.]]></summary>
+        <content type="html"><![CDATA[<p>Welcome to the first edition of <strong>Nim in Logos</strong> — a newsletter covering major Nim features from Logos' perspective.</p>
+<p>If you have comments or suggestions, feel free to reach out to the authors directly or start a thread in the <a href="https://discord.gg/logosnetwork" target="_blank" rel="noopener noreferrer">Logos Discord server</a>.</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="nim-22---better-stability-smarter-memory-and-smoother-development">Nim 2.2  – Better Stability, Smarter Memory, and Smoother Development<a href="https://vac.dev/rlog/nim-in-logos-01#nim-22---better-stability-smarter-memory-and-smoother-development" class="hash-link" aria-label="Direct link to Nim 2.2  – Better Stability, Smarter Memory, and Smoother Development" title="Direct link to Nim 2.2  – Better Stability, Smarter Memory, and Smoother Development">​</a></h2>
+<p>The Nim 2.2 release series focuses on improving language stability, fixing long-standing bugs, and optimizing performance—particularly in the ORC memory management system. The latest patch in this series, version 2.2.4, continues to build on these goals.</p>
+<p>Here are some of the key highlights from the 2.2 series:</p>
+<ul>
+<li><strong>More powerful generics and type expressions:</strong> Stabilization of generics, typedesc, and static types. These features now support arbitrary expressions that previously only worked in limited cases, making them more reliable.</li>
+<li><strong>Improved tuple unpacking:</strong> Tuple unpacking now supports discarding values using underscores (_) and allows inline type annotations for unpacked elements.</li>
+<li><strong>Memory leak fixes:</strong> Issues with memory leaks when using std/nre’s regular expressions or nested exceptions have been resolved.</li>
+<li><strong>More efficient async code:</strong> Futures no longer always copy data, resulting in better performance in asynchronous workflows.</li>
+<li><strong>String bug fixes:</strong> Several issues involving string and cstring usage have been corrected.</li>
+</ul>
+<p>In addition to core language improvements:</p>
+<ul>
+<li><strong>NimSuggest stability:</strong> The language server has received multiple fixes, improving the experience in IDEs and editors that rely on NimSuggest for autocompletion and error checking.</li>
+<li><strong>Better code generation:</strong> Numerous issues related to invalid or broken C and C++ code generation and backend-specific bugs have been addressed, improving Nim’s reliability when targeting other languages.</li>
+</ul>
+<p>You can read the full release announcement and changelog <a href="https://nim-lang.org/blog/2024/10/02/nim-220-2010.html" target="_blank" rel="noopener noreferrer">here</a></p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="error-handling-in-nim-why-results-beat-exceptions">Error Handling in Nim: Why Results Beat Exceptions<a href="https://vac.dev/rlog/nim-in-logos-01#error-handling-in-nim-why-results-beat-exceptions" class="hash-link" aria-label="Direct link to Error Handling in Nim: Why Results Beat Exceptions" title="Direct link to Error Handling in Nim: Why Results Beat Exceptions">​</a></h2>
+<p>Error handling is one of the most critical aspects of writing reliable software, yet it remains a contentious topic in many programming languages. In Nim, developers face a unique challenge: multiple error handling paradigms are supported, leading to confusion about which approach to choose. For robust, maintainable code, our answer at Logos is increasingly clear—favor Result types over exceptions.</p>
+<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="the-exception-problem">The Exception Problem<a href="https://vac.dev/rlog/nim-in-logos-01#the-exception-problem" class="hash-link" aria-label="Direct link to The Exception Problem" title="Direct link to The Exception Problem">​</a></h4>
+<p>While exceptions might seem convenient for quick scripts and prototypes, they introduce significant challenges in complex, long-running applications:</p>
+<ul>
+<li><strong>Silent API Changes</strong>: One of the most dangerous aspects of exception-based error handling is that changes deep within dependencies can break your code without any compile-time warning. When a function suddenly starts throwing a new exception type, your code may fail at runtime under exceptional circumstances—often when you least expect it.</li>
+<li><strong>Resource Management Issues</strong>: Exceptions create unpredictable control flow that can lead to resource leaks, security vulnerabilities, and unexpected crashes. When an exception unwinds the stack, resources may not be properly cleaned up.</li>
+<li><strong>Refactoring Difficulties</strong>: The compiler provides little assistance when working with exception-based code. Adding a new exception type breaks the ABI but leaves the API unchanged, making it nearly impossible to track down all the places that need updating.</li>
+</ul>
+<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="the-result-advantage">The Result Advantage<a href="https://vac.dev/rlog/nim-in-logos-01#the-result-advantage" class="hash-link" aria-label="Direct link to The Result Advantage" title="Direct link to The Result Advantage">​</a></h4>
+<p>The Result type offers a compelling alternative that makes error handling explicit, predictable, and compiler-verified:</p>
+<div class="language-bash codeBlockContainer_EB2s codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:rgba(var(--lsd-surface-secondary), 0.08)"><div class="codeBlockContent_ugSV"><pre tabindex="0" class="prism-code language-bash codeBlock_TWhw thin-scrollbar"><code class="codeBlockLines_LDrR"><span class="token-line" style="color:#F8F8F2"><span class="token plain"># Enforce that no exceptions can't be raised in this module</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">{.push raises: [].}</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">import results</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">proc doSomething(): Result[void, string] =</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"># Implementation here</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">proc getRandomInt(): Result[int, string] =</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain"># Implementation here</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">doSomething().isOkOr:</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">echo "Failed doing something, error: ", &amp; error</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">randomInt = getRandomInt().valueOr:</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">echo "Failed getting random int, error: ", &amp; error</span><br></span></code></pre><div class="buttonGroup_Qu4e"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_an20" aria-hidden="true"><div class="icon_S7Kx m_thRi copyButtonIcon_ZL7v"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M2.917 12.833q-.482 0-.825-.343a1.12 1.12 0 0 1-.342-.823V3.5h1.167v8.167h6.416v1.166zM5.25 10.5q-.481 0-.824-.343a1.12 1.12 0 0 1-.343-.824v-7q0-.48.343-.824t.824-.342h5.25q.481 0 .824.343t.343.823v7q0 .482-.343.825a1.12 1.12 0 0 1-.824.342zm0-1.167h5.25v-7H5.25z"></path></svg></div></span></button></div></div></div>
+<p>Notice that this usage of Result is much more concise and easier to follow than try-except blocks</p>
+<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="best-practices-for-result-based-error-handling">Best Practices for Result-Based Error Handling<a href="https://vac.dev/rlog/nim-in-logos-01#best-practices-for-result-based-error-handling" class="hash-link" aria-label="Direct link to Best Practices for Result-Based Error Handling" title="Direct link to Best Practices for Result-Based Error Handling">​</a></h4>
+<ul>
+<li><strong>Make Errors Explicit</strong>: Use Result when multiple failure paths exist and calling code needs to differentiate between them. This makes error handling visible at the call site and forces developers to consciously handle failure cases.</li>
+<li><strong>Handle Errors Locally</strong>: Address errors at each abstraction level rather than letting them bubble up through multiple layers. This prevents spurious abstraction leakage and keeps error handling logic close to where problems occur.</li>
+<li><strong>Use Exception Tracking</strong>: Enable exception tracking with <code>{.push raises: [].}</code> at the module level. This helps identify any remaining exception-throwing code and ensures new code follows the Result pattern.</li>
+</ul>
+<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="when-to-break-the-rules">When to Break the Rules<a href="https://vac.dev/rlog/nim-in-logos-01#when-to-break-the-rules" class="hash-link" aria-label="Direct link to When to Break the Rules" title="Direct link to When to Break the Rules">​</a></h4>
+<p>While Result should be your default choice, exceptions still have their place:</p>
+<ul>
+<li><strong>Assertions and Logic Errors</strong>: Use assertions for violated preconditions or situations where recovery isn't possible or expected.</li>
+<li><strong>Legacy Integration</strong>: When interfacing with exception-heavy libraries, you may need to use exceptions at integration boundaries, but convert them to Result types as quickly as possible. To ensure safe exception handling, explicitly declare which exceptions a procedure may raise using the <code>{.raises: [SpecificException].}</code> pragma.</li>
+</ul>
+<p>Error handling in Nim continues to evolve, but the trend is clear: explicit error handling through Result types provides better safety, maintainability, and debugging experience than exceptions. By making errors part of your function signatures and forcing explicit handling at call sites, you create more robust software that fails gracefully and predictably.</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="debugging-in-nim">Debugging in Nim<a href="https://vac.dev/rlog/nim-in-logos-01#debugging-in-nim" class="hash-link" aria-label="Direct link to Debugging in Nim" title="Direct link to Debugging in Nim">​</a></h2>
+<p>Nowadays, analyzing the behavior of a Nim program is not as straightforward as debugging a C++ application, for example.</p>
+<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="gdb">GDB<a href="https://vac.dev/rlog/nim-in-logos-01#gdb" class="hash-link" aria-label="Direct link to GDB" title="Direct link to GDB">​</a></h4>
+<p>GDB can be used, and step-by-step debugging with GDB and VSCode is possible. However, the interaction is not very smooth. You can set breakpoints in VSCode and press F5 to run the program up to the breakpoint and continue debugging from there. That said, the state of variables is not fully demangled. For example:</p>
+<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="img" src="https://vac.dev/assets/images/nim-gdb-fd0493d2f83bf5f19eb4476e41036b35.png" width="471" height="497" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
+<p>For that reason, GDB is not the preferred option in Logos</p>
+<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="logs---chronicles">Logs - Chronicles<a href="https://vac.dev/rlog/nim-in-logos-01#logs---chronicles" class="hash-link" aria-label="Direct link to Logs - Chronicles" title="Direct link to Logs - Chronicles">​</a></h4>
+<p>At Logos, we primarily debug Nim applications using log outputs. In particular, we make extensive use of the <a href="https://github.com/status-im/nim-chronicles" target="_blank" rel="noopener noreferrer">nim-chronicles</a> library.</p>
+<p><code>nim-chronicles</code> is a robust logging library that automatically includes the following contextual information in each log entry:</p>
+<ul>
+<li>Calling thread ID</li>
+<li>Current timestamp</li>
+<li>Log level (e.g., TRACE, DEBUG, INFO, WARN, ERROR, FATAL)</li>
+<li>Source file name</li>
+<li>Line number of the log statement</li>
+</ul>
+<p>Additionally, <code>chronicles</code> supports attaching custom log messages along with relevant variable values, which proves especially useful for debugging. For instance, in the following example, the log message is <code>"Configuration. Shards"</code>, and it includes the value of an additional variable, <code>shard</code>.</p>
+<div class="language-jsx codeBlockContainer_EB2s codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:rgba(var(--lsd-surface-secondary), 0.08)"><div class="codeBlockContent_ugSV"><pre tabindex="0" class="prism-code language-jsx codeBlock_TWhw thin-scrollbar"><code class="codeBlockLines_LDrR"><span class="token-line" style="color:#F8F8F2"><span class="token constant" style="color:rgb(189, 147, 249)">INF</span><span class="token plain"> </span><span class="token number">2025</span><span class="token operator">-</span><span class="token number">07</span><span class="token operator">-</span><span class="token number">01</span><span class="token plain"> </span><span class="token number">09</span><span class="token operator">:</span><span class="token number">56</span><span class="token operator">:</span><span class="token number">57.705</span><span class="token operator">+</span><span class="token number">02</span><span class="token operator">:</span><span class="token number">00</span><span class="token plain"> </span><span class="token maybe-class-name">Configuration</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token plain"> </span><span class="token property-access maybe-class-name">Shards</span><span class="token plain">                      topics</span><span class="token operator">=</span><span class="token string" style="color:rgb(255, 121, 198)">"waku conf"</span><span class="token plain"> tid</span><span class="token operator">=</span><span class="token number">28817</span><span class="token plain"> file</span><span class="token operator">=</span><span class="token plain">waku_conf</span><span class="token punctuation" style="color:rgb(248, 248, 242)">.</span><span class="token property-access">nim</span><span class="token operator">:</span><span class="token number">147</span><span class="token plain"> shard</span><span class="token operator">=</span><span class="token number">64</span><br></span></code></pre><div class="buttonGroup_Qu4e"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_an20" aria-hidden="true"><div class="icon_S7Kx m_thRi copyButtonIcon_ZL7v"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M2.917 12.833q-.482 0-.825-.343a1.12 1.12 0 0 1-.342-.823V3.5h1.167v8.167h6.416v1.166zM5.25 10.5q-.481 0-.824-.343a1.12 1.12 0 0 1-.343-.824v-7q0-.48.343-.824t.824-.342h5.25q.481 0 .824.343t.343.823v7q0 .482-.343.825a1.12 1.12 0 0 1-.824.342zm0-1.167h5.25v-7H5.25z"></path></svg></div></span></button></div></div></div>
+<p>There are also useful techniques for displaying more detailed information about specific variables:</p>
+<ul>
+<li><code>repr(p)</code> — Returns a string representation of the variable <code>p</code>, providing a more comprehensive view of its contents.</li>
+<li><code>name(typeof(p))</code> — Extracts the type of the variable <code>p</code> as a string. This is particularly helpful when working with pointers or generics.</li>
+</ul>
+<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="logs---echo">Logs - echo<a href="https://vac.dev/rlog/nim-in-logos-01#logs---echo" class="hash-link" aria-label="Direct link to Logs - echo" title="Direct link to Logs - echo">​</a></h4>
+<p>The <a href="https://nim-lang.org/docs/system.html#echo%2Cvarargs%5Btyped%2C%5D" target="_blank" rel="noopener noreferrer">echo</a> statement in Nim serves as a basic debugging tool, although it is less powerful and flexible compared to <code>nim-chronicles</code>.</p>
+<p>Besides, <a href="https://www.notion.so/Nim-in-Logos-July-2025-2038f96fb65c8042bcbbe676ee8f2182?pvs=21" target="_blank" rel="noopener noreferrer">debugEcho</a> is an interesting alternative, which behaves similarly to <code>echo</code> but it allows working on routines marked with no side effects.</p>
+<h4 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="heaptrack">Heaptrack<a href="https://vac.dev/rlog/nim-in-logos-01#heaptrack" class="hash-link" aria-label="Direct link to Heaptrack" title="Direct link to Heaptrack">​</a></h4>
+<p>This technique enables precise insight into where memory is being consumed within a Nim application.</p>
+<p>It is particularly useful for identifying potential memory leaks and is widely employed in <strong>nwaku</strong> (Nim Waku). For more details, refer to the documentation: <a href="https://github.com/waku-org/nwaku/blob/master/docs/tutorial/heaptrack.md" target="_blank" rel="noopener noreferrer">Heaptrack Tutorial</a>.</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="formatting-code-in-nim">Formatting code in Nim<a href="https://vac.dev/rlog/nim-in-logos-01#formatting-code-in-nim" class="hash-link" aria-label="Direct link to Formatting code in Nim" title="Direct link to Formatting code in Nim">​</a></h2>
+<p>Maintaining a consistent code format is essential for readability and for facilitating clear diff comparisons during code reviews.</p>
+<p>To support this, Logos strongly recommends using <a href="https://arnetheduck.github.io/nph/" target="_blank" rel="noopener noreferrer"><em>nph</em></a> across all Nim projects.</p>]]></content>
+        <author>
+            <name>Ivan</name>
+        </author>
+        <author>
+            <name>Gabriel</name>
         </author>
     </entry>
     <entry>
@@ -5435,366 +5525,6 @@ Waku is already used in production.</li>
 </ul>]]></content>
         <author>
             <name>Franck</name>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Building Privacy-Protecting Infrastructure]]></title>
-        <id>https://vac.dev/rlog/building-privacy-protecting-infrastructure</id>
-        <link href="https://vac.dev/rlog/building-privacy-protecting-infrastructure"/>
-        <updated>2022-11-04T12:00:00.000Z</updated>
-        <summary type="html"><![CDATA[What is privacy-protecting infrastructure? Why do we need it and how we can build it? We'll look at Waku, the communication layer for Web3. We'll see how it uses ZKPs to incentivize and protect the Waku network. We'll also look at Zerokit, a library that makes it easier to use ZKPs in different environments. After reading this, I hope you'll better understand the importance of privacy-protecting infrastructure and how we can build it.]]></summary>
-        <content type="html"><![CDATA[<p>What is privacy-protecting infrastructure? Why do we need it and how we can build it? We'll look at Waku, the communication layer for Web3. We'll see how it uses ZKPs to incentivize and protect the Waku network. We'll also look at Zerokit, a library that makes it easier to use ZKPs in different environments. After reading this, I hope you'll better understand the importance of privacy-protecting infrastructure and how we can build it.</p>
-<!-- -->
-<p><em>This write-up is based on a talk given at DevCon 6 in Bogota, a video can be found <a href="https://www.youtube.com/watch?v=CW1DYJifdhs" target="_blank" rel="noopener noreferrer">here</a></em></p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="intro">Intro<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#intro" class="hash-link" aria-label="Direct link to Intro" title="Direct link to Intro">​</a></h3>
-<p>In this write-up, we are going to talk about building privacy-protecting
-infrastructure. What is it, why do we need it and how can we build it?</p>
-<p>We'll look at Waku, the communication layer for Web3. We'll look at how we are
-using Zero Knowledge (ZK) technology to incentivize and protect the Waku
-network. We'll also look at Zerokit, a library we are writing to make ZKP easier
-to use in different environments.</p>
-<p>At the end of this write-up, I hope you'll come away with an understanding of
-the importance of privacy-protecting infrastructure and how we can build it.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="about">About<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#about" class="hash-link" aria-label="Direct link to About" title="Direct link to About">​</a></h3>
-<p>First, briefly about Vac. We build public good protocols for the decentralized
-web, with a focus on privacy and communication. We do applied research based on
-which we build protocols, libraries and publications. We are also the custodians
-of protocols that reflect a set of principles.</p>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Principles" src="https://vac.dev/assets/images/building_private_infra_principles-699c52e62e0e4de0843ddb23ffbed365.png" width="1204" height="356" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<p>It has its origins in the <a href="https://status.im/" target="_blank" rel="noopener noreferrer">Status app</a> and trying to improve
-the underlying protocols and infrastructure. We build <a href="https://waku.org/" target="_blank" rel="noopener noreferrer">Waku</a>,
-among other things.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="why-build-privacy-protecting-infrastructure">Why build privacy-protecting infrastructure?<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#why-build-privacy-protecting-infrastructure" class="hash-link" aria-label="Direct link to Why build privacy-protecting infrastructure?" title="Direct link to Why build privacy-protecting infrastructure?">​</a></h3>
-<p>Privacy is the power to selectively reveal yourself. It is a requirement for
-freedom and self-determination.</p>
-<p>Just like you need decentralization in order to get censorship-resistance, you
-need privacy to enable freedom of expression.</p>
-<p>To build applications that are decentralized and privacy-protecting, you need
-the base layer, the infrastructure itself, to have those properties.</p>
-<p>We see this a lot. It is easier to make trade-offs at the application layer than
-doing them at the base layer. You can build custodial solutions on top of a
-decentralized and non-custodial network where participants control their own
-keys, but you can't do the opposite.</p>
-<p>If you think about it, buildings can be seen as a form of privacy-protecting
-infrastructure. It is completely normal and obvious in many ways, but when it
-comes to the digital realm our mental models and way of speaking about it hasn't
-caught up yet for most people.</p>
-<p>I'm not going too much more into the need for privacy or what happens when you
-don't have it, but suffice to say it is an important property for any open
-society.</p>
-<p>When we have conversations, true peer-to-peer offline conversations, we can talk
-privately. If we use cash to buy things we can do commerce privately.</p>
-<p>On the Internet, great as it is, there are a lot of forces that makes this
-natural state of things not the default. Big Tech has turned users into a
-commodity, a product, and monetized user's attention for advertising. To
-optimize for your attention they need to surveil your habits and activities, and
-hence breach your privacy. As opposed to more old-fashioned models, where
-someone is buying a useful service from a company and the incentives are more
-aligned.</p>
-<p>We need to build credibly neutral infrastructure that protects your privacy at
-the base layer, in order to truly enable applications that are
-censorship-resistant and encourage meaningful freedom of expression.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="web3-infrastructure">Web3 infrastructure<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#web3-infrastructure" class="hash-link" aria-label="Direct link to Web3 infrastructure" title="Direct link to Web3 infrastructure">​</a></h3>
-<p>Infrastructure is what lies underneath. Many ways of looking at this but I'll
-keep it simple as per the original Web3 vision. You had Ethereum for
-compute/consensus, Swarm for storage, and Whisper for messaging. Waku has taken
-over the mantle from Whisper and is a lot more
-<a href="https://vac.dev/fixing-whisper-with-waku" target="_blank" rel="noopener noreferrer">usable</a> today than Whisper ever was,
-for many reasons.</p>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Web3 Infrastructure" src="https://vac.dev/assets/images/web3_holy_trinity-fd2023ba2271927950dc70bb56f3c615.png" width="1408" height="826" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<p>On the privacy-front, we see how Ethereum is struggling. It is a big UX problem,
-especially when you try to add privacy back "on top". It takes a lot of effort
-and it is easier to censor. We see this with recent action around Tornado Cash.
-Compare this with something like Zcash or Monero, where privacy is there by
-default.</p>
-<p>There are also problems when it comes to the p2p networking side of things, for
-example with Ethereum validator privacy and hostile actors and jurisdictions. If
-someone can easily find out where a certain validator is physically located,
-that's a problem in many parts of the world. Being able to have stronger
-privacy-protection guarantees would be very useful for high-value targets.</p>
-<p>This doesn't begin to touch on the so called "dapps" that make a lot of
-sacrifices in how they function, from the way domains work, to how websites are
-hosted and the reliance on centralized services for communication. We see this
-time and time again, where centralized, single points of failure systems work
-for a while, but then eventually fail.</p>
-<p>In many cases an individual user might not care enough though, and for platforms
-the lure to take shortcuts is strong. That is why it is important to be
-principled, but also pragmatic in terms of the trade-offs that you allow on top.
-We'll touch more on this in the design goals around modularity that Waku has.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="zk-for-privacy-protecting-infrastructure">ZK for privacy-protecting infrastructure<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#zk-for-privacy-protecting-infrastructure" class="hash-link" aria-label="Direct link to ZK for privacy-protecting infrastructure" title="Direct link to ZK for privacy-protecting infrastructure">​</a></h3>
-<p>ZKPs are a wonderful new tool. Just like smart contracts enables programmable
-money, ZKPs allow us to express fundamentally new things. In line with the great
-tradition of trust-minimization, we can prove statement while revealing the
-absolute minimum information necessary. This fits the definition of privacy, the
-power to selectively reveal yourself, perfectly. I'm sure I don't need to tell
-anyone reading this but this is truly revolutionary. The technology is advancing
-extremely fast and often it is our imagination that is the limit.</p>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Zero knowledge" src="https://vac.dev/assets/images/building_private_infra_zk-61dc3331f70705c672242b894bc35ab8.png" width="1412" height="930" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="waku">Waku<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#waku" class="hash-link" aria-label="Direct link to Waku" title="Direct link to Waku">​</a></h3>
-<p>What is Waku? It is a set of modular protocols for p2p communication. It has a
-focus on privacy, security and being able to run anywhere. It is the spiritual
-success to Whisper.</p>
-<p>By modular we mean that you can pick and choose protocols and how you use them
-depending on constraints and trade-offs. For example, bandwidth usage vs
-privacy.</p>
-<p>It is designed to work in resource restricted environments, such as mobile
-phones and in web browsers. It is important that infrastructure meets users
-where they are and supports their real-world use cases. Just like you don't need
-your own army and a castle to have your own private bathroom, you shouldn't need
-to have a powerful always-on node to get reasonable privacy and
-censorship-resistance. We might call this self-sovereignty.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="waku---adaptive-nodes">Waku - adaptive nodes<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#waku---adaptive-nodes" class="hash-link" aria-label="Direct link to Waku - adaptive nodes" title="Direct link to Waku - adaptive nodes">​</a></h3>
-<p>One way of looking at Waku is as an open service network. There are nodes with
-varying degrees of capabilities and requirements. For example when it comes to
-bandwidth usage, storage, uptime, privacy requirements, latency requirements,
-and connectivity restrictions.</p>
-<p>We have a concept of adaptive nodes that can run a variety of protocols. A node
-operator can choose which protocols they want to run. Naturally, there'll be
-some nodes that do more consumption and other nodes that do more provisioning.
-This gives rise to the idea of a service network, where services are provided
-for and consumed.</p>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Adaptive Nodes" src="https://vac.dev/assets/images/building_private_infra_adaptive-69974a7e087e209572e1c2faf162e5d5.png" width="1408" height="1098" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="waku---protocol-interactions">Waku - protocol interactions<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#waku---protocol-interactions" class="hash-link" aria-label="Direct link to Waku - protocol interactions" title="Direct link to Waku - protocol interactions">​</a></h3>
-<p>There are many protocols that interact. Waku Relay protocol is based on libp2p
-GossipSub for p2p messaging. We have filter for bandwidth-restricted nodes to
-only receive subset of messages. Lightpush for nodes with short connection
-windows to push messages into network. Store for nodes that want to retrieve
-historical messages.</p>
-<p>On the payload layer, we provide support for Noise handshakes/key-exchanges.
-This means that as a developers, you can get end-to-end encryption and expected
-guarantees out of the box. We have support for setting up a secure channel from
-scratch, and all of this paves the way for providing Signal's Double Ratchet at
-the protocol level much easier. We also have experimental support for
-multi-device usage. Similar features have existed in for example the Status app
-for a while, but with this we make it easier for any platform using Waku to use
-it.</p>
-<p>There are other protocols too, related to peer discovery, topic usage, etc. See
-<a href="https://rfc.vac.dev/" target="_blank" rel="noopener noreferrer">specs</a> for more details.</p>
-<img src="https://vac.dev/img/building_private_infra_interactions.png" alt="Protocol Interactions">
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="waku---network">Waku - Network<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#waku---network" class="hash-link" aria-label="Direct link to Waku - Network" title="Direct link to Waku - Network">​</a></h3>
-<p>For the Waku network, there are a few problems. For example, when it comes to
-network spam and incentivizing service nodes. We want to address these while
-keeping privacy-guarantees of the base layer. I'm going to go into both of
-these.</p>
-<p>The spam problem arises on the gossip layer when anyone can overwhelm the
-network with messages. The service incentivization is a problem when nodes don't
-directly benefit from the provisioning of a certain service. This can happen if
-they are not using the protocol directly themselves as part of normal operation,
-or if they aren't socially inclined to provide a certain service. This depends a
-lot on how an individual platform decides to use the network.</p>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Waku Network" src="https://vac.dev/assets/images/building_private_infra_network-43aa536967aee45b44a1e2a6673b6941.png" width="1860" height="980" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="dealing-with-network-spam-and-rln-relay">Dealing with network spam and RLN Relay<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#dealing-with-network-spam-and-rln-relay" class="hash-link" aria-label="Direct link to Dealing with network spam and RLN Relay" title="Direct link to Dealing with network spam and RLN Relay">​</a></h3>
-<p>Since the p2p relay network is open to anyone, there is a problem with spam. If
-we look at existing solutions for dealing with spam in traditional messaging
-systems, a lot of entities like Google, Facebook, Twitter, Telegram, Discord use
-phone number verification. While this is largely sybil-resistant, it is
-centralized and not private at all.</p>
-<p>Historically, Whisper used PoW which isn't good for heterogenerous networks.
-Peer scoring is open to sybil attacks and doesn't directly address spam
-protection in an anonymous p2p network.</p>
-<p>The key idea here is to use RLN for private economic spam protection using
-zkSNARKs.</p>
-<p>I'm not going to go into too much detail of RLN here. If you are interested, I
-gave a <a href="https://www.youtube.com/watch?v=g41nHQ0mLoA" target="_blank" rel="noopener noreferrer">talk</a> in Amsterdam at
-Devconnect about this. We have some write-ups on RLN
-<a href="https://vac.dev/rln-relay" target="_blank" rel="noopener noreferrer">here</a> by Sanaz who has been pushing a lot of this
-from our side. There's also another talk at Devcon by Tyler going into RLN in
-more detail. Finally, here's the <a href="https://rfc.vac.dev/vac/32/rln-v1" target="_blank" rel="noopener noreferrer">RLN spec</a>.</p>
-<p>I'll briefly go over what it is, the interface and circuit and then talk about
-how it is used in Waku.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="rln---overview-and-flow">RLN - Overview and Flow<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#rln---overview-and-flow" class="hash-link" aria-label="Direct link to RLN - Overview and Flow" title="Direct link to RLN - Overview and Flow">​</a></h3>
-<p>RLN stands for Rate Limiting Nullifier. It is an anonyomous rate limiting
-mechanism based on zkSNARKs. By rate limiting we mean you can only send N
-messages in a given period. By anonymity we mean that you can't link message to
-a publisher. We can think of it as a voting booth, where you are only allowed to
-vote once every election.</p>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Voting Booth" src="https://vac.dev/assets/images/building_private_infra_vote-a5992b54f4076642acc8e20ac716c750.png" width="703" height="479" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<p>It can be used for spam protection in p2p messaging systems, and also rate
-limiting in general, such as for a decentralized captcha.</p>
-<p>There are three parts to it. You register somewhere, then you can signal and
-finally there's a verification/slashing phase. You put some capital at risk,
-either economic or social, and if you double signal you get slashed.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="rln---circuit">RLN - Circuit<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#rln---circuit" class="hash-link" aria-label="Direct link to RLN - Circuit" title="Direct link to RLN - Circuit">​</a></h3>
-<p>Here's what the private and public inputs to the circuit look like. The identity
-secret is generated locally, and we create an identity commitment that is
-inserted into a Merkle tree. We then use Merkle proofs to prove membership.
-Registered member can only signal once for a given epoch or external nullifier,
-for example every ten seconds in Unix time. RLN identifer is for a specific RLN
-app.</p>
-<p>We also see what the circuit output looks like. This is calculated locally. <code>y</code>
-is a share of the secret equation, and the (internal) nullifier acts as a unique
-fingerprint for a given app/user/epoch combination. How do we calculate <code>y</code> and
-the internal nullifier?</p>
-<div class="codeBlockContainer_EB2s codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:rgba(var(--lsd-surface-secondary), 0.08)"><div class="codeBlockContent_ugSV"><pre tabindex="0" class="prism-code language-text codeBlock_TWhw thin-scrollbar"><code class="codeBlockLines_LDrR"><span class="token-line" style="color:#F8F8F2"><span class="token plain">// Private input</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">signal input identity_secret;</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">signal input path_elements[n_levels][1];</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">signal input identity_path_index[n_levels];</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">// Public input</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">signal input x; // signal_hash</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">signal input epoch; // external_nullifier</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">signal input rln_identifier;</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">// Circuit output</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">signal output y;</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">signal output root;</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">signal output nullifier;</span><br></span></code></pre><div class="buttonGroup_Qu4e"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_an20" aria-hidden="true"><div class="icon_S7Kx m_thRi copyButtonIcon_ZL7v"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M2.917 12.833q-.482 0-.825-.343a1.12 1.12 0 0 1-.342-.823V3.5h1.167v8.167h6.416v1.166zM5.25 10.5q-.481 0-.824-.343a1.12 1.12 0 0 1-.343-.824v-7q0-.48.343-.824t.824-.342h5.25q.481 0 .824.343t.343.823v7q0 .482-.343.825a1.12 1.12 0 0 1-.824.342zm0-1.167h5.25v-7H5.25z"></path></svg></div></span></button></div></div></div>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="rln---shamirs-secret-sharing">RLN - Shamir's secret sharing<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#rln---shamirs-secret-sharing" class="hash-link" aria-label="Direct link to RLN - Shamir's secret sharing" title="Direct link to RLN - Shamir's secret sharing">​</a></h3>
-<p>This is done using <a href="https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing" target="_blank" rel="noopener noreferrer">Shamir's secret
-sharing</a>. Shamir’s
-secret sharing is based on idea of splitting a secret into shares. This is how
-we enable slashing of funds.</p>
-<p>In this case, we have two shares. If a given identity <code>a0</code> signals twice in
-epoch/external nullifier, <code>a1</code> is the same. For a given RLN app,
-<code>internal_nullifier</code> then stays the same. <code>x</code> is signal hash which is different,
-and <code>y</code> is public, so we can reconstruct <code>identity_secret</code>. With the identity
-secret revealed, this gives access to e.g. financial stake.</p>
-<div class="codeBlockContainer_EB2s codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:rgba(var(--lsd-surface-secondary), 0.08)"><div class="codeBlockContent_ugSV"><pre tabindex="0" class="prism-code language-text codeBlock_TWhw thin-scrollbar"><code class="codeBlockLines_LDrR"><span class="token-line" style="color:#F8F8F2"><span class="token plain">a_0 = identity_secret // secret S</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">a_1 = poseidonHash([a0, external_nullifier])</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">y = a_0 + x * a_1</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">internal_nullifier = poseidonHash([a_1, rln_identifier])</span><br></span></code></pre><div class="buttonGroup_Qu4e"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_an20" aria-hidden="true"><div class="icon_S7Kx m_thRi copyButtonIcon_ZL7v"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M2.917 12.833q-.482 0-.825-.343a1.12 1.12 0 0 1-.342-.823V3.5h1.167v8.167h6.416v1.166zM5.25 10.5q-.481 0-.824-.343a1.12 1.12 0 0 1-.343-.824v-7q0-.48.343-.824t.824-.342h5.25q.481 0 .824.343t.343.823v7q0 .482-.343.825a1.12 1.12 0 0 1-.824.342zm0-1.167h5.25v-7H5.25z"></path></svg></div></span></button></div></div></div>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Shamir&amp;#39;s secret sharing" src="https://vac.dev/assets/images/building_private_infra_shamir-8f4c8e31d2eaa86b62392514a411b999.png" width="936" height="704" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="rln-relay">RLN Relay<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#rln-relay" class="hash-link" aria-label="Direct link to RLN Relay" title="Direct link to RLN Relay">​</a></h3>
-<p>This is how RLN is used with Relay/GossipSub protocol. A node registers and
-locks up funds, and after that it can send messages. It publishes a message
-containing the Zero Knowledge proof and some other details.</p>
-<p>Each relayer node listens to the membership contract for new members, and it
-also keeps track of relevant metadata and merkle tree. Metadata is needed to be
-able to detect double signaling and perform slashing.</p>
-<p>Before forwarding a message, it does some verification checks to ensure there
-are no duplicate messages, ZKP is valid and no double signaling has occured. It
-is worth noting that this can be combined with peer scoring, for example for
-duplicate messages or invalid ZK proofs.</p>
-<p>In line of Waku's goals of modularity, RLN Relay is applied on a specific subset
-of pubsub and content topics. You can think of it as an extra secure channel.</p>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="RLN Relay" src="https://vac.dev/assets/images/building_private_infra_rlnrelay-4823f37fce52d9d44d72ca73028fa9b8.png" width="1874" height="995" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="rln-relay-cross-client-testnet">RLN Relay cross-client testnet<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#rln-relay-cross-client-testnet" class="hash-link" aria-label="Direct link to RLN Relay cross-client testnet" title="Direct link to RLN Relay cross-client testnet">​</a></h3>
-<p>Where are we with RLN Relay deployment? We've recently launched our second
-testnet. This is using RLN Relay with a smart contract on Goerli. It integrates
-with our example p2p chat application, and it does so through three different
-clients, nwaku, go-waku and js-waku for browsers. This is our first p2p
-cross-client testnet for RLN Relay.</p>
-<p>Here's a <a href="https://www.youtube.com/watch?v=-vVrJWW0fls" target="_blank" rel="noopener noreferrer">video</a> that shows a user
-registering in a browser, signaling through JS-Waku. It then gets relayed to a
-nwaku node, that verifies the proof. The second
-<a href="https://www.youtube.com/watch?v=Xz5q2ZhkFYs" target="_blank" rel="noopener noreferrer">video</a> shows what happens in the
-spam case. when more than one message is sent in a given epoch, it detects it as
-spam and discards it. Slashing hasn't been implemented fully yet in the client
-and is a work in progress.</p>
-<p>If you are curious and want to participate, you can join the effort on our <a href="https://discord.gg/PQFdubGt6d" target="_blank" rel="noopener noreferrer">Vac
-Discord</a>. We also have
-<a href="https://github.com/status-im/nwaku/blob/master/docs/tutorial/rln-chat-cross-client.md" target="_blank" rel="noopener noreferrer">tutorials</a>
-setup for all clients so you can play around with it.</p>
-<p>As part of this, and to make it work in multiple different environments, we've
-also been developing a new library called Zerokit. I'll talk about this a bit
-later.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="private-settlement--service-credentials">Private settlement / Service credentials<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#private-settlement--service-credentials" class="hash-link" aria-label="Direct link to Private settlement / Service credentials" title="Direct link to Private settlement / Service credentials">​</a></h3>
-<p>Going back to the service network idea, let's talk about service credentials.
-The idea behind service credentials and private settlement is to enable two
-actors to pay for and provide services without compromising their privacy. We do
-not want the payment to create a direct public link between the service provider
-and requester.</p>
-<p>Recall the Waku service network illustration with adaptive nodes that choose
-which protocols they want to run. Many of these protocols aren't very heavy and
-just work by default. For example the relay protocol is enabled by default.
-Other protocols are much heavier to provide, such as storing historical
-messages.</p>
-<p>It is desirable to have additional incentives for this, especially for platforms
-that aren't community-based where some level of altruism can be assumed (e.g.
-Status Communities, or WalletConnect cloud infrastructure).</p>
-<p>You have a node Alice that is often offline and wants to consume historical
-messages on some specific content topics. You have another node Bob that runs a
-server at home where they store historical messages for the last several weeks.
-Bob is happy to provide this service for free because he's excited about running
-privacy-preserving infrastructure and he's using it himself, but his node is
-getting overwhelmed by freeloaders and he feels like he should be paid something
-for continuing to provide this service.</p>
-<p>Alice deposits some funds in a smart contract which registers it in a tree,
-similar to certain other private settlement mechanisms. A fee is taken or
-burned. In exchange, she gets a set of tokens or service credentials. When she
-wants to do a query with some criteria, she sends this to Bob. Bob responds with
-size of response, cost, and receiver address. Alice then sends a proof of
-delegation of a service token as a payment. Bob verifies the proof and resolves
-the query.</p>
-<p>The end result is that Alice has consumed some service from Bob, and Bob has
-received payment for this. There's no direct transaction link between Alice and
-Bob, and gas fees can be minimized by extending the period before settling on
-chain.</p>
-<p>This can be complemented with altruistic service provisioning, for example by
-splitting the peer pool into two slots, or only providing a few cheap queries
-for free.</p>
-<p>The service provisioning is general, and can be generalized for any kind of
-request/response service provisoning that we want to keep private.</p>
-<p>This isn't a perfect solution, but it is an incremental improvement on top of
-the status quo. It can be augmented with more advanced techniques such as better
-non-repudiable node reputation, proof of correct service provisioning, etc.</p>
-<p>We are currently in the raw spec / proof of concept stage of this. We expect to
-launch a testnet of this later this year or early next year.</p>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Service credentials flow" src="https://vac.dev/assets/images/building_private_infra_servicecred-b022d763d66e89fb610d8d4552355e3c.png" width="1414" height="1022" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="zerokit">Zerokit<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#zerokit" class="hash-link" aria-label="Direct link to Zerokit" title="Direct link to Zerokit">​</a></h3>
-<p><a href="https://github.com/vacp2p/zerokit" target="_blank" rel="noopener noreferrer">Zerokit</a> is a set of Zero Knowledge modules,
-written in Rust and designed to be used in many different environments. The
-initial goal is to get the best of both worlds with Circom/Solidity/JS and
-Rust/ZK ecosystem. This enables people to leverage Circom-based constructs from
-non-JS environments.</p>
-<p>For the RLN module, it is using Circom circuits via ark-circom and Rust for
-scaffolding. It exposes a C FFI API that can be used through other system
-programming environments, like Nim and Go. It also exposes an experimental WASM
-API that can be used through web browsers.</p>
-<p>Waku is p2p infrastructure running in many different environments, such as
-Nim/JS/Go/Rust, so this a requirement for us.</p>
-<p>Circom and JS strengths are access to Dapp developers, tooling, generating
-verification code, circuits etc. Rust strengths is that it is systems-based and
-easy to interface with other language runtime such as Nim, Go, Rust, C. It also
-gives access to other Rust ZK ecosystems such as arkworks. This opens door for
-using other constructs, such as Halo2. This becomes especially relevant for
-constructs where you don't want to do a trusted setup or where circuits are more
-complex/custom and performance requirements are higher.</p>
-<p>In general with Zerokit, we want to make it easy to build and use ZKP in a
-multitude of environments, such as mobile phones and web browsers. Currently it
-is too complex to write privacy-protecting infrastructure with ZKPs considering
-all the languages and tools you have to learn, from JS, Solidity and Circom to
-Rust, WASM and FFI. And that isn't even touching on things like secure key
-storage or mobile dev. Luckily more and more projects are working on this,
-including writing DSLs etc. It'd also be exciting if we can make a useful
-toolstack for JS-less ZK dev to reduce cognitive overhead, similar to what we
-have with something like Foundry.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="other-research">Other research<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#other-research" class="hash-link" aria-label="Direct link to Other research" title="Direct link to Other research">​</a></h3>
-<p>I also want to mention a few other things we are doing. One thing is
-<a href="https://rfc.vac.dev/" target="_blank" rel="noopener noreferrer">protocol specifications</a>. We think this is very important
-for p2p infra, and we see a lot of other projects that claim to do it p2p
-infrastructure but they aren't clear about guarantees or how stable something
-is. That makes it hard to have multiple implementations, to collaborate across
-different projects, and to analyze things objectively.</p>
-<p>Related to that is publishing <a href="https://vac.dev/publications" target="_blank" rel="noopener noreferrer">papers</a>. We've put
-out three so far, related to Waku and RLN-Relay. This makes it easier to
-interface with academia. There's a lot of good researchers out there and we want
-to build a better bridge between academia and industry.</p>
-<p>Another thing is <a href="https://vac.dev/wakuv2-relay-anon" target="_blank" rel="noopener noreferrer">network</a>
-<a href="https://github.com/vacp2p/research/issues/107" target="_blank" rel="noopener noreferrer">privacy</a>. Waku is modular with
-respect to privacy guarantees, and there are a lot of knobs to turn here
-depending on specific deployments. For example, if you are running the full
-relay protocol you currently have much stronger receiver anonymity than if you
-are running filter protocol from a bandwidth or connectivity-restricted node.</p>
-<p>We aim to make this pluggable depending on user needs. E.g. mixnets such as Nym
-come with some trade-offs but are a useful tool in the arsenal. A good mental
-model to keep in mind is the anonymity trilemma, where you can only pick 2/3 out
-of low latency, low bandwidth usage and strong anonymity.</p>
-<p>We are currently exploring <a href="https://github.com/vacp2p/research/issues/119" target="_blank" rel="noopener noreferrer">Dandelion-like
-additions</a> to the relay/gossip
-protocol, which would provide for stronger sender anonymity, especially in a
-multi-node/botnet attacker model. As part of this we are looking into different
-parameters choices and general possibilities for lower latency usage. This could
-make it more amenable for latency sensitive environments, such as validator
-privacy, for specific threat models. The general theme here is we want to be
-rigorous with the guarantees we provide, under what conditions and for what
-threat models.</p>
-<p>Another thing mentioned earlier is <a href="https://vac.dev/wakuv2-noise" target="_blank" rel="noopener noreferrer">Noise payload
-encryption</a>, and specifically things like allowing
-for pairing different devices with e.g. QR codes. This makes it easier for
-developers to provide secure messaging in many realistic scenarios in a
-multi-device world.</p>
-<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Other research" src="https://vac.dev/assets/images/building_private_infra_misc-16721ea7c68873dbb0276ae7fe665ae5.png" width="1662" height="1156" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="summary">Summary<a href="https://vac.dev/rlog/building-privacy-protecting-infrastructure#summary" class="hash-link" aria-label="Direct link to Summary" title="Direct link to Summary">​</a></h3>
-<p>We've gone over what privacy-protecting infrastructure is, why we want it and
-how we can build it. We've seen how ZK is a fundamental building block for this.
-We've looked at Waku, the communication layer for Web3, and how it uses Zero
-Knowledge proofs to stay private and function better. We've also looked at
-Zerokit and how we can make it easier to do ZKP in different environments.</p>
-<p>Finally we also looked at some other research we've been doing. All of the
-things mentioned in this article, and more, is available as
-<a href="https://vac.dev/research" target="_blank" rel="noopener noreferrer">write-ups</a>, <a href="https://rfc.vac.dev/" target="_blank" rel="noopener noreferrer">specs</a>, or
-discussions on our <a href="https://vac.dev/rlog/forum.vac.dev/">forum</a> or <a href="https://vac.dev/rlog/github.com/vacp2p/">Github</a>.</p>
-<p>If you find any of this exciting to work on, feel free to reach out on our
-Discord. We are also <a href="https://jobs.status.im/" target="_blank" rel="noopener noreferrer">hiring</a>, and we have started
-expanding into other privacy infrastructure tech like private and provable
-computation with ZK-WASM.</p>]]></content>
-        <author>
-            <name>Oskar</name>
         </author>
     </entry>
 </feed>
