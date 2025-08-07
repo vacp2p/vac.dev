@@ -253,6 +253,7 @@ your field of work catch our interest.</p>]]></content:encoded>
             <description><![CDATA[Welcome to the first edition of Nim in Logos — a newsletter covering major Nim features from Logos' perspective.]]></description>
             <content:encoded><![CDATA[<p>Welcome to the first edition of <strong>Nim in Logos</strong> — a newsletter covering major Nim features from Logos' perspective.</p>
 <p>If you have comments or suggestions, feel free to reach out to the authors directly or start a thread in the <a href="https://discord.gg/logosnetwork" target="_blank" rel="noopener noreferrer">Logos Discord server</a>.</p>
+<!-- -->
 <h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="nim-22---better-stability-smarter-memory-and-smoother-development">Nim 2.2  – Better Stability, Smarter Memory, and Smoother Development<a href="https://vac.dev/rlog/nim-in-logos-01#nim-22---better-stability-smarter-memory-and-smoother-development" class="hash-link" aria-label="Direct link to Nim 2.2  – Better Stability, Smarter Memory, and Smoother Development" title="Direct link to Nim 2.2  – Better Stability, Smarter Memory, and Smoother Development">​</a></h2>
 <p>The Nim 2.2 release series focuses on improving language stability, fixing long-standing bugs, and optimizing performance—particularly in the ORC memory management system. The latest patch in this series, version 2.2.4, continues to build on these goals.</p>
 <p>Here are some of the key highlights from the 2.2 series:</p>
