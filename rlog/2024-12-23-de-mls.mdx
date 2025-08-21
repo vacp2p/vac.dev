@@ -182,36 +182,35 @@ After decrypted, Steward also verifies the validity of the `keyPackage` by signa
 If the `keyPackage` is not valid, the Steward just drops the message,
 otherwise it moves to the next step which is proposal creation.
 
-### 7. Steward creates proposal
+### 7. Creation of Voting proposals
 
-Proposals are special messages that may come from any participant including Steward.
-In this case, Steward creates proposal corresponding user's `keyPackage`.
-In regular MLS, proposals are automatically converted to the commit messages
-which has the ability the change the structure of the tree but in de-MLS,
-since it is decentralized, proposals should be voted before converted into the commitment.
+Voting proposals are special MLS application messages that may come from any participant, including the Steward.
+In this context, any member can create a proposal corresponding to the user’s `keyPackage`.
+In regular MLS, proposals are automatically converted into commit messages,
+which can change the structure of the tree. However, in de-MLS, since the process is decentralized,
+proposals must be voted on before being converted into a commitment.
 
 ### 8. Voting for proposal
 
-Voting applies decentrazliation by protecting small groups can control.
-Therefore, proposals must be voted before committing.
-The consensus mechanism should be a lightweight consensus that cannot be bottleneck for treeKEM scalability.
-Basically, the consensus returns the binary result for given a proposal.
-If the result is NO, the proposal is dropped otherwise process.
-
-Ones Steward creates the proposal send it to network for the voting.
-If the result of the consensus is YES, lastly Steward sends two different message.
+Voting applies decentralization by protecting small groups can control.
+Therefore, proposals must be voted on before committing.
+The consensus mechanism should be a lightweight consensus that cannot be a bottleneck for treeKEM scalability.
+Basically, the consensus returns the binary result for a given proposal.
+If voting result is NO, the proposal is dropped; otherwise, the Steward transforms it into an MLS proposal.
+MLS proposal message is a distinct type of MLS application message,
+where the Steward attaches the voting result instead of directly releasing a commit message.
 
 ### 9. Creating commit message
 
-Commit messages are the messages that starts new epochs.
-They include key and tree material that existing members can generate the new state of tree.
+Commit messages are the messages that start new epochs.
+They include key and tree material that existing members can use to generate the new state of the tree.
 
 After Steward gets the YES from consensus, Steward creates commit messages 
-that inject new entropy for the existing group members.
+that injects new entropy for the existing group members.
 
 ### 10. Sending messages
 
-After Steward creates then sends two messages:
+After Steward creates and then sends two messages:
 
 1. Commit message informs existing group member to update their key
 to align with the new member’s key for the upcoming epoch.
@@ -223,8 +222,8 @@ the Steward message ensures that both existing and new users converge on the sam
 
 ### 11. Applying welcome message
 
-User can generate the next epoch group key by using welcome message as well as
-existing users extract the same `groupKey` by using commit mesages.
+User can generate the next epoch group key by using the welcome message as well as
+existing users extract the same `groupKey` by using commit messages.
 
 The commit message helps existing members generate the next group key `Gk+1`,
 while the welcome message helps the newly joining user generate the same `Gk+1`.
@@ -322,7 +321,7 @@ In the next iterations, the implementations are planned as following:
 - Dual-Consensus Multi-Steward Support: One consensus mechanism selects an Steward from all users,
 while a second governs group decisions among the elected Stewards
 - Consensus mechanism for handling concurrent changes within the same epoch
-- Key rotation
+- Key rotation support
 - Benchmarking for the multi-Steward configuration including the network time
 
 ## References
