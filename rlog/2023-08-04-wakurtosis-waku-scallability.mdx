@@ -1,0 +1,174 @@
+&mdash;
+layout: post
+name: 'Scaling the Waku Protocol: A Performance Analysis with Wakurtosis'  
+title: 'Scaling the Waku Protocol: A Performance Analysis with Wakurtosis'
+date: 2023-10-19 12:00:00
+authors: Daimakaimura
+published: true
+slug: wakurtosis-waku-scalability-simulations
+categories: waku, wakurtosis
+&mdash;
+
+# Scaling the Waku Protocol: A Performance Analysis with Wakurtosis
+
+## Introduction
+
+[Waku](https://waku.org/) is a family of P2P protocols enabling private, scalable messaging for Web3 by providing censorship resistance, adaptability, modular design, and a shared service network. 
+Waku is designed to enable communication between decentralized applications (dApps) in a peer-to-peer manner.  
+It serves as an improvement and successor to Ethereum's Whisper protocol, offering better scalability and efficiency.
+
+[Waku Relay](https://rfc.vac.dev/spec/11/), on the other hand, is the core component within the broader Waku framework.  
+It is responsible for relaying messages between nodes in the Waku network, effectively serving as the message dissemination mechanism.  
+While Waku encompasses a variety of functionalities and improvements for decentralized messaging, Waku Relay specifically focuses on the message propagation aspect within this larger system.
+
+Finally, [Discv5 (Discovery v5)](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) is a peer-to-peer networking protocol designed to facilitate node discovery in decentralized networks. 
+It serves as an upgrade to earlier discovery protocols and is designed to be modular and extensible, allowing it to support various types of decentralized systems beyond just Ethereum.  
+The protocol enables nodes to find each other, maintaining a distributed hash table.
+
+The scalability and performance of the Waku protocol are of critical importance for any projects using Waku and intending to onboard thousands, if not millions, of users. 
+To explore these facets with high granularity across a wide range of scenarios, we turned to [Wakurtosis](https://github.com/vacp2p/wakurtosis), a bespoke simulation framework developed internally.  
+By studying various network sizes, message rates, and peer discovery setups, we aimed to better understand the protocol's capabilities and limitations, and hence aspects that could benefit from further optimization. 
+
+Unfortunately, Wakurtosis did not fulfill many of our initial goals. We will delve into the specifics of these shortcomings in a retrospective article coming shortly.
+
+## Understanding Wakurtosis  
+
+Wakurtosis is a simulation framework which integrates [Docker](https://www.docker.com/) and [Kurtosis](https://www.kurtosis.com/) to create a simulation environment that allows highly granular, large-scale simulations with a variety of traffic and network patterns.
+At the core of Wakurtosis is Kurtosis — an orchestration tool responsible for managing containers, known as services, within isolated environments called enclaves.  
+These enclaves house virtual networks and their respective containers. 
+In addition to this, several external modules developed in-house expand some of Kurtosis' limitations:
+
+- Network Generation Module (Gennet): Initiates and configures networks for the simulation. It's highly modular, supporting the integration of multiple topologies, protocols, and node traits.
+
+- Packet Injection Module (WLS): Allows for the insertion of custom data packets, thereby enabling varied traffic patterns and stress tests on the simulations.
+
+- Analysis Module: Captures and provides insights into resource usage, network behaviors, and protocol interactions throughout the enclave.
+
+### Data Collection  
+
+Wakurtosis ensures the accuracy of its data by leveraging multiple sources for hardware metrics:
+
+- ##### Cadvisor (a Google tool)
+  [Cadvisor](https://github.com/google/cadvisor) provides detailed metrics on resource usage and performance characteristics of Docker containers. Cadvisor monitors application containers at the individual level by directly interfacing with Docker's daemon API.
+While Cadvisor offers real-time metrics, it primarily focuses on container-specific metrics, which may neglect broader system-level insights.  
+
+- ##### Docker statistics
+  [Docker statistics](https://docs.docker.com/engine/reference/commandline/stats/) provides insights into Docker's overall performance and resource allocation.  
+This native Docker tool captures statistics about running containers using Docker's stats API, collecting cumulative CPU, memory, network, and block I/O metrics.
+Docker statistics offer a bird's-eye view of the system, which can sometimes miss the granularity of performance fluctuations inside individual containers, particularly when dealing with multiple processes per container.
+
+- ##### Process-level monitoring
+  Process-level monitoring offers detailed insights by tracking operational traits of processes within containers.
+This method employs deep inspection of individual processes running inside a container by accessing */proc* kernel files to gather real-time process statistics.  
+Reading from the */proc* filesystem offers a direct window into kernel statistics, providing comprehensive metrics on each process within the containers.
+However, while it offers granular insights, process-level monitoring can be more resource-intensive and might not always capture overarching system behavior.   
+
+### Performance Metrics
+
+Each simulation lasted 3 hours to reach a steady state.  
+
+- Hardware Level Metrics: Emphasis on memory usage, CPU consumption, disk I/O, and network I/O.
+
+- Topology Level Metrics: Focuses on the efficiency of message propagation across the network, including metrics like message injection, propagation times, and message loss.
+
+### Scalability  
+
+To overcome scalability challenges, Wakurtosis employs a multi-node approach, running several nodes within one container.
+This method supports simulations with over 1,000 nodes on a single machine.  
+However, this can introduce unforeseen network effects, potentially affecting some metrics. For instance, running several nodes per container can alter propagation times, as nodes grouped within the same container may exhibit different messaging behavior compared to a true node-to-node topology.
+Additionally, employing a multi-node approach may result in losing node-level sampling granularity depending on the metrics infrastructure used, e.g. Cadvisor.
+
+Nevertheless, Wakurtosis offers the flexibility to choose between this and a 1-to-1 simulation, catering to the specific needs of each test scenario. The results presented in this stidu are all 1-to-1 simulations &mdash; i.e., one node per container.
+
+## Examining the Waku Protocol
+
+### Simulation Setup
+
+To evaluate Waku under varied conditions, we conducted simulations across a range of network sizes, topologies, and message rates: 
+- All the simulations run for 3 hours to reach a steady state.
+- The network sizes explored included 75, 150, 300, and 600 nodes. 
+- To stress test message throughput, we simulated message rates of 0.25, 0.5, 0.75, and 1 messages per second. 
+- We also included simulations batches with no load &mdash; i.e. 0 Msg/s. &mdash; to provide a clearer picture of Waku's baseline resource demands and inherent overhead costs stemming from core protocol operations.
+- We run simulations without discovery mechanism &mdash; Non-Discv5 &mdash; and with discovery &mdash; Discv5 &mdash;. For Non-Discv5 simulations, we used static topologies with average node degrees of K=50. In simulations with Discv5, we set the max_peers parameter to 50 to approximate similar average degrees.
+
+This combination of network sizes, topologies, message rates, and hardware configurations enabled us to comprehensively evaluate Waku's performance and scalability boundaries under diverse conditions.
+
+#### Clarification on Non-Discv5 Scenarios:  
+
+It's important to note that the Non-Discv5 scenarios presented in this study serve as a theoretical baseline for comparison and are not meant to represent real-world conditions. In a live environment, some form of peer discovery mechanism would be necessary for the functioning of the network. Mechanisms like ['rendezvous'](https://docs.libp2p.io/concepts/discovery-routing/rendezvous/) would also introduce additional bandwidth costs.
+
+Therefore, the intention behind including Non-Discv5 simulations is not to compare their performance directly with Discv5 but rather to establish a fundamental baseline against which the added complexities and scaling costs of employing a discovery mechanism like Discv5 can be better understood.  
+
+### Simulation Results
+
+We present the results in two sets &mdash; without and with discovery mechanism &mdash; using two plots each:
+
+- The first plot depicts the total bandwidth usage (Tx and Rx). The x-axis represents the number of nodes with separate series for the different traffic loads.
+- The second plot shows the average peak memory usage with the same configuration.
+
+The goal is examining total bandwidth and peak memory usage across various network sizes, both with and without discovery.
+
+#### Results without discovery mechanism (baseline)
+
+The transmission bandwidth (Tx) shows varied patterns across network sizes. Although it rises consistently with increasing message rates and sizes, some caveats exist.
+
+For the two highest rates, bandwidth noticeably decreases from the smallest to moderate-sized networks. This counterintuitive drop suggests potential efficiencies or optimizable dynamics in intermediate networks.
+
+However, in the larger 300- and 600-node configurations, the demands become more pronounced, especially from 300 to 600 nodes. While moderate networks may realize efficiencies, expansive networks exert greater transmission bandwidth demands.
+
+The reception bandwidth (Rx) also manifests distinct patterns based on network size and message rate. For smaller networks, an intriguing trend emerges: across most rates (except 0 msg/s), bandwidth decreases consistently from 75 to 150 nodes. This indicates possible efficiencies or dynamics benefiting moderate configurations.
+
+After this initial decrease, the bandwidth plateaus without significant growth even as rates rise. This contrasts sharply with the 600-node setup, where even without messaging, substantial bandwidth is consumed, comparable to active messaging in smaller networks.
+
+![Total mean bandwidth usage without discovery mechanism](/static/img/wakurtosis_waku/non_discv5_bandwidth.png) 
+
+<figcaption>
+
+***Total mean bandwidth usage without discovery mechanism (baseline).***
+
+</figcaption>
+
+In addition to bandwidth, we examined average peak memory usage across network sizes and message loads. Memory use is fairly consistent without messaging, fluctuating between 20.3-20.5 MB. With messaging, only a slight increase is seen. Remarkably, at 1 msg/s, memory use remains modest, with the largest average of 21.95 MB in the 150-node setup. The difference between an idle and highly active network is under 1.5 MB.
+
+![Mean peak memory usage without discovery mechanism](/static/img/wakurtosis_waku/non_discv5_memory.png) 
+
+<figcaption>
+
+***Mean peak memory usage without discovery mechanism (baseline).***
+
+</figcaption>
+
+
+#### Results with discovery mechanism (Discv5)
+
+With the discovery mechanism discv5, distinct resource usage patterns emerge. Transmission bandwidth remains relatively stable despite an eight-fold node increase, evidencing the protocol's transmission efficiency under discovery. However, reception bandwidth shows a different trend. From 75 to 300 nodes, a significant increase occurs, especially at 0 msg/s (95.83 to 254.7 Mb/s). The 300 to 600 node change is even more dramatic, with bandwidth surging to 497.47 Mb/s without messaging.
+
+The observation of a similar anomaly in simulations without the discovery mechanism suggests that the issue might lie with the protocol implementation itself, rather than being merely a simulation artifact.
+
+![Total average bandwidth usage with discovery mechanism](/static/img/wakurtosis_waku/discv5_bandwidth.png) 
+
+<figcaption>
+
+***Total average bandwidth usage with discovery mechanism.***
+
+</figcaption>
+
+![Average peak memory usage with discovery mechanism](/static/img/wakurtosis_waku/discv5_memory.png) 
+
+<figcaption>
+
+***Average peak memory usage with discovery mechanism .***
+
+</figcaption>
+
+Memory usage also scales noticeably with node count, with a pronounced spike above 24 MB at 600 nodes, even without messaging. This indicates the overhead introduced by discovery for node tracking and data structure maintenance.
+
+Overall, the discovery mechanism adds substantial reception bandwidth and memory overhead that scale more sharply with network size than the baseline. However, transmission bandwidth impact appears relatively contained.
+
+## Conclusions
+
+This study highlights Waku's resilience and scalability but also reveals challenges and limitations for Wakurtosis and the need for more robust simulation infrastructure under demanding conditions. 
+
+A key takeaway is Waku's robustness, evidenced by no message loss, stability across network sizes and loads. As expected, Discv5 typically leads to higher resource usage, with reception bandwidth seeing the largest overhead and poorest scaling, nearly doubling baseline costs and groing substantially with network size. Interestingly, we observed an anomaly in the no-load cases at high node counts that warrants further investigation and it is likely suggestive of an implementation issue in the protocol. While infrastructure constraints limited testing at high node counts and rates, Waku demonstrated strong capabilities within those bounds. Enhancing the simulation infrastructure will enable rigorous extreme scenario testing moving forward.
+
+Guided by these insights, our priority is continuing to study Waku's scalability and performance, especially under large networks, high traffic, and different configurations. Stay tuned for our progress!
