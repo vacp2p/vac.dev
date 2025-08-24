@@ -82,8 +82,12 @@ This enables flexible and efficient communication patterns in a decentralized en
 
 ## de-MLS
 
-Decentralized MLS (de-MLS) is a peer-to-peer SGM protocol compatible with any P2P messaging application for the DS,
-with Waku selected as the messaging protocol.
+Decentralized MLS (de-MLS) is a peer-to-peer secure group messaging protocol
+that can work with any delivery service (DS) meeting a minimal set of requirements.
+In this post, we highlight its integration with [Waku](https://waku.org/) as the messaging protocol,
+while emphasizing that de-MLS itself remains agnostic to the underlying DS.
+Further technical details can be found in the [de-MLS RFC](https://rfc.vac.dev/vac/raw/eth-mls-offchain).
+
 Decentralization is achieved not only at the delivery service (DS) level
 but also within the authentication service (AS).
 Multiple special nodes named Steward in the group serve as authorized identities to authenticate users
