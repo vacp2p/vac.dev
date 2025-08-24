@@ -139,6 +139,8 @@ This contradicts a core requirement of MLS: each key package must be used exactl
 to prevent replay or reuse attacks.
 Instead, our solution is to require users to actively provide their key packages upon request,
 allowing validation at the moment of use without persistent storage.
+While this approach may lose some benefits of asynchronicity,
+we plan to address this in the future by introducing store nodes that can temporarily hold key packages.
 This ensures both compliance with MLS's security model and alignment with decentralized system principles.
 
 ### Flow
