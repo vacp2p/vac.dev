@@ -37,6 +37,9 @@ One scalable for Secure Group Messaging (SGM) is Message Layer Security (MLS), a
 Leveraging TreeKEM, MLS organizes group members in a cryptographic tree structure,
 where each participant is responsible for maintaining specific parts of the tree.
 
+While MLS offers scalability and strong security guarantees,
+its reliance on server-based delivery services poses limitations for fully decentralized environments.
+
 In this post, we present the implementation details of the first version of Decentralized MLS (de-MLS)
 which is an SGM protocol that satisfies the following features:
 
