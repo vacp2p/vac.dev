@@ -1,0 +1,354 @@
+---
+title: 'Decentralized Message Layer Security (De-MLS) with Waku'
+date: 2025-01-24 19:00:00
+authors: seemenkina
+published: true
+slug: de-mls-with-waku
+categories: research
+
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+This post introduces de-MLS, a decentralized variant of Message Layer Security (MLS)
+that reimagines group messaging by replacing centralized delivery services with peer-to-peer protocols
+while retaining strong guarantees such as forward secrecy (FS) and post-compromise security (PCS).
+
+{/* truncate */}
+
+## Introduction
+
+Secure Group Messaging (SGM) is resource-intensive when aiming for robust security features
+like forward secrecy (FS) and post-compromise security (PCS).
+
+One straightforward approach to SGM is a pairwise group chat,
+where each pair of group members establishes a unique encryption key using Diffie-Hellman.
+While this method ensures security, it falls short in terms of practicality:
+
+- **High storage requirements**: Each participant must store encryption keys for every other participant.
+- **Inefficient encryption**: Each message must be encrypted separately for every participant,
+leading to significant computational overhead.
+- **Inefficient message storage and delivery**: Each separately encrypted message must then be sent over the wire,
+whatever this wire might be. Or stored in database.
+- **Cumbersome group management**: Adding or removing users and refreshing keys becomes
+increasingly inefficient as the group grows.
+
+One scalable for Secure Group Messaging (SGM) is Message Layer Security (MLS), as standardized in [RFC 9420](https://datatracker.ietf.org/doc/rfc9420/).
+Leveraging TreeKEM, MLS organizes group members in a cryptographic tree structure,
+where each participant is responsible for maintaining specific parts of the tree.
+
+While MLS offers scalability and strong security guarantees,
+its reliance on server-based delivery services poses limitations for fully decentralized environments.
+
+In this post, we present the implementation details of the first version of Decentralized MLS (de-MLS)
+which is an SGM protocol. De-MLS can serve groups that cannot rely on central servers,
+such as journalists and activists seeking secure communication.
+It is also well suited for DAOs, where Ethereum-based authentication can restrict access to members
+holding a minimum ETH balance, and for NGOs or research consortia that prefer not to host their own servers while still
+requiring end-to-end encrypted group messaging. Decentralized MLS (de-MLS) satisfies the following features:
+
+- Decentralized
+- Scalable
+- End-to-end encrypted (E2EE)
+- FS and PCS provided
+- Ethereum authenticated
+
+## Background
+
+### MLS
+
+The Message Layer Security (MLS) protocol offers scalable and secure group messaging protocol
+by organizing participants into a cryptographic tree structure,
+enabling efficient operations like adding or removing members with logarithmic time complexity
+relative to the group size. MLS provides strong security guarantees, including FS and PCS.
+
+MLS assumes that two services are provided:
+
+- An Authentication Service (AS): It enables group members to
+authenticate the credentials presented by other group members.
+- A Delivery Service (DS) that routes MLS messages among the
+participants in the protocol in the correct order and manage the `keyPackage` of the users 
+where the `keyPackage` is the objects that provide some public information about a user.
+
+Despite its scalability, MLS has a notable limitation:
+it is inherently designed for server-based federated architectures for delivery service (DS),
+even when the servers themselves don't need to be trusted.
+To achieve a decentralized protocol, the functionality of DS must be reimagined
+to eliminate reliance on a central server while preserving the protocol's security properties.
+Thus, we proposed decentralized MLS (de-MLS),
+leveraging Waku nodes as peer-to-peer communication protocols to eliminate reliance on centralized servers.
+
+Lastly, MLS operates on an epoch-based model,
+where group state changes (e.g., adding/removing users or key refreshes) occur between epochs
+that are always required to be conducted by a single entity.
+For example, if a user is removed in epoch `E`,
+the rest of the group members generate a new key in epoch `E + 1` by passing the new entropy.
+The removed user cannot decrypt messages sent after epoch `E + 1`.
+
+### Waku
+
+[Waku](https://waku.org/) is a decentralized messaging protocol designed for secure and efficient communication in peer-to-peer networks.
+It operates as a broadcast-based routing layer where content topics can be used to tag and filter messages.
+Users join channels by subscribing to specific content topics,
+which determine the scope and type of messages exchanged.
+This enables flexible and efficient communication patterns in a decentralized environment.
+
+## de-MLS
+
+Decentralized MLS (de-MLS) is a peer-to-peer secure group messaging protocol
+that can work with any delivery service (DS) meeting a minimal set of requirements.
+In this post, we highlight its integration with [Waku](https://waku.org/) as the messaging protocol,
+while emphasizing that de-MLS itself remains agnostic to the underlying DS.
+Further technical details can be found in the [de-MLS RFC](https://rfc.vac.dev/vac/raw/eth-mls-offchain).
+
+Decentralization is achieved not only at the delivery service (DS) level
+but also within the authentication service (AS).
+Multiple special nodes named Steward in the group serve as authorized identities to authenticate users
+before they join or are removed from the group transparently.
+
+de-MLS provides two different user management configurations, both utilizing the Waku protocol for DS:
+
+1. **Single Steward**:
+    - A single authorized identity (Steward) manages the group,
+    including removing or adding users with agreement among users by a voting-based consensus.
+2. **Multi-Steward**:
+    - Multiple Stewards have equal authority to add or remove users.
+    - A consensus mechanism ensures consistency by resolving concurrent changes
+    within the same epoch and preventing possible conflicts.
+    In each epoch, all modifications are managed exclusively by a single Steward.
+
+Note: We chose the term Steward to reflect the role of transparently coordinating and organizing passengers at stations, much like Stewards do in transit systems. 
+
+In multi-Steward settings, de-MLS requires a consensus among Stewards
+that have equal rights in the group since changes in an epoch in MLS are required
+to be conducted by a single identity, that is the Steward.
+
+For the consensus integration, ongoing research explores two promising approaches:
+
+1. **On-chain consensus mechanisms**:
+Outsourcing consensus to a smart contract solution for transparent and immutable agreement.
+2. **Off-chain consensus mechanisms**:
+Utilizing off-chain consensus protocols to design efficient, decentralized protocols.
+
+### Waku Integration
+
+Waku integration is a crucial step in the construction of de-MLS,
+aiming to replace traditional client-server communication with decentralized messaging.
+The specifics of Waku integration will be detailed in a separate RFC;
+for now, our main priority is the de-MLS RFC.
+
+The main challenge in this transition is transforming the centralized Delivery Service (DS)
+into a decentralized equivalent, which performs two essential functions:
+
+1. Message Delivery and Ordering:
+The DS is responsible not only for delivering messages to the correct recipients,
+but also for preserving the correct order of these messages, which is critical for the consistency of group state.
+2. Key Package Management: 
+The DS manages key packages, which are essential for adding members securely to a group.
+
+To maintain a truly decentralized architecture,
+key packages cannot be stored in a centralized location.
+Initially, we considered using a smart contract (SC) as a decentralized substitute for server-side key package storage.
+However, this approach proved impractical.
+Blockchains are immutable by design—once data is written, it cannot be fully removed.
+This contradicts a core requirement of MLS: each key package must be used exactly once and then deleted,
+to prevent replay or reuse attacks.
+Instead, our solution is to require users to actively provide their key packages upon request,
+allowing validation at the moment of use without persistent storage.
+While this approach may lose some benefits of asynchronicity,
+we plan to address this in the future by introducing store nodes that can temporarily hold key packages.
+This ensures both compliance with MLS's security model and alignment with decentralized system principles.
+
+### Flow
+
+The flow section explains the processes that 
+when a user wants to join a group in both Steward and users side also their interactions.
+The flow of de-MLS is as follows:
+
+![Figure 1](/img/de-mls/flow.png)
+
+### 1. Steward joins the welcome topic
+
+The welcome topic is a topic created and monitored by the Steward for a specific secure messaging group,
+allowing any Waku node to subscribe permissionlessly.
+Being in the welcome topic does not imply group membership,
+it acts as a waiting room where users can send their key material,
+which the Steward listens for and processes before granting access to the secure group.
+
+### 2. Group initialization
+
+Steward initalizes a group with parameters such as cipher suite and group ID.
+
+### 3. Emitting Group Anouncement (GA) by Steward
+
+Steward creates group announcement (GA) periodically to the welcome channel
+that the users can find the who the Steward is.
+This will be important for the next step.
+
+### 4. User joins the welcome topic
+
+As first, the users who wants to be part of the decentralized MLS should subscribe the welcome channel.
+Then user can find the group name and also corresponding GA message from Steward.
+This GA message helps the user to create a valid `keyPackages` which define in section 10 
+in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/) for the group.
+
+### 5. User creates its key package
+
+User creates the `keyPackage` and encrypt by public key of the Steward then send it to the Steward.
+Since the message is encrypted, stay secure though the welcome (permissionless) topic.
+
+### 6. Steward receives the User's key package
+
+Steward receives the user's `keyPackage` and decrypt it.
+After decrypted, Steward also verifies the validity of the `keyPackage` by signature verification.
+If the `keyPackage` is not valid, the Steward just drops the message,
+otherwise it moves to the next step which is proposal creation.
+
+### 7. Creation of Voting proposals
+
+Voting proposals are special MLS application messages that may come from any participant, including the Steward.
+In this context, any member can create a proposal corresponding to the user’s `keyPackage`.
+In regular MLS, proposals are automatically converted into commit messages,
+which can change the structure of the tree. However, in de-MLS, since the process is decentralized,
+proposals must be voted on before being converted into a commitment.
+
+### 8. Voting for proposal
+
+Voting applies decentralization by protecting small groups can control.
+Therefore, proposals must be voted on before committing.
+The consensus mechanism should be a lightweight consensus that cannot be a bottleneck for treeKEM scalability.
+Basically, the consensus returns the binary result for a given proposal.
+If voting result is NO, the proposal is dropped; otherwise, the Steward transforms it into an MLS proposal.
+MLS proposal message is a distinct type of MLS application message,
+where the Steward attaches the voting result instead of directly releasing a commit message.
+
+### 9. Creating commit message
+
+Commit messages are the messages that start new epochs.
+They include key and tree material that existing members can use to generate the new state of the tree.
+
+After Steward gets the YES from consensus, Steward creates commit messages 
+that injects new entropy for the existing group members.
+
+### 10. Sending messages
+
+After Steward creates and then sends two messages:
+
+1. Commit message informs existing group member to update their key
+to align with the new member’s key for the upcoming epoch.
+2. The welcome message informs the newly joined user to generate a group key
+that matches the key existing members will use in the upcoming epoch.
+
+Although existing users had different group keys in the previous epoch and the new user had none,
+the Steward message ensures that both existing and new users converge on the same group key in the next epoch.
+
+### 11. Applying welcome message
+
+User can generate the next epoch group key by using the welcome message as well as
+existing users extract the same `groupKey` by using commit messages.
+
+The commit message helps existing members generate the next group key `Gk+1`,
+while the welcome message helps the newly joining user generate the same `Gk+1`.
+This provides two important security properties:
+
+1. Forward Secrecy (FS):
+The new user cannot read previous messages since they were encrypted with the old key `Gk`
+
+2. Post-Compromise Security (PCS):
+If a user is removed from the group,
+they cannot read future messages since those messages will be encrypted with the new key `Gk+1`
+
+## Benchmark
+
+This section presents the performance evaluation of de-MLS.
+One of the key advantages of the MLS protocol is its efficiency,
+as it eliminates the need for pairwise message exchanges between all participants.
+Instead, the decentralized DS enables the addition of new participants by sending only two messages to the group:
+a commit message and a welcome message.
+However, despite this advantage, the protocol does have certain bottlenecks, which are as follows:
+
+- Firstly, the Steward must receive the key packages from each member wishing to join the group.
+This process requires sequential message exchanges and involves computationally intensive tasks such as encryption,
+decryption, and digital signature verification.
+Even when multiple users are added to the group simultaneously, the process is essentially sequential.
+The tree structure is updated one user at a time,
+followed by sending the final commit message to the existing group members
+and a single welcome message to the new members.
+- Secondly adding a member to a group requires rebuilding the tree and computing new keys.
+
+The following measurements were made as follows:
+
+1. The time required for the entire sequence of receiving a user key package is presented here.
+This includes generating the Steward key, creating messages with signatures and encryption,
+and processing these messages.
+
+`Share Key Package - 1.8395 ms`
+
+Note that these measurements do not account for the time taken to forward messages.
+
+1. The time required for creating the commit and welcome message
+from a ready-made package bunches is shown in this table.
+
+| Group Size (by users) | Time |
+| --- | --- |
+| 10 | 1.8662 ms |
+| 100 | 14.124 ms |
+| 500 | 121.85 ms |
+| 1000 | 412.39 ms |
+| 5000 | ~ 15-20 s |
+| 10000 | ~ 1-1.5 min |
+
+The tests were conducted on the following configuration:
+Apple M3 Pro @ 4.05GHz and 12-Core CPU/18-Core GPU.
+
+Here, the network latency and the time taken by users to apply the received commits are also excluded.
+These aspects are planned to be measured and evaluated in future work.
+
+## Potential drawbacks and countermeasures
+
+Since de-MLS replace the servers by P2P, we could lose some good features of servers based MLS.
+In this section we present the potential drawbacks and possible countermeasures of de-MLS.
+
+- Offline users: `keyPackage`s are provided by the users directly without any storing,
+this is required each user must be online for joining to a group.
+    - We can consider to use [Waku sync nodes](https://docs.waku.org/guides/js-waku/store-retrieve-messages/)
+    that are nodes has storing ability for a temporary storing of `keyPackage`s.
+- DoS attack to Steward: Steward is known in welcome message from periodic group announcement message
+so Steward can be targeted for DoS attack.
+    - As always we consider to use Rate-Limiting Nullifier (RLN) with Waku to protect network from spam.
+- Message loss or delay : Because of P2P and consensus settings, message can be lost or delayed.,
+    - We can integrate reliability mechanisms to Waku such as
+    [scalable data sync (SDS)](https://github.com/waku-org/nim-sds)
+    - Consensus mechanism requires to provide liveness property against offline nodes, for example,
+    it may provides default YES or NO options for a silent users who do not vote.
+- Enchanced authentication
+    - Ethereum authentication could be inefficient.
+    We can configure the authentication mechanism for example asking minimum balance or etc.
+
+## Conclusion
+
+To summarize, the approach to solving decentralized DS tasks with Waku
+can be outlined as shown in the comparison table:
+
+| Feature | MLS | de-MLS |
+| --- | --- | --- |
+| Message Distribution | Messages are sent from the server to clients | Messages are sent by publishing/subscribing to pub-sub topics |
+| Commit Message Handling | Relies on a server | Relies on a consensus and transparent Steward |
+| Key Package Management | Key packages are stored and distributed by the server | Key packages are provided by the users themselves |
+
+## Future Work
+
+In the next iterations, the implementations are planned as following:
+
+- Dual-Consensus Multi-Steward Support: One consensus mechanism selects an Steward from all users,
+while a second governs group decisions among the elected Stewards
+- Consensus mechanism for handling concurrent changes within the same epoch
+- Key rotation support
+- Benchmarking for the multi-Steward configuration including the network time
+
+## References
+
+- [1] RFC 9420: The Messaging Layer Security (MLS) Protocol. Retrieved from https://datatracker.ietf.org/doc/rfc9420/
+- [2] OpenMLS. Retrived from https://github.com/openmls/openmls
+- [3] Waku. Retrived from https://waku.org/
+- [4] de-MLS. Retrived from https://github.com/vacp2p/de-mls/
