@@ -4,10 +4,313 @@
         <title>Vac Research Blog</title>
         <link>https://vac.dev/rlog</link>
         <description>Vac Research Blog</description>
-        <lastBuildDate>Tue, 12 Aug 2025 12:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 02 Sep 2025 14:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[Decentralized Message Layer Security (De-MLS) with Waku]]></title>
+            <link>https://vac.dev/rlog/de-mls-with-waku</link>
+            <guid>https://vac.dev/rlog/de-mls-with-waku</guid>
+            <pubDate>Tue, 02 Sep 2025 14:00:00 GMT</pubDate>
+            <description><![CDATA[This post introduces de-MLS, a decentralized variant of Message Layer Security (MLS)]]></description>
+            <content:encoded><![CDATA[<p>This post introduces de-MLS, a decentralized variant of Message Layer Security (MLS)
+that reimagines group messaging by replacing centralized delivery services with peer-to-peer protocols
+while retaining strong guarantees such as forward secrecy (FS) and post-compromise security (PCS).</p>
+<!-- -->
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="introduction">Introduction<a href="https://vac.dev/rlog/de-mls-with-waku#introduction" class="hash-link" aria-label="Direct link to Introduction" title="Direct link to Introduction">​</a></h2>
+<p>Secure Group Messaging (SGM) is resource-intensive when aiming for robust security features
+like forward secrecy (FS) and post-compromise security (PCS).</p>
+<p>One straightforward approach to SGM is a pairwise group chat,
+where each pair of group members establishes a unique encryption key using Diffie-Hellman.
+While this method ensures security, it falls short in terms of practicality:</p>
+<ul>
+<li><strong>High storage requirements</strong>: Each participant must store encryption keys for every other participant.</li>
+<li><strong>Inefficient encryption</strong>: Each message must be encrypted separately for every participant,
+leading to significant computational overhead.</li>
+<li><strong>Inefficient message storage and delivery</strong>: Each separately encrypted message must then be sent over the wire,
+whatever this wire might be. Or stored in database.</li>
+<li><strong>Cumbersome group management</strong>: Adding or removing users and refreshing keys becomes
+increasingly inefficient as the group grows.</li>
+</ul>
+<p>One scalable for Secure Group Messaging (SGM) is Message Layer Security (MLS), as standardized in <a href="https://datatracker.ietf.org/doc/rfc9420/" target="_blank" rel="noopener noreferrer">RFC 9420</a>.
+Leveraging TreeKEM, MLS organizes group members in a cryptographic tree structure,
+where each participant is responsible for maintaining specific parts of the tree.</p>
+<p>While MLS offers scalability and strong security guarantees,
+its reliance on server-based delivery services poses limitations for fully decentralized environments.</p>
+<p>In this post, we present the implementation details of the first version of Decentralized MLS (de-MLS)
+which is an SGM protocol. De-MLS can serve groups that cannot rely on central servers,
+such as journalists and activists seeking secure communication.
+It is also well suited for DAOs, where Ethereum-based authentication can restrict access to members
+holding a minimum ETH balance, and for NGOs or research consortia that prefer not to host their own servers while still
+requiring end-to-end encrypted group messaging. Decentralized MLS (de-MLS) satisfies the following features:</p>
+<ul>
+<li>Decentralized</li>
+<li>Scalable</li>
+<li>End-to-end encrypted (E2EE)</li>
+<li>FS and PCS provided</li>
+<li>Ethereum authenticated</li>
+</ul>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="background">Background<a href="https://vac.dev/rlog/de-mls-with-waku#background" class="hash-link" aria-label="Direct link to Background" title="Direct link to Background">​</a></h2>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="mls">MLS<a href="https://vac.dev/rlog/de-mls-with-waku#mls" class="hash-link" aria-label="Direct link to MLS" title="Direct link to MLS">​</a></h3>
+<p>The Message Layer Security (MLS) protocol offers scalable and secure group messaging protocol
+by organizing participants into a cryptographic tree structure,
+enabling efficient operations like adding or removing members with logarithmic time complexity
+relative to the group size. MLS provides strong security guarantees, including FS and PCS.</p>
+<p>MLS assumes that two services are provided:</p>
+<ul>
+<li>An Authentication Service (AS): It enables group members to
+authenticate the credentials presented by other group members.</li>
+<li>A Delivery Service (DS) that routes MLS messages among the
+participants in the protocol in the correct order and manage the <code>keyPackage</code> of the users
+where the <code>keyPackage</code> is the objects that provide some public information about a user.</li>
+</ul>
+<p>Despite its scalability, MLS has a notable limitation:
+it is inherently designed for server-based federated architectures for delivery service (DS),
+even when the servers themselves don't need to be trusted.
+To achieve a decentralized protocol, the functionality of DS must be reimagined
+to eliminate reliance on a central server while preserving the protocol's security properties.
+Thus, we proposed decentralized MLS (de-MLS),
+leveraging Waku nodes as peer-to-peer communication protocols to eliminate reliance on centralized servers.</p>
+<p>Lastly, MLS operates on an epoch-based model,
+where group state changes (e.g., adding/removing users or key refreshes) occur between epochs
+that are always required to be conducted by a single entity.
+For example, if a user is removed in epoch <code>E</code>,
+the rest of the group members generate a new key in epoch <code>E + 1</code> by passing the new entropy.
+The removed user cannot decrypt messages sent after epoch <code>E + 1</code>.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="waku">Waku<a href="https://vac.dev/rlog/de-mls-with-waku#waku" class="hash-link" aria-label="Direct link to Waku" title="Direct link to Waku">​</a></h3>
+<p><a href="https://waku.org/" target="_blank" rel="noopener noreferrer">Waku</a> is a decentralized messaging protocol designed for secure and efficient communication in peer-to-peer networks.
+It operates as a broadcast-based routing layer where content topics can be used to tag and filter messages.
+Users join channels by subscribing to specific content topics,
+which determine the scope and type of messages exchanged.
+This enables flexible and efficient communication patterns in a decentralized environment.</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="de-mls">de-MLS<a href="https://vac.dev/rlog/de-mls-with-waku#de-mls" class="hash-link" aria-label="Direct link to de-MLS" title="Direct link to de-MLS">​</a></h2>
+<p>Decentralized MLS (de-MLS) is a peer-to-peer secure group messaging protocol
+that can work with any delivery service (DS) meeting a minimal set of requirements.
+In this post, we highlight its integration with <a href="https://waku.org/" target="_blank" rel="noopener noreferrer">Waku</a> as the messaging protocol,
+while emphasizing that de-MLS itself remains agnostic to the underlying DS.
+Further technical details can be found in the <a href="https://rfc.vac.dev/vac/raw/eth-mls-offchain" target="_blank" rel="noopener noreferrer">de-MLS RFC</a>.</p>
+<p>Decentralization is achieved not only at the delivery service (DS) level
+but also within the authentication service (AS).
+Multiple special nodes named Steward in the group serve as authorized identities to authenticate users
+before they join or are removed from the group transparently.</p>
+<p>de-MLS provides two different user management configurations, both utilizing the Waku protocol for DS:</p>
+<ol>
+<li><strong>Single Steward</strong>:<!-- -->
+<ul>
+<li>A single authorized identity (Steward) manages the group,
+including removing or adding users with agreement among users by a voting-based consensus.</li>
+</ul>
+</li>
+<li><strong>Multi-Steward</strong>:<!-- -->
+<ul>
+<li>Multiple Stewards have equal authority to add or remove users.</li>
+<li>A consensus mechanism ensures consistency by resolving concurrent changes
+within the same epoch and preventing possible conflicts.
+In each epoch, all modifications are managed exclusively by a single Steward.</li>
+</ul>
+</li>
+</ol>
+<p>Note: We chose the term Steward to reflect the role of transparently coordinating and organizing passengers at stations, much like Stewards do in transit systems.</p>
+<p>In multi-Steward settings, de-MLS requires a consensus among Stewards
+that have equal rights in the group since changes in an epoch in MLS are required
+to be conducted by a single identity, that is the Steward.</p>
+<p>For the consensus integration, ongoing research explores two promising approaches:</p>
+<ol>
+<li><strong>On-chain consensus mechanisms</strong>:
+Outsourcing consensus to a smart contract solution for transparent and immutable agreement.</li>
+<li><strong>Off-chain consensus mechanisms</strong>:
+Utilizing off-chain consensus protocols to design efficient, decentralized protocols.</li>
+</ol>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="waku-integration">Waku Integration<a href="https://vac.dev/rlog/de-mls-with-waku#waku-integration" class="hash-link" aria-label="Direct link to Waku Integration" title="Direct link to Waku Integration">​</a></h3>
+<p>Waku integration is a crucial step in the construction of de-MLS,
+aiming to replace traditional client-server communication with decentralized messaging.
+The specifics of Waku integration will be detailed in a separate RFC;
+for now, our main priority is the de-MLS RFC.</p>
+<p>The main challenge in this transition is transforming the centralized Delivery Service (DS)
+into a decentralized equivalent, which performs two essential functions:</p>
+<ol>
+<li>Message Delivery and Ordering:
+The DS is responsible not only for delivering messages to the correct recipients,
+but also for preserving the correct order of these messages, which is critical for the consistency of group state.</li>
+<li>Key Package Management:
+The DS manages key packages, which are essential for adding members securely to a group.</li>
+</ol>
+<p>To maintain a truly decentralized architecture,
+key packages cannot be stored in a centralized location.
+Initially, we considered using a smart contract (SC) as a decentralized substitute for server-side key package storage.
+However, this approach proved impractical.
+Blockchains are immutable by design—once data is written, it cannot be fully removed.
+This contradicts a core requirement of MLS: each key package must be used exactly once and then deleted,
+to prevent replay or reuse attacks.
+Instead, our solution is to require users to actively provide their key packages upon request,
+allowing validation at the moment of use without persistent storage.
+While this approach may lose some benefits of asynchronicity,
+we plan to address this in the future by introducing store nodes that can temporarily hold key packages.
+This ensures both compliance with MLS's security model and alignment with decentralized system principles.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="flow">Flow<a href="https://vac.dev/rlog/de-mls-with-waku#flow" class="hash-link" aria-label="Direct link to Flow" title="Direct link to Flow">​</a></h3>
+<p>The flow section explains the processes that
+when a user wants to join a group in both Steward and users side also their interactions.
+The flow of de-MLS is as follows:</p>
+<p></p><div class="wrapper_SWrM active_qZD5"><img decoding="async" loading="lazy" alt="Figure 1" src="https://vac.dev/assets/images/flow-e56eebf7e59df3cb5a6acc738dbeb72e.png" width="921" height="627" class="img_ev3q"><button class="fullscreenButton_Bocn lsd-icon-button lsd-icon-button--medium lsd-icon-button--outlined"><div class="icon_S7Kx m_thRi"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14"><path fill="#fff" d="M1.75 2.917V5.25h1.167V2.917H5.25V1.75H2.917A1.17 1.17 0 0 0 1.75 2.917M2.917 8.75H1.75v2.333a1.17 1.17 0 0 0 1.167 1.167H5.25v-1.167H2.917zm8.166 2.333H8.75v1.167h2.333a1.17 1.17 0 0 0 1.167-1.167V8.75h-1.167zm0-9.333H8.75v1.167h2.333V5.25h1.167V2.917a1.17 1.17 0 0 0-1.167-1.167"></path></svg></div></button></div><p></p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="1-steward-joins-the-welcome-topic">1. Steward joins the welcome topic<a href="https://vac.dev/rlog/de-mls-with-waku#1-steward-joins-the-welcome-topic" class="hash-link" aria-label="Direct link to 1. Steward joins the welcome topic" title="Direct link to 1. Steward joins the welcome topic">​</a></h3>
+<p>The welcome topic is a topic created and monitored by the Steward for a specific secure messaging group,
+allowing any Waku node to subscribe permissionlessly.
+Being in the welcome topic does not imply group membership,
+it acts as a waiting room where users can send their key material,
+which the Steward listens for and processes before granting access to the secure group.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="2-group-initialization">2. Group initialization<a href="https://vac.dev/rlog/de-mls-with-waku#2-group-initialization" class="hash-link" aria-label="Direct link to 2. Group initialization" title="Direct link to 2. Group initialization">​</a></h3>
+<p>Steward initalizes a group with parameters such as cipher suite and group ID.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="3-emitting-group-anouncement-ga-by-steward">3. Emitting Group Anouncement (GA) by Steward<a href="https://vac.dev/rlog/de-mls-with-waku#3-emitting-group-anouncement-ga-by-steward" class="hash-link" aria-label="Direct link to 3. Emitting Group Anouncement (GA) by Steward" title="Direct link to 3. Emitting Group Anouncement (GA) by Steward">​</a></h3>
+<p>Steward creates group announcement (GA) periodically to the welcome channel
+that the users can find the who the Steward is.
+This will be important for the next step.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="4-user-joins-the-welcome-topic">4. User joins the welcome topic<a href="https://vac.dev/rlog/de-mls-with-waku#4-user-joins-the-welcome-topic" class="hash-link" aria-label="Direct link to 4. User joins the welcome topic" title="Direct link to 4. User joins the welcome topic">​</a></h3>
+<p>As first, the users who wants to be part of the decentralized MLS should subscribe the welcome channel.
+Then user can find the group name and also corresponding GA message from Steward.
+This GA message helps the user to create a valid <code>keyPackages</code> which define in section 10
+in <a href="https://datatracker.ietf.org/doc/rfc9420/" target="_blank" rel="noopener noreferrer">RFC9420</a> for the group.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="5-user-creates-its-key-package">5. User creates its key package<a href="https://vac.dev/rlog/de-mls-with-waku#5-user-creates-its-key-package" class="hash-link" aria-label="Direct link to 5. User creates its key package" title="Direct link to 5. User creates its key package">​</a></h3>
+<p>User creates the <code>keyPackage</code> and encrypt by public key of the Steward then send it to the Steward.
+Since the message is encrypted, stay secure though the welcome (permissionless) topic.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="6-steward-receives-the-users-key-package">6. Steward receives the User's key package<a href="https://vac.dev/rlog/de-mls-with-waku#6-steward-receives-the-users-key-package" class="hash-link" aria-label="Direct link to 6. Steward receives the User's key package" title="Direct link to 6. Steward receives the User's key package">​</a></h3>
+<p>Steward receives the user's <code>keyPackage</code> and decrypt it.
+After decrypted, Steward also verifies the validity of the <code>keyPackage</code> by signature verification.
+If the <code>keyPackage</code> is not valid, the Steward just drops the message,
+otherwise it moves to the next step which is proposal creation.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="7-creation-of-voting-proposals">7. Creation of Voting proposals<a href="https://vac.dev/rlog/de-mls-with-waku#7-creation-of-voting-proposals" class="hash-link" aria-label="Direct link to 7. Creation of Voting proposals" title="Direct link to 7. Creation of Voting proposals">​</a></h3>
+<p>Voting proposals are special MLS application messages that may come from any participant, including the Steward.
+In this context, any member can create a proposal corresponding to the user’s <code>keyPackage</code>.
+In regular MLS, proposals are automatically converted into commit messages,
+which can change the structure of the tree. However, in de-MLS, since the process is decentralized,
+proposals must be voted on before being converted into a commitment.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="8-voting-for-proposal">8. Voting for proposal<a href="https://vac.dev/rlog/de-mls-with-waku#8-voting-for-proposal" class="hash-link" aria-label="Direct link to 8. Voting for proposal" title="Direct link to 8. Voting for proposal">​</a></h3>
+<p>Voting applies decentralization by protecting small groups can control.
+Therefore, proposals must be voted on before committing.
+The consensus mechanism should be a lightweight consensus that cannot be a bottleneck for treeKEM scalability.
+Basically, the consensus returns the binary result for a given proposal.
+If voting result is NO, the proposal is dropped; otherwise, the Steward transforms it into an MLS proposal.
+MLS proposal message is a distinct type of MLS application message,
+where the Steward attaches the voting result instead of directly releasing a commit message.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="9-creating-commit-message">9. Creating commit message<a href="https://vac.dev/rlog/de-mls-with-waku#9-creating-commit-message" class="hash-link" aria-label="Direct link to 9. Creating commit message" title="Direct link to 9. Creating commit message">​</a></h3>
+<p>Commit messages are the messages that start new epochs.
+They include key and tree material that existing members can use to generate the new state of the tree.</p>
+<p>After Steward gets the YES from consensus, Steward creates commit messages
+that injects new entropy for the existing group members.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="10-sending-messages">10. Sending messages<a href="https://vac.dev/rlog/de-mls-with-waku#10-sending-messages" class="hash-link" aria-label="Direct link to 10. Sending messages" title="Direct link to 10. Sending messages">​</a></h3>
+<p>After Steward creates and then sends two messages:</p>
+<ol>
+<li>Commit message informs existing group member to update their key
+to align with the new member’s key for the upcoming epoch.</li>
+<li>The welcome message informs the newly joined user to generate a group key
+that matches the key existing members will use in the upcoming epoch.</li>
+</ol>
+<p>Although existing users had different group keys in the previous epoch and the new user had none,
+the Steward message ensures that both existing and new users converge on the same group key in the next epoch.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="11-applying-welcome-message">11. Applying welcome message<a href="https://vac.dev/rlog/de-mls-with-waku#11-applying-welcome-message" class="hash-link" aria-label="Direct link to 11. Applying welcome message" title="Direct link to 11. Applying welcome message">​</a></h3>
+<p>User can generate the next epoch group key by using the welcome message as well as
+existing users extract the same <code>groupKey</code> by using commit messages.</p>
+<p>The commit message helps existing members generate the next group key <code>Gk+1</code>,
+while the welcome message helps the newly joining user generate the same <code>Gk+1</code>.
+This provides two important security properties:</p>
+<ol>
+<li>
+<p>Forward Secrecy (FS):
+The new user cannot read previous messages since they were encrypted with the old key <code>Gk</code></p>
+</li>
+<li>
+<p>Post-Compromise Security (PCS):
+If a user is removed from the group,
+they cannot read future messages since those messages will be encrypted with the new key <code>Gk+1</code></p>
+</li>
+</ol>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="benchmark">Benchmark<a href="https://vac.dev/rlog/de-mls-with-waku#benchmark" class="hash-link" aria-label="Direct link to Benchmark" title="Direct link to Benchmark">​</a></h2>
+<p>This section presents the performance evaluation of de-MLS.
+One of the key advantages of the MLS protocol is its efficiency,
+as it eliminates the need for pairwise message exchanges between all participants.
+Instead, the decentralized DS enables the addition of new participants by sending only two messages to the group:
+a commit message and a welcome message.
+However, despite this advantage, the protocol does have certain bottlenecks, which are as follows:</p>
+<ul>
+<li>Firstly, the Steward must receive the key packages from each member wishing to join the group.
+This process requires sequential message exchanges and involves computationally intensive tasks such as encryption,
+decryption, and digital signature verification.
+Even when multiple users are added to the group simultaneously, the process is essentially sequential.
+The tree structure is updated one user at a time,
+followed by sending the final commit message to the existing group members
+and a single welcome message to the new members.</li>
+<li>Secondly adding a member to a group requires rebuilding the tree and computing new keys.</li>
+</ul>
+<p>The following measurements were made as follows:</p>
+<ol>
+<li>The time required for the entire sequence of receiving a user key package is presented here.
+This includes generating the Steward key, creating messages with signatures and encryption,
+and processing these messages.</li>
+</ol>
+<p><code>Share Key Package - 1.8395 ms</code></p>
+<p>Note that these measurements do not account for the time taken to forward messages.</p>
+<ol>
+<li>The time required for creating the commit and welcome message
+from a ready-made package bunches is shown in this table.</li>
+</ol>
+<table><thead><tr><th>Group Size (by users)</th><th>Time</th></tr></thead><tbody><tr><td>10</td><td>1.8662 ms</td></tr><tr><td>100</td><td>14.124 ms</td></tr><tr><td>500</td><td>121.85 ms</td></tr><tr><td>1000</td><td>412.39 ms</td></tr><tr><td>5000</td><td>~ 15-20 s</td></tr><tr><td>10000</td><td>~ 1-1.5 min</td></tr></tbody></table>
+<p>The tests were conducted on the following configuration:
+Apple M3 Pro @ 4.05GHz and 12-Core CPU/18-Core GPU.</p>
+<p>Here, the network latency and the time taken by users to apply the received commits are also excluded.
+These aspects are planned to be measured and evaluated in future work.</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="potential-drawbacks-and-countermeasures">Potential drawbacks and countermeasures<a href="https://vac.dev/rlog/de-mls-with-waku#potential-drawbacks-and-countermeasures" class="hash-link" aria-label="Direct link to Potential drawbacks and countermeasures" title="Direct link to Potential drawbacks and countermeasures">​</a></h2>
+<p>Since de-MLS replace the servers by P2P, we could lose some good features of servers based MLS.
+In this section we present the potential drawbacks and possible countermeasures of de-MLS.</p>
+<ul>
+<li>Offline users: <code>keyPackage</code>s are provided by the users directly without any storing,
+this is required each user must be online for joining to a group.<!-- -->
+<ul>
+<li>We can consider to use <a href="https://docs.waku.org/guides/js-waku/store-retrieve-messages/" target="_blank" rel="noopener noreferrer">Waku sync nodes</a>
+that are nodes has storing ability for a temporary storing of <code>keyPackage</code>s.</li>
+</ul>
+</li>
+<li>DoS attack to Steward: Steward is known in welcome message from periodic group announcement message
+so Steward can be targeted for DoS attack.<!-- -->
+<ul>
+<li>As always we consider to use Rate-Limiting Nullifier (RLN) with Waku to protect network from spam.</li>
+</ul>
+</li>
+<li>Message loss or delay : Because of P2P and consensus settings, message can be lost or delayed.,<!-- -->
+<ul>
+<li>We can integrate reliability mechanisms to Waku such as
+<a href="https://github.com/waku-org/nim-sds" target="_blank" rel="noopener noreferrer">scalable data sync (SDS)</a></li>
+<li>Consensus mechanism requires to provide liveness property against offline nodes, for example,
+it may provides default YES or NO options for a silent users who do not vote.</li>
+</ul>
+</li>
+<li>Enchanced authentication<!-- -->
+<ul>
+<li>Ethereum authentication could be inefficient.
+We can configure the authentication mechanism for example asking minimum balance or etc.</li>
+</ul>
+</li>
+</ul>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="conclusion">Conclusion<a href="https://vac.dev/rlog/de-mls-with-waku#conclusion" class="hash-link" aria-label="Direct link to Conclusion" title="Direct link to Conclusion">​</a></h2>
+<p>To summarize, the approach to solving decentralized DS tasks with Waku
+can be outlined as shown in the comparison table:</p>
+<table><thead><tr><th>Feature</th><th>MLS</th><th>de-MLS</th></tr></thead><tbody><tr><td>Message Distribution</td><td>Messages are sent from the server to clients</td><td>Messages are sent by publishing/subscribing to pub-sub topics</td></tr><tr><td>Commit Message Handling</td><td>Relies on a server</td><td>Relies on a consensus and transparent Steward</td></tr><tr><td>Key Package Management</td><td>Key packages are stored and distributed by the server</td><td>Key packages are provided by the users themselves</td></tr></tbody></table>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="future-work">Future Work<a href="https://vac.dev/rlog/de-mls-with-waku#future-work" class="hash-link" aria-label="Direct link to Future Work" title="Direct link to Future Work">​</a></h2>
+<p>In the next iterations, the implementations are planned as following:</p>
+<ul>
+<li>Dual-Consensus Multi-Steward Support: One consensus mechanism selects an Steward from all users,
+while a second governs group decisions among the elected Stewards</li>
+<li>Consensus mechanism for handling concurrent changes within the same epoch</li>
+<li>Key rotation support</li>
+<li>Benchmarking for the multi-Steward configuration including the network time</li>
+</ul>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="references">References<a href="https://vac.dev/rlog/de-mls-with-waku#references" class="hash-link" aria-label="Direct link to References" title="Direct link to References">​</a></h2>
+<ul>
+<li>[1] RFC 9420: The Messaging Layer Security (MLS) Protocol. Retrieved from <a href="https://datatracker.ietf.org/doc/rfc9420/" target="_blank" rel="noopener noreferrer">https://datatracker.ietf.org/doc/rfc9420/</a></li>
+<li>[2] OpenMLS. Retrived from <a href="https://github.com/openmls/openmls" target="_blank" rel="noopener noreferrer">https://github.com/openmls/openmls</a></li>
+<li>[3] Waku. Retrived from <a href="https://waku.org/" target="_blank" rel="noopener noreferrer">https://waku.org/</a></li>
+<li>[4] de-MLS. Retrived from <a href="https://github.com/vacp2p/de-mls/" target="_blank" rel="noopener noreferrer">https://github.com/vacp2p/de-mls/</a></li>
+</ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[Scaling libp2p GossipSub for Large Messages: An Evaluation of Performance Improvement Proposals]]></title>
             <link>https://vac.dev/rlog/gsub-perf-imp-comparison</link>
@@ -5569,103 +5872,6 @@ aligning incentives with the blockchain’s broader consensus mechanism.</p>
 <li><a href="https://github.com/waku-org/js-noise/" target="_blank" rel="noopener noreferrer">js-noise</a></li>
 <li><a href="https://github.com/waku-org/js-noise/" target="_blank" rel="noopener noreferrer">go-noise</a></li>
 </ul>]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[The Future of Waku Network: Scaling, Incentivization, and Heterogeneity]]></title>
-            <link>https://vac.dev/rlog/future-of-waku-network</link>
-            <guid>https://vac.dev/rlog/future-of-waku-network</guid>
-            <pubDate>Mon, 03 Apr 2023 00:00:00 GMT</pubDate>
-            <description><![CDATA[Learn how the Waku Network is evolving through scaling, incentivization, and diverse ecosystem development and what the future might look like.]]></description>
-            <content:encoded><![CDATA[<p>Learn how the Waku Network is evolving through scaling, incentivization, and diverse ecosystem development and what the future might look like.</p>
-<!-- -->
-<p>Waku is preparing for production with a focus on the Status Communities use case. In this blog post, we will provide an
-overview of recent discussions and research outputs, aiming to give you a better understanding of how the Waku network
-may look like in terms of scaling and incentivization.</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="dos-mitigation-for-status-communities">DOS Mitigation for Status Communities<a href="https://vac.dev/rlog/future-of-waku-network#dos-mitigation-for-status-communities" class="hash-link" aria-label="Direct link to DOS Mitigation for Status Communities" title="Direct link to DOS Mitigation for Status Communities">​</a></h2>
-<p>Waku is actively exploring DOS mitigation mechanisms suitable for Status Communities. While RLN
-(Rate Limiting Nullifiers) remains the go-to DOS protection solution due to its privacy-preserving and
-censorship-resistant properties, there is still more work to be done. We are excited to collaborate with PSE
-(Privacy &amp; Scaling Explorations) in this endeavor. Learn more about their latest progress in this <a href="https://twitter.com/CPerezz19/status/1640373940634939394?s=20" target="_blank" rel="noopener noreferrer">tweet</a>.</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="a-heterogeneous-waku-network">A Heterogeneous Waku Network<a href="https://vac.dev/rlog/future-of-waku-network#a-heterogeneous-waku-network" class="hash-link" aria-label="Direct link to A Heterogeneous Waku Network" title="Direct link to A Heterogeneous Waku Network">​</a></h2>
-<p>As we noted in a previous <a href="https://forum.vac.dev/t/waku-payment-models/166/3" target="_blank" rel="noopener noreferrer">forum post</a>, Waku's protocol
-incentivization model needs to be flexible to accommodate various business models. Flexibility ensures that projects
-can choose how they want to use Waku based on their specific needs.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="reversing-the-incentivization-question">Reversing the Incentivization Question<a href="https://vac.dev/rlog/future-of-waku-network#reversing-the-incentivization-question" class="hash-link" aria-label="Direct link to Reversing the Incentivization Question" title="Direct link to Reversing the Incentivization Question">​</a></h3>
-<p>Traditionally, the question of incentivization revolves around how to incentivize operators to run nodes. We'd like to
-reframe the question and instead ask, "How do we pay for the infrastructure?"</p>
-<p>Waku does not intend to offer a free lunch.
-Ethereum's infrastructure is supported by transaction fees and inflation, with validators receiving rewards from both sources.
-However, this model does not suit a communication network like Waku.
-Users and platforms would not want to pay for every single message they send. Additionally, Waku aims to support instant
-ephemeral messages that do not require consensus or long-term storage.</p>
-<p>Projects that use Waku to enable user interactions, whether for chat messages, gaming, private DeFi, notifications, or
-inter-wallet communication, may have different value extraction models. Some users might provide services for the
-project and expect to receive value by running nodes, while others may pay for the product or run infrastructure to
-contribute back. Waku aims to support each of these use cases, which means there will be various ways to "pay for the
-infrastructure."</p>
-<p>In <a href="https://vac.dev/building-privacy-protecting-infrastructure" target="_blank" rel="noopener noreferrer">his talk</a>, Oskar addressed two strategies: RLN and service credentials.</p>
-<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="rln-and-service-credentials">RLN and Service Credentials<a href="https://vac.dev/rlog/future-of-waku-network#rln-and-service-credentials" class="hash-link" aria-label="Direct link to RLN and Service Credentials" title="Direct link to RLN and Service Credentials">​</a></h3>
-<p>RLN enables DOS protection across the network in a privacy-preserving and permission-less manner: stake in a contract,
-and you can send messages.</p>
-<p>Service credentials establish a customer-provider relationship. Users might pay to have messages they are interested in
-stored and served by a provider. Alternatively, a community owner could pay a service provider to host their community.</p>
-<p>Providers could offer trial or limited free services to Waku users, similar to Slack or Discord. Once a trial is expired or outgrown,
-a community owner could pay for more storage or bandwidth, similar to Slack's model.
-Alternatively, individual users could contribute financially, akin to Discord's Server Boost, or by sharing their own
-resources with their community.</p>
-<p>We anticipate witnessing various scenarios across the spectrum: from users sharing resources to users paying for access to the network and everything in between.</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="waku-network-ethereum-or-cosmos">Waku Network: Ethereum or Cosmos?<a href="https://vac.dev/rlog/future-of-waku-network#waku-network-ethereum-or-cosmos" class="hash-link" aria-label="Direct link to Waku Network: Ethereum or Cosmos?" title="Direct link to Waku Network: Ethereum or Cosmos?">​</a></h2>
-<p>Another perspective is to consider whether the Waku network will resemble Ethereum or Cosmos.</p>
-<p>For those not familiar with the difference between both, in a very concise manner:</p>
-<ul>
-<li>Ethereum is a set of protocols and software that are designed to operate on one common network and infrastructure</li>
-<li>Cosmos is a set of protocols and software (SDKs) designed to be deployed in separate yet interoperable networks and infrastructures by third parties</li>
-</ul>
-<p>We want Waku to be decentralized to provide censorship resistance and privacy-preserving communication.
-If each application has to deploy its own network, we will not achieve this goal.
-Therefore, we aim Waku to be not only an open source set of protocols, but also a shared infrastructure that anyone can leverage to build applications on top, with some guarantees in terms of decentralization and anonymity.
-This approach is closer in spirit to Ethereum than Cosmos.
-Do note that, similarly to Ethereum, anyone is free to take Waku software and protocols and deploy their own network.</p>
-<p>Yet, because of the difference in the fee model, the Waku Network is unlikely to be as unified as Ethereum's.
-We currently assume that there will be separate gossipsub networks with different funding models.
-Since there is no consensus on Waku, each individual operator can decide which network to support, enabling Waku to maintain its permission-less property.</p>
-<p>Most likely, the Waku network will be heterogeneous, and node operators will choose the incentivization model they prefer.</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="scalability-and-discovery-protocols">Scalability and Discovery Protocols<a href="https://vac.dev/rlog/future-of-waku-network#scalability-and-discovery-protocols" class="hash-link" aria-label="Direct link to Scalability and Discovery Protocols" title="Direct link to Scalability and Discovery Protocols">​</a></h2>
-<p>To enable scalability, the flow of messages in the Waku network will be divided in shards,
-so that not every node has to forward every message of the whole network.
-Discovery protocols will facilitate users connecting to the right nodes to receive the messages they are interested in.</p>
-<p>Different shards could be subject to a variety of rate limiting techniques (globally, targeted to that shard or something in-between).</p>
-<p>Marketplace protocols may also be developed to help operators understand how they can best support the network and where
-their resources are most needed. However, we are still far from establishing or even assert that such a marketplace will be needed.</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="open-problems">Open Problems<a href="https://vac.dev/rlog/future-of-waku-network#open-problems" class="hash-link" aria-label="Direct link to Open Problems" title="Direct link to Open Problems">​</a></h2>
-<p>Splitting traffic between shards reduces bandwidth consumption for every Waku Relay node.
-This improvement increases the likelihood that users with home connections can participate and contribute to the gossipsub network without encountering issues.</p>
-<p>However, it does not cap traffic.
-There are still open problems regarding how to guarantee that someone can use Waku with lower Internet bandwidth or run critical services, such as a validation node, on the same connection.</p>
-<p>We have several ongoing initiatives:</p>
-<ul>
-<li>Analyzing the Status Community protocol to confirm efficient usage of Waku <a href="https://github.com/vacp2p/research/issues/177" target="_blank" rel="noopener noreferrer">[4]</a></li>
-<li>Simulating the Waku Network to measure actual bandwidth usage <a href="https://github.com/waku-org/pm/issues/2" target="_blank" rel="noopener noreferrer">[5]</a></li>
-<li>Segregating chat messages from control and media messages <a href="https://github.com/waku-org/specs/blob/master/standards/core/relay-sharding.md/#control-message-shards" target="_blank" rel="noopener noreferrer">[6]</a></li>
-</ul>
-<p>The final solution will likely be a combination of protocols that reduce bandwidth usage or mitigate the risk of DOS attacks, providing flexibility for users and platforms to enable the best experience.</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="the-evolving-waku-network">The Evolving Waku Network<a href="https://vac.dev/rlog/future-of-waku-network#the-evolving-waku-network" class="hash-link" aria-label="Direct link to The Evolving Waku Network" title="Direct link to The Evolving Waku Network">​</a></h2>
-<p>The definition of the "Waku Network" will likely change over time. In the near future, it will transition from a single
-gossipsub network to a sharded set of networks unified by a common discovery layer. This change will promote scalability
-and allow various payment models to coexist within the Waku ecosystem.</p>
-<p>In conclusion, the future of Waku Network entails growth, incentivization, and heterogeneity while steadfastly
-maintaining its core principles. As Waku continues to evolve, we expect it to accommodate a diverse range of use cases
-and business models, all while preserving privacy, resisting censorship, avoiding surveillance, and remaining accessible
-to devices with limited resources.</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="references">References<a href="https://vac.dev/rlog/future-of-waku-network#references" class="hash-link" aria-label="Direct link to References" title="Direct link to References">​</a></h2>
-<ol>
-<li><a href="https://github.com/waku-org/specs/blob/master/standards/core/relay-sharding.md" target="_blank" rel="noopener noreferrer">WAKU2-RELAY-SHARDING</a></li>
-<li><a href="https://rfc.vac.dev/status/raw/simple-scaling" target="_blank" rel="noopener noreferrer">57/STATUS-Simple-Scaling</a></li>
-<li><a href="https://rfc.vac.dev/vac/raw/rln-v2" target="_blank" rel="noopener noreferrer">RLN-V2</a></li>
-<li><a href="https://github.com/vacp2p/research/issues/177" target="_blank" rel="noopener noreferrer">Scaling Status Communities: Potential Problems</a></li>
-<li><a href="https://github.com/waku-org/pm/issues/2" target="_blank" rel="noopener noreferrer">Waku Network Testing</a></li>
-<li><a href="https://github.com/waku-org/specs/blob/master/standards/core/relay-sharding.md/#control-message-shards" target="_blank" rel="noopener noreferrer">WAKU2-RELAY-SHARDING: Control Message Shards</a></li>
-</ol>]]></content:encoded>
         </item>
     </channel>
 </rss>
